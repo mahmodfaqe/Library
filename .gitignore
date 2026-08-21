@@ -32,3 +32,12 @@ pnpm-debug.log
 *.njsproj
 *.sln
 *.sw?
+
+# Local database
+/database/*.sqlite
+/database/*.sqlite-journal
+/database/*.sqlite-shm
+/database/*.sqlite-wal
+
+# Page cache
+/storage/framework/pagecache
