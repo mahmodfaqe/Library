@@ -333,6 +333,14 @@
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-[900px] mx-auto">
 
+            <!-- BioNova, the team behind the library -->
+            <img src="{{ asset('file/bionova-logo.webp') }}"
+                 alt="BioNova"
+                 width="400" height="464"
+                 loading="lazy" decoding="async"
+                 class="bionova-mark block mx-auto mb-6 reveal"
+                 style="width: clamp(104px, 20vw, 156px); height: auto;">
+
             <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.about.heading') }}</h2>
 
             <div class="relative rounded-[18px] overflow-hidden reveal"
