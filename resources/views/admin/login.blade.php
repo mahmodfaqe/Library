@@ -1,10 +1,11 @@
+@use('App\Support\Locale')
 <!DOCTYPE html>
-<html lang="ckb" dir="rtl">
+<html lang="{{ Locale::htmlLang() }}" dir="{{ Locale::dir() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>چوونەژوورەوە — بەڕێوەبەر</title>
+    <title>{{ __('admin.login.title') }}</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif; background: linear-gradient(160deg, #f0f2ff 0%, #e8ebff 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; }
@@ -23,7 +24,7 @@
 </head>
 <body>
     <div class="box">
-        <h1>چوونەژوورەوەی بەڕێوەبەر</h1>
+        <h1>{{ __('admin.login.heading') }}</h1>
         @if ($errors->any())
             <div class="error">
                 @foreach ($errors->all() as $error)
@@ -34,12 +35,12 @@
         <form method="POST" action="{{ route('admin.login') }}">
             @csrf
             <div class="field">
-                <label for="password">وشەی نهێنی</label>
+                <label for="password">{{ __('admin.login.password') }}</label>
                 <input type="password" id="password" name="password" required autofocus autocomplete="current-password">
             </div>
-            <button type="submit" class="btn">چوونەژوورەوە</button>
+            <button type="submit" class="btn">{{ __('admin.login.submit') }}</button>
         </form>
-        <div class="back"><a href="{{ route('home') }}">گەڕانەوە بۆ ماڵپەڕ</a></div>
+        <div class="back"><a href="{{ route('home') }}">{{ __('admin.login.back_site') }}</a></div>
     </div>
 </body>
 </html>

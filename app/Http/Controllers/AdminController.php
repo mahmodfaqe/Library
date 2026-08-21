@@ -31,7 +31,7 @@ class AdminController extends Controller
             return redirect()->intended(route('admin.index'));
         }
 
-        return back()->withErrors(['password' => 'وشەنهێنیەکە هەڵەیە.'])->onlyInput('password');
+        return back()->withErrors(['password' => __('admin.login.wrong_password')])->onlyInput('password');
     }
 
     public function logout(Request $request): RedirectResponse
@@ -64,7 +64,7 @@ class AdminController extends Controller
         Department::create($data);
         $this->clearPageCache();
 
-        return redirect()->route('admin.index')->with('status', 'بەشەکە زیادکرا.');
+        return redirect()->route('admin.index')->with('status', __('admin.flash.department_created'));
     }
 
     public function edit(Department $department): View
@@ -82,7 +82,7 @@ class AdminController extends Controller
         $department->update($data);
         $this->clearPageCache();
 
-        return redirect()->route('admin.index')->with('status', 'بەشەکە نوێکرایەوە.');
+        return redirect()->route('admin.index')->with('status', __('admin.flash.department_updated'));
     }
 
     public function destroy(Department $department): RedirectResponse
@@ -90,7 +90,7 @@ class AdminController extends Controller
         $department->delete();
         $this->clearPageCache();
 
-        return redirect()->route('admin.index')->with('status', 'بەشەکە سڕایەوە.');
+        return redirect()->route('admin.index')->with('status', __('admin.flash.department_deleted'));
     }
 
     private function validated(Request $request): array
@@ -122,7 +122,7 @@ class AdminController extends Controller
     {
         $feedback->delete();
 
-        return redirect()->route('admin.feedback')->with('status', 'ڕەخنە/پێشنیارەکە سڕایەوە.');
+        return redirect()->route('admin.feedback')->with('status', __('admin.flash.feedback_deleted'));
     }
 
     private function clearPageCache(): void

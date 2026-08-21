@@ -4,14 +4,20 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpFoundation\Response;
 
 class CachePage
 {
     /**
-     * Cache the rendered home page to storage/framework/pagecache so
-     * repeat visits skip the full Blade/DB render. Admin writes already
-     * invalidate this cache (see AdminController::clearPageCache()).
+     * How long a cached copy stays servable.
+     */
+    private const TTL_SECONDS = 3600;
+
+    /**
+     * Cache the rendered home page to storage/framework/pagecache so repeat
+     * visits skip the full Blade/DB render. Admin writes invalidate the cache
+     * (see AdminController::clearPageCache()).
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -20,21 +26,21 @@ class CachePage
             return $next($request);
         }
 
-        // Never serve cached content to visitors carrying cookies
-        // (e.g. an authenticated admin session).
-        if ($request->cookies->count() > 0) {
+        // A response that depends on who is asking must never be shared, and a
+        // shared copy must never be handed to someone expecting their own.
+        if ($this->isPersonalised($request)) {
             return $next($request);
         }
 
-        $file = storage_path('framework/pagecache/home.html');
+        $file = $this->cacheFile();
 
         if (is_file($file) && $this->isFresh($file)) {
             $html = file_get_contents($file);
 
-            // The cached copy carries the token of the request that
-            // warmed the cache. Substitute the current visitor's session
-            // token so the embedded @csrf field passes VerifyCsrfToken.
-            // (pagecache runs after StartSession, so the session exists.)
+            // The cached copy carries the token of the request that warmed the
+            // cache. Substitute the current visitor's session token so the
+            // embedded @csrf field passes VerifyCsrfToken. (pagecache runs
+            // after StartSession, so the session exists.)
             if ($request->hasSession()) {
                 $html = $this->withLiveCsrfToken($html, $request->session()->token());
             }
@@ -59,14 +65,41 @@ class CachePage
         return $response;
     }
 
-    private function isFresh(string $file): bool
+    /**
+     * The page is rendered per locale, so each locale gets its own copy.
+     */
+    private function cacheFile(): string
     {
-        return filemtime($file) > time() - 3600;
+        return storage_path('framework/pagecache/home-'.App::getLocale().'.html');
     }
 
     /**
-     * Replace the value of the first hidden _token input with the
-     * token of the current session.
+     * Whether this request renders something specific to one visitor: the
+     * admin's own view, a feedback confirmation, validation errors, or the
+     * old input repopulating the feedback form.
+     */
+    private function isPersonalised(Request $request): bool
+    {
+        if (! $request->hasSession()) {
+            return false;
+        }
+
+        $session = $request->session();
+
+        return $session->has('admin_authenticated')
+            || $session->has('feedback_sent')
+            || $session->has('errors')
+            || $session->hasOldInput();
+    }
+
+    private function isFresh(string $file): bool
+    {
+        return filemtime($file) > time() - self::TTL_SECONDS;
+    }
+
+    /**
+     * Replace the value of the first hidden _token input with the token of the
+     * current session.
      */
     private function withLiveCsrfToken(string $html, string $token): string
     {

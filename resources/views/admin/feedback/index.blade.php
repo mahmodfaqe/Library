@@ -1,21 +1,21 @@
 @extends('admin.layout')
 
-@section('title', 'ڕەخنە و پێشنیار')
+@section('title', __('admin.feedback.title'))
 
 @section('content')
     <div class="card">
-        <h2 style="font-size:1.15rem;">ڕەخنە و پێشنیارەکان ({{ $feedback->total() }})</h2>
+        <h2 style="font-size:1.15rem;">{{ __('admin.feedback.heading', ['count' => $feedback->total()]) }}</h2>
         @if ($feedback->isEmpty())
-            <p style="color:#6b6b80; padding:1.5rem 0; text-align:center;">هێشتا هیچ ڕەخنە و پێشنیارێک نەنێردراوە.</p>
+            <p style="color:#6b6b80; padding:1.5rem 0; text-align:center;">{{ __('admin.feedback.empty') }}</p>
         @else
             <table>
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>ناو</th>
-                        <th>ڕەخنە / پێشنیار</th>
-                        <th>بەروار</th>
-                        <th>کردارەکان</th>
+                        <th>{{ __('admin.feedback.table.id') }}</th>
+                        <th>{{ __('admin.feedback.table.name') }}</th>
+                        <th>{{ __('admin.feedback.table.message') }}</th>
+                        <th>{{ __('admin.feedback.table.date') }}</th>
+                        <th>{{ __('admin.feedback.table.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,10 +27,10 @@
                             <td style="white-space:nowrap; font-size:0.82rem; color:#6b6b80;">{{ $item->created_at->format('Y-m-d H:i') }}</td>
                             <td class="actions">
                                 <form method="POST" action="{{ route('admin.feedback.destroy', $item) }}" style="display:inline;"
-                                      onsubmit="return confirm('دڵنیایت لە سڕینەوەی ئەم ڕەخنە/پێشنیارە؟');">
+                                      onsubmit="return confirm(@js(__('admin.feedback.confirm_delete')));">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">سڕینەوە</button>
+                                    <button type="submit" class="btn btn-danger">{{ __('admin.actions.delete') }}</button>
                                 </form>
                             </td>
                         </tr>

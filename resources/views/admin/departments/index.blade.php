@@ -1,25 +1,25 @@
 @extends('admin.layout')
 
-@section('title', 'بەشەکان')
+@section('title', __('admin.departments.title'))
 
 @section('content')
     <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-            <h2 style="font-size:1.15rem;">بەشە زانستییەکان ({{ $departments->total() }})</h2>
-            <a href="{{ route('admin.departments.create') }}" class="btn btn-primary">+ زیادکردنی بەشی نوێ</a>
+            <h2 style="font-size:1.15rem;">{{ __('admin.departments.heading', ['count' => $departments->total()]) }}</h2>
+            <a href="{{ route('admin.departments.create') }}" class="btn btn-primary">{{ __('admin.departments.add') }}</a>
         </div>
         @if ($departments->isEmpty())
-            <p style="color:#6b6b80; padding:1.5rem 0; text-align:center;">هیچ بەشێک نەنووسراوە.</p>
+            <p style="color:#6b6b80; padding:1.5rem 0; text-align:center;">{{ __('admin.departments.empty') }}</p>
         @else
             <table>
                 <thead>
                     <tr>
-                        <th>ڕیز</th>
-                        <th>ئایکۆن</th>
-                        <th>ناو (سۆرانی)</th>
-                        <th>ناو (ئینگلیزی)</th>
-                        <th>بەستەر</th>
-                        <th>کردارەکان</th>
+                        <th>{{ __('admin.departments.table.order') }}</th>
+                        <th>{{ __('admin.departments.table.icon') }}</th>
+                        <th>{{ __('admin.departments.table.name_sorani') }}</th>
+                        <th>{{ __('admin.departments.table.name_english') }}</th>
+                        <th>{{ __('admin.departments.table.link') }}</th>
+                        <th>{{ __('admin.departments.table.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,12 +33,12 @@
                                 <a href="{{ $department->drive_url }}" target="_blank" rel="noopener" style="color:#667eea;">{{ $department->drive_url }}</a>
                             </td>
                             <td class="actions">
-                                <a href="{{ route('admin.departments.edit', $department) }}" class="btn btn-secondary">دەستکاری</a>
+                                <a href="{{ route('admin.departments.edit', $department) }}" class="btn btn-secondary">{{ __('admin.actions.edit') }}</a>
                                 <form method="POST" action="{{ route('admin.departments.destroy', $department) }}" style="display:inline;"
-                                      onsubmit="return confirm('دڵنیایت لە سڕینەوەی ئەم بەشە؟');">
+                                      onsubmit="return confirm(@js(__('admin.departments.confirm_delete')));">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">سڕینەوە</button>
+                                    <button type="submit" class="btn btn-danger">{{ __('admin.actions.delete') }}</button>
                                 </form>
                             </td>
                         </tr>
