@@ -121,18 +121,20 @@ class PageCacheTest extends TestCase
     {
         $this->withSession(['locale' => 'en'])->get('/');
 
+        // A title that appears nowhere else on the page, so seeing it can only
+        // mean the department list was re-rendered.
         Department::create([
             'sort_order' => 1,
-            'icon' => '🧬',
+            'icon' => '🔭',
             'drive_url' => 'https://drive.google.com/drive/folders/abc',
-            'translations' => ['en' => ['title' => 'Biology', 'desc' => 'd', 'button' => 'b']],
+            'translations' => ['en' => ['title' => 'Astrophysics', 'desc' => 'd', 'button' => 'b']],
         ]);
 
-        $this->withSession(['locale' => 'en'])->get('/')->assertDontSee('Biology');
+        $this->withSession(['locale' => 'en'])->get('/')->assertDontSee('Astrophysics');
 
         $this->clearCacheDir();
 
-        $this->withSession(['locale' => 'en'])->get('/')->assertSee('Biology');
+        $this->withSession(['locale' => 'en'])->get('/')->assertSee('Astrophysics');
     }
 
     public function test_only_the_home_page_is_cached(): void
