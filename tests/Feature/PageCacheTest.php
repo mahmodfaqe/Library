@@ -27,6 +27,14 @@ class PageCacheTest extends TestCase
         parent::tearDown();
     }
 
+    /**
+     * The cached copy for a locale, whatever source stamp it carries.
+     */
+    private function cachedCopies(string $locale): array
+    {
+        return glob($this->dir."/home-$locale-*.html") ?: [];
+    }
+
     private function clearCacheDir(): void
     {
         foreach (glob($this->dir.'/*') ?: [] as $file) {
@@ -39,7 +47,7 @@ class PageCacheTest extends TestCase
         $this->get('/en')->assertHeader('X-Page-Cache', 'MISS');
         $this->get('/en')->assertHeader('X-Page-Cache', 'HIT');
 
-        $this->assertFileExists($this->dir.'/home-en.html');
+        $this->assertCount(1, $this->cachedCopies('en'));
     }
 
     public function test_a_returning_visitor_with_a_session_still_gets_the_cache(): void
@@ -58,8 +66,8 @@ class PageCacheTest extends TestCase
         $this->get('/en')->assertHeader('X-Page-Cache', 'MISS');
         $this->get('/ar')->assertHeader('X-Page-Cache', 'MISS');
 
-        $this->assertFileExists($this->dir.'/home-en.html');
-        $this->assertFileExists($this->dir.'/home-ar.html');
+        $this->assertCount(1, $this->cachedCopies('en'));
+        $this->assertCount(1, $this->cachedCopies('ar'));
 
         $this->get('/ar')
             ->assertHeader('X-Page-Cache', 'HIT')
@@ -83,21 +91,21 @@ class PageCacheTest extends TestCase
             ->assertSee(__('messages.feedback.success', [], 'en'));
 
         // A confirmation shown to one visitor must not end up in the shared copy.
-        $this->assertFileDoesNotExist($this->dir.'/home-en.html');
+        $this->assertSame([], $this->cachedCopies('en'));
     }
 
     public function test_the_admin_neither_reads_nor_warms_the_cache(): void
     {
         $this->withSession(['admin_authenticated' => true])->get('/en')->assertOk();
 
-        $this->assertFileDoesNotExist($this->dir.'/home-en.html');
+        $this->assertSame([], $this->cachedCopies('en'));
     }
 
     public function test_a_stale_copy_is_ignored_once_it_expires(): void
     {
         $this->get('/en');
 
-        touch($this->dir.'/home-en.html', time() - 3601);
+        touch($this->cachedCopies('en')[0], time() - 3601);
 
         $this->get('/en')->assertHeader('X-Page-Cache', 'MISS');
     }

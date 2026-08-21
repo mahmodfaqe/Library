@@ -1,3 +1,4 @@
+@use('App\Support\Asset')
 @use('App\Support\Locale')
 @use('App\Support\RichText')
 <!DOCTYPE html>
@@ -22,7 +23,9 @@
     <meta name="description" content="{{ __('messages.meta_description') }}">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#667eea">
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" href="{{ Asset::versioned('favicon.ico') }}" sizes="16x16 32x32 48x48">
+    <link rel="icon" type="image/png" href="{{ Asset::versioned('favicon-96.png') }}" sizes="96x96">
+    <link rel="apple-touch-icon" href="{{ Asset::versioned('apple-touch-icon.png') }}">
     <link rel="canonical" href="{{ Locale::url() }}">
     @foreach (App\Support\Locale::SUPPORTED as $alternate)
         <link rel="alternate" hreflang="{{ Locale::languageTag($alternate) }}" href="{{ Locale::url($alternate) }}">
@@ -334,7 +337,7 @@
         <div class="max-w-[900px] mx-auto">
 
             <!-- BioNova, the team behind the library -->
-            <img src="{{ asset('file/bionova-logo.webp') }}"
+            <img src="{{ Asset::versioned('file/bionova-logo.webp') }}"
                  alt="BioNova"
                  width="400" height="464"
                  loading="lazy" decoding="async"

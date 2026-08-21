@@ -60,6 +60,7 @@ class CachePage
                 @mkdir(dirname($file), 0775, true);
             }
             @file_put_contents($file, $response->getContent());
+            $this->forgetOlderCopies($file);
         }
 
         $response->headers->set('X-Page-Cache', 'MISS');
@@ -68,11 +69,46 @@ class CachePage
     }
 
     /**
-     * The page is rendered per locale, so each locale gets its own copy.
+     * The page is rendered per locale, so each locale gets its own copy — and
+     * the name carries a stamp of the sources it was rendered from, so editing
+     * a template, a translation or the stylesheet cannot leave a stale copy
+     * being served until the TTL runs out.
      */
     private function cacheFile(): string
     {
-        return storage_path('framework/pagecache/home-'.App::getLocale().'.html');
+        return storage_path(
+            'framework/pagecache/home-'.App::getLocale().'-'.$this->sourceStamp().'.html'
+        );
+    }
+
+    private function sourceStamp(): string
+    {
+        $sources = [
+            resource_path('views/home.blade.php'),
+            lang_path(App::getLocale().'/messages.php'),
+            public_path('build/manifest.json'),
+        ];
+
+        $stamps = array_map(
+            fn (string $file) => is_file($file) ? filemtime($file) : 0,
+            $sources
+        );
+
+        return substr(md5(implode('-', $stamps)), 0, 8);
+    }
+
+    /**
+     * Drop copies of this page rendered from older sources.
+     */
+    private function forgetOlderCopies(string $keep): void
+    {
+        $pattern = storage_path('framework/pagecache/home-'.App::getLocale().'-*.html');
+
+        foreach (glob($pattern) ?: [] as $file) {
+            if ($file !== $keep) {
+                @unlink($file);
+            }
+        }
     }
 
     /**

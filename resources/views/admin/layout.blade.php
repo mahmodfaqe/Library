@@ -1,3 +1,4 @@
+@use('App\Support\Asset')
 @use('App\Support\Locale')
 <!DOCTYPE html>
 <html lang="{{ Locale::htmlLang() }}" dir="{{ Locale::dir() }}">
@@ -5,6 +6,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="{{ Asset::versioned('favicon.ico') }}" sizes="16x16 32x32 48x48">
+    <link rel="icon" type="image/png" href="{{ Asset::versioned('favicon-96.png') }}" sizes="96x96">
+    <link rel="apple-touch-icon" href="{{ Asset::versioned('apple-touch-icon.png') }}">
     <title>@yield('title', __('admin.title')) — {{ __('admin.suffix') }}</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }

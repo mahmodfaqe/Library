@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Department;
+use App\Support\Asset;
 use App\Support\Locale;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -133,6 +134,30 @@ class HomePageTest extends TestCase
     public function test_it_shows_the_empty_state_when_there_are_no_departments(): void
     {
         $this->get('/en')->assertSee(__('messages.no_departments', [], 'en'));
+    }
+
+    public function test_every_page_carries_the_site_icons(): void
+    {
+        foreach (['/', '/en', '/admin/login'] as $uri) {
+            $this->get($uri)
+                // Versioned so a replaced icon actually reaches the browser.
+                ->assertSee('href="'.Asset::versioned('favicon.ico').'"', false)
+                ->assertSee('href="'.Asset::versioned('favicon-96.png').'"', false)
+                ->assertSee('rel="apple-touch-icon"', false);
+        }
+
+        foreach (['favicon.ico', 'favicon-96.png', 'apple-touch-icon.png', 'file/bionova-logo.webp'] as $asset) {
+            $path = public_path($asset);
+            $this->assertFileExists($path);
+            $this->assertGreaterThan(0, filesize($path), "$asset is empty");
+        }
+    }
+
+    public function test_the_about_section_shows_the_bionova_mark(): void
+    {
+        $this->get('/')
+            ->assertSee(asset('file/bionova-logo.webp'), false)
+            ->assertSee('alt="BioNova"', false);
     }
 
     public function test_the_page_loads_its_stylesheet_from_the_build(): void

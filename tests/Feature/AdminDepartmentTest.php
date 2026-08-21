@@ -93,7 +93,7 @@ class AdminDepartmentTest extends TestCase
 
     public function test_writing_a_department_clears_the_page_cache(): void
     {
-        $file = storage_path('framework/pagecache/home-en.html');
+        $file = storage_path('framework/pagecache/home-en-abc12345.html');
         @mkdir(dirname($file), 0775, true);
         file_put_contents($file, '<html>stale</html>');
 
