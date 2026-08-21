@@ -3,9 +3,21 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HomeController;
+use App\Http\Middleware\SetLocale;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('pagecache');
+
+Route::get('language', function (Request $request) {
+    $locale = $request->query('locale');
+
+    if (is_string($locale) && in_array($locale, SetLocale::LOCALES, true)) {
+        $request->session()->put('locale', $locale);
+    }
+
+    return back();
+})->name('language.switch');
 
 Route::post('feedback', [FeedbackController::class, 'store'])->name('feedback.store');
 

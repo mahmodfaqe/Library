@@ -1256,6 +1256,7 @@ function updateVisitorLabel(lang){
 }
 var currentLang = sessionStorage.getItem('selectedLanguage')||'ku-sorani';
 var KU_DIALECTS=['ku-sorani','ku-badini','ku-badini-lat','ku-hawrami'];
+var LANGUAGE_SWITCH_URL = "{{ url('language') }}";
 var LTR_LANGS=['en','tr','ku-badini-lat'];
 applyLanguage(currentLang);
 restoreButtons(currentLang);
@@ -1285,6 +1286,11 @@ document.addEventListener('click',function(e){
     if(kg && !kg.contains(e.target)) closeKuDropdown();
 });
 
+function persistLang(lang){
+    if(typeof fetch!=='undefined' && LANGUAGE_SWITCH_URL){
+        fetch(LANGUAGE_SWITCH_URL+'?locale='+encodeURIComponent(lang),{method:'GET',credentials:'same-origin'}).catch(function(){});
+    }
+}
 function selectDialect(lang,btn){
     closeKuDropdown();
     document.getElementById('kuMainBtn').classList.add('active');
@@ -1292,6 +1298,7 @@ function selectDialect(lang,btn){
     document.querySelectorAll('.ku-dialect-btn').forEach(function(b){ b.classList.remove('active'); });
     btn.classList.add('active');
     applyLanguage(lang);
+    persistLang(lang);
 }
 function switchLang(lang){
     closeKuDropdown();
@@ -1301,10 +1308,12 @@ function switchLang(lang){
         b.classList.toggle('active',b.getAttribute('data-lang')===lang);
     });
     applyLanguage(lang);
+    persistLang(lang);
 }
 function applyLanguage(lang){
     currentLang=lang;
     sessionStorage.setItem('selectedLanguage',lang);
+    document.documentElement.setAttribute('lang', KU_DIALECTS.indexOf(lang)>-1 ? 'ku' : lang);
     document.querySelectorAll('.lang-content.active').forEach(function(el){ el.style.opacity='0'; });
     setTimeout(function(){
         document.querySelectorAll('.lang-content').forEach(function(el){
