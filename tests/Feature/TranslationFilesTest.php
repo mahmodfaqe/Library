@@ -141,8 +141,7 @@ class TranslationFilesTest extends TestCase
             $count = count($this->load($locale, 'messages')['intro']['paragraphs']);
 
             $expected = match ($locale) {
-                'ku-badini' => 5,
-                'ku-hawrami' => 1,   // still awaiting a translation of paragraphs 2-4
+                'ku-badini' => 5,   // carries a Bismillah line ahead of the four
                 default => 4,
             };
 
