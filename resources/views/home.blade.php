@@ -325,6 +325,7 @@
                 @endforelse
             </div>
         </div>
+    </div>
 </section>
 
 <!-- ══════════ ABOUT SECTION ══════════ -->
