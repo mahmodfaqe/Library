@@ -31,7 +31,7 @@ class AdminController extends Controller
             return redirect()->intended(route('admin.index'));
         }
 
-        return back()->withErrors(['password' => 'وشەنووسەکە هەڵەیە.'])->onlyInput('password');
+        return back()->withErrors(['password' => 'وشەنهێنیەکە هەڵەیە.'])->onlyInput('password');
     }
 
     public function logout(Request $request): RedirectResponse

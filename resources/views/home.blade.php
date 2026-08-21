@@ -516,7 +516,9 @@
 
             <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal"
                  style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                @php($openingDate = '<strong>'.e(__('messages.history.opening_date')).'</strong>')
+                @php
+                    $openingDate = '<strong>'.e(__('messages.history.opening_date')).'</strong>';
+                @endphp
                 @foreach (__('messages.history.paragraphs') as $paragraph)
                     <p class="text-[#6b6b80] leading-[1.9] {{ $loop->last ? '' : 'mb-4' }} text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">{{ RichText::make($paragraph, ['date' => $openingDate]) }}</p>
                 @endforeach
