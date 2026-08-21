@@ -1,5 +1,7 @@
+@use('App\Support\Locale')
+@use('App\Support\RichText')
 <!DOCTYPE html>
-<html lang="{{ str_starts_with(app()->getLocale(), 'ku') ? 'ku' : app()->getLocale() }}" dir="{{ in_array(app()->getLocale(), ['en','tr','ku-badini-lat']) ? 'ltr' : 'rtl' }}">
+<html lang="{{ Locale::htmlLang() }}" dir="{{ Locale::dir() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
@@ -296,7 +298,7 @@
     }
     </script>
 </head>
-<body class="bg-[#f8f9ff] text-[#2d2d3a] overflow-x-hidden" dir="{{ in_array(app()->getLocale(), ['en','tr','ku-badini-lat']) ? 'ltr' : 'rtl' }}">
+<body class="bg-[#f8f9ff] text-[#2d2d3a] overflow-x-hidden" dir="{{ Locale::dir() }}">
 
 <div id="scrollProgress"></div>
 
@@ -446,8 +448,10 @@
 
     <div class="container mx-auto relative z-20 px-4">
         <div class="max-w-4xl mx-auto">
-            
-            {!! __('messages.hero_eyebrow') !!}
+
+            <h2 class="opacity-80 tracking-widest mb-2" style="font-size:clamp(1rem,3vw,1.3rem);">{{ __('messages.hero.welcome') }}</h2>
+            <h1 class="font-bold mb-6 leading-tight" style="font-size:clamp(2.5rem,8vw,4.5rem);">{{ __('messages.hero.title') }}</h1>
+            <p class="mb-8 opacity-95 mx-auto max-w-3xl" style="font-size:clamp(0.95rem,2.5vw,1.25rem);">{{ __('messages.hero.subtitle') }}</p>
 
         </div>
     </div>
@@ -457,8 +461,48 @@
 <section class="bg-white" style="padding: clamp(3rem,8vw,6rem) 0;">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
 
-        <!-- KU SORANI -->
-        {!! __('messages.hero_title') !!}
+        <div class="text-center max-w-[900px] mx-auto">
+            <h2 class="font-bold text-[#2d2d3a] mb-8" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.intro.heading') }}</h2>
+
+            <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal"
+                 style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
+
+                @foreach (__('messages.intro.paragraphs') as $paragraph)
+                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">{{ $paragraph }}</p>
+                @endforeach
+
+                <!-- Objectives -->
+                <div class="rounded-[10px] p-6 mb-6 border border-[rgba(102,126,234,0.16)] transition-all duration-300 hover:shadow-md reveal"
+                     style="background:rgba(102,126,234,0.08);">
+                    <h3 class="text-[#667eea] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">{{ __('messages.intro.objectives_heading') }}</h3>
+                    <ul class="list-none p-0 text-[#6b6b80] leading-loose" style="font-size:clamp(0.9rem,2.5vw,1.05rem);">
+                        @php
+                            $qrLink = '<a href="https://scence-bio.github.io/Qr-Code/" style="color: gold; text-shadow: 0 0 8px gold, 0 0 15px gold;">'
+                                .e(__('messages.intro.qr_label')).'</a>';
+                        @endphp
+                        @foreach (__('messages.intro.objectives') as $objective)
+                            <li class="mb-1 pl-6">{{ RichText::make($objective, ['qr' => $qrLink]) }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <!-- Prepared by -->
+                <div class="rounded-[10px] p-6 border border-[rgba(255,107,107,0.15)] reveal" style="background:rgba(255,107,107,0.07);">
+                    <h3 class="text-[#ff6b6b] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">{{ __('messages.intro.prepared_heading') }}</h3>
+                    <div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(min(220px,100%),1fr));">
+                        @foreach (__('messages.intro.people') as $person)
+                            <div class="text-center p-5 bg-white rounded-xl shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                                <h4 class="text-[#2d2d3a] mb-2 font-bold">{{ $person['name'] }}</h4>
+                                <p class="text-[#6b6b80]">{{ $person['role'] }}</p>
+                                @if ($person['social'])
+                                    <div class="social-placeholder"></div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 </section>
@@ -468,8 +512,15 @@
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-[900px] mx-auto">
 
-            <!-- KU SORANI -->
-            {!! __('messages.services_heading') !!}
+            <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.history.heading') }}</h2>
+
+            <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal"
+                 style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
+                @php($openingDate = '<strong>'.e(__('messages.history.opening_date')).'</strong>')
+                @foreach (__('messages.history.paragraphs') as $paragraph)
+                    <p class="text-[#6b6b80] leading-[1.9] {{ $loop->last ? '' : 'mb-4' }} text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">{{ RichText::make($paragraph, ['date' => $openingDate]) }}</p>
+                @endforeach
+            </div>
 
         </div>
     </div>
@@ -478,7 +529,11 @@
 <section style="padding: clamp(1rem,4vw,0.5rem) 0; background: linear-gradient(160deg, #f0f2ff 0%, #e8ebff 100%);">
     <div class="max-w-[1200px] mx-auto px-6 sm:px-8 lg:px-10">
         <div class="text-center mb-10 reveal">
-            {!! __('messages.resources_heading') !!}
+            <h2 class="font-bold text-[#2d2d3a] mb-6" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.library.heading') }}</h2>
+            <a href="https://drive.google.com/drive/folders/12PipzBzMVgfr1tFSy-4bplnVMnNHTy4d"
+               class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5"
+               style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;"
+               target="_blank">{{ __('messages.library.button_1') }}</a>
         </div>
     </div>
 </section>
@@ -489,11 +544,11 @@
 
         <!-- Library 2 button -->
         <div class="text-center">
-            <a href="https://drive.google.com/drive/folders/1KkvwcZdKCZzV7gjExlnOdl1JnCELHCkC" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">{{ __('messages.main_library_btn') }}</a>
+            <a href="https://drive.google.com/drive/folders/1KkvwcZdKCZzV7gjExlnOdl1JnCELHCkC" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">{{ __('messages.library.button_2') }}</a>
         </div>
 
         <!-- Department cards (DB-driven) -->
-        <div id="dept-{{ app()->getLocale() }}" style="direction:{{ in_array(app()->getLocale(), ['en','tr','ku-badini-lat']) ? 'ltr' : 'rtl' }};">
+        <div id="dept-{{ app()->getLocale() }}" style="direction:{{ Locale::dir() }};">
             <h2 class="text-center font-bold text-[#2d2d3a] mb-10" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.dept_heading') }}</h2>
             <div class="grid gap-5" style="grid-template-columns: repeat(auto-fit, minmax(260px,1fr));">
                 @forelse ($departments as $department)
@@ -517,7 +572,19 @@
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-[900px] mx-auto">
 
-            {!! __('messages.about_block') !!}
+            <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.about.heading') }}</h2>
+
+            <div class="relative rounded-[18px] overflow-hidden reveal"
+                 style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
+                <div class="absolute top-0 left-0 right-0 h-1" style="background: linear-gradient(90deg, #667eea, #764ba2);"></div>
+
+                <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">{{ __('messages.about.intro') }}</p>
+
+                <div class="rounded-[10px] p-6" style="background:rgba(102,126,234,0.09); border:1px solid rgba(102,126,234,0.16);">
+                    <h3 class="text-[#667eea] mb-3 text-center font-bold" style="font-size:clamp(1.1rem,3vw,1.35rem);">{{ __('messages.about.mission_heading') }}</h3>
+                    <p class="text-[#6b6b80] mb-0 italic text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem); font-style: italic;">{{ __('messages.about.mission_text') }}</p>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -535,40 +602,40 @@
     <div class="max-w-[760px] mx-auto px-4 sm:px-6">
         @if (session('feedback_sent'))
             <div class="mb-6 rounded-[14px] px-5 py-4 text-center font-semibold" style="background:#d1fae5; color:#065f46; font-size:clamp(0.9rem,2vw,1rem);">
-                    {{ __('messages.feedback_success') }}
+                    {{ __('messages.feedback.success') }}
             </div>
         @endif
         @if ($errors->has('message'))
             <div class="mb-6 rounded-[14px] px-5 py-4 text-center font-semibold" style="background:#fee2e2; color:#991b1b; font-size:clamp(0.9rem,2vw,1rem);">
-                {{ __('messages.feedback_error') }}
+                {{ __('messages.feedback.error') }}
             </div>
         @endif
         <div class="rounded-[22px] bg-white/85 backdrop-blur-md border border-white/70 text-center" style="box-shadow:0 10px 40px rgba(102,126,234,0.14); padding: clamp(1.8rem,5vw,3rem);">
             <h2 class="font-bold text-[#2d2d3a] mb-3" style="font-size:clamp(1.5rem,4vw,2rem);">
-                    {{ __('messages.feedback_title') }}
+                    {{ __('messages.feedback.title') }}
             </h2>
             <p class="text-[#6b6b80] mb-6" style="font-size:clamp(0.9rem,2.2vw,1rem); line-height:1.7;">
-                    {{ __('messages.feedback_subtitle') }}
+                    {{ __('messages.feedback.subtitle') }}
             </p>
-            <form method="POST" action="{{ route('feedback.store') }}" style="text-align:right;">
+            <form method="POST" action="{{ route('feedback.store') }}" style="text-align:start;">
                 @csrf
-                <div class="mb-4 text-right" style="text-align:right;">
+                <div class="mb-4 text-start">
                     <label for="fb-name" class="block font-semibold mb-1 text-[#4a4a5c]" style="font-size:0.9rem;">
-                        {{ __('messages.fb_name_label') }}
+                        {{ __('messages.feedback.name_label') }}
                     </label>
                     <input type="text" id="fb-name" name="name" maxlength="120" value="{{ old('name') }}"
-                           class="w-full rounded-[12px] px-4 py-3" style="border:1px solid #d5d9ee; font-size:0.95rem; font-family:inherit; text-align:right;">
+                           class="w-full rounded-[12px] px-4 py-3" style="border:1px solid #d5d9ee; font-size:0.95rem; font-family:inherit; text-align:start;">
                 </div>
-                <div class="mb-5 text-right">
+                <div class="mb-5 text-start">
                     <label for="fb-msg" class="block font-semibold mb-1 text-[#4a4a5c]" style="font-size:0.9rem;">
-                        {{ __('messages.fb_msg_label') }}
+                        {{ __('messages.feedback.message_label') }}
                     </label>
                     <textarea id="fb-msg" name="message" rows="4" maxlength="2000" required
-                              class="w-full rounded-[12px] px-4 py-3" style="border:1px solid #d5d9ee; font-size:0.95rem; font-family:inherit; text-align:right;">{{ old('message') }}</textarea>
+                              class="w-full rounded-[12px] px-4 py-3" style="border:1px solid #d5d9ee; font-size:0.95rem; font-family:inherit; text-align:start;">{{ old('message') }}</textarea>
                 </div>
                 <div style="text-align:center;">
                     <button type="submit" class="section-btn relative inline-block font-semibold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1 font-[inherit] cursor-pointer" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:clamp(0.65rem,2.2vw,0.9rem) clamp(1.6rem,4vw,2.4rem); font-size:clamp(0.9rem,2.2vw,1rem); box-shadow:0 4px 14px rgba(102,126,234,0.28); border:none;">
-                        {{ __('messages.fb_send') }}
+                        {{ __('messages.feedback.send') }}
                     </button>
                 </div>
             </form>
@@ -578,9 +645,13 @@
 <!-- ══════════ FOOTER ══════════ -->
 <footer class="text-center" style="background: linear-gradient(135deg, #1e1e2e 0%, #2d2b4e 100%); color: rgba(255,255,255,0.82); padding: clamp(1.5rem,4vw,2.2rem) 0;">
     <div class="max-w-[1200px] mx-auto px-4">
-        {!! __('messages.footer_copyright') !!}
-
-        {!! __('messages.footer_uor_link') !!}
+        @php
+            $year = '<span class="'.Locale::yearClass().'"></span>';
+            $uorLink = '<a href="https://uor.edu.krd" target="_blank" rel="noopener" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">'
+                .e(__('messages.footer.uor_link_label')).'</a>';
+        @endphp
+        <p style="font-size:clamp(0.85rem,2vw,0.95rem);">{{ RichText::make(__('messages.footer.copyright'), ['year' => $year]) }}</p>
+        <p style="font-size:clamp(0.85rem,2vw,0.95rem);">{{ RichText::make(__('messages.footer.uor_line'), ['link' => $uorLink]) }}</p>
 
         <div class="mt-3 flex items-center justify-center gap-3 opacity-75 hover:opacity-100 transition-opacity duration-300">
             <span style="font-size: 1rem;">👁</span>
