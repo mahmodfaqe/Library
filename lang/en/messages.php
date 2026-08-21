@@ -68,5 +68,6 @@ style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: c
     'site_title' => 'Electronic Library of the College of Science - Raparin University',
     'meta_description' => 'The College of Science Electronic Library at Raparin University: online library services and access to books and scientific resources in 8 languages.',
     'jsonld_description' => 'The College of Science Electronic Library at Raparin University.',
+    'no_departments' => 'No departments found.',
     'scroll_top' => 'Back to top',
 ];

@@ -59,5 +59,6 @@ style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: c
     'site_title' => 'Fen Fakültesi Elektronik Kütüphanesi - Raparin Üniversitesi',
     'meta_description' => 'Raparin Üniversitesi Fen Fakültesi Elektronik Kütüphanesi: çevrimiçi kütüphane hizmetleri ve kitaplara ile bilimsel kaynaklara 8 dilde erişim.',
     'jsonld_description' => 'Raparin Üniversitesi Fen Fakültesi Elektronik Kütüphanesi.',
+    'no_departments' => 'Bölüm bulunamadı.',
     'scroll_top' => 'Başa dön',
 ];

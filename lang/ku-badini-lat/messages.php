@@ -59,5 +59,6 @@ style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: c
     'site_title' => 'Kitêbxaneya Elektronîkî ya Kolêja Zanistê - Zanîngeha Raperin',
     'meta_description' => 'Kitêbxaneya Elektronîkî ya Kolêja Zanistê li Zanîngeha Raperin: xizmetguzariyên pirtûkxaneya serhêl û gihîştina pirtûkan û çavkaniyên zanistî bi 8 zimanan.',
     'jsonld_description' => 'Kitêbxaneya Elektronîkî ya Kolêja Zanistê li Zanîngeha Raperin.',
+    'no_departments' => 'Ti beş nehat dîtin.',
     'scroll_top' => 'Vegere jor',
 ];

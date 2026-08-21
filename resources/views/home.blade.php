@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ku">
+<html lang="{{ str_starts_with(app()->getLocale(), 'ku') ? 'ku' : app()->getLocale() }}" dir="{{ in_array(app()->getLocale(), ['en','tr','ku-badini-lat']) ? 'ltr' : 'rtl' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
@@ -8,22 +8,22 @@
     <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
     <link rel="dns-prefetch" href="https://mahmodfaqe.goatcounter.com">
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
-    <title>کتێبخانەی ئەلیکترۆنی کۆلێژی زانست - زانکۆی ڕاپەڕین</title>
-    <meta name="description" content="کتێبخانەی ئەلیکترۆنی کۆلێژی زانست لە زانکۆی ڕاپەڕین: خزمەتگوزاری کتێبخانەی ئۆنلاین و دەستگەیشتن بە کتێب و سەرچاوە زانستییەکان بە ٨ زمان.">
+    <title>{{ __('messages.site_title') }}</title>
+    <meta name="description" content="{{ __('messages.meta_description') }}">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#667eea">
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link rel="canonical" href="{{ url('/') }}">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="کتێبخانەی ئەلیکترۆنی کۆلێژی زانست - زانکۆی ڕاپەڕین">
-    <meta property="og:title" content="کتێبخانەی ئەلیکترۆنی کۆلێژی زانست - زانکۆی ڕاپەڕین">
-    <meta property="og:description" content="خزمەتگوزاری کتێبخانەی ئۆنلاین و دەستگەیشتن بە کتێب و سەرچاوە زانستییەکان بە ٨ زمان.">
+    <meta property="og:site_name" content="{{ __('messages.site_title') }}">
+    <meta property="og:title" content="{{ __('messages.site_title') }}">
+    <meta property="og:description" content="{{ __('messages.meta_description') }}">
     <meta property="og:url" content="{{ url('/') }}">
     <meta property="og:image" content="{{ asset('file/uor-logo.png') }}">
     <meta property="og:locale" content="ku">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="کتێبخانەی ئەلیکترۆنی کۆلێژی زانست - زانکۆی ڕاپەڕین">
-    <meta name="twitter:description" content="خزمەتگوزاری کتێبخانەی ئۆنلاین و دەستگەیشتن بە کتێب و سەرچاوە زانستییەکان بە ٨ زمان.">
+    <meta name="twitter:title" content="{{ __('messages.site_title') }}">
+    <meta name="twitter:description" content="{{ __('messages.meta_description') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -168,14 +168,6 @@
         }
         .reveal.visible { opacity: 1; transform: translateY(0); }
 
-        /* Lang content */
-        .lang-content { display: none; opacity: 0; transition: opacity 0.35s ease; }
-        .lang-content.active { display: block; opacity: 1; }
-        .logo-title .lang-content,
-        .logo-subtitle .lang-content { display: none; }
-        .logo-title .lang-content.active,
-        .logo-subtitle .lang-content.active { display: inline; opacity: 1; }
-
         /* Particle */
         .particle {
             position: absolute;
@@ -297,14 +289,14 @@
         "alternateName": "Raparin Science College Electronic Library",
         "url": "{{ url('/') }}",
         "logo": "{{ asset('file/uor-logo.png') }}",
-        "description": "کتێبخانەی ئەلیکترۆنی کۆلێژی زانست لە زانکۆی ڕاپەڕین.",
+        "description": @json(__('messages.jsonld_description')),
         "inLanguage": ["ckb", "en", "ar", "fa", "tr"],
         "isAccessibleForFree": true,
         "sameAs": ["https://github.com/mahmodfaqe/Library"]
     }
     </script>
 </head>
-<body class="bg-[#f8f9ff] text-[#2d2d3a] overflow-x-hidden" dir="rtl">
+<body class="bg-[#f8f9ff] text-[#2d2d3a] overflow-x-hidden" dir="{{ in_array(app()->getLocale(), ['en','tr','ku-badini-lat']) ? 'ltr' : 'rtl' }}">
 
 <div id="scrollProgress"></div>
 
@@ -323,25 +315,11 @@
                 <div class="flex flex-col min-w-0 flex-shrink">
                     <span class="logo-title logo-title-el font-bold text-white leading-tight overflow-hidden text-ellipsis whitespace-nowrap"
                           style="font-size: clamp(0.72rem,2.8vw,1.4rem);">
-                        <span class="lang-content active" data-lang="ku-sorani">زانکۆی ڕاپەڕین</span>
-                        <span class="lang-content" data-lang="ku-badini">زانینگەها ڕاپەرین</span>
-                        <span class="lang-content" data-lang="ku-badini-lat">Zanîngeha Raperin</span>
-                        <span class="lang-content" data-lang="ku-hawrami">زانکۆی ڕاپەڕین</span>
-                        <span class="lang-content" data-lang="en">University of Raparin</span>
-                        <span class="lang-content" data-lang="ar">جامعة رابەرين</span>
-                        <span class="lang-content" data-lang="fa">دانشگاه راپەرین</span>
-                        <span class="lang-content" data-lang="tr">Raparin Üniversitesi</span>
+                        {{ __('messages.university_name') }}
                     </span>
                     <span class="logo-subtitle logo-sub-el block mt-1 overflow-hidden text-ellipsis whitespace-nowrap"
                           style="font-size: clamp(0.55rem,1.8vw,0.9rem); color: rgba(255,255,255,0.72);">
-                        <span class="lang-content active" data-lang="ku-sorani">کتێبخانەی ئەلیکترۆنی</span>
-                        <span class="lang-content" data-lang="ku-badini">پرتوکخانەیا ئەلیکترۆنیک</span>
-                        <span class="lang-content" data-lang="ku-badini-lat">Kitêbxaneya Elektronîkî</span>
-                        <span class="lang-content" data-lang="ku-hawrami">کتێبخانەی ئەلیکترۆنی</span>
-                        <span class="lang-content" data-lang="en">Electronic Library</span>
-                        <span class="lang-content" data-lang="ar">المكتبة الإلكترونية</span>
-                        <span class="lang-content" data-lang="fa">کتابخانه الکترونیکی</span>
-                        <span class="lang-content" data-lang="tr">Elektronik Kütüphane</span>
+                        {{ __('messages.library_name') }}
                     </span>
                 </div>
             </a>
@@ -354,32 +332,24 @@
                 <!-- Kurdish dropdown group -->
                 <div class="relative" id="kuGroup">
                     <button id="kuMainBtn"
-                            class="active flex items-center gap-1 px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md font-[inherit]"
+                            class="{{ str_starts_with(app()->getLocale(), 'ku') ? 'active ' : '' }}flex items-center gap-1 px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md font-[inherit]"
                             style="font-size: clamp(0.52rem,1.4vw,0.8rem); min-height:30px;"
                             onclick="toggleKuDropdown()">
                         کوردی <span class="text-[0.5rem] transition-transform duration-300" id="kuArrow">▼</span>
                     </button>
                     <div class="ku-dropdown" id="kuDropdown">
-                        <button class="ku-dialect-btn active block w-full bg-transparent border-0 text-white text-right cursor-pointer transition-colors duration-200 hover:bg-white/15 font-[Rabar,sans-serif]"
-                                style="padding: clamp(0.38rem,1.2vw,0.55rem) clamp(0.6rem,2vw,1rem); font-size:clamp(0.58rem,1.4vw,0.8rem); min-height:36px;"
-                                data-lang="ku-sorani" onclick="selectDialect('ku-sorani',this)">
+                        <a href="{{ url('language') }}?locale=ku-sorani" class="ku-dialect-btn block w-full bg-transparent border-0 text-white text-right cursor-pointer transition-colors duration-200 hover:bg-white/15 font-[Rabar,sans-serif] no-underline{{ app()->getLocale() === 'ku-sorani' ? ' active' : '' }}" style="padding: clamp(0.38rem,1.2vw,0.55rem) clamp(0.6rem,2vw,1rem); font-size:clamp(0.58rem,1.4vw,0.8rem); min-height:36px;">
                             سۆرانی<span class="block text-[0.5em] opacity-65 mt-px">Soranî</span>
-                        </button>
-                        <button class="ku-dialect-btn block w-full bg-transparent border-0 text-white text-right cursor-pointer transition-colors duration-200 hover:bg-white/15 font-[Rabar,sans-serif]"
-                                style="padding: clamp(0.38rem,1.2vw,0.55rem) clamp(0.6rem,2vw,1rem); font-size:clamp(0.58rem,1.4vw,0.8rem); min-height:36px;"
-                                data-lang="ku-badini" onclick="selectDialect('ku-badini',this)">
+                        </a>
+                        <a href="{{ url('language') }}?locale=ku-badini" class="ku-dialect-btn block w-full bg-transparent border-0 text-white text-right cursor-pointer transition-colors duration-200 hover:bg-white/15 font-[Rabar,sans-serif] no-underline{{ app()->getLocale() === 'ku-badini' ? ' active' : '' }}" style="padding: clamp(0.38rem,1.2vw,0.55rem) clamp(0.6rem,2vw,1rem); font-size:clamp(0.58rem,1.4vw,0.8rem); min-height:36px;">
                             بادینی<span class="block text-[0.5em] opacity-65 mt-px">Kurmancî (عەرەبی)</span>
-                        </button>
-                        <button class="ku-dialect-btn block w-full bg-transparent border-0 text-white text-left cursor-pointer transition-colors duration-200 hover:bg-white/15 font-sans"
-                                style="padding: clamp(0.38rem,1.2vw,0.55rem) clamp(0.6rem,2vw,1rem); font-size:clamp(0.58rem,1.4vw,0.8rem); min-height:36px;"
-                                data-lang="ku-badini-lat" onclick="selectDialect('ku-badini-lat',this)">
+                        </a>
+                        <a href="{{ url('language') }}?locale=ku-badini-lat" class="ku-dialect-btn block w-full bg-transparent border-0 text-white text-left cursor-pointer transition-colors duration-200 hover:bg-white/15 font-sans no-underline{{ app()->getLocale() === 'ku-badini-lat' ? ' active' : '' }}" style="padding: clamp(0.38rem,1.2vw,0.55rem) clamp(0.6rem,2vw,1rem); font-size:clamp(0.58rem,1.4vw,0.8rem); min-height:36px;">
                             Badînî<span class="block text-[0.5em] opacity-65 mt-px">Kurmancî (Latînî)</span>
-                        </button>
-                        <button class="ku-dialect-btn block w-full bg-transparent border-0 text-white text-right cursor-pointer transition-colors duration-200 hover:bg-white/15 font-[Rabar,sans-serif]"
-                                style="padding: clamp(0.38rem,1.2vw,0.55rem) clamp(0.6rem,2vw,1rem); font-size:clamp(0.58rem,1.4vw,0.8rem); min-height:36px;"
-                                data-lang="ku-hawrami" onclick="selectDialect('ku-hawrami',this)">
+                        </a>
+                        <a href="{{ url('language') }}?locale=ku-hawrami" class="ku-dialect-btn block w-full bg-transparent border-0 text-white text-right cursor-pointer transition-colors duration-200 hover:bg-white/15 font-[Rabar,sans-serif] no-underline{{ app()->getLocale() === 'ku-hawrami' ? ' active' : '' }}" style="padding: clamp(0.38rem,1.2vw,0.55rem) clamp(0.6rem,2vw,1rem); font-size:clamp(0.58rem,1.4vw,0.8rem); min-height:36px;">
                             هەورامی<span class="block text-[0.5em] opacity-65 mt-px">Hewramî</span>
-                        </button>
+                        </a>
                     </div>
                 </div>
 
@@ -388,18 +358,10 @@
 
                 <!-- Other languages -->
                 <div class="flex items-center gap-1 flex-nowrap overflow-x-auto" style="scrollbar-width:none; max-width:clamp(100px,40vw,400px);">
-                    <button class="lang-btn px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md whitespace-nowrap flex-shrink-0 font-[inherit]"
-                            style="font-size:clamp(0.52rem,1.4vw,0.8rem); min-height:30px;"
-                            data-lang="en" onclick="switchLang('en')">English</button>
-                    <button class="lang-btn px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md whitespace-nowrap flex-shrink-0 font-[inherit]"
-                            style="font-size:clamp(0.52rem,1.4vw,0.8rem); min-height:30px;"
-                            data-lang="ar" onclick="switchLang('ar')">العربية</button>
-                    <button class="lang-btn px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md whitespace-nowrap flex-shrink-0 font-[inherit]"
-                            style="font-size:clamp(0.52rem,1.4vw,0.8rem); min-height:30px;"
-                            data-lang="fa" onclick="switchLang('fa')">فارسی</button>
-                    <button class="lang-btn px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md whitespace-nowrap flex-shrink-0 font-[inherit]"
-                            style="font-size:clamp(0.52rem,1.4vw,0.8rem); min-height:30px;"
-                            data-lang="tr" onclick="switchLang('tr')">Türkçe</button>
+                    <a href="{{ url('language') }}?locale=en" class="lang-btn px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md whitespace-nowrap flex-shrink-0 font-[inherit] no-underline{{ app()->getLocale() === 'en' ? ' active' : '' }}" style="font-size:clamp(0.52rem,1.4vw,0.8rem); min-height:30px;">English</a>
+                    <a href="{{ url('language') }}?locale=ar" class="lang-btn px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md whitespace-nowrap flex-shrink-0 font-[inherit] no-underline{{ app()->getLocale() === 'ar' ? ' active' : '' }}" style="font-size:clamp(0.52rem,1.4vw,0.8rem); min-height:30px;">العربية</a>
+                    <a href="{{ url('language') }}?locale=fa" class="lang-btn px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md whitespace-nowrap flex-shrink-0 font-[inherit] no-underline{{ app()->getLocale() === 'fa' ? ' active' : '' }}" style="font-size:clamp(0.52rem,1.4vw,0.8rem); min-height:30px;">فارسی</a>
+                    <a href="{{ url('language') }}?locale=tr" class="lang-btn px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md whitespace-nowrap flex-shrink-0 font-[inherit] no-underline{{ app()->getLocale() === 'tr' ? ' active' : '' }}" style="font-size:clamp(0.52rem,1.4vw,0.8rem); min-height:30px;">Türkçe</a>
                 </div>
             </div>
         </div>
@@ -485,53 +447,7 @@
     <div class="container mx-auto relative z-20 px-4">
         <div class="max-w-4xl mx-auto">
             
-            <div class="lang-content active" data-lang="ku-sorani" style="direction:rtl;">
-                <h2 class="opacity-80 tracking-widest mb-2" style="font-size:clamp(1rem,3vw,1.3rem);">بەخێربێن بۆ</h2>
-                <h1 class="font-bold mb-6 leading-tight" style="font-size: clamp(2.5rem, 8vw, 4.5rem);">کتێبخانەی ئەلیکترۆنی کۆلێژی زانست</h1>
-                <p class="mb-8 opacity-95 mx-auto max-w-3xl" style="font-size: clamp(0.95rem,2.5vw,1.25rem);">بەردەستبوون و کۆکردنەوەی هەزاران سەرچاوە و پەرتووکی زانستی بە شێوەیەکی ئاسان و خێرا.</p>
-            </div>
-
-            <div class="lang-content" data-lang="ku-badini" style="direction:rtl;">
-                <h2 style="font-size:clamp(1rem,3vw,1.3rem);">بخێر هاتن بۆ</h2>
-                <h1 class="font-bold mb-6 leading-tight" style="font-size: clamp(2.5rem, 8vw, 4.5rem);">کتێبخانەیا ئەلیکترۆنیکی یا کۆلێژا زانستێ</h1>
-                <p class="mb-8 opacity-95 mx-auto max-w-3xl" style="font-size: clamp(0.95rem,2.5vw,1.25rem);">بهێسانی و زو پەیدابوونا بی هەزاران چاوکانی و پەرتوکین زانستی.</p>
-            </div>
-
-            <div class="lang-content" data-lang="ku-badini-lat" style="direction:ltr;">
-                <h2 style="font-size:clamp(1rem,3vw,1.3rem);">Bi xêr hatin</h2>
-                <h1 class="font-bold mb-6 leading-tight" style="font-size: clamp(2.5rem, 8vw, 4.5rem);">Kitêbxaneya Elektronîkî ya Kolêja Zanistê</h1>
-                <p class="mb-8 opacity-95 mx-auto max-w-3xl" style="font-size: clamp(0.95rem,2.5vw,1.25rem);">Bigihîje hezaran çavkanî û pirtûkên zanistî bi awayekî hêsan û bilez.</p>
-            </div>
-
-            <div class="lang-content" data-lang="ku-hawrami" style="direction:rtl;">
-                <h2 style="font-size:clamp(1rem,3vw,1.3rem);">خۆش بگەیەیت بۆ</h2>
-                <h1 class="font-bold mb-6 leading-tight" style="font-size: clamp(2.5rem, 8vw, 4.5rem);">کتێبخانەی ئەلیکترۆنی کۆلێژی زانست</h1>
-                <p class="mb-8 opacity-95 mx-auto max-w-3xl" style="font-size: clamp(0.95rem,2.5vw,1.25rem);">دەستڕەسیەتی بە هەزاران سەرچاوە و پەرتووکی زانستی بە شێوەیەکی ئاسان و خێرا.</p>
-            </div>
-
-            <div class="lang-content" data-lang="en" style="direction:ltr;">
-                <h2 style="font-size:clamp(1rem,3vw,1.3rem);">Welcome To</h2>
-                <h1 class="font-bold mb-6 leading-tight" style="font-size: clamp(2.5rem, 8vw, 4.5rem);">College of Science Electronic Library</h1>
-                <p class="mb-8 opacity-95 mx-auto max-w-3xl" style="font-size: clamp(0.95rem,2.5vw,1.25rem);">Access and gather thousands of scientific resources and books easily and quickly.</p>
-            </div>
-
-            <div class="lang-content" data-lang="ar" style="direction:rtl;">
-                <h2 style="font-size:clamp(1rem,3vw,1.3rem);">مرحبا بكم في</h2>
-                <h1 class="font-bold mb-6 leading-tight" style="font-size: clamp(2.5rem, 8vw, 4.5rem);">المكتبة الإلكترونية لكلية العلوم</h1>
-                <p class="mb-8 opacity-95 mx-auto max-w-3xl" style="font-size: clamp(0.95rem,2.5vw,1.25rem);">الوصول وتجميع آلاف المصادر والكتب العلمية بسهولة وسرعة.</p>
-            </div>
-
-            <div class="lang-content" data-lang="fa" style="direction:rtl;">
-                <h2 style="font-size:clamp(1rem,3vw,1.3rem);">خوش آمدید به</h2>
-                <h1 class="font-bold mb-6 leading-tight" style="font-size: clamp(2.5rem, 8vw, 4.5rem);">کتابخانه الکترونیکی دانشکده علوم</h1>
-                <p class="mb-8 opacity-95 mx-auto max-w-3xl" style="font-size: clamp(0.95rem,2.5vw,1.25rem);">دسترسی و گردآوری هزاران منبع و کتاب علمی به آسانی و سرعت.</p>
-            </div>
-
-            <div class="lang-content" data-lang="tr" style="direction:ltr;">
-                <h2 style="font-size:clamp(1rem,3vw,1.3rem);">Hoş Geldiniz</h2>
-                <h1 class="font-bold mb-6 leading-tight" style="font-size: clamp(2.5rem, 8vw, 4.5rem);">Fen Fakültesi Elektronik Kütüphanesi</h1>
-                <p class="mb-8 opacity-95 mx-auto max-w-3xl" style="font-size: clamp(0.95rem,2.5vw,1.25rem);">Binlerce bilimsel kaynak ve kitaba kolayca ve hızlıca erişin ve toplayın.</p>
-            </div>
+            {!! __('messages.hero_eyebrow') !!}
 
         </div>
     </div>
@@ -542,244 +458,7 @@
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
 
         <!-- KU SORANI -->
-        <div class="lang-content active" style="direction:rtl;" data-lang="ku-sorani">
-            <div class="text-center max-w-[900px] mx-auto">
-                <h2 class="font-bold text-[#2d2d3a] mb-8" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">پێشەکی</h2>
-                <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal"
-                     style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);"> بەخێربێن بۆ کتێبخانەی ئەلیکترۆنی کۆلێژی زانست - ژینگەیەکی دیجیتاڵییە کە دروستکراوە بۆ ئەوەی گەیشتن بە زانیاری و فێربوون چێژبەخش بێت و توێژینەوە کاراتر بێت بۆ خوێندکاران و ستافی ئەکادیمی.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">ئەم کتێبخانە ئەلیکترۆنییە کۆمەڵێک سەرچاوەی زانستی بەرفراوان پێشکەش دەکات، لەوانە کتێبی خوێندن، توێژینەوەی زانستی و ئەکادیمی، گۆڤاری ئەکادیمی، کەرەستەی وانەوتنەوە و ئاماژەی پەروەردەیی، کە هەموویان لە یەک پلاتفۆرمی گونجاودا بەردەستن. ڕێگە بە بەکارهێنەران دەدات لە هەر کاتێکدا و لە هەر شوێنێکدا بە دوای زانیارییەکان بگەڕێن، کە پشتگیری لە هەردوو فێربوونی سەربەخۆ و چالاکییەکانی توێژینەوەی پێشکەوتوو دەکات. هەموو ئەمانە لە ڕێگەی QR کۆدەوە کە بە شێوازێکی ئەلکترۆنی ئامادەکراوە. </p>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">کتێبخانەی ئەلیکترۆنی زیاترە لە تەنها کۆمەڵەیەکی دیجیتاڵی، نیشاندەری پەیوەندی نێوان زانست و تەکنەلۆژیایە. هاندەری بیرکردنەوەی ڕەخنەگرانە و فێربوونی بەردەوامە، لە هەمان کاتدا یارمەتی خوێندکاران و توێژەران دەدات کە لە پێشکەوتنە زانستییە مۆدێرنەکاندا ئاگاداربن.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">ئەرکی ئێمە بنیاتنانی بۆشاییەکی ئەکادیمی پشتیوانە کە زانیاری بە ئازادی تێدا بەردەست بکرێت، بیرۆکەکان پەرەی پێبدرێت، و زانایانی داهاتوو بەهێز بکرێن بۆ دۆزینەوە و داهێنان و بەشداریکردن لە پێشکەوتنی زانست و کۆمەڵگا.ئەم سیستەمە مۆدێرنە بۆ خزمەتی خوێنەرانی کۆلێژی زانست دروست کراوە.</p>
-
-                    <!-- Objectives -->
-                    <div class="rounded-[10px] p-6 mb-6 border border-[rgba(102,126,234,0.16)] transition-all duration-300 hover:shadow-md reveal"
-                         style="background:rgba(102,126,234,0.08);">
-                        <h3 class="text-[#667eea] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">ئامانجەکانی پڕۆژەکە:</h3>
-                        <ul class="list-none p-0 text-[#6b6b80] leading-loose" style="font-size:clamp(0.9rem,2.5vw,1.05rem);">
-                            <li class="mb-1 ps-6">🎓 پشتگیریکردنی خوێندنی ئۆنلاین لە زانکۆ</li>
-                            <li class="mb-1 ps-6">⚡ بەردەستبوونی سەرچاوەی زانستی بە خێرایی و ئاسانی</li>
-                            <li class="mb-1 ps-6">📖 کۆکردنەوەی هەزاران سەرچاوەی زانستی لە یەک شوێن</li>
-                            <li class="mb-1 ps-6">📱 بەکارهێنانی تەکنەلۆژیای سەردەم <a href="https://scence-bio.github.io/Qr-Code/" style="color: gold; text-shadow: 0 0 8px gold, 0 0 15px gold;">QR code</a> بۆ خزمەتی خوێندن</li>
-                            <li class="mb-1 ps-6">👨‍🏫 سوودمەندبوونی مامۆستایان و خوێندکاران لە پەرتووکخانەی دیجیتاڵی</li>
-                            <li class="mb-1 ps-6">⏰ پڕکردنەوەی کاتە بەتاڵەکانی خوێندکاران بە پڕۆژەیەکی زانستی</li>
-                            <li class="mb-1 ps-6">🌐 بەردەستبوونی پەرتووک و سەرچاوەکان بە هەموو زمانەکان</li>
-                        </ul>
-                    </div>
-
-
-
-                    <!-- Team -->
-                    <div class="rounded-[10px] p-6 border border-[rgba(255,107,107,0.15)] transition-all duration-300 hover:shadow-md reveal"
-                         style="background:rgba(255,107,107,0.07);">
-                        <h3 class="text-[#ff6b6b] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">ئامادەکراوە لەلایەن:</h3>
-                        <div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(min(220px,100%),1fr));">
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-                                <h4 class="text-[#2d2d3a] mb-2 font-bold" style="font-size:clamp(0.9rem,2.5vw,1.05rem);">ژیاو یوسف حسێن</h4>
-                                <p class="text-center text-[#6b6b80] mb-2" style="font-size:clamp(0.8rem,2vw,0.95rem);">خوێندکاری بەشی بایۆلۆجی - دابینکردنی کتێب</p>
-                            </div>
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-                                <h4 class="text-[#2d2d3a] mb-2 font-bold" style="font-size:clamp(0.9rem,2.5vw,1.05rem);">نیار قادر ڕەسوڵ</h4>
-                                <p class="text-center text-[#6b6b80] mb-2" style="font-size:clamp(0.8rem,2vw,0.95rem);">خوێندکاری بەشی بایۆلۆجی - ڕێکخستنی کتێبخانە</p>
-                            </div>
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-                                <h4 class="text-[#2d2d3a] mb-2 font-bold" style="font-size:clamp(0.9rem,2.5vw,1.05rem);">محمود خدر فقێ ڕەسوڵ</h4>
-                                <p class="text-center text-[#6b6b80] mb-2" style="font-size:clamp(0.8rem,2vw,0.95rem);">خوێندکاری بەشی بایۆلۆجی ـ گەشەپێدەری وێبسایت</p>
-                                <div class="social-placeholder"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- EN -->
-        <div class="lang-content" style="direction:ltr;" data-lang="en">
-            <div class="text-center max-w-[900px] mx-auto">
-                <h2 class="font-bold text-[#2d2d3a] mb-8" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">Introduction</h2>
-                <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal"
-                     style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">Welcome to the College of Science e-library - a digital environment designed to make access to information and learning enjoyable and research more efficient for students and academic staff.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">This e-library offers a wide range of scientific resources, including textbooks, scientific and academic papers, academic journals, teaching materials and educational references, all available on one convenient platform. It allows users to search for information anytime, anywhere, supporting both independent learning and advanced research activities. All this through an electronically prepared QR code. </p>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">An e-library is more than just a digital collection, it demonstrates the relationship between science and technology. It encourages critical thinking and continuous learning, while helping students and researchers stay up-to-date on modern scientific developments.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">Our mission is to build a supportive academic space where information is freely available, ideas are developed, and future scientists are empowered to discover, innovate, and contribute to the advancement of science and society.</p>
-                    <div class="rounded-[10px] p-6 mb-6 border border-[rgba(102,126,234,0.16)] reveal" style="background:rgba(102,126,234,0.08);">
-                        <h3 class="text-[#667eea] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">Project Objectives:</h3>
-                        <ul class="list-none p-0 text-[#6b6b80] leading-loose" style="font-size:clamp(0.9rem,2.5vw,1.05rem);">
-                            <li class="mb-1 pl-6">🎓 Supporting online learning at universities</li>
-                            <li class="mb-1 pl-6">⚡ Quick and easy access to scientific resources</li>
-                            <li class="mb-1 pl-6">📖 Gathering thousands of scientific resources in one place</li>
-                            <li class="mb-1 pl-6">📱 Utilizing modern technology <a href="https://scence-bio.github.io/Qr-Code/" style="color: gold; text-shadow: 0 0 8px gold, 0 0 15px gold;">QR code</a> to serve education</li>
-                            <li class="mb-1 pl-6">👨‍🏫 Benefiting teachers and students from digital library resources</li>
-                            <li class="mb-1 pl-6">⏰ Filling students' free time with scientific projects</li>
-                            <li class="mb-1 pl-6">🌐 Availability of books and resources in all languages</li>
-                        </ul>
-                    </div>
-                    <div class="rounded-[10px] p-6 border border-[rgba(255,107,107,0.15)] reveal" style="background:rgba(255,107,107,0.07);">
-                        <h3 class="text-[#ff6b6b] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">Prepared by:</h3>
-                        <div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(min(220px,100%),1fr));">
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"><h4 class="text-[#2d2d3a] mb-2 font-bold">ZHYAW YUSF HUSEN</h4><p class="text-[#6b6b80]">Biology Department Student - Provision of books</p></div>
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"><h4 class="text-[#2d2d3a] mb-2 font-bold">NYAR QADR RASUL</h4><p class="text-[#6b6b80]">Biology Department Student - Organization of the library</p></div>
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"><h4 class="text-[#2d2d3a] mb-2 font-bold">MAHMOOD KHDIR FAQE RASUL</h4><p class="text-[#6b6b80]">Biology Department Student - Web Developer</p><div class="social-placeholder"></div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- AR -->
-        <div class="lang-content" style="direction:rtl;" data-lang="ar">
-            <div class="text-center max-w-[900px] mx-auto">
-                <h2 class="font-bold text-[#2d2d3a] mb-8" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">مقدمة</h2>
-                <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal"
-                     style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">أهلاً بكم في المكتبة الإلكترونية لكلية العلوم - بيئة رقمية مصممة لجعل الوصول إلى المعلومات والتعلم ممتعًا والبحث أكثر كفاءة للطلاب وأعضاء هيئة التدريس.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">توفر هذه المكتبة الإلكترونية مجموعة واسعة من الموارد العلمية، تشمل الكتب الدراسية، والأوراق العلمية والأكاديمية، والمجلات الأكاديمية، والمواد التعليمية، والمراجع التربوية، وكلها متاحة على منصة واحدة سهلة الاستخدام. تتيح هذه المكتبة للمستخدمين البحث عن المعلومات في أي وقت ومن أي مكان، مما يدعم التعلم الذاتي والأنشطة البحثية المتقدمة. كل ذلك من خلال رمز الاستجابة السريعة (QR code) المُعدّ إلكترونيًا.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">إن المكتبة الإلكترونية ليست مجرد مجموعة رقمية، بل هي تجسيد للعلاقة بين العلم والتكنولوجيا. فهي تشجع التفكير النقدي والتعلم المستمر، وتساعد الطلاب والباحثين على مواكبة أحدث التطورات العلمية.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">مهمتنا هي بناء مساحة أكاديمية داعمة حيث تتوفر المعلومات بحرية، ويتم تطوير الأفكار، ويتم تمكين العلماء المستقبليين من الاكتشاف والابتكار والمساهمة في تقدم العلوم والمجتمع.</p>
-                    <div class="rounded-[10px] p-6 mb-6 border border-[rgba(102,126,234,0.16)] reveal" style="background:rgba(102,126,234,0.08);">
-                        <h3 class="text-[#667eea] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">أهداف المشروع:</h3>
-                        <ul class="list-none p-0 text-[#6b6b80] leading-loose" style="font-size:clamp(0.9rem,2.5vw,1.05rem);">
-                            <li class="mb-1 ps-6">🎓 دعم التعلم الإلكتروني في الجامعات</li>
-                            <li class="mb-1 ps-6">⚡ الوصول السريع والسهل إلى الموارد العلمية</li>
-                            <li class="mb-1 ps-6">📖 جمع آلاف الموارد العلمية في مكان واحد</li>
-                            <li class="mb-1 ps-6">📱 استخدام التكنولوجيا الحديثة <a href="https://scence-bio.github.io/Qr-Code/" style="color: gold; text-shadow: 0 0 8px gold, 0 0 15px gold;">QR code</a> لخدمة التعليم</li>
-                            <li class="mb-1 ps-6">👨‍🏫 استفادة المدرسين والطلاب من موارد المكتبة الرقمية</li>
-                            <li class="mb-1 ps-6">⏰ ملء أوقات فراغ الطلاب بمشاريع علمية</li>
-                            <li class="mb-1 ps-6">🌐 توفر الكتب والموارد بجميع اللغات</li>
-                        </ul>
-                    </div>
-                    <div class="rounded-[10px] p-6 border border-[rgba(255,107,107,0.15)] reveal" style="background:rgba(255,107,107,0.07);">
-                        <h3 class="text-[#ff6b6b] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">إعداد:</h3>
-                        <div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(min(220px,100%),1fr));">
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm"><h4 class="text-[#2d2d3a] mb-2 font-bold">ژیاو یوسف حسێن</h4><p class="text-[#6b6b80]">طالب قسم علوم الحياة - توفير الكتب</p></div>
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm"><h4 class="text-[#2d2d3a] mb-2 font-bold">نیار قادر ڕەسوڵ</h4><p class="text-[#6b6b80]">طالبة قسم علوم الحياة - تنظيم المكتبة</p></div>
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm"><h4 class="text-[#2d2d3a] mb-2 font-bold">محمود خدر فقێ ڕەسوڵ</h4><p class="text-[#6b6b80]">طالب قسم علوم الحياة - مطور مواقع الويب</p><div class="social-placeholder"></div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Other langs (KU-BADINI, KU-BADINI-LAT, KU-HAWRAMI, FA, TR) - abbreviated for brevity but fully functional -->
-        <div class="lang-content" style="direction:rtl;" data-lang="ku-badini">
-            <div class="text-center max-w-[900px] mx-auto">
-                <h2 class="font-bold text-[#2d2d3a] mb-8" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">پێشگرتن</h2>
-                <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal" style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">بە ناڤێ خوەدایێ دڵۆڤان </p>
-                                        <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">بخێر هاتن بۆ پرتوکخانەیا ئەلیکترۆنیکی یا کۆلێژا زانستێ
-هاوێردۆرەکا دیجیتال کو ژ بۆ هێسانکرنا گهیشتنا ئاگەهداری و فێربوونێ و باندۆرکرنا لێکۆلینێ ژ بۆ خوێندکار و کارمەندێن ئەکادیمی هاتیە چێکرن.</p>
-                                        <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">میسیونا مە ئەوە کو ئەم قادەکا ئەکادیمی یا هاڤکار بیاڤرینین کو تێدا زانین ئازاد دبیت، ڕامان پێشڤە دچیت، و زانایێن پێشەڕۆژێ ژ بۆ کیفشکرن و نووژەنیێ تێنە هێزدارکرن.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">ئڤ پرتوکخانەیا ئەلیکترۆنیک جوربەجور چاوکانیێن زانستی پێشکێش دکە، د ناڤ دا پِرتوکێن دەرسێ، لێکۆلینێن زانستی و ئەکادیمی، کۆڤارێن ئەکادیمی، ماتەریالێن هینکرنێ و رێفەرەنسێن پەروەردەهێ، هەمی ل سەر پلاتفۆرمەکا هێسان پەیدا دبن. ئڤ هەمی بە ڕێیا کۆدێن QR تێنە پەیداکرن.</p>
-                    <div class="rounded-[10px] p-6 mb-6 border border-[rgba(102,126,234,0.16)] reveal" style="background:rgba(102,126,234,0.08);">
-                        <h3 class="text-[#667eea] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">ئارمانجێن پڕۆژەیێ:</h3>
-                        <ul class="list-none p-0 text-[#6b6b80] leading-loose"><li class="mb-1 ps-6">🎓 پشتگیریا پەروەردەهیا سەرھێل ل زانینگەھێ</li><li class="mb-1 ps-6">⚡ هەبوونا بیلەز و هێسانا چاوکانیێن زانستی</li><li class="mb-1 ps-6">📖 بەرھەڤکرنا بی هەزاران چاوکانیێن زانستی ل یەک جهێکی</li><li class="mb-1 ps-6">📱 بکارئینانا تەکنەلۆژیا نووژەن <a href="https://scence-bio.github.io/Qr-Code/" style="color: gold; text-shadow: 0 0 8px gold, 0 0 15px gold;">QR code</a></li><li class="mb-1 ps-6">👨‍🏫 سوودێن مامۆستا و خوێندکاران ژ کتێبخانەیێن دیجیتال</li><li class="mb-1 ps-6">⏰ داگیرتنا دەمێ ڤالا یا خوێندکاران</li><li class="mb-1 ps-6">🌐 هەبوونا کتێب و چاوکانییان بی هەمی زمانان</li></ul>
-                    </div>
-                    <div class="rounded-[10px] p-6 border border-[rgba(255,107,107,0.15)] reveal" style="background:rgba(255,107,107,0.07);">
-                        <h3 class="text-[#ff6b6b] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">هاتیە ئامادەکرن ژ هێلا:</h3>
-                        <div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(min(220px,100%),1fr));">
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm"><h4 class="font-bold text-[#2d2d3a] mb-2">ژیاو یوسف حسێن</h4><p class="text-[#6b6b80]">خینکارێ بایۆلۆجیێ - دابینکرنا پرتوکان</p></div>
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm"><h4 class="font-bold text-[#2d2d3a] mb-2">نیار قادر ڕەسوڵ</h4><p class="text-[#6b6b80]">خینکارێ بایۆلۆجیێ - ڕێکخستنا پرتوکخانەیێ</p></div>
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm"><h4 class="font-bold text-[#2d2d3a] mb-2">محمود خدر فقێ ڕەسوڵ</h4><p class="text-[#6b6b80]">خینکارێ بایۆلۆجیێ - پێشدەبرێ مالپەرێ</p><div class="social-placeholder"></div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="lang-content" style="direction:ltr;" data-lang="ku-badini-lat">
-            <div class="text-center max-w-[900px] mx-auto">
-                <h2 class="font-bold text-[#2d2d3a] mb-8" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">Pêşgotin</h2>
-                <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal" style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">Bi xêr hatin bo pirtûkxaneya elektronîkî ya Koleja Zanistê - jîngeheke dîjîtal ku ji bo xwendekar û karmendên akademîk gihîştina agahdarî û fêrbûnê xweştir û lêkolînê jî bikêrtir hatîye sêwirandin.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">Ev pirtûkxaneya elektronîkî cûrbecûr çavkaniyên zanistî pêşkêş dike, di nav de pirtûkên dersê, gotarên zanistî û akademîk, kovarên akademîk, materyalên hînkirinê û referansên perwerdehiyê, hemî li ser platformek hêsan peyda dibin. Ew dihêle ku bikarhêner her dem, li her deverê li agahdariyê bigerin, hem piştgirî dide fêrbûna serbixwe û hem jî çalakiyên lêkolînê yên pêşkeftî. Ev hemû bi rêya kodek QR-ê ya elektronîkî hatî amadekirin.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">Pirtûkxaneya elektronîk ji berhevokeke dîjîtal bêtir e, ew têkiliya di navbera zanist û teknolojiyê de nîşan dide. Ew ramana rexnegir û fêrbûna berdewam teşwîq dike, di heman demê de alîkariya xwendekar û lêkolîneran dike ku li ser pêşkeftinên zanistî yên nûjen agahdar bimînin.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">Erka me avakirina qadeke akademîk a piştgir e ku tê de agahî bi azadî peyda bibin, raman werin pêşxistin, û zanyarên pêşerojê werin hêzdar kirin ku kifş bikin, nûjeniyê bikin û beşdarî pêşveçûna zanist û civakê bibin.</p>
-
-                    <div class="rounded-[10px] p-6 mb-6 border border-[rgba(102,126,234,0.16)] reveal" style="background:rgba(102,126,234,0.08);">
-                        <h3 class="text-[#667eea] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">Armancên Projeyê:</h3>
-                        <ul class="list-none p-0 text-[#6b6b80] leading-loose"><li class="mb-1 pl-6">🎓 Piştgirîkirina xwendina serhêl li zanko</li><li class="mb-1 pl-6">⚡ Gihîştina zû û hêsan bo çavkaniyên zanistî</li><li class="mb-1 pl-6">📖 Berhevkirina hezaran çavkaniyên zanistî di yek cihî de</li><li class="mb-1 pl-6">📱 Bikaranîna teknolojiya nû <a href="https://scence-bio.github.io/Qr-Code/" style="color: gold; text-shadow: 0 0 8px gold, 0 0 15px gold;">QR code</a></li><li class="mb-1 pl-6">👨‍🏫 Sûdwergirtina mamoste û xwendekaran ji kitêbxaneya dîjîtal</li><li class="mb-1 pl-6">⏰ Tijîkirina demên vala yên xwendekaran bi projeyek zanistî</li><li class="mb-1 pl-6">🌐 Berdestbûna pirtûk û çavkaniyan bi hemû zimanan</li></ul>
-                    </div>
-                    <div class="rounded-[10px] p-6 border border-[rgba(255,107,107,0.15)] reveal" style="background:rgba(255,107,107,0.07);">
-                        <h3 class="text-[#ff6b6b] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">Amadekirî ji aliyê:</h3>
-                        <div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(min(220px,100%),1fr));">
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm"><h4 class="font-bold text-[#2d2d3a] mb-2">JIYAW YUSIF HUSÊN</h4><p class="text-[#6b6b80]">Xwendekarê Beşê Biyolojiyê - Dabînkirina pirtûkan</p></div>
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm"><h4 class="font-bold text-[#2d2d3a] mb-2">NIYAR QADIR RASÛL</h4><p class="text-[#6b6b80]">Xwendekarê Beşê Biyolojiyê - Rêxistina kitêbxanê</p></div>
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm"><h4 class="font-bold text-[#2d2d3a] mb-2">MEHMÛD XIDIR FAQÊ RASÛL</h4><p class="text-[#6b6b80]">Xwendekarê Beşê Biyolojiyê - Pêşxistinkarê malperê</p><div class="social-placeholder"></div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="lang-content" style="direction:rtl;" data-lang="ku-hawrami">
-            <div class="text-center max-w-[900px] mx-auto">
-                <h2 class="font-bold text-[#2d2d3a] mb-8" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">پێشەکی</h2>
-                <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal" style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">خۆش بگەیەیت بۆ کتێبخانەی ئەلیکترۆنی کۆلێژی زانست — ئەمە یەک ژینگەی دیجیتاڵیە کە دروستکراوە بۆ ئەوەی دەستڕەسیەتی بە زانیاری و فێربوون ئاسان ببێت.</p>
-                    <div class="rounded-[10px] p-6 mb-6 border border-[rgba(102,126,234,0.16)] reveal" style="background:rgba(102,126,234,0.08);">
-                        <h3 class="text-[#667eea] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">ئامانجەکانی پرۆژەکە:</h3>
-                        <ul class="list-none p-0 text-[#6b6b80] leading-loose"><li class="mb-1 ps-6">🎓 پشتگیری کردن بە خوێندنی ئۆنلاین لە زانکۆ</li><li class="mb-1 ps-6">⚡ دەستڕەسیەتی خێرا و ئاسان بە سەرچاوەی زانستی</li><li class="mb-1 ps-6">📖 کۆکردنەوەی هەزاران سەرچاوەی زانستی لە یەک شوێن</li><li class="mb-1 ps-6">📱 بەکارهێنانی تەکنەلۆژیای نوی <a href="https://scence-bio.github.io/Qr-Code/" style="color: gold; text-shadow: 0 0 8px gold, 0 0 15px gold;">QR code</a></li><li class="mb-1 ps-6">👨‍🏫 سوودگرتنی مامۆستایان و خوێندکاران لە کتێبخانەی دیجیتاڵ</li><li class="mb-1 ps-6">⏰ پڕکردنی کاتی بەتاڵی خوێندکاران بە پرۆژەیەکی زانستی</li><li class="mb-1 ps-6">🌐 بەردەستبوونی کتێب و سەرچاوەکان بە هەموو زمانەکان</li></ul>
-                    </div>
-                    <div class="rounded-[10px] p-6 border border-[rgba(255,107,107,0.15)] reveal" style="background:rgba(255,107,107,0.07);">
-                        <h3 class="text-[#ff6b6b] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">ئامادەکراوە لەلایەن:</h3>
-                        <div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(min(220px,100%),1fr));">
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm"><h4 class="font-bold text-[#2d2d3a] mb-2">ژیاو یوسف حسێن</h4><p class="text-[#6b6b80]">خوێندکاری بەشی بایۆلۆجی - دابینکردنی کتێب</p></div>
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm"><h4 class="font-bold text-[#2d2d3a] mb-2">نیار قادر ڕەسوڵ</h4><p class="text-[#6b6b80]">خوێندکاری بەشی بایۆلۆجی - ڕێکخستنی کتێبخانە</p></div>
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm"><h4 class="font-bold text-[#2d2d3a] mb-2">محمود خدر فقێ ڕەسوڵ</h4><p class="text-[#6b6b80]">خوێندکاری بەشی بایۆلۆجی - گەشەپێدەری وێبسایت</p><div class="social-placeholder"></div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="lang-content" style="direction:rtl;" data-lang="fa">
-            <div class="text-center max-w-[900px] mx-auto">
-                <h2 class="font-bold text-[#2d2d3a] mb-8" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">مقدمه</h2>
-                <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal" style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">به کتابخانه الکترونیکی دانشکده علوم خوش آمدید - یک محیط دیجیتالی که برای لذت‌بخش کردن دسترسی به اطلاعات و یادگیری و کارآمدتر کردن تحقیقات برای دانشجویان و اعضای هیئت علمی طراحی شده است.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">این کتابخانه الکترونیکی طیف گسترده‌ای از منابع علمی، از جمله کتاب‌های درسی، مقالات علمی و دانشگاهی، مجلات دانشگاهی، مطالب آموزشی و منابع آموزشی را ارائه می‌دهد که همگی در یک پلتفرم مناسب در دسترس هستند. این کتابخانه به کاربران امکان می‌دهد تا در هر زمان و هر مکان به جستجوی اطلاعات بپردازند و از یادگیری مستقل و فعالیت‌های تحقیقاتی پیشرفته پشتیبانی کند. همه اینها از طریق یک کد QR که به صورت الکترونیکی تهیه شده است، امکان‌پذیر است.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">یک کتابخانه الکترونیکی چیزی بیش از یک مجموعه دیجیتال است، و رابطه بین علم و فناوری را نشان می‌دهد. این کتابخانه تفکر انتقادی و یادگیری مداوم را تشویق می‌کند، در حالی که به دانشجویان و محققان کمک می‌کند تا در جریان پیشرفت‌های علمی مدرن قرار گیرند.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">ماموریت ما ایجاد یک فضای دانشگاهی حمایتی است که در آن اطلاعات به صورت رایگان در دسترس باشد، ایده‌ها توسعه یابند و دانشمندان آینده توانمند شوند تا کشف کنند، نوآوری کنند و به پیشرفت علم و جامعه کمک کنند.</p>
-                    <div class="rounded-[10px] p-6 mb-6 border border-[rgba(102,126,234,0.16)] reveal" style="background:rgba(102,126,234,0.08);">
-                        <h3 class="text-[#667eea] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">اهداف پروژه:</h3>
-                        <ul class="list-none p-0 text-[#6b6b80] leading-loose"><li class="mb-1 ps-6">🎓 حمایت از یادگیری آنلاین در دانشگاه‌ها</li><li class="mb-1 ps-6">⚡ دسترسی سریع و آسان به منابع علمی</li><li class="mb-1 ps-6">📖 گردآوری هزاران منبع علمی در یک مکان</li><li class="mb-1 ps-6">📱 استفاده از فناوری مدرن <a href="https://scence-bio.github.io/Qr-Code/" style="color: gold; text-shadow: 0 0 8px gold, 0 0 15px gold;">QR code</a></li><li class="mb-1 ps-6">👨‍🏫 بهره‌مندی اساتید و دانشجویان از منابع کتابخانه دیجیتال</li><li class="mb-1 ps-6">⏰ پر کردن اوقات فراغت دانشجویان با پروژه‌های علمی</li><li class="mb-1 ps-6">🌐 در دسترس بودن کتاب‌ها و منابع به همه زبان‌ها</li></ul>
-                    </div>
-                    <div class="rounded-[10px] p-6 border border-[rgba(255,107,107,0.15)] reveal" style="background:rgba(255,107,107,0.07);">
-                        <h3 class="text-[#ff6b6b] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">تهیه شده توسط:</h3>
-                        <div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(min(220px,100%),1fr));">
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm"><h4 class="font-bold text-[#2d2d3a] mb-2">ژیاو یوسف حسێن</h4><p class="text-[#6b6b80]">دانشجوی گروه زیست‌شناسی - تأمین کتاب‌ها</p></div>
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm"><h4 class="font-bold text-[#2d2d3a] mb-2">نیار قادر ڕەسوڵ</h4><p class="text-[#6b6b80]">دانشجوی گروه زیست‌شناسی - سازماندهی کتابخانه</p></div>
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm"><h4 class="font-bold text-[#2d2d3a] mb-2">محمود خدر فقێ ڕەسوڵ</h4><p class="text-[#6b6b80]">دانشجوی گروه زیست‌شناسی - توسعه‌دهنده وب</p><div class="social-placeholder"></div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="lang-content" style="direction:ltr;" data-lang="tr">
-            <div class="text-center max-w-[900px] mx-auto">
-                <h2 class="font-bold text-[#2d2d3a] mb-8" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">Giriş</h2>
-                <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal" style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">Fen Fakültesi e-kütüphanesine hoş geldiniz - öğrenciler ve akademik personel için bilgiye ve öğrenmeye erişimi keyifli hale getirmek ve araştırmayı daha verimli kılmak amacıyla tasarlanmış dijital bir ortam.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">Bu e-kütüphane, ders kitapları, bilimsel ve akademik makaleler, akademik dergiler, öğretim materyalleri ve eğitim referansları da dahil olmak üzere çok çeşitli bilimsel kaynakları tek bir kullanışlı platformda sunmaktadır. Kullanıcıların istedikleri zaman, istedikleri yerde bilgi aramalarına olanak tanıyarak hem bağımsız öğrenmeyi hem de ileri düzey araştırma faaliyetlerini desteklemektedir. Tüm bunlar, elektronik olarak hazırlanmış bir QR kodu aracılığıyla gerçekleşmektedir.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">E-kütüphane, sadece dijital bir koleksiyon olmaktan öte, bilim ve teknoloji arasındaki ilişkiyi gösterir. Eleştirel düşünmeyi ve sürekli öğrenmeyi teşvik ederken, öğrencilerin ve araştırmacıların modern bilimsel gelişmelerden haberdar olmalarına yardımcı olur.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">Misyonumuz, bilginin özgürce erişilebildiği, fikirlerin geliştirildiği ve geleceğin bilim insanlarının keşfetme, yenilik yapma ve bilimin ve toplumun ilerlemesine katkıda bulunma konusunda güçlendirildiği destekleyici bir akademik alan oluşturmaktır.</p>
-                    <div class="rounded-[10px] p-6 mb-6 border border-[rgba(102,126,234,0.16)] reveal" style="background:rgba(102,126,234,0.08);">
-                        <h3 class="text-[#667eea] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">Proje Hedefleri:</h3>
-                        <ul class="list-none p-0 text-[#6b6b80] leading-loose"><li class="mb-1 pl-6">🎓 Üniversitelerde çevrimiçi öğrenimi destekleme</li><li class="mb-1 pl-6">⚡ Bilimsel kaynaklara hızlı ve kolay erişim</li><li class="mb-1 pl-6">📖 Binlerce bilimsel kaynağı tek bir yerde toplama</li><li class="mb-1 pl-6">📱 Modern teknolojiyi <a href="https://scence-bio.github.io/Qr-Code/" style="color: gold; text-shadow: 0 0 8px gold, 0 0 15px gold;">QR code</a> eğitime hizmet için kullanma</li><li class="mb-1 pl-6">👨‍🏫 Öğretmenlerin ve öğrencilerin dijital kütüphane kaynaklarından yararlanması</li><li class="mb-1 pl-6">⏰ Öğrencilerin boş zamanlarını bilimsel projelerle değerlendirme</li><li class="mb-1 pl-6">🌐 Kitap ve kaynakların tüm dillerde erişilebilir olması</li></ul>
-                    </div>
-                    <div class="rounded-[10px] p-6 border border-[rgba(255,107,107,0.15)] reveal" style="background:rgba(255,107,107,0.07);">
-                        <h3 class="text-[#ff6b6b] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">Hazırlayanlar:</h3>
-                        <div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(min(220px,100%),1fr));">
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm"><h4 class="font-bold text-[#2d2d3a] mb-2">ZHYAW YUSF HUSEN</h4><p class="text-[#6b6b80]">Biyoloji Bölümü Öğrencisi - Kitap temini</p></div>
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm"><h4 class="font-bold text-[#2d2d3a] mb-2">NYAR QADR RASUL</h4><p class="text-[#6b6b80]">Biyoloji Bölümü Öğrencisi - Kütüphane organizasyonu</p></div>
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm"><h4 class="font-bold text-[#2d2d3a] mb-2">MAHMOOD KHDIR FAQE RASUL</h4><p class="text-[#6b6b80]">Biyoloji Bölümü Öğrencisi - Web Geliştirici</p><div class="social-placeholder"></div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {!! __('messages.hero_title') !!}
 
     </div>
 </section>
@@ -790,84 +469,7 @@
         <div class="max-w-[900px] mx-auto">
 
             <!-- KU SORANI -->
-            <div class="lang-content active" style="direction:rtl;" data-lang="ku-sorani">
-                <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">📚 مێژووی کتێبخانەی کۆلێژی زانست</h2>
-                <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal"
-                     style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <p class="text-[#6b6b80] leading-[1.9] mb-4 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">کتێبخانەی کۆلێژی زانست لەسەر فەرمانی بەڕێز سەرۆکی زانکۆ پڕۆفیسۆری یاریدەدەر د. پەیمان ڕەمەزان احمد بڕیاردرا بە درووستکردنی لە بینای کۆلێژی زانستی زانکۆی ڕاپەڕین نهۆمی دووەم، و لە بەرواری <strong>(١٨/١٠/٢٠٢٥)</strong> لە لایەن بەڕێزان سەرۆکی زانکۆ و ڕاگر و ئەنجومەنی کۆلێژی زانست کرایەوە بە ڕووی زانستخوازانی کۆلێژی زانست.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">کردنەوەی ئەم کتێبخانەیە وەرچەرخانێکی نوێ بوو بۆ خوێندکاران و مامۆستایان و فەرمانبەرانی کۆلێژی زانست، تا لەوێوە بە ئاسانتر و خێراتر دەستیان بگات بە کتێب و سەرچاوە زانستی و ئەکادیمیەکان و پڕۆسەی خوێندن و فێربوون خێراتر و کوالێتی بەرزتر بێت.</p>
-                </div>
-            </div>
-
-            <!-- EN -->
-            <div class="lang-content" style="direction:ltr;" data-lang="en">
-                <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">📚 History of the College of Science Library</h2>
-                <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal"
-                     style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <p class="text-[#6b6b80] leading-[1.9] mb-4 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">The College of Science Library was established by order of the esteemed University President, Assistant Professor Dr. Payman Ramazan Ahmad, and was built on the second floor of the College of Science building at the University of Raparin. It was officially opened on <strong>18/10/2025</strong> by the University President, the Vice-President, and the College of Science Council, welcoming the science-seeking students of the College.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">The opening of this library marked a new turning point for the students, faculty, and staff of the College of Science, enabling them to access scientific and academic books and resources more easily and quickly, and raising the quality and efficiency of the learning process.</p>
-                </div>
-            </div>
-
-            <!-- AR -->
-            <div class="lang-content" style="direction:rtl;" data-lang="ar">
-                <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">📚 تاريخ مكتبة كلية العلوم</h2>
-                <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal"
-                     style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <p class="text-[#6b6b80] leading-[1.9] mb-4 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">أُنشئت مكتبة كلية العلوم بأمر من السيد رئيس الجامعة الأستاذ المساعد الدكتور پەیمان ڕەمەزان احمد، وذلك في الطابق الثاني من مبنى كلية العلوم في جامعة رابرين. وقد افتُتحت رسمياً بتاريخ <strong>١٨/١٠/٢٠٢٥</strong> على يد رئيس الجامعة ونائبه ومجلس كلية العلوم، في حفل استقبل طلاب كلية العلوم الساعين إلى المعرفة.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">شكّل افتتاح هذه المكتبة منعطفاً جديداً للطلاب والأساتذة والموظفين في كلية العلوم، إذ أتاح لهم الوصول إلى الكتب والمصادر العلمية والأكاديمية بصورة أيسر وأسرع، مما أسهم في رفع جودة العملية التعليمية وكفاءتها.</p>
-                </div>
-            </div>
-
-            <!-- KU BADINI -->
-            <div class="lang-content" style="direction:rtl;" data-lang="ku-badini">
-                <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">📚 مێژووی پرتوکخانەیا کۆلێژا زانستێ</h2>
-                <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal"
-                     style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <p class="text-[#6b6b80] leading-[1.9] mb-4 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">پرتوکخانەیا کۆلێژا زانستێ بە فەرمانا رێزدار سەرۆکێ زانینگەهێ پرۆفیسۆرێ جیهێلکار د. پەیمان ڕەمەزان احمد هاتیە دامەزراندن، ل نهۆمێ دووێ یا بینایا کۆلێژا زانستێ یا زانینگەها ڕاپەرین. ل بەرواری <strong>(١٨/١٠/٢٠٢٥)</strong> ژ هێلا سەرۆکێ زانینگەهێ و یارمەتیدەرێ و ئەنجومەنێ کۆلێژا زانستێ هاتیە کرانەوە بۆ خوێندکارێن زانستدۆست.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">ئەڤ کرانەوە وەرگیرانا نوێ بوو ژ بۆ خوێندکار، مامۆستا و کارمەندێن کۆلێژا زانستێ، کو ئیستا بیهێسانی و بی زوانی دەستدا ب پرتوک و چاوکانیێن زانستی و ئەکادیمیک، و قەریقا فێربوونێ باştir û kalîtetir bibe.</p>
-                </div>
-            </div>
-
-            <!-- KU BADINI LAT -->
-            <div class="lang-content" style="direction:ltr;" data-lang="ku-badini-lat">
-                <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">📚 Dîroka Pirtûkxaneya Koleja Zanistê</h2>
-                <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal"
-                     style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <p class="text-[#6b6b80] leading-[1.9] mb-4 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">Pirtûkxaneya Koleja Zanistê bi fermana rêzdar Serokê Zanîngehê Profesor Alîkar Dr. Peyman Ramezanê Ehmed hat avakirin, li qata duyemîn a avahiya Koleja Zanistê ya Zanîngeha Raperinê. Di tarîxa <strong>18/10/2025</strong> de ji aliyê Serokê Zanîngehê, Cîgirê wî û Encumena Koleja Zanistê ve hat vekirin û xwendekarên zanistxwaz pêşwazî lê hat kirin.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">Vekirina vê pirtûkxaneyê xalek nû û girîng bû ji bo xwendekar, mamoste û karmendên Koleja Zanistê, û derfet da wan ku bi awayekî hêsantir û bilez bigihîjin pirtûk û çavkaniyên zanistî û akademîk, û pêvajoya fêrbûnê kalîtir û kêrhatîtir bibe.</p>
-                </div>
-            </div>
-
-            <!-- KU HAWRAMI -->
-            <div class="lang-content" style="direction:rtl;" data-lang="ku-hawrami">
-                <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">📚 مێژووی کتێبخانەی کۆلێژی زانست</h2>
-                <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal"
-                     style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <p class="text-[#6b6b80] leading-[1.9] mb-4 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">کتێبخانەی کۆلێژی زانست بەرفەرمانی بەڕێز سەرۆکی زانکۆ پڕۆفیسۆری یاریدەدەر د. پەیمان ڕەمەزان احمد دروستکرا، لە نهۆمی دووەمی بینای کۆلێژی زانستی زانکۆی ڕاپەڕین. لە بەرواری <strong>(١٨/١٠/٢٠٢٥)</strong> لە لایەن سەرۆکی زانکۆ و ڕاگر و ئەنجومەنی کۆلێژی زانست کرایەوە بەر زانستخوازانی کۆلێژی زانست.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">کردنەوەی ئەم کتێبخانەیە پۆینتێکی نوێی گرنگ بوو بۆ خوێندکاران، مامۆستایان و فەرمانبەرانی کۆلێژی زانست، کە بە ئاسانی و خێرایی دەستیان گات بە کتێب و سەرچاوەی زانستی و ئەکادیمی، و پڕۆسەی فێربوون بەرزتر و باشتر بوو.</p>
-                </div>
-            </div>
-
-            <!-- FA -->
-            <div class="lang-content" style="direction:rtl;" data-lang="fa">
-                <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">📚 تاریخچه کتابخانه دانشکده علوم</h2>
-                <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal"
-                     style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <p class="text-[#6b6b80] leading-[1.9] mb-4 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">کتابخانه دانشکده علوم به دستور ریاست محترم دانشگاه، استادیار دکتر پەیمان ڕەمەزان احمد تأسیس شد و در طبقه دوم ساختمان دانشکده علوم دانشگاه راپەرین قرار دارد. این کتابخانه در تاریخ <strong>۱۸/۱۰/۲۰۲۵</strong> توسط رئیس دانشگاه، معاون ایشان و شورای دانشکده علوم افتتاح شد و به روی دانشجویان علم‌آموز گشوده گردید.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">افتتاح این کتابخانه نقطه عطف جدیدی برای دانشجویان، اساتید و کارمندان دانشکده علوم بود تا از آن طریق به کتاب‌ها و منابع علمی و آکادمیک با سهولت و سرعت بیشتری دسترسی داشته باشند و فرایند آموزش و یادگیری باکیفیت‌تر و کارآمدتر شود.</p>
-                </div>
-            </div>
-
-            <!-- TR -->
-            <div class="lang-content" style="direction:ltr;" data-lang="tr">
-                <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">📚 Fen Fakültesi Kütüphanesinin Tarihi</h2>
-                <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal"
-                     style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <p class="text-[#6b6b80] leading-[1.9] mb-4 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">Fen Fakültesi Kütüphanesi, saygıdeğer Üniversite Rektörü Yardımcı Doçent Dr. Peyman Ramazan Ahmed'in emriyle kurulmuş olup Raparin Üniversitesi Fen Fakültesi binasının ikinci katında yer almaktadır. Kütüphane, <strong>18/10/2025</strong> tarihinde Rektör, Rektör Yardımcısı ve Fen Fakültesi Kurulu tarafından törenle açılmış ve Fen Fakültesi'nin bilim meraklısı öğrencilerine kapılarını açmıştır.</p>
-                    <p class="text-[#6b6b80] leading-[1.9] text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">Bu kütüphanenin açılışı, Fen Fakültesi'nin öğrencileri, öğretim üyeleri ve personeli için yeni bir dönüm noktası oldu; bilimsel ve akademik kitap ve kaynaklara daha kolay ve hızlı erişim sağlanarak öğrenme sürecinin kalitesi ve verimliliği artırıldı.</p>
-                </div>
-            </div>
+            {!! __('messages.services_heading') !!}
 
         </div>
     </div>
@@ -876,15 +478,7 @@
 <section style="padding: clamp(1rem,4vw,0.5rem) 0; background: linear-gradient(160deg, #f0f2ff 0%, #e8ebff 100%);">
     <div class="max-w-[1200px] mx-auto px-6 sm:px-8 lg:px-10">
         <div class="text-center mb-10 reveal">
-            <div class="lang-content active" style="direction:rtl;" data-lang="ku-sorani"><h2 class="font-bold text-[#2d2d3a] mb-6" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">کتێبخانەی سەرەکی</h2><a href="https://drive.google.com/drive/folders/12PipzBzMVgfr1tFSy-4bplnVMnNHTy4d" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5 hover:scale-[1.03] active:translate-y-0 active:scale-[0.99]" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">چونە ناو کتێبخانەی گشتی ١</a></div>
-            <div class="lang-content" style="direction:rtl;" data-lang="ku-badini"><h2 class="font-bold text-[#2d2d3a] mb-6" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">کتێبخانەیا سەرەکە</h2><a href="https://drive.google.com/drive/folders/12PipzBzMVgfr1tFSy-4bplnVMnNHTy4d" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">بکەڤن کتێبخانەیا سەرەکە ١</a></div>
-            <div class="lang-content" style="direction:ltr;" data-lang="ku-badini-lat"><h2 class="font-bold text-[#2d2d3a] mb-6" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">Kitêbxaneya Sereke</h2><a href="https://drive.google.com/drive/folders/12PipzBzMVgfr1tFSy-4bplnVMnNHTy4d" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">Têkeve Kitêbxaneya Giştî 1</a></div>
-            <div class="lang-content" style="direction:rtl;" data-lang="ku-hawrami"><h2 class="font-bold text-[#2d2d3a] mb-6" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">کتێبخانەی سەرەکی</h2><a href="https://drive.google.com/drive/folders/12PipzBzMVgfr1tFSy-4bplnVMnNHTy4d" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">بچۆ ناو کتێبخانەی گشتی ١</a></div>
-            <div class="lang-content" style="direction:ltr;" data-lang="en"><h2 class="font-bold text-[#2d2d3a] mb-6" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">Main Library</h2><a href="https://drive.google.com/drive/folders/12PipzBzMVgfr1tFSy-4bplnVMnNHTy4d" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">Enter General Library 1</a></div>
-            <div class="lang-content" style="direction:rtl;" data-lang="ar"><h2 cla
-                                                                                ss="font-bold text-[#2d2d3a] mb-6" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">المكتبة الرئيسية</h2><a href="https://drive.google.com/drive/folders/12PipzBzMVgfr1tFSy-4bplnVMnNHTy4d" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">دخول إلى المكتبة العامة ١</a></div>
-            <div class="lang-content" style="direction:rtl;" data-lang="fa"><h2 class="font-bold text-[#2d2d3a] mb-6" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">کتابخانه اصلی</h2><a href="https://drive.google.com/drive/folders/12PipzBzMVgfr1tFSy-4bplnVMnNHTy4d" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">ورود به کتابخانه عمومی ۱</a></div>
-            <div class="lang-content" style="direction:ltr;" data-lang="tr"><h2 class="font-bold text-[#2d2d3a] mb-6" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">Ana Kütüphane</h2><a href="https://drive.google.com/drive/folders/12PipzBzMVgfr1tFSy-4bplnVMnNHTy4d" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">Genel Kütüphane 1'e Gir</a></div>
+            {!! __('messages.resources_heading') !!}
         </div>
     </div>
 </section>
@@ -894,49 +488,28 @@
     <div class="max-w-[1200px] mx-auto px-6 sm:px-8 lg:px-10">
 
         <!-- Library 2 button -->
-        <div class="text-center mb-12 reveal">
-            <div class="lang-content active" style="direction:rtl;" data-lang="ku-sorani"><a href="https://drive.google.com/drive/folders/1KkvwcZdKCZzV7gjExlnOdl1JnCELHCkC" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5 hover:scale-[1.03]" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">چونە ناو کتێبخانەی گشتی ٢</a></div>
-            <div class="lang-content" style="direction:rtl;" data-lang="ku-badini"><a href="https://drive.google.com/drive/folders/1KkvwcZdKCZzV7gjExlnOdl1JnCELHCkC" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">بکەڤن کتێبخانەیا سەرەکە ٢</a></div>
-            <div class="lang-content" style="direction:ltr;" data-lang="ku-badini-lat"><a href="https://drive.google.com/drive/folders/1KkvwcZdKCZzV7gjExlnOdl1JnCELHCkC" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">Têkeve Kitêbxaneya Giştî 2</a></div>
-            <div class="lang-content" style="direction:rtl;" data-lang="ku-hawrami"><a href="https://drive.google.com/drive/folders/1KkvwcZdKCZzV7gjExlnOdl1JnCELHCkC" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">بچۆ ناو کتێبخانەی گشتی ٢</a></div>
-            <div class="lang-content" style="direction:ltr;" data-lang="en"><a href="https://drive.google.com/drive/folders/1KkvwcZdKCZzV7gjExlnOdl1JnCELHCkC" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">Enter General Library 2</a></div>
-            <div class="lang-content" style="direction:rtl;" data-lang="ar"><a href="https://drive.google.com/drive/folders/1KkvwcZdKCZzV7gjExlnOdl1JnCELHCkC" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">دخول إلى المكتبة العامة ٢</a></div>
-            <div class="lang-content" style="direction:rtl;" data-lang="fa"><a href="https://drive.google.com/drive/folders/1KkvwcZdKCZzV7gjExlnOdl1JnCELHCkC" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">ورود به کتابخانه عمومی ۲</a></div>
-            <div class="lang-content" style="direction:ltr;" data-lang="tr"><a href="https://drive.google.com/drive/folders/1KkvwcZdKCZzV7gjExlnOdl1JnCELHCkC" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">Genel Kütüphane 2'ye Gir</a></div>
+        <div class="text-center">
+            <a href="https://drive.google.com/drive/folders/1KkvwcZdKCZzV7gjExlnOdl1JnCELHCkC" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">{{ __('messages.main_library_btn') }}</a>
         </div>
 
         <!-- Department cards (DB-driven) -->
-        @php
-            $depLocales = [
-                ['lang' => 'ku-sorani', 'dir' => 'rtl', 'heading' => 'بەشە زانستییەکان'],
-                ['lang' => 'en', 'dir' => 'ltr', 'heading' => 'Scientific Departments'],
-                ['lang' => 'ar', 'dir' => 'rtl', 'heading' => 'الأقسام العلمية'],
-                ['lang' => 'ku-badini', 'dir' => 'rtl', 'heading' => 'بەشێن زانستی'],
-                ['lang' => 'ku-badini-lat', 'dir' => 'ltr', 'heading' => 'Beşên Zanistî'],
-                ['lang' => 'ku-hawrami', 'dir' => 'rtl', 'heading' => 'بەشەکانی زانستی'],
-                ['lang' => 'fa', 'dir' => 'rtl', 'heading' => 'بخش‌های علمی'],
-                ['lang' => 'tr', 'dir' => 'ltr', 'heading' => 'Bilim Bölümleri'],
-            ];
-        @endphp
-        @foreach ($depLocales as $depLocale)
-        <div id="dept-{{ $depLocale['lang'] }}" class="lang-content{{ $depLocale['lang'] === 'ku-sorani' ? ' active' : '' }}" style="direction:{{ $depLocale['dir'] }};" data-lang="{{ $depLocale['lang'] }}">
-            <h2 class="text-center font-bold text-[#2d2d3a] mb-10" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ $depLocale['heading'] }}</h2>
+        <div id="dept-{{ app()->getLocale() }}" style="direction:{{ in_array(app()->getLocale(), ['en','tr','ku-badini-lat']) ? 'ltr' : 'rtl' }};">
+            <h2 class="text-center font-bold text-[#2d2d3a] mb-10" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.dept_heading') }}</h2>
             <div class="grid gap-5" style="grid-template-columns: repeat(auto-fit, minmax(260px,1fr));">
                 @forelse ($departments as $department)
                 <div class="section-card card-top-bar card-glow relative flex flex-col justify-between bg-white/85 backdrop-blur-md border border-white/70 rounded-[18px] text-center transition-all duration-300 hover:-translate-y-3 reveal" style="padding:clamp(1.5rem,4vw,2.2rem); min-height:280px; box-shadow:0 4px 16px rgba(102,126,234,0.10);">
                     <div>
                         <span class="block text-5xl mb-4 transition-transform duration-300">{{ $department->icon }}</span>
-                        <h3 class="font-bold text-[#2d2d3a] mb-3" style="font-size:clamp(1.1rem,3vw,1.4rem);">{{ $department->translation($depLocale['lang'], 'title') }}</h3>
-                        <p class="text-[#6b6b80] mb-4 flex-grow" style="font-size:clamp(0.88rem,2.2vw,0.98rem); line-height:1.65;">{{ $department->translation($depLocale['lang'], 'desc') }}</p>
+                        <h3 class="font-bold text-[#2d2d3a] mb-3" style="font-size:clamp(1.1rem,3vw,1.4rem);">{{ $department->translation(app()->getLocale(), 'title') }}</h3>
+                        <p class="text-[#6b6b80] mb-4 flex-grow" style="font-size:clamp(0.88rem,2.2vw,0.98rem); line-height:1.65;">{{ $department->translation(app()->getLocale(), 'desc') }}</p>
                     </div>
-                    <a href="{{ $department->drive_url }}" class="section-btn relative inline-block font-semibold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1 font-[inherit]" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:clamp(0.6rem,2.2vw,0.85rem) clamp(1.3rem,3.5vw,1.9rem); font-size:clamp(0.85rem,2.2vw,0.95rem); min-width:130px; box-shadow:0 4px 14px rgba(102,126,234,0.28);" target="_blank">{{ $department->translation($depLocale['lang'], 'button') }}</a>
+                    <a href="{{ $department->drive_url }}" class="section-btn relative inline-block font-semibold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1 font-[inherit]" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:clamp(0.6rem,2.2vw,0.85rem) clamp(1.3rem,3.5vw,1.9rem); font-size:clamp(0.85rem,2.2vw,0.95rem); min-width:130px; box-shadow:0 4px 14px rgba(102,126,234,0.28);" target="_blank">{{ $department->translation(app()->getLocale(), 'button') }}</a>
                 </div>
                 @empty
-                <p class="text-center text-[#6b6b80]">No departments found.</p>
+                <p class="text-center text-[#6b6b80]">{{ __('messages.no_departments') }}</p>
                 @endforelse
             </div>
         </div>
-        @endforeach
 </section>
 
 <!-- ══════════ ABOUT SECTION ══════════ -->
@@ -944,102 +517,7 @@
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-[900px] mx-auto">
 
-            <div class="lang-content active" style="direction:rtl;" data-lang="ku-sorani">
-                <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">👥 دەربارەی ئێمە</h2>
-                <div class="relative rounded-[18px] overflow-hidden reveal"
-                     style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <div class="absolute top-0 left-0 right-0 h-1" style="background: linear-gradient(90deg, #667eea, #764ba2);"></div>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">ئێمە وەک تیمی BioNova کە سێ خوێندکاری زانکۆین خولیای هاوبەشمان بۆ فێربوون و تەکنەلۆژیا هەیە. لە کاتی خوێندندا تێبینیمان کرد کە دۆزینەوەی سەرچاوەی متمانەپێکراو و باش و ڕێکخراو لە یەک شوێن زۆر ئەستەمە. ئەوەش ئیلهامبەخش بوو بۆ دروستکردنی ئەم کتێبخانە ئەلیکترۆنییە.</p>
-                    <div class="rounded-[10px] p-6 transition-all duration-300 hover:shadow-md" style="background:rgba(102,126,234,0.09); border:1px solid rgba(102,126,234,0.16);">
-                        <h3 class="text-[#667eea] mb-3 text-center font-bold" style="font-size:clamp(1.1rem,3vw,1.35rem);">ئامانجی ئێمە</h3>
-                        <p class="text-[#6b6b80] mb-0 italic text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem); font-style: italic;"> &ldquo;کردنەوەی دەرگای زانیاری بۆ هەموو خوێندکارێک و دابینکردنی یەک پلاتفۆرم کە هەموو پێداویستییەکانی ئەکادیمی دابین بکات بە شێوەیەکی مۆدێرن و سەردەمیانە &rdquo;</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="lang-content" style="direction:ltr;" data-lang="en">
-                <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">👥 About Us</h2>
-                <div class="relative rounded-[18px] overflow-hidden reveal" style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <div class="absolute top-0 left-0 right-0 h-1" style="background: linear-gradient(90deg, #667eea, #764ba2);"></div>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">We are three university students as BioNova team who share a passion for learning and technology. During our studies, we noticed that finding reliable, quality, and well-organized resources in one place was very difficult. This inspired us to create this electronic library.</p>
-                    <div class="rounded-[10px] p-6" style="background:rgba(102,126,234,0.09); border:1px solid rgba(102,126,234,0.16);">
-                        <h3 class="text-[#667eea] mb-3 text-center font-bold" style="font-size:clamp(1.1rem,3vw,1.35rem);">Our Mission</h3>
-                        <p class="text-[#6b6b80] mb-0 italic text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem); font-style: italic;"> &ldquo; Opening the door to information for every student and providing a single platform that meets all academic needs in a modern and contemporary manner &ldquo;</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="lang-content" style="direction:rtl;" data-lang="ar">
-                <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">👥 معلومات عنا</h2>
-                <div class="relative rounded-[18px] overflow-hidden reveal" style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <div class="absolute top-0 left-0 right-0 h-1" style="background: linear-gradient(90deg, #667eea, #764ba2);"></div>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">بصفتنا فريق BioNova المكون من ثلاثة طلاب جامعيين، نتشارك شغفًا بالتعلم والتكنولوجيا. خلال دراستنا، لاحظنا صعوبة بالغة في إيجاد مصادر موثوقة ومنظمة جيدًا في مكان واحد. هذا ما دفعني لإنشاء هذه المكتبة الإلكترونية.</p>
-                    <div class="rounded-[10px] p-6" style="background:rgba(102,126,234,0.09); border:1px solid rgba(102,126,234,0.16);">
-                        <h3 class="text-[#667eea] mb-3 text-center font-bold">مهمتنا </h3>
-                        <p class="text-[#6b6b80] mb-0">"فتح الباب أمام المعلومات لكل طالب وتوفير منصة واحدة تلبي جميع الاحتياجات الأكاديمية بطريقة حديثة ومعاصرة &ldquo;</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="lang-content" style="direction:rtl;" data-lang="ku-badini">
-                <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">👥 دەربارا مە</h2>
-                <div class="relative rounded-[18px] overflow-hidden reveal" style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <div class="absolute top-0 left-0 right-0 h-1" style="background: linear-gradient(90deg, #667eea, #764ba2);"></div>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">وەک تیما BioNova یا ژ سێ خوێندکارێن زانینگەهێ پێک تێ، ئەم ژ بۆ فێربوون و تەکنەلۆژیێ هەوەسەکا هەڤپار پارڤە دکین. د دەما خوێندنا خوە دە، مە دیت کو دیتنا چاوکانیێن پێباوەر و باش-رێخستینکری ل یەک جهێکی پیر دژوارە. ئەڤ یەک ئیلھام دا مە کو ئەم ڤێ پِرتوکخانەیا ئەلیکترۆنیک بیاڤرینین، کو پلاتفۆرمەکا هێسان و ئاسانە کو خوێندکار و مامۆستا دکارن بی قاسی کو پێکان ئاگەهداریێ ببینن.</p>
-                    <div class="rounded-[10px] p-6" style="background:rgba(102,126,234,0.09); border:1px solid rgba(102,126,234,0.16);">
-                        <h3 class="text-[#667eea] mb-3 text-center font-bold">ئارمانجا مە </h3>
-                        <p class="text-[#6b6b80] mb-0">"ڤەکرنا دەریێ ئاگەهداریێ ژ بۆ هەموو خوێندکاران و پەیداکرنا پلاتفۆرمەک کو بی ئاڤایەکی مودێرن هەموو پێداڤیێن ئەکادیمی پێک تینە &ldquo;</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="lang-content" style="direction:ltr;" data-lang="ku-badini-lat">
-                <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">👥 Derbarê Me</h2>
-                <div class="relative rounded-[18px] overflow-hidden reveal" style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <div class="absolute top-0 left-0 right-0 h-1" style="background: linear-gradient(90deg, #667eea, #764ba2);"></div>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">Wek tîma BioNova ya ji sê xwendekarên zanîngehê pêk tê, em ji bo fêrbûn û teknolojiyê heweseke hevpar parve dikin. Di dema xwendina xwe de, me dît ku dîtina çavkaniyên pêbawer û baş-rêxistinkirî li yek cîhekî pir dijwar e. Ev yek îlham da min ku ez vê pirtûkxaneya elektronîkî biafirînim.</p>
-                    <div class="rounded-[10px] p-6" style="background:rgba(102,126,234,0.09); border:1px solid rgba(102,126,234,0.16);">
-                        <h3 class="text-[#667eea] mb-3 text-center font-bold">Mîsyona Me </h3>
-                        <p class="text-[#6b6b80] mb-0">"Deriyê agahdariyê ji bo her xwendekarekî vedike û platformek yekane peyda dike ku hemî hewcedariyên akademîk bi awayekî nûjen û hemdem pêk tîne &ldquo;</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="lang-content" style="direction:rtl;" data-lang="ku-hawrami">
-                <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">👥 دەربارەی ئێمە</h2>
-                <div class="relative rounded-[18px] overflow-hidden reveal" style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <div class="absolute top-0 left-0 right-0 h-1" style="background: linear-gradient(90deg, #667eea, #764ba2);"></div>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">ئێمە وەک تیمی BioNova سێ خوێندکاری زانکۆین کە خولیای هاوبەشمان بۆ فێربوون و تەکنەلۆژی هەیە.</p>
-                    <div class="rounded-[10px] p-6" style="background:rgba(102,126,234,0.09); border:1px solid rgba(102,126,234,0.16);">
-                        <h3 class="text-[#667eea] mb-3 text-center font-bold">ئامانجمان </h3>
-                        <p class="text-[#6b6b80] mb-0">"کردنەوەی دەرگای زانیاری بۆ هەموو خوێندکارێک و دابینکردنی یەک پلاتفۆرم کە هەموو پێداویستییەکانی ئەکادیمی دابین بکات بە شێوەیەکی مۆدێرن و سەردەمیانە &ldquo;</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="lang-content" style="direction:rtl;" data-lang="fa">
-                <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">👥 درباره ما</h2>
-                <div class="relative rounded-[18px] overflow-hidden reveal" style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <div class="absolute top-0 left-0 right-0 h-1" style="background: linear-gradient(90deg, #667eea, #764ba2);"></div>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">به عنوان تیم BioNova متشکل از سه دانشجوی دانشگاه، ما اشتیاق مشترکی به یادگیری و فناوری داریم. در طول تحصیل، متوجه شدیم که یافتن منابع قابل اعتماد و منظم در یک مکان بسیار دشوار است. این موضوع الهام‌بخش من برای ایجاد این کتابخانه الکترونیکی شد.</p>
-                    <div class="rounded-[10px] p-6" style="background:rgba(102,126,234,0.09); border:1px solid rgba(102,126,234,0.16);">
-                        <h3 class="text-[#667eea] mb-3 text-center font-bold">مأموریت ما </h3>
-                        <p class="text-[#6b6b80] mb-0">"گشودن دریچه‌ای به سوی اطلاعات برای هر دانش‌آموز و فراهم کردن بستری واحد که تمام نیازهای تحصیلی را به شیوه‌ای مدرن و امروزی برآورده می‌کند &ldquo;</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="lang-content" style="direction:ltr;" data-lang="tr">
-                <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">👥 Hakkımızda</h2>
-                <div class="relative rounded-[18px] overflow-hidden reveal" style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                    <div class="absolute top-0 left-0 right-0 h-1" style="background: linear-gradient(90deg, #667eea, #764ba2);"></div>
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">Üç üniversite öğrencisinden oluşan BioNova ekibi olarak, öğrenmeye ve teknolojiye olan tutkumuzu paylaşıyoruz. Öğrenimimiz sırasında, güvenilir ve iyi organize edilmiş kaynakları tek bir yerde bulmanın çok zor olduğunu fark ettik. Bu da beni bu e-kütüphaneyi oluşturmaya teşvik etti.</p>
-                    <div class="rounded-[10px] p-6" style="background:rgba(102,126,234,0.09); border:1px solid rgba(102,126,234,0.16);">
-                        <h3 class="text-[#667eea] mb-3 text-center font-bold">Misyonumuz </h3>
-                        <p class="text-[#6b6b80] mb-0">"Her öğrenci için bilgiye erişim kapısını açmak ve tüm akademik ihtiyaçları modern ve çağdaş bir şekilde karşılayan tek bir platform sağlamak &ldquo;</p>
-                    </div>
-                </div>
-            </div>
+            {!! __('messages.about_block') !!}
 
         </div>
     </div>
@@ -1048,14 +526,7 @@
 <section style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: clamp(1.2rem,3vw,1.8rem) 0;">
     <div class="max-w-[1200px] mx-auto px-4 text-center text-white">
         <p style="font-size:clamp(0.88rem,2.2vw,1.05rem); opacity:0.92; margin:0; line-height:1.7;">
-            <span class="lang-content active" data-lang="ku-sorani">ئەم ماڵپەڕە وەک ناوەندێکی گەشەسەندوو، لە لایەن تیمی BioNova بەردەوام چاودێری و نوێ دەکرێتەوە.</span>
-            <span class="lang-content" data-lang="ku-badini"> ئەڤ ماڵپەڕە وەک سەنتەرەکێ گەشەسەندی، ژ لایێ تیما BioNova ڤە بەردەوام چاڤدێری لێ دهێتە کرن و دهێتە نویژەنکرن. </span>
-            <span class="lang-content" data-lang="ku-badini-lat">Ev malpera wek navendek geşesendî, ji aliyê tîma BioNova ve berdewam tê çavdêrîkirin û nûkirin.</span>
-            <span class="lang-content" data-lang="ku-hawrami">ئەم ماڵپەڕە وەک ناوەندێکی گەشەسەندوو، لە لایەن تیمی BioNova بەردەوام چاودێری و نوێ دەکرێتەوە.</span>
-            <span class="lang-content" data-lang="en">This website, as a growing hub, is continuously monitored and updated by the BioNova team.</span>
-            <span class="lang-content" data-lang="ar">هذا الموقع، بوصفه مركزًا في تطور مستمر، يخضع للمراقبة والتحديث المستمر من قِبَل فريق BioNova.</span>
-            <span class="lang-content" data-lang="fa">این وب‌سایت به عنوان یک مرکز در حال رشد، به‌طور مداوم توسط تیم BioNova نظارت و به‌روزرسانی می‌شود.</span>
-            <span class="lang-content" data-lang="tr">Bu web sitesi, gelişen bir merkez olarak BioNova ekibi tarafından sürekli izlenmekte ve güncellenmektedir.</span>
+            {{ __('messages.prefooter_note') }}
         </p>
     </div>
 </section>
@@ -1064,89 +535,40 @@
     <div class="max-w-[760px] mx-auto px-4 sm:px-6">
         @if (session('feedback_sent'))
             <div class="mb-6 rounded-[14px] px-5 py-4 text-center font-semibold" style="background:#d1fae5; color:#065f46; font-size:clamp(0.9rem,2vw,1rem);">
-                    <span class="lang-content active" data-lang="ku-sorani">سوپاس! ڕەخنە و پێشنیارەکەت پێگەیشت.</span>
-                    <span class="lang-content" data-lang="ku-badini">سپاس! ڕەخنە و پێشنیارا تە گەهیشت.</span>
-                    <span class="lang-content" data-lang="ku-badini-lat">Spas! Rexne û pêşniyara te gihîşt.</span>
-                    <span class="lang-content" data-lang="ku-hawrami">سوپاس! ڕەخنە و پێشنیارەکەت پێگەیشت.</span>
-                    <span class="lang-content" data-lang="en">Thank you! Your feedback has been received.</span>
-                    <span class="lang-content" data-lang="ar">شكرًا! تم استلام ملاحظاتك.</span>
-                    <span class="lang-content" data-lang="fa">متشکریم! بازخورد شما دریافت شد.</span>
-                    <span class="lang-content" data-lang="tr">Teşekkürler! Geri bildiriminiz alındı.</span>
+                    {{ __('messages.feedback_success') }}
             </div>
         @endif
         @if ($errors->has('message'))
             <div class="mb-6 rounded-[14px] px-5 py-4 text-center font-semibold" style="background:#fee2e2; color:#991b1b; font-size:clamp(0.9rem,2vw,1rem);">
-                <span class="lang-content active" data-lang="ku-sorani">تکایە ڕەخنە یان پێشنیارەکەت بنووسە.</span>
-                <span class="lang-content" data-lang="ku-badini">تکایە ڕەخنە یان پێشنیارا خۆ بنڤیسە.</span>
-                <span class="lang-content" data-lang="ku-badini-lat">Ji kerema xwe rexne an pêşniyara xwe binivîse.</span>
-                <span class="lang-content" data-lang="ku-hawrami">تکایە ڕەخنە یان پێشنیارەکەت بنووسە.</span>
-                <span class="lang-content" data-lang="en">Please write your feedback or suggestion.</span>
-                <span class="lang-content" data-lang="ar">يرجى كتابة ملاحظتك أو اقتراحك.</span>
-                <span class="lang-content" data-lang="fa">لطفاً انتقاد یا پیشنهاد خود را بنویسید.</span>
-                <span class="lang-content" data-lang="tr">Lütfen eleştirinizi veya önerinizi yazın.</span>
+                {{ __('messages.feedback_error') }}
             </div>
         @endif
         <div class="rounded-[22px] bg-white/85 backdrop-blur-md border border-white/70 text-center" style="box-shadow:0 10px 40px rgba(102,126,234,0.14); padding: clamp(1.8rem,5vw,3rem);">
             <h2 class="font-bold text-[#2d2d3a] mb-3" style="font-size:clamp(1.5rem,4vw,2rem);">
-                    <span class="lang-content active" data-lang="ku-sorani">💬 ڕەخنە و پێشنیار</span>
-                    <span class="lang-content" data-lang="ku-badini">💬 ڕەخنە و پێشنیار</span>
-                    <span class="lang-content" data-lang="ku-badini-lat">💬 Rexne û Pêşniyar</span>
-                    <span class="lang-content" data-lang="ku-hawrami">💬 ڕەخنە و پێشنیار</span>
-                    <span class="lang-content" data-lang="en">💬 Feedback & Suggestions</span>
-                    <span class="lang-content" data-lang="ar">💬 الملاحظات والاقتراحات</span>
-                    <span class="lang-content" data-lang="fa">💬 انتقادات و پیشنهادات</span>
-                    <span class="lang-content" data-lang="tr">💬 Eleştiri ve Öneriler</span>
+                    {{ __('messages.feedback_title') }}
             </h2>
             <p class="text-[#6b6b80] mb-6" style="font-size:clamp(0.9rem,2.2vw,1rem); line-height:1.7;">
-                    <span class="lang-content active" data-lang="ku-sorani">ڕای خۆت لەگەڵمان بەش بکە بۆ باشترکردنی کتێبخانەکە.</span>
-                    <span class="lang-content" data-lang="ku-badini">ڕایا خۆ بە مە ڤە پارڤە بە دا باشترکرنا کتێبخانێ.</span>
-                    <span class="lang-content" data-lang="ku-badini-lat">Nêrîna xwe bi me re parve bike ji bo çêtirkirina pirtûkxanê.</span>
-                    <span class="lang-content" data-lang="ku-hawrami">ڕای خۆت لەگەڵمان بەش بکە بۆ باشترکردنی کتێبخانەکە.</span>
-                    <span class="lang-content" data-lang="en">Share your opinion with us to help improve the library.</span>
-                    <span class="lang-content" data-lang="ar">شاركنا رأيك لمساعدتنا على تحسين المكتبة.</span>
-                    <span class="lang-content" data-lang="fa">برای بهبود کتابخانه نظر خود را با ما در میان بگذارید.</span>
-                    <span class="lang-content" data-lang="tr">Kütüphaneyi geliştirmemize yardımcı olmak için görüşlerinizi paylaşın.</span>
+                    {{ __('messages.feedback_subtitle') }}
             </p>
             <form method="POST" action="{{ route('feedback.store') }}" style="text-align:right;">
                 @csrf
                 <div class="mb-4 text-right" style="text-align:right;">
                     <label for="fb-name" class="block font-semibold mb-1 text-[#4a4a5c]" style="font-size:0.9rem;">
-                        <span class="lang-content active" data-lang="ku-sorani">ناو (ئارەزوومەندانە)</span>
-                    <span class="lang-content" data-lang="ku-badini">ناڤ (ڤەدلێخواز)</span>
-                    <span class="lang-content" data-lang="ku-badini-lat">Nav (dilxwaz)</span>
-                    <span class="lang-content" data-lang="ku-hawrami">ناو (ئارەزوومەندانە)</span>
-                    <span class="lang-content" data-lang="en">Name (optional)</span>
-                    <span class="lang-content" data-lang="ar">الاسم (اختياري)</span>
-                    <span class="lang-content" data-lang="fa">نام (اختیاری)</span>
-                    <span class="lang-content" data-lang="tr">İsim (isteğe bağlı)</span>
+                        {{ __('messages.fb_name_label') }}
                     </label>
                     <input type="text" id="fb-name" name="name" maxlength="120" value="{{ old('name') }}"
                            class="w-full rounded-[12px] px-4 py-3" style="border:1px solid #d5d9ee; font-size:0.95rem; font-family:inherit; text-align:right;">
                 </div>
                 <div class="mb-5 text-right">
                     <label for="fb-msg" class="block font-semibold mb-1 text-[#4a4a5c]" style="font-size:0.9rem;">
-                        <span class="lang-content active" data-lang="ku-sorani">ڕەخنە یان پێشنیار</span>
-                    <span class="lang-content" data-lang="ku-badini">ڕەخنە یان پێشنیار</span>
-                    <span class="lang-content" data-lang="ku-badini-lat">Rexne an pêşniyar</span>
-                    <span class="lang-content" data-lang="ku-hawrami">ڕەخنە یان پێشنیار</span>
-                    <span class="lang-content" data-lang="en">Feedback or suggestion</span>
-                    <span class="lang-content" data-lang="ar">ملاحظة أو اقتراح</span>
-                    <span class="lang-content" data-lang="fa">انتقاد یا پیشنهاد</span>
-                    <span class="lang-content" data-lang="tr">Eleştiri veya öneri</span>
+                        {{ __('messages.fb_msg_label') }}
                     </label>
                     <textarea id="fb-msg" name="message" rows="4" maxlength="2000" required
                               class="w-full rounded-[12px] px-4 py-3" style="border:1px solid #d5d9ee; font-size:0.95rem; font-family:inherit; text-align:right;">{{ old('message') }}</textarea>
                 </div>
                 <div style="text-align:center;">
                     <button type="submit" class="section-btn relative inline-block font-semibold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1 font-[inherit] cursor-pointer" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:clamp(0.65rem,2.2vw,0.9rem) clamp(1.6rem,4vw,2.4rem); font-size:clamp(0.9rem,2.2vw,1rem); box-shadow:0 4px 14px rgba(102,126,234,0.28); border:none;">
-                        <span class="lang-content active" data-lang="ku-sorani">ناردن</span>
-                    <span class="lang-content" data-lang="ku-badini">شاندن</span>
-                    <span class="lang-content" data-lang="ku-badini-lat">Bişîne</span>
-                    <span class="lang-content" data-lang="ku-hawrami">ناردن</span>
-                    <span class="lang-content" data-lang="en">Send</span>
-                    <span class="lang-content" data-lang="ar">إرسال</span>
-                    <span class="lang-content" data-lang="fa">ارسال</span>
-                    <span class="lang-content" data-lang="tr">Gönder</span>
+                        {{ __('messages.fb_send') }}
                     </button>
                 </div>
             </form>
@@ -1156,23 +578,9 @@
 <!-- ══════════ FOOTER ══════════ -->
 <footer class="text-center" style="background: linear-gradient(135deg, #1e1e2e 0%, #2d2b4e 100%); color: rgba(255,255,255,0.82); padding: clamp(1.5rem,4vw,2.2rem) 0;">
     <div class="max-w-[1200px] mx-auto px-4">
-        <div class="lang-content active" style="direction:rtl;" data-lang="ku-sorani"><p style="font-size:clamp(0.85rem,2vw,0.95rem);">کتێبخانەی ئەلیکترۆنی کۆلێژی زانست - زانکۆی ڕاپەڕین &nbsp;|&nbsp; هەموو مافەکان پارێزراون &copy; <span class="footer-year-ar"></span></p></div>
-        <div class="lang-content" style="direction:rtl;" data-lang="ku-badini"><p style="font-size:clamp(0.85rem,2vw,0.95rem);">کتێبخانەیا ئەلیکترۆنیکی یا کۆلێژا زانستێ - زانینگەها ڕاپەرین &nbsp;|&nbsp; هەموو ماف پاراستی نە &copy; <span class="footer-year-ar"></span></p></div>
-        <div class="lang-content" style="direction:ltr;" data-lang="ku-badini-lat"><p style="font-size:clamp(0.85rem,2vw,0.95rem);">Kitêbxaneya Elektronîkî ya Kolêja Zanistê - Zanîngeha Raperin &nbsp;|&nbsp; Hemû maf parastî ne &copy; <span class="footer-year-en"></span></p></div>
-        <div class="lang-content" style="direction:rtl;" data-lang="ku-hawrami"><p style="font-size:clamp(0.85rem,2vw,0.95rem);">کتێبخانەی ئەلیکترۆنی کۆلێژی زانست - زانکۆی ڕاپەڕین &nbsp;|&nbsp; هەموو مافەکان پارێزراون &copy; <span class="footer-year-ar"></span></p></div>
-        <div class="lang-content" style="direction:ltr;" data-lang="en"><p style="font-size:clamp(0.85rem,2vw,0.95rem);">College of Science Electronic Library - Raparin University &nbsp;|&nbsp; All rights reserved &copy; <span class="footer-year-en"></span></p></div>
-        <div class="lang-content" style="direction:rtl;" data-lang="ar"><p style="font-size:clamp(0.85rem,2vw,0.95rem);">المكتبة الإلكترونية لكلية العلوم - جامعة رابەرين &nbsp;|&nbsp; جميع الحقوق محفوظة &copy; <span class="footer-year-ar"></span></p></div>
-        <div class="lang-content" style="direction:rtl;" data-lang="fa"><p style="font-size:clamp(0.85rem,2vw,0.95rem);">کتابخانه الکترونیکی دانشکده علوم - دانشگاه راپەرین &nbsp;|&nbsp; تمامی حقوق محفوظ است &copy; <span class="footer-year-ar"></span></p></div>
-        <div class="lang-content" style="direction:ltr;" data-lang="tr"><p style="font-size:clamp(0.85rem,2vw,0.95rem);">Fen Fakültesi Elektronik Kütüphanesi - Raparin Üniversitesi &nbsp;|&nbsp; Tüm hakları saklıdır &copy; <span class="footer-year-en"></span></p></div>
+        {!! __('messages.footer_copyright') !!}
 
-        <div class="lang-content active" style="direction:rtl;" data-lang="ku-sorani"><p style="font-size:clamp(0.85rem,2vw,0.95rem);">🎓 <a href="https://uor.edu.krd" target="_blank" rel="noopener" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">ماڵپەڕی زانکۆی ڕاپەڕین</a> &nbsp;|&nbsp; uor.edu.krd</p></div>
-        <div class="lang-content" style="direction:rtl;" data-lang="ku-badini"><p style="font-size:clamp(0.85rem,2vw,0.95rem);">🎓 <a href="https://uor.edu.krd" target="_blank" rel="noopener" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">ماڵپەڕا زانینگەها ڕاپەرین</a> &nbsp;|&nbsp; uor.edu.krd</p></div>
-        <div class="lang-content" style="direction:ltr;" data-lang="ku-badini-lat"><p style="font-size:clamp(0.85rem,2vw,0.95rem);">🎓 <a href="https://uor.edu.krd" target="_blank" rel="noopener" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">Malpera Zanîngeha Raperîn</a> &nbsp;|&nbsp; uor.edu.krd</p></div>
-        <div class="lang-content" style="direction:rtl;" data-lang="ku-hawrami"><p style="font-size:clamp(0.85rem,2vw,0.95rem);">🎓 <a href="https://uor.edu.krd" target="_blank" rel="noopener" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">ماڵپەڕی زانکۆی ڕاپەڕین</a> &nbsp;|&nbsp; uor.edu.krd</p></div>
-        <div class="lang-content" style="direction:ltr;" data-lang="en"><p style="font-size:clamp(0.85rem,2vw,0.95rem);">🎓 <a href="https://uor.edu.krd" target="_blank" rel="noopener" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">University of Raparin Website</a> &nbsp;|&nbsp; uor.edu.krd</p></div>
-        <div class="lang-content" style="direction:rtl;" data-lang="ar"><p style="font-size:clamp(0.85rem,2vw,0.95rem);">🎓 <a href="https://uor.edu.krd" target="_blank" rel="noopener" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">الموقع الرسمي لجامعة رابەرين</a> &nbsp;|&nbsp; uor.edu.krd</p></div>
-        <div class="lang-content" style="direction:rtl;" data-lang="fa"><p style="font-size:clamp(0.85rem,2vw,0.95rem);">🎓 <a href="https://uor.edu.krd" target="_blank" rel="noopener" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">وب‌سایت دانشگاه راپەرین</a> &nbsp;|&nbsp; uor.edu.krd</p></div>
-        <div class="lang-content" style="direction:ltr;" data-lang="tr"><p style="font-size:clamp(0.85rem,2vw,0.95rem);">🎓 <a href="https://uor.edu.krd" target="_blank" rel="noopener" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">Raparin Üniversitesi Web Sitesi</a> &nbsp;|&nbsp; uor.edu.krd</p></div>
+        {!! __('messages.footer_uor_link') !!}
 
         <div class="mt-3 flex items-center justify-center gap-3 opacity-75 hover:opacity-100 transition-opacity duration-300">
             <span style="font-size: 1rem;">👁</span>
@@ -1184,14 +592,14 @@
                   class="h-[40px] w-auto align-middle" 
                   loading="lazy" decoding="async">
              
-                <span id="visitor-label">بەکارهێنەری کتێبخانە</span>
+                <span id="visitor-label">{{ __('messages.visitors_label') }}</span>
             </div>
         </div>
     </div>
 </footer>
 
 <!-- Scroll To Top -->
-<button id="scrollTopBtn" title="بگەڕێوە سەرەوە" aria-label="بگەڕێوە سەرەوە">
+<button id="scrollTopBtn" title="{{ __('messages.scroll_top') }}" aria-label="{{ __('messages.scroll_top') }}">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="18 15 12 9 6 15"></polyline>
     </svg>
@@ -1244,23 +652,6 @@
     },{passive:true});
 })();
 
-// Language system
-var VISITOR_LABELS = {
-    'ku-sorani':'بەکارهێنەری کتێبخانە','ku-badini':'سەردانکار',
-    'ku-badini-lat':'Serdankar','ku-hawrami':'سەردانکەر',
-    'en':'Visitors','ar':'زائر','fa':'بازدیدکننده','tr':'Ziyaretçi'
-};
-function updateVisitorLabel(lang){
-    var el = document.getElementById('visitor-label');
-    if(el) el.textContent = VISITOR_LABELS[lang]||'Visitors';
-}
-var currentLang = sessionStorage.getItem('selectedLanguage')||'ku-sorani';
-var KU_DIALECTS=['ku-sorani','ku-badini','ku-badini-lat','ku-hawrami'];
-var LANGUAGE_SWITCH_URL = "{{ url('language') }}";
-var LTR_LANGS=['en','tr','ku-badini-lat'];
-applyLanguage(currentLang);
-restoreButtons(currentLang);
-
 function toggleKuDropdown(){
     var btn=document.getElementById('kuMainBtn');
     var dd=document.getElementById('kuDropdown');
@@ -1285,62 +676,6 @@ document.addEventListener('click',function(e){
     var kg=document.getElementById('kuGroup');
     if(kg && !kg.contains(e.target)) closeKuDropdown();
 });
-
-function persistLang(lang){
-    if(typeof fetch!=='undefined' && LANGUAGE_SWITCH_URL){
-        fetch(LANGUAGE_SWITCH_URL+'?locale='+encodeURIComponent(lang),{method:'GET',credentials:'same-origin'}).catch(function(){});
-    }
-}
-function selectDialect(lang,btn){
-    closeKuDropdown();
-    document.getElementById('kuMainBtn').classList.add('active');
-    document.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.remove('active'); });
-    document.querySelectorAll('.ku-dialect-btn').forEach(function(b){ b.classList.remove('active'); });
-    btn.classList.add('active');
-    applyLanguage(lang);
-    persistLang(lang);
-}
-function switchLang(lang){
-    closeKuDropdown();
-    document.getElementById('kuMainBtn').classList.remove('active');
-    document.querySelectorAll('.ku-dialect-btn').forEach(function(b){ b.classList.remove('active'); });
-    document.querySelectorAll('.lang-btn').forEach(function(b){
-        b.classList.toggle('active',b.getAttribute('data-lang')===lang);
-    });
-    applyLanguage(lang);
-    persistLang(lang);
-}
-function applyLanguage(lang){
-    currentLang=lang;
-    sessionStorage.setItem('selectedLanguage',lang);
-    document.documentElement.setAttribute('lang', KU_DIALECTS.indexOf(lang)>-1 ? 'ku' : lang);
-    document.querySelectorAll('.lang-content.active').forEach(function(el){ el.style.opacity='0'; });
-    setTimeout(function(){
-        document.querySelectorAll('.lang-content').forEach(function(el){
-            el.classList.remove('active');
-            el.style.opacity='0';
-        });
-        document.querySelectorAll('[data-lang="'+lang+'"].lang-content').forEach(function(el){
-            el.classList.add('active');
-            requestAnimationFrame(function(){ el.style.opacity='1'; });
-        });
-        triggerReveal();
-    },180);
-    document.body.style.direction=LTR_LANGS.indexOf(lang)>-1?'ltr':'rtl';
-    updateVisitorLabel(lang);
-}
-function restoreButtons(lang){
-    if(KU_DIALECTS.indexOf(lang)>-1){
-        document.getElementById('kuMainBtn').classList.add('active');
-        document.querySelectorAll('.ku-dialect-btn').forEach(function(b){
-            b.classList.toggle('active',b.getAttribute('data-lang')===lang);
-        });
-    } else {
-        document.querySelectorAll('.lang-btn').forEach(function(b){
-            b.classList.toggle('active',b.getAttribute('data-lang')===lang);
-        });
-    }
-}
 
 // Scroll reveal
 var revealObserver = new IntersectionObserver(function(entries){
