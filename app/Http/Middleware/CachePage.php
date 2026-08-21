@@ -21,8 +21,10 @@ class CachePage
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Only plain GET requests to the exact home page are cached.
-        if (! $request->isMethod('GET') || ! $request->is('/')) {
+        // Only plain GET requests to the home page — at the root or behind a
+        // locale prefix — are cached.
+        if (! $request->isMethod('GET')
+            || ! in_array($request->route()?->getName(), ['home', 'home.localised'], true)) {
             return $next($request);
         }
 

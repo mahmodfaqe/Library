@@ -22,6 +22,15 @@ abstract class TestCase extends BaseTestCase
         parent::tearDown();
     }
 
+    /**
+     * The home page URL for a locale: the default locale is served at the
+     * root, every other locale behind its own prefix.
+     */
+    protected function homeUrl(string $locale): string
+    {
+        return $locale === \App\Support\Locale::DEFAULT ? '/' : "/$locale";
+    }
+
     protected function clearPageCache(): void
     {
         foreach (glob(storage_path('framework/pagecache').'/*') ?: [] as $file) {

@@ -103,6 +103,53 @@ class TranslationFilesTest extends TestCase
         }
     }
 
+    public function test_arabic_script_locales_do_not_trail_off_into_latin(): void
+    {
+        // ku-badini once ended a sentence in Kurmanji Latin mid-paragraph.
+        $allowed = ['QR', 'code', 'BioNova', 'uor', 'edu', 'krd', 'Title', 'Description', 'Button'];
+
+        foreach (['ku-sorani', 'ku-badini', 'ku-hawrami', 'ar', 'fa'] as $locale) {
+            $messages = $this->load($locale, 'messages');
+            $offenders = [];
+
+            array_walk_recursive($messages, function ($value, $key) use (&$offenders, $allowed) {
+                if (! is_string($value)) {
+                    return;
+                }
+
+                // :date, :year and friends are placeholders, not stray words.
+                $value = preg_replace('/:[a-z_]+/', '', $value);
+
+                preg_match_all('/[A-Za-zÎîÛûÊêŞşÇç]{3,}/u', $value, $m);
+
+                foreach ($m[0] as $word) {
+                    if (! in_array($word, $allowed, true)) {
+                        $offenders[] = "$key: $word";
+                    }
+                }
+            });
+
+            $this->assertSame([], $offenders, "Latin-script words in $locale");
+        }
+    }
+
+    public function test_the_intro_reads_the_same_way_in_every_locale(): void
+    {
+        // Sorani is the reference: welcome, resources, what an e-library is,
+        // mission. ku-badini adds a Bismillah line ahead of them.
+        foreach (SetLocale::LOCALES as $locale) {
+            $count = count($this->load($locale, 'messages')['intro']['paragraphs']);
+
+            $expected = match ($locale) {
+                'ku-badini' => 5,
+                'ku-hawrami' => 1,   // still awaiting a translation of paragraphs 2-4
+                default => 4,
+            };
+
+            $this->assertSame($expected, $count, "intro paragraph count for $locale");
+        }
+    }
+
     public function test_the_admin_panel_has_a_kurdish_sorani_translation_for_every_key(): void
     {
         $reference = $this->keyPaths($this->load('ku-sorani', 'admin'));

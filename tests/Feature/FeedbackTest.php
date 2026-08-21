@@ -69,8 +69,8 @@ class FeedbackTest extends TestCase
     {
         $this->from('/')->post('/feedback', ['message' => 'Hello.']);
 
-        $this->withSession(['locale' => 'en', 'feedback_sent' => true])
-            ->get('/')
+        $this->withSession(['feedback_sent' => true])
+            ->get('/en')
             ->assertSee(__('messages.feedback.success', [], 'en'));
     }
 }

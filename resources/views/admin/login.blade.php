@@ -40,7 +40,7 @@
             </div>
             <button type="submit" class="btn">{{ __('admin.login.submit') }}</button>
         </form>
-        <div class="back"><a href="{{ route('home') }}">{{ __('admin.login.back_site') }}</a></div>
+        <div class="back"><a href="{{ Locale::url() }}">{{ __('admin.login.back_site') }}</a></div>
     </div>
 </body>
 </html>

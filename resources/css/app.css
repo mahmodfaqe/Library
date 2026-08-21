@@ -3,7 +3,192 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+/* ══════════ Site styles ══════════
+   Everything below was previously an inline <style> block in home.blade.php,
+   served alongside the Tailwind CDN build. It is compiled by Vite now. */
+
+/* Noise texture overlay */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+}
+
+html { font-size: 16px; scroll-behavior: smooth; }
+@media (max-width: 480px)  { html { font-size: 14px; } }
+@media (min-width: 1200px) { html { font-size: 18px; } }
+
+body { font-family: 'Rabar', sans-serif; }
+
+/* Scroll progress bar */
+#scrollProgress {
+    position: fixed; top: 0; left: 0; width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, #ff6b6b, #667eea, #764ba2, #ff6b6b);
+    background-size: 200% 100%;
+    z-index: 2000;
+    transition: width 0.1s linear;
+    animation: progressShimmer 3s linear infinite;
+}
+
+/* Shimmer bar on intro-card top border */
+.shimmer-border::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea, #ff6b6b, #764ba2);
+    background-size: 200% 100%;
+    animation: shimmerBar 3s linear infinite;
+}
+
+/* Section card top bar */
+.card-top-bar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.card-top-bar:hover::before { transform: scaleX(1); }
+
+/* Card glow on hover */
+.card-glow::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at 50% 0%, rgba(102,126,234,0.08), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+.card-glow:hover::after { opacity: 1; }
+
+/* Scroll reveal */
+.reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.65s cubic-bezier(0.4,0,0.2,1), transform 0.65s cubic-bezier(0.4,0,0.2,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Particle */
+.particle {
+    position: absolute;
+    background: rgba(255,255,255,0.5);
+    border-radius: 50%;
+    animation: particleDrift linear infinite;
+}
+#hero-section {
+transition: background-image 1.5s ease-in-out;
+}
+
+/* Hero mesh spans */
+.mesh-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    animation: meshFloat 12s ease-in-out infinite;
+    opacity: 0.35;
+}
+
+/* Scroll-to-top */
+#scrollTopBtn {
+    position: fixed;
+    bottom: clamp(1.2rem,4vw,2rem);
+    left: clamp(1.2rem,4vw,2rem);
+    width: clamp(44px,6vw,54px);
+    height: clamp(44px,6vw,54px);
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 24px rgba(102,126,234,0.45);
+    z-index: 990;
+    opacity: 0;
+    transform: translateY(20px) scale(0.85);
+    transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
+    pointer-events: none;
+}
+#scrollTopBtn.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+#scrollTopBtn:hover {
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 14px 36px rgba(102,126,234,0.58);
+}
+#scrollTopBtn:active { transform: translateY(0) scale(0.95); }
+
+/* KU Dropdown */
+.ku-dropdown {
+    display: none;
+    position: fixed;
+    background: rgba(70,50,130,0.96);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    z-index: 9999;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.35);
+    min-width: clamp(110px,28vw,155px);
+    transform-origin: top right;
+}
+.ku-dropdown.open {
+    display: block;
+    animation: dropdownOpen 0.22s cubic-bezier(0.34,1.56,0.64,1) forwards;
+}
+
+/* Logo hover */
+.logo-link:hover .uor-logo {
+    transform: scale(1.12) rotate(4deg);
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.55));
+}
+.logo-link:hover .logo-title-el  { color: #ffd700; }
+.logo-link:hover .logo-sub-el { color: rgba(255,215,0,0.78); }
+.uor-logo { transition: all 0.45s cubic-bezier(0.4,0,0.2,1); }
+.logo-title-el, .logo-sub-el { transition: color 0.35s ease; }
+
+/* Main library btn */
+.main-library-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0);
+    transition: background 0.3s ease;
+}
+.main-library-btn:hover::after { background: rgba(255,255,255,0.12); }
+
+/* section-btn shimmer */
+.section-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0);
+    transition: background 0.25s ease;
+}
+.section-btn:hover::before { background: rgba(255,255,255,0.14); }
+
+/* Social icon hover */
+.social-link { transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), filter 0.3s ease; display: inline-block; }
+.social-link:hover { transform: translateY(-4px) scale(1.15); filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
+
+/* Keyboard nav */
+.keyboard-nav *:focus { outline: 2px solid #667eea; outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }

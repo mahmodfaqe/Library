@@ -49,7 +49,7 @@
                 <a href="{{ route('admin.feedback') }}">{{ __('admin.nav.feedback') }}</a>
             </nav>
         </div>
-        <a href="{{ route('home') }}">{{ __('admin.back_home') }}</a>
+        <a href="{{ Locale::url() }}">{{ __('admin.back_home') }}</a>
     </div>
     <div class="container">
         @if (session('status'))

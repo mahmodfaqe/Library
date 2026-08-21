@@ -2,53 +2,76 @@
 
 namespace Tests\Feature;
 
-use App\Http\Middleware\SetLocale;
+use App\Support\Locale;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class LocaleSwitchingTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_it_stores_a_supported_locale_in_the_session(): void
+    public static function locales(): array
     {
-        $this->from('/')
-            ->get('/language?locale=tr')
-            ->assertRedirect('/')
-            ->assertSessionHas('locale', 'tr');
+        return array_map(fn (string $l) => [$l], Locale::SUPPORTED);
     }
 
-    public function test_it_ignores_an_unsupported_locale(): void
+    #[DataProvider('locales')]
+    public function test_the_url_decides_the_language(string $locale): void
     {
-        $this->withSession(['locale' => 'en'])
-            ->from('/')
-            ->get('/language?locale=de')
-            ->assertRedirect('/')
-            ->assertSessionHas('locale', 'en');
+        $this->get($this->homeUrl($locale))
+            ->assertOk()
+            ->assertSee(__('messages.hero.title', [], $locale), false);
     }
 
-    public function test_it_ignores_a_missing_locale(): void
+    #[DataProvider('locales')]
+    public function test_the_switcher_links_to_every_other_language(string $locale): void
     {
-        $this->from('/')
-            ->get('/language')
-            ->assertRedirect('/')
-            ->assertSessionMissing('locale');
-    }
+        $response = $this->get($this->homeUrl($locale))->assertOk();
 
-    public function test_every_advertised_locale_is_accepted(): void
-    {
-        foreach (SetLocale::LOCALES as $locale) {
-            $this->from('/')
-                ->get("/language?locale=$locale")
-                ->assertSessionHas('locale', $locale);
+        foreach (Locale::SUPPORTED as $target) {
+            $response->assertSee('href="'.Locale::url($target).'"', false);
         }
     }
 
-    public function test_the_stored_locale_drives_the_rendered_page(): void
+    public function test_visiting_a_localised_url_remembers_the_choice(): void
     {
-        $this->withSession(['locale' => 'ar'])
-            ->get('/')
+        // The admin panel has no locale prefix, so it reads the remembered one.
+        $this->get('/fa')->assertSessionHas('locale', 'fa');
+    }
+
+    public function test_a_page_without_a_prefix_uses_the_remembered_locale(): void
+    {
+        $this->withSession(['locale' => 'tr'])
+            ->get('/admin/login')
             ->assertOk()
-            ->assertSee(__('messages.hero.title', [], 'ar'), false);
+            ->assertSee(__('admin.login.heading', [], 'tr'), false);
+    }
+
+    public function test_a_page_without_a_prefix_falls_back_to_the_default_locale(): void
+    {
+        $this->get('/admin/login')
+            ->assertOk()
+            ->assertSee(__('admin.login.heading', [], 'ku-sorani'), false);
+    }
+
+    public function test_a_nonsense_locale_in_the_session_is_ignored(): void
+    {
+        $this->withSession(['locale' => 'de'])
+            ->get('/admin/login')
+            ->assertOk()
+            ->assertSee(__('admin.login.heading', [], 'ku-sorani'), false);
+    }
+
+    public function test_the_old_query_string_switcher_still_works(): void
+    {
+        $this->get('/language?locale=ar')->assertRedirect(url('/ar'))->assertStatus(301);
+        $this->get('/language?locale=ku-sorani')->assertRedirect(url('/'))->assertStatus(301);
+    }
+
+    public function test_the_old_switcher_ignores_an_unsupported_locale(): void
+    {
+        $this->get('/language?locale=de')->assertRedirect(url('/'));
+        $this->get('/language')->assertRedirect(url('/'));
     }
 }

@@ -5,284 +5,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
     <link rel="dns-prefetch" href="https://mahmodfaqe.goatcounter.com">
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preload" href="{{ asset('fonts/Rabar_015.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <style>
+        @font-face {
+            font-family: 'Rabar';
+            src: url('{{ asset('fonts/Rabar_015.woff2') }}') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+            /* Show the fallback face immediately rather than blocking on the
+               download; the Kurdish text stays readable while Rabar loads. */
+            font-display: swap;
+        }
+    </style>
     <title>{{ __('messages.site_title') }}</title>
     <meta name="description" content="{{ __('messages.meta_description') }}">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#667eea">
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    <link rel="canonical" href="{{ url('/') }}">
+    <link rel="canonical" href="{{ Locale::url() }}">
+    @foreach (App\Support\Locale::SUPPORTED as $alternate)
+        <link rel="alternate" hreflang="{{ Locale::languageTag($alternate) }}" href="{{ Locale::url($alternate) }}">
+    @endforeach
+    <link rel="alternate" hreflang="x-default" href="{{ url('/') }}">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="{{ __('messages.site_title') }}">
     <meta property="og:title" content="{{ __('messages.site_title') }}">
     <meta property="og:description" content="{{ __('messages.meta_description') }}">
-    <meta property="og:url" content="{{ url('/') }}">
+    <meta property="og:url" content="{{ Locale::url() }}">
     <meta property="og:image" content="{{ asset('file/uor-logo.png') }}">
-    <meta property="og:locale" content="ku">
+    <meta property="og:locale" content="{{ Locale::languageTag() }}">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ __('messages.site_title') }}">
     <meta name="twitter:description" content="{{ __('messages.meta_description') }}">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#667eea',
-                        secondary: '#764ba2',
-                        accent: '#ff6b6b',
-                        'text-main': '#2d2d3a',
-                        'text-light': '#6b6b80',
-                        'bg-main': '#f8f9ff',
-                    },
-                    fontFamily: {
-                      kufi: ['Rabar', 'sans-serif'],
-                    },
-                    backdropBlur: {
-                        xs: '2px',
-                    },
-                    animation: {
-                        'mesh-float': 'meshFloat 12s ease-in-out infinite',
-                        'particle-drift': 'particleDrift linear infinite',
-                        'hero-fade-up': 'heroFadeUp 0.8s ease-out both',
-                        'shimmer-bar': 'shimmerBar 3s linear infinite',
-                        'dropdown-open': 'dropdownOpen 0.22s cubic-bezier(0.34,1.56,0.64,1) forwards',
-                        'progress-shimmer': 'progressShimmer 3s linear infinite',
-                    },
-                    keyframes: {
-                        meshFloat: {
-                            '0%,100%': { transform: 'translate(0,0) scale(1)' },
-                            '33%':     { transform: 'translate(3%,4%) scale(1.06)' },
-                            '66%':     { transform: 'translate(-2%,2%) scale(0.96)' },
-                        },
-                        particleDrift: {
-                            '0%':   { transform: 'translateY(0) translateX(0) scale(1)', opacity: '0' },
-                            '10%':  { opacity: '1' },
-                            '90%':  { opacity: '0.6' },
-                            '100%': { transform: 'translateY(-120vh) translateX(30px) scale(0)', opacity: '0' },
-                        },
-                        heroFadeUp: {
-                            from: { opacity: '0', transform: 'translateY(28px)' },
-                            to:   { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        shimmerBar: {
-                            '0%':   { backgroundPosition: '200% 0' },
-                            '100%': { backgroundPosition: '-200% 0' },
-                        },
-                        dropdownOpen: {
-                            from: { opacity: '0', transform: 'scale(0.88) translateY(-8px)' },
-                            to:   { opacity: '1', transform: 'scale(1) translateY(0)' },
-                        },
-                        progressShimmer: {
-                            '0%':   { backgroundPosition: '0% 0' },
-                            '100%': { backgroundPosition: '200% 0' },
-                        },
-                    },
-                    transitionTimingFunction: {
-                        'spring': 'cubic-bezier(0.34,1.56,0.64,1)',
-                        'smooth': 'cubic-bezier(0.4,0,0.2,1)',
-                    },
-                },
-            },
-        }
-    </script>
-    <style>
-       @font-face {
-    font-family: 'Rabar';
-    src: url('{{ asset('fonts/Rabar_015.ttf') }}') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-        /* Noise texture overlay */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.4;
-        }
-
-        html { font-size: 16px; scroll-behavior: smooth; }
-        @media (max-width: 480px)  { html { font-size: 14px; } }
-        @media (min-width: 1200px) { html { font-size: 18px; } }
-
-        body { font-family: 'Rabar', sans-serif; }
-
-        /* Scroll progress bar */
-        #scrollProgress {
-            position: fixed; top: 0; left: 0; width: 0%;
-            height: 3px;
-            background: linear-gradient(90deg, #ff6b6b, #667eea, #764ba2, #ff6b6b);
-            background-size: 200% 100%;
-            z-index: 2000;
-            transition: width 0.1s linear;
-            animation: progressShimmer 3s linear infinite;
-        }
-
-        /* Shimmer bar on intro-card top border */
-        .shimmer-border::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #667eea, #ff6b6b, #764ba2);
-            background-size: 200% 100%;
-            animation: shimmerBar 3s linear infinite;
-        }
-
-        /* Section card top bar */
-        .card-top-bar::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
-        }
-        .card-top-bar:hover::before { transform: scaleX(1); }
-
-        /* Card glow on hover */
-        .card-glow::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            background: radial-gradient(circle at 50% 0%, rgba(102,126,234,0.08), transparent 70%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            pointer-events: none;
-        }
-        .card-glow:hover::after { opacity: 1; }
-
-        /* Scroll reveal */
-        .reveal {
-            opacity: 0;
-            transform: translateY(32px);
-            transition: opacity 0.65s cubic-bezier(0.4,0,0.2,1), transform 0.65s cubic-bezier(0.4,0,0.2,1);
-        }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
-
-        /* Particle */
-        .particle {
-            position: absolute;
-            background: rgba(255,255,255,0.5);
-            border-radius: 50%;
-            animation: particleDrift linear infinite;
-        }
-        #hero-section {
-        transition: background-image 1.5s ease-in-out;
-        }
-
-        /* Hero mesh spans */
-        .mesh-blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(60px);
-            animation: meshFloat 12s ease-in-out infinite;
-            opacity: 0.35;
-        }
-
-        /* Scroll-to-top */
-        #scrollTopBtn {
-            position: fixed;
-            bottom: clamp(1.2rem,4vw,2rem);
-            left: clamp(1.2rem,4vw,2rem);
-            width: clamp(44px,6vw,54px);
-            height: clamp(44px,6vw,54px);
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 6px 24px rgba(102,126,234,0.45);
-            z-index: 990;
-            opacity: 0;
-            transform: translateY(20px) scale(0.85);
-            transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
-            pointer-events: none;
-        }
-        #scrollTopBtn.visible {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            pointer-events: auto;
-        }
-        #scrollTopBtn:hover {
-            transform: translateY(-5px) scale(1.1);
-            box-shadow: 0 14px 36px rgba(102,126,234,0.58);
-        }
-        #scrollTopBtn:active { transform: translateY(0) scale(0.95); }
-
-        /* KU Dropdown */
-        .ku-dropdown {
-            display: none;
-            position: fixed;
-            background: rgba(70,50,130,0.96);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 12px;
-            overflow: hidden;
-            z-index: 9999;
-            box-shadow: 0 16px 48px rgba(0,0,0,0.35);
-            min-width: clamp(110px,28vw,155px);
-            transform-origin: top right;
-        }
-        .ku-dropdown.open {
-            display: block;
-            animation: dropdownOpen 0.22s cubic-bezier(0.34,1.56,0.64,1) forwards;
-        }
-
-        /* Logo hover */
-        .logo-link:hover .uor-logo {
-            transform: scale(1.12) rotate(4deg);
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.55));
-        }
-        .logo-link:hover .logo-title-el  { color: #ffd700; }
-        .logo-link:hover .logo-sub-el { color: rgba(255,215,0,0.78); }
-        .uor-logo { transition: all 0.45s cubic-bezier(0.4,0,0.2,1); }
-        .logo-title-el, .logo-sub-el { transition: color 0.35s ease; }
-
-        /* Main library btn */
-        .main-library-btn::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(255,255,255,0);
-            transition: background 0.3s ease;
-        }
-        .main-library-btn:hover::after { background: rgba(255,255,255,0.12); }
-
-        /* section-btn shimmer */
-        .section-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(255,255,255,0);
-            transition: background 0.25s ease;
-        }
-        .section-btn:hover::before { background: rgba(255,255,255,0.14); }
-
-        /* Social icon hover */
-        .social-link { transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), filter 0.3s ease; display: inline-block; }
-        .social-link:hover { transform: translateY(-4px) scale(1.15); filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
-
-        /* Keyboard nav */
-        .keyboard-nav *:focus { outline: 2px solid #667eea; outline-offset: 3px; }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, ::before, ::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-        }
-    </style>
+    @vite(['resources/css/app.css'])
     <script type="application/ld+json">
     {
         "@@context": "https://schema.org",
@@ -309,12 +65,14 @@
         <div class="flex items-center gap-2 sm:gap-4 flex-nowrap">
 
             <!-- Logo -->
-            <a class="logo-link flex items-center gap-1.5 sm:gap-2.5 flex-shrink min-w-0 no-underline" href="#">
-                <img src="{{ asset('file/uor-logo.png') }}"
+            <a class="logo-link flex items-center gap-1.5 sm:gap-2.5 shrink min-w-0 no-underline" href="#">
+                <img src="{{ asset('file/uor-logo.webp') }}"
                      alt="University of Raparin Logo"
-                     class="uor-logo object-contain flex-shrink-0"
-                     style="height: clamp(34px,7.5vw,62px);">
-                <div class="flex flex-col min-w-0 flex-shrink">
+                     width="512" height="523"
+                     fetchpriority="high" decoding="async"
+                     class="uor-logo object-contain shrink-0"
+                     style="height: clamp(34px,7.5vw,62px); width: auto;">
+                <div class="flex flex-col min-w-0 shrink">
                     <span class="logo-title logo-title-el font-bold text-white leading-tight overflow-hidden text-ellipsis whitespace-nowrap"
                           style="font-size: clamp(0.72rem,2.8vw,1.4rem);">
                         {{ __('messages.university_name') }}
@@ -327,10 +85,10 @@
             </a>
 
             <!-- Divider -->
-            <div class="flex-shrink-0 w-px bg-white/30" style="height: clamp(22px,5vw,36px);"></div>
+            <div class="shrink-0 w-px bg-white/30" style="height: clamp(22px,5vw,36px);"></div>
 
             <!-- Language Switcher -->
-            <div class="flex items-center gap-1 flex-nowrap ms-auto flex-shrink-0">
+            <div class="flex items-center gap-1 flex-nowrap ms-auto shrink-0">
                 <!-- Kurdish dropdown group -->
                 <div class="relative" id="kuGroup">
                     <button id="kuMainBtn"
@@ -340,30 +98,30 @@
                         کوردی <span class="text-[0.5rem] transition-transform duration-300" id="kuArrow">▼</span>
                     </button>
                     <div class="ku-dropdown" id="kuDropdown">
-                        <a href="{{ url('language') }}?locale=ku-sorani" class="ku-dialect-btn block w-full bg-transparent border-0 text-white text-right cursor-pointer transition-colors duration-200 hover:bg-white/15 font-[Rabar,sans-serif] no-underline{{ app()->getLocale() === 'ku-sorani' ? ' active' : '' }}" style="padding: clamp(0.38rem,1.2vw,0.55rem) clamp(0.6rem,2vw,1rem); font-size:clamp(0.58rem,1.4vw,0.8rem); min-height:36px;">
+                        <a href="{{ Locale::url('ku-sorani') }}" class="ku-dialect-btn block w-full bg-transparent border-0 text-white text-right cursor-pointer transition-colors duration-200 hover:bg-white/15 font-[Rabar,sans-serif] no-underline{{ app()->getLocale() === 'ku-sorani' ? ' active' : '' }}" style="padding: clamp(0.38rem,1.2vw,0.55rem) clamp(0.6rem,2vw,1rem); font-size:clamp(0.58rem,1.4vw,0.8rem); min-height:36px;">
                             سۆرانی<span class="block text-[0.5em] opacity-65 mt-px">Soranî</span>
                         </a>
-                        <a href="{{ url('language') }}?locale=ku-badini" class="ku-dialect-btn block w-full bg-transparent border-0 text-white text-right cursor-pointer transition-colors duration-200 hover:bg-white/15 font-[Rabar,sans-serif] no-underline{{ app()->getLocale() === 'ku-badini' ? ' active' : '' }}" style="padding: clamp(0.38rem,1.2vw,0.55rem) clamp(0.6rem,2vw,1rem); font-size:clamp(0.58rem,1.4vw,0.8rem); min-height:36px;">
+                        <a href="{{ Locale::url('ku-badini') }}" class="ku-dialect-btn block w-full bg-transparent border-0 text-white text-right cursor-pointer transition-colors duration-200 hover:bg-white/15 font-[Rabar,sans-serif] no-underline{{ app()->getLocale() === 'ku-badini' ? ' active' : '' }}" style="padding: clamp(0.38rem,1.2vw,0.55rem) clamp(0.6rem,2vw,1rem); font-size:clamp(0.58rem,1.4vw,0.8rem); min-height:36px;">
                             بادینی<span class="block text-[0.5em] opacity-65 mt-px">Kurmancî (عەرەبی)</span>
                         </a>
-                        <a href="{{ url('language') }}?locale=ku-badini-lat" class="ku-dialect-btn block w-full bg-transparent border-0 text-white text-left cursor-pointer transition-colors duration-200 hover:bg-white/15 font-sans no-underline{{ app()->getLocale() === 'ku-badini-lat' ? ' active' : '' }}" style="padding: clamp(0.38rem,1.2vw,0.55rem) clamp(0.6rem,2vw,1rem); font-size:clamp(0.58rem,1.4vw,0.8rem); min-height:36px;">
+                        <a href="{{ Locale::url('ku-badini-lat') }}" class="ku-dialect-btn block w-full bg-transparent border-0 text-white text-left cursor-pointer transition-colors duration-200 hover:bg-white/15 font-sans no-underline{{ app()->getLocale() === 'ku-badini-lat' ? ' active' : '' }}" style="padding: clamp(0.38rem,1.2vw,0.55rem) clamp(0.6rem,2vw,1rem); font-size:clamp(0.58rem,1.4vw,0.8rem); min-height:36px;">
                             Badînî<span class="block text-[0.5em] opacity-65 mt-px">Kurmancî (Latînî)</span>
                         </a>
-                        <a href="{{ url('language') }}?locale=ku-hawrami" class="ku-dialect-btn block w-full bg-transparent border-0 text-white text-right cursor-pointer transition-colors duration-200 hover:bg-white/15 font-[Rabar,sans-serif] no-underline{{ app()->getLocale() === 'ku-hawrami' ? ' active' : '' }}" style="padding: clamp(0.38rem,1.2vw,0.55rem) clamp(0.6rem,2vw,1rem); font-size:clamp(0.58rem,1.4vw,0.8rem); min-height:36px;">
+                        <a href="{{ Locale::url('ku-hawrami') }}" class="ku-dialect-btn block w-full bg-transparent border-0 text-white text-right cursor-pointer transition-colors duration-200 hover:bg-white/15 font-[Rabar,sans-serif] no-underline{{ app()->getLocale() === 'ku-hawrami' ? ' active' : '' }}" style="padding: clamp(0.38rem,1.2vw,0.55rem) clamp(0.6rem,2vw,1rem); font-size:clamp(0.58rem,1.4vw,0.8rem); min-height:36px;">
                             هەورامی<span class="block text-[0.5em] opacity-65 mt-px">Hewramî</span>
                         </a>
                     </div>
                 </div>
 
                 <!-- Divider -->
-                <div class="flex-shrink-0 w-px bg-white/25 mx-1" style="height:clamp(16px,3.5vw,22px);"></div>
+                <div class="shrink-0 w-px bg-white/25 mx-1" style="height:clamp(16px,3.5vw,22px);"></div>
 
                 <!-- Other languages -->
                 <div class="flex items-center gap-1 flex-nowrap overflow-x-auto" style="scrollbar-width:none; max-width:clamp(100px,40vw,400px);">
-                    <a href="{{ url('language') }}?locale=en" class="lang-btn px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md whitespace-nowrap flex-shrink-0 font-[inherit] no-underline{{ app()->getLocale() === 'en' ? ' active' : '' }}" style="font-size:clamp(0.52rem,1.4vw,0.8rem); min-height:30px;">English</a>
-                    <a href="{{ url('language') }}?locale=ar" class="lang-btn px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md whitespace-nowrap flex-shrink-0 font-[inherit] no-underline{{ app()->getLocale() === 'ar' ? ' active' : '' }}" style="font-size:clamp(0.52rem,1.4vw,0.8rem); min-height:30px;">العربية</a>
-                    <a href="{{ url('language') }}?locale=fa" class="lang-btn px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md whitespace-nowrap flex-shrink-0 font-[inherit] no-underline{{ app()->getLocale() === 'fa' ? ' active' : '' }}" style="font-size:clamp(0.52rem,1.4vw,0.8rem); min-height:30px;">فارسی</a>
-                    <a href="{{ url('language') }}?locale=tr" class="lang-btn px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md whitespace-nowrap flex-shrink-0 font-[inherit] no-underline{{ app()->getLocale() === 'tr' ? ' active' : '' }}" style="font-size:clamp(0.52rem,1.4vw,0.8rem); min-height:30px;">Türkçe</a>
+                    <a href="{{ Locale::url('en') }}" class="lang-btn px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md whitespace-nowrap shrink-0 font-[inherit] no-underline{{ app()->getLocale() === 'en' ? ' active' : '' }}" style="font-size:clamp(0.52rem,1.4vw,0.8rem); min-height:30px;">English</a>
+                    <a href="{{ Locale::url('ar') }}" class="lang-btn px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md whitespace-nowrap shrink-0 font-[inherit] no-underline{{ app()->getLocale() === 'ar' ? ' active' : '' }}" style="font-size:clamp(0.52rem,1.4vw,0.8rem); min-height:30px;">العربية</a>
+                    <a href="{{ Locale::url('fa') }}" class="lang-btn px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md whitespace-nowrap shrink-0 font-[inherit] no-underline{{ app()->getLocale() === 'fa' ? ' active' : '' }}" style="font-size:clamp(0.52rem,1.4vw,0.8rem); min-height:30px;">فارسی</a>
+                    <a href="{{ Locale::url('tr') }}" class="lang-btn px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md whitespace-nowrap shrink-0 font-[inherit] no-underline{{ app()->getLocale() === 'tr' ? ' active' : '' }}" style="font-size:clamp(0.52rem,1.4vw,0.8rem); min-height:30px;">Türkçe</a>
                 </div>
             </div>
         </div>
@@ -491,7 +249,7 @@
                     <h3 class="text-[#ff6b6b] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">{{ __('messages.intro.prepared_heading') }}</h3>
                     <div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(min(220px,100%),1fr));">
                         @foreach (__('messages.intro.people') as $person)
-                            <div class="text-center p-5 bg-white rounded-xl shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                            <div class="text-center p-5 bg-white rounded-xl shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
                                 <h4 class="text-[#2d2d3a] mb-2 font-bold">{{ $person['name'] }}</h4>
                                 <p class="text-[#6b6b80]">{{ $person['role'] }}</p>
                                 @if ($person['social'])
@@ -558,7 +316,7 @@
                     <div>
                         <span class="block text-5xl mb-4 transition-transform duration-300">{{ $department->icon }}</span>
                         <h3 class="font-bold text-[#2d2d3a] mb-3" style="font-size:clamp(1.1rem,3vw,1.4rem);">{{ $department->translation(app()->getLocale(), 'title') }}</h3>
-                        <p class="text-[#6b6b80] mb-4 flex-grow" style="font-size:clamp(0.88rem,2.2vw,0.98rem); line-height:1.65;">{{ $department->translation(app()->getLocale(), 'desc') }}</p>
+                        <p class="text-[#6b6b80] mb-4 grow" style="font-size:clamp(0.88rem,2.2vw,0.98rem); line-height:1.65;">{{ $department->translation(app()->getLocale(), 'desc') }}</p>
                     </div>
                     <a href="{{ $department->drive_url }}" class="section-btn relative inline-block font-semibold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1 font-[inherit]" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:clamp(0.6rem,2.2vw,0.85rem) clamp(1.3rem,3.5vw,1.9rem); font-size:clamp(0.85rem,2.2vw,0.95rem); min-width:130px; box-shadow:0 4px 14px rgba(102,126,234,0.28);" target="_blank">{{ $department->translation(app()->getLocale(), 'button') }}</a>
                 </div>
