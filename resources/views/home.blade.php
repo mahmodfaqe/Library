@@ -1059,6 +1059,100 @@
         </p>
     </div>
 </section>
+<!-- ══════════ FEEDBACK & SUGGESTIONS ══════════ -->
+<section id="feedback" style="padding: clamp(3rem,8vw,6rem) 0; background: linear-gradient(160deg, #eef1ff 0%, #e3e9ff 100%);">
+    <div class="max-w-[760px] mx-auto px-4 sm:px-6">
+        @if (session('feedback_sent'))
+            <div class="mb-6 rounded-[14px] px-5 py-4 text-center font-semibold" style="background:#d1fae5; color:#065f46; font-size:clamp(0.9rem,2vw,1rem);">
+                    <span class="lang-content active" data-lang="ku-sorani">سوپاس! ڕەخنە و پێشنیارەکەت پێگەیشت.</span>
+                    <span class="lang-content" data-lang="ku-badini">سپاس! ڕەخنە و پێشنیارا تە گەهیشت.</span>
+                    <span class="lang-content" data-lang="ku-badini-lat">Spas! Rexne û pêşniyara te gihîşt.</span>
+                    <span class="lang-content" data-lang="ku-hawrami">سوپاس! ڕەخنە و پێشنیارەکەت پێگەیشت.</span>
+                    <span class="lang-content" data-lang="en">Thank you! Your feedback has been received.</span>
+                    <span class="lang-content" data-lang="ar">شكرًا! تم استلام ملاحظاتك.</span>
+                    <span class="lang-content" data-lang="fa">متشکریم! بازخورد شما دریافت شد.</span>
+                    <span class="lang-content" data-lang="tr">Teşekkürler! Geri bildiriminiz alındı.</span>
+            </div>
+        @endif
+        @if ($errors->has('message'))
+            <div class="mb-6 rounded-[14px] px-5 py-4 text-center font-semibold" style="background:#fee2e2; color:#991b1b; font-size:clamp(0.9rem,2vw,1rem);">
+                <span class="lang-content active" data-lang="ku-sorani">تکایە ڕەخنە یان پێشنیارەکەت بنووسە.</span>
+                <span class="lang-content" data-lang="ku-badini">تکایە ڕەخنە یان پێشنیارا خۆ بنڤیسە.</span>
+                <span class="lang-content" data-lang="ku-badini-lat">Ji kerema xwe rexne an pêşniyara xwe binivîse.</span>
+                <span class="lang-content" data-lang="ku-hawrami">تکایە ڕەخنە یان پێشنیارەکەت بنووسە.</span>
+                <span class="lang-content" data-lang="en">Please write your feedback or suggestion.</span>
+                <span class="lang-content" data-lang="ar">يرجى كتابة ملاحظتك أو اقتراحك.</span>
+                <span class="lang-content" data-lang="fa">لطفاً انتقاد یا پیشنهاد خود را بنویسید.</span>
+                <span class="lang-content" data-lang="tr">Lütfen eleştirinizi veya önerinizi yazın.</span>
+            </div>
+        @endif
+        <div class="rounded-[22px] bg-white/85 backdrop-blur-md border border-white/70 text-center" style="box-shadow:0 10px 40px rgba(102,126,234,0.14); padding: clamp(1.8rem,5vw,3rem);">
+            <h2 class="font-bold text-[#2d2d3a] mb-3" style="font-size:clamp(1.5rem,4vw,2rem);">
+                    <span class="lang-content active" data-lang="ku-sorani">💬 ڕەخنە و پێشنیار</span>
+                    <span class="lang-content" data-lang="ku-badini">💬 ڕەخنە و پێشنیار</span>
+                    <span class="lang-content" data-lang="ku-badini-lat">💬 Rexne û Pêşniyar</span>
+                    <span class="lang-content" data-lang="ku-hawrami">💬 ڕەخنە و پێشنیار</span>
+                    <span class="lang-content" data-lang="en">💬 Feedback & Suggestions</span>
+                    <span class="lang-content" data-lang="ar">💬 الملاحظات والاقتراحات</span>
+                    <span class="lang-content" data-lang="fa">💬 انتقادات و پیشنهادات</span>
+                    <span class="lang-content" data-lang="tr">💬 Eleştiri ve Öneriler</span>
+            </h2>
+            <p class="text-[#6b6b80] mb-6" style="font-size:clamp(0.9rem,2.2vw,1rem); line-height:1.7;">
+                    <span class="lang-content active" data-lang="ku-sorani">ڕای خۆت لەگەڵمان بەش بکە بۆ باشترکردنی کتێبخانەکە.</span>
+                    <span class="lang-content" data-lang="ku-badini">ڕایا خۆ بە مە ڤە پارڤە بە دا باشترکرنا کتێبخانێ.</span>
+                    <span class="lang-content" data-lang="ku-badini-lat">Nêrîna xwe bi me re parve bike ji bo çêtirkirina pirtûkxanê.</span>
+                    <span class="lang-content" data-lang="ku-hawrami">ڕای خۆت لەگەڵمان بەش بکە بۆ باشترکردنی کتێبخانەکە.</span>
+                    <span class="lang-content" data-lang="en">Share your opinion with us to help improve the library.</span>
+                    <span class="lang-content" data-lang="ar">شاركنا رأيك لمساعدتنا على تحسين المكتبة.</span>
+                    <span class="lang-content" data-lang="fa">برای بهبود کتابخانه نظر خود را با ما در میان بگذارید.</span>
+                    <span class="lang-content" data-lang="tr">Kütüphaneyi geliştirmemize yardımcı olmak için görüşlerinizi paylaşın.</span>
+            </p>
+            <form method="POST" action="{ route('feedback.store') }" style="text-align:right;">
+                @csrf
+                <div class="mb-4 text-right" style="text-align:right;">
+                    <label for="fb-name" class="block font-semibold mb-1 text-[#4a4a5c]" style="font-size:0.9rem;">
+                        <span class="lang-content active" data-lang="ku-sorani">ناو (ئارەزوومەندانە)</span>
+                    <span class="lang-content" data-lang="ku-badini">ناڤ (ڤەدلێخواز)</span>
+                    <span class="lang-content" data-lang="ku-badini-lat">Nav (dilxwaz)</span>
+                    <span class="lang-content" data-lang="ku-hawrami">ناو (ئارەزوومەندانە)</span>
+                    <span class="lang-content" data-lang="en">Name (optional)</span>
+                    <span class="lang-content" data-lang="ar">الاسم (اختياري)</span>
+                    <span class="lang-content" data-lang="fa">نام (اختیاری)</span>
+                    <span class="lang-content" data-lang="tr">İsim (isteğe bağlı)</span>
+                    </label>
+                    <input type="text" id="fb-name" name="name" maxlength="120" value="{ old('name') }"
+                           class="w-full rounded-[12px] px-4 py-3" style="border:1px solid #d5d9ee; font-size:0.95rem; font-family:inherit; text-align:right;">
+                </div>
+                <div class="mb-5 text-right">
+                    <label for="fb-msg" class="block font-semibold mb-1 text-[#4a4a5c]" style="font-size:0.9rem;">
+                        <span class="lang-content active" data-lang="ku-sorani">ڕەخنە یان پێشنیار</span>
+                    <span class="lang-content" data-lang="ku-badini">ڕەخنە یان پێشنیار</span>
+                    <span class="lang-content" data-lang="ku-badini-lat">Rexne an pêşniyar</span>
+                    <span class="lang-content" data-lang="ku-hawrami">ڕەخنە یان پێشنیار</span>
+                    <span class="lang-content" data-lang="en">Feedback or suggestion</span>
+                    <span class="lang-content" data-lang="ar">ملاحظة أو اقتراح</span>
+                    <span class="lang-content" data-lang="fa">انتقاد یا پیشنهاد</span>
+                    <span class="lang-content" data-lang="tr">Eleştiri veya öneri</span>
+                    </label>
+                    <textarea id="fb-msg" name="message" rows="4" maxlength="2000" required
+                              class="w-full rounded-[12px] px-4 py-3" style="border:1px solid #d5d9ee; font-size:0.95rem; font-family:inherit; text-align:right;">{ old('message') }</textarea>
+                </div>
+                <div style="text-align:center;">
+                    <button type="submit" class="section-btn relative inline-block font-semibold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1 font-[inherit] cursor-pointer" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:clamp(0.65rem,2.2vw,0.9rem) clamp(1.6rem,4vw,2.4rem); font-size:clamp(0.9rem,2.2vw,1rem); box-shadow:0 4px 14px rgba(102,126,234,0.28); border:none;">
+                        <span class="lang-content active" data-lang="ku-sorani">ناردن</span>
+                    <span class="lang-content" data-lang="ku-badini">شاندن</span>
+                    <span class="lang-content" data-lang="ku-badini-lat">Bişîne</span>
+                    <span class="lang-content" data-lang="ku-hawrami">ناردن</span>
+                    <span class="lang-content" data-lang="en">Send</span>
+                    <span class="lang-content" data-lang="ar">إرسال</span>
+                    <span class="lang-content" data-lang="fa">ارسال</span>
+                    <span class="lang-content" data-lang="tr">Gönder</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
 <!-- ══════════ FOOTER ══════════ -->
 <footer class="text-center" style="background: linear-gradient(135deg, #1e1e2e 0%, #2d2b4e 100%); color: rgba(255,255,255,0.82); padding: clamp(1.5rem,4vw,2.2rem) 0;">
     <div class="max-w-[1200px] mx-auto px-4">
