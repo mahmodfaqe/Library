@@ -34,7 +34,7 @@ class CachePage
             return $next($request);
         }
 
-        $file = $this->cacheFile();
+        $file = $this->cacheFile($request);
 
         if (is_file($file) && $this->isFresh($file)) {
             $html = file_get_contents($file);
@@ -69,15 +69,21 @@ class CachePage
     }
 
     /**
-     * The page is rendered per locale, so each locale gets its own copy — and
-     * the name carries a stamp of the sources it was rendered from, so editing
-     * a template, a translation or the stylesheet cannot leave a stale copy
-     * being served until the TTL runs out.
+     * The page is rendered per locale, so each locale gets its own copy.
+     *
+     * The name also carries the host it was rendered for and a stamp of the
+     * sources it came from. The host matters because the page is full of
+     * absolute URLs — stylesheet, fonts, icons, canonical, hreflang — built
+     * from the request that warmed the cache; serving that copy on another
+     * host (localhost vs 127.0.0.1, www vs bare, http vs https) would point
+     * every one of them at the wrong origin.
      */
-    private function cacheFile(): string
+    private function cacheFile(Request $request): string
     {
+        $host = substr(md5($request->getSchemeAndHttpHost()), 0, 8);
+
         return storage_path(
-            'framework/pagecache/home-'.App::getLocale().'-'.$this->sourceStamp().'.html'
+            'framework/pagecache/home-'.App::getLocale().'-'.$host.'-'.$this->sourceStamp().'.html'
         );
     }
 
@@ -98,11 +104,12 @@ class CachePage
     }
 
     /**
-     * Drop copies of this page rendered from older sources.
+     * Drop copies for this locale and host that were rendered from older
+     * sources. Other hosts keep their own copies.
      */
     private function forgetOlderCopies(string $keep): void
     {
-        $pattern = storage_path('framework/pagecache/home-'.App::getLocale().'-*.html');
+        $pattern = preg_replace('/-[^-]+\.html$/', '-*.html', $keep);
 
         foreach (glob($pattern) ?: [] as $file) {
             if ($file !== $keep) {

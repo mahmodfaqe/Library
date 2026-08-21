@@ -35,6 +35,31 @@ class PageCacheTest extends TestCase
         return glob($this->dir."/home-$locale-*.html") ?: [];
     }
 
+    public function test_a_cached_page_is_never_served_to_a_different_host(): void
+    {
+        // The page is full of absolute URLs — stylesheet, fonts, icons,
+        // canonical, hreflang. A copy warmed on one host once leaked all of
+        // them to visitors arriving on another.
+        $this->get('http://127.0.0.1/en')->assertOk();
+
+        $html = $this->get('http://localhost/en')->assertOk()->getContent();
+
+        $this->assertStringNotContainsString('http://127.0.0.1', $html);
+        $this->assertStringContainsString('http://localhost/favicon.ico', $html);
+    }
+
+    public function test_each_host_keeps_its_own_copy(): void
+    {
+        $this->get('http://127.0.0.1/en');
+        $this->get('http://localhost/en');
+
+        $this->assertCount(2, $this->cachedCopies('en'));
+
+        // And each host still serves its own copy from cache.
+        $this->get('http://127.0.0.1/en')->assertHeader('X-Page-Cache', 'HIT');
+        $this->get('http://localhost/en')->assertHeader('X-Page-Cache', 'HIT');
+    }
+
     private function clearCacheDir(): void
     {
         foreach (glob($this->dir.'/*') ?: [] as $file) {
