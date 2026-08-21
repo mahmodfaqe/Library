@@ -1107,7 +1107,7 @@
                     <span class="lang-content" data-lang="fa">برای بهبود کتابخانه نظر خود را با ما در میان بگذارید.</span>
                     <span class="lang-content" data-lang="tr">Kütüphaneyi geliştirmemize yardımcı olmak için görüşlerinizi paylaşın.</span>
             </p>
-            <form method="POST" action="{ route('feedback.store') }" style="text-align:right;">
+            <form method="POST" action="{{ route('feedback.store') }}" style="text-align:right;">
                 @csrf
                 <div class="mb-4 text-right" style="text-align:right;">
                     <label for="fb-name" class="block font-semibold mb-1 text-[#4a4a5c]" style="font-size:0.9rem;">
@@ -1120,7 +1120,7 @@
                     <span class="lang-content" data-lang="fa">نام (اختیاری)</span>
                     <span class="lang-content" data-lang="tr">İsim (isteğe bağlı)</span>
                     </label>
-                    <input type="text" id="fb-name" name="name" maxlength="120" value="{ old('name') }"
+                    <input type="text" id="fb-name" name="name" maxlength="120" value="{{ old('name') }}"
                            class="w-full rounded-[12px] px-4 py-3" style="border:1px solid #d5d9ee; font-size:0.95rem; font-family:inherit; text-align:right;">
                 </div>
                 <div class="mb-5 text-right">
@@ -1135,7 +1135,7 @@
                     <span class="lang-content" data-lang="tr">Eleştiri veya öneri</span>
                     </label>
                     <textarea id="fb-msg" name="message" rows="4" maxlength="2000" required
-                              class="w-full rounded-[12px] px-4 py-3" style="border:1px solid #d5d9ee; font-size:0.95rem; font-family:inherit; text-align:right;">{ old('message') }</textarea>
+                              class="w-full rounded-[12px] px-4 py-3" style="border:1px solid #d5d9ee; font-size:0.95rem; font-family:inherit; text-align:right;">{{ old('message') }}</textarea>
                 </div>
                 <div style="text-align:center;">
                     <button type="submit" class="section-btn relative inline-block font-semibold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1 font-[inherit] cursor-pointer" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:clamp(0.65rem,2.2vw,0.9rem) clamp(1.6rem,4vw,2.4rem); font-size:clamp(0.9rem,2.2vw,1rem); box-shadow:0 4px 14px rgba(102,126,234,0.28); border:none;">

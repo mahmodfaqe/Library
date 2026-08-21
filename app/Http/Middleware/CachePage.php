@@ -29,7 +29,17 @@ class CachePage
         $file = storage_path('framework/pagecache/home.html');
 
         if (is_file($file) && $this->isFresh($file)) {
-            return new Response(file_get_contents($file), 200, [
+            $html = file_get_contents($file);
+
+            // The cached copy carries the token of the request that
+            // warmed the cache. Substitute the current visitor's session
+            // token so the embedded @csrf field passes VerifyCsrfToken.
+            // (pagecache runs after StartSession, so the session exists.)
+            if ($request->hasSession()) {
+                $html = $this->withLiveCsrfToken($html, $request->session()->token());
+            }
+
+            return new Response($html, 200, [
                 'Content-Type' => 'text/html; charset=UTF-8',
                 'X-Page-Cache' => 'HIT',
             ]);
@@ -52,5 +62,19 @@ class CachePage
     private function isFresh(string $file): bool
     {
         return filemtime($file) > time() - 3600;
+    }
+
+    /**
+     * Replace the value of the first hidden _token input with the
+     * token of the current session.
+     */
+    private function withLiveCsrfToken(string $html, string $token): string
+    {
+        return preg_replace_callback(
+            '/(<input[^>]*name="_token"[^>]*value=")[^"]*("[^>]*>)/',
+            fn (array $m) => $m[1].e($token).$m[2],
+            $html,
+            1
+        );
     }
 }

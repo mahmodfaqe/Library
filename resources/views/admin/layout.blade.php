@@ -41,7 +41,13 @@
 </head>
 <body>
     <div class="topbar">
-        <h1>بەڕێوەبەریی کتێبخانە</h1>
+        <div style="display:flex; align-items:center; gap:1.4rem; flex-wrap:wrap;">
+            <h1>بەڕێوەبەریی کتێبخانە</h1>
+            <nav style="display:flex; gap:1rem; font-size:0.9rem;">
+                <a href="{{ route('admin.index') }}">بەشەکان</a>
+                <a href="{{ route('admin.feedback') }}">ڕەخنە و پێشنیار</a>
+            </nav>
+        </div>
         <a href="{{ route('home') }}">گەڕانەوە بۆ سەرەکی</a>
     </div>
     <div class="container">

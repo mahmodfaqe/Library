@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('pagecache');
+
+Route::post('feedback', [FeedbackController::class, 'store'])->name('feedback.store');
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('login', [AdminController::class, 'showLogin'])->name('login');
@@ -18,5 +21,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('departments/{department}/edit', [AdminController::class, 'edit'])->name('departments.edit');
         Route::put('departments/{department}', [AdminController::class, 'update'])->name('departments.update');
         Route::delete('departments/{department}', [AdminController::class, 'destroy'])->name('departments.destroy');
+        Route::get('feedback', [AdminController::class, 'feedback'])->name('feedback');
+        Route::delete('feedback/{feedback}', [AdminController::class, 'destroyFeedback'])->name('feedback.destroy');
     });
 });

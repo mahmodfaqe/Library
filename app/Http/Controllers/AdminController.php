@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Department;
+use App\Models\Feedback;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -108,6 +109,20 @@ class AdminController extends Controller
         }
 
         return $request->validate($rules);
+    }
+
+    public function feedback(): View
+    {
+        return view('admin.feedback.index', [
+            'feedback' => Feedback::latest()->paginate(15),
+        ]);
+    }
+
+    public function destroyFeedback(Feedback $feedback): RedirectResponse
+    {
+        $feedback->delete();
+
+        return redirect()->route('admin.feedback')->with('status', 'ڕەخنە/پێشنیارەکە سڕایەوە.');
     }
 
     private function clearPageCache(): void
