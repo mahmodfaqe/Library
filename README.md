@@ -19,6 +19,17 @@ Production: **https://library.uor.edu.krd**
 
 The database is SQLite; no database server is required.
 
+### Why the PHP version is pinned in `composer.json`
+
+`config.platform.php` is set to `8.3.0`. Composer resolves dependencies as if
+it were running on PHP 8.3 even when the machine has something newer, so the
+lock file always installs on the oldest version the project claims to support.
+
+Without it, a developer on PHP 8.5 locks Symfony packages that require 8.4+,
+and the install then fails on any 8.3 server — including CI. If the university
+server is confirmed to run a newer PHP, raise this value and run
+`composer update`; do not simply delete it.
+
 ---
 
 ## First install
