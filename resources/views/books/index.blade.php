@@ -101,7 +101,8 @@
                     {{ collect([
                         $book->year,
                         $book->language,
-                        $book->category?->name,
+                        // Redundant once the whole page is one subject.
+                        $selected ? null : $book->category?->name,
                     ])->filter()->implode(' · ') }}
                 </p>
             </div>

@@ -131,7 +131,8 @@ class BookFileTest extends TestCase
         $this->actingAs($this->staff())->post('/admin/books', ['title' => 'Genetics', 'file' => $this->pdf()]);
         $book = Book::firstOrFail();
 
-        $this->get('/en/books')
+        // The catalogue lists books once a search or subject narrows it.
+        $this->get('/en/books?q=Genetics')
             ->assertOk()
             ->assertSee(route('books.download', $book), false);
     }

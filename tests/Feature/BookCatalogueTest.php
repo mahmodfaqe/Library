@@ -35,14 +35,51 @@ class BookCatalogueTest extends TestCase
         ], $overrides));
     }
 
-    public function test_the_catalogue_lists_books(): void
+    public function test_the_catalogue_opens_on_the_subject_shelves(): void
     {
-        $this->book();
+        // With over a thousand books, landing on a flat list is unusable.
+        $biology = Category::create(['name' => 'بایۆلۆجی', 'sort_order' => 1]);
+        $this->book(['category_id' => $biology->id]);
 
         $this->get('/en/books')
             ->assertOk()
+            ->assertSee('بایۆلۆجی', false)
+            ->assertDontSee('Molecular Biology of the Cell');
+    }
+
+    public function test_choosing_a_subject_lists_its_books(): void
+    {
+        $biology = Category::create(['name' => 'بایۆلۆجی', 'sort_order' => 1]);
+        $this->book(['category_id' => $biology->id]);
+
+        $this->get("/en/books?category={$biology->id}")
+            ->assertOk()
             ->assertSee('Molecular Biology of the Cell')
-            ->assertSee('Bruce Alberts');
+            ->assertSee('Bruce Alberts')
+            ->assertSee(__('books.back_to_subjects', [], 'en'));
+    }
+
+    public function test_searching_looks_across_every_subject(): void
+    {
+        $biology = Category::create(['name' => 'بایۆلۆجی', 'sort_order' => 1]);
+        $chemistry = Category::create(['name' => 'کیمیا', 'sort_order' => 2]);
+        $this->book(['category_id' => $biology->id]);
+        $this->book(['title' => 'Molecular Orbitals', 'category_id' => $chemistry->id]);
+
+        $this->get('/en/books?q=Molecular')
+            ->assertOk()
+            ->assertSee('Molecular Biology of the Cell')
+            ->assertSee('Molecular Orbitals');
+    }
+
+    public function test_each_shelf_shows_how_many_books_it_holds(): void
+    {
+        $biology = Category::create(['name' => 'بایۆلۆجی', 'sort_order' => 1]);
+        $this->book(['category_id' => $biology->id]);
+        $this->book(['title' => 'Second', 'category_id' => $biology->id]);
+
+        $this->get('/en/books')
+            ->assertSee(trans_choice('books.results', 2, ['count' => 2], 'en'));
     }
 
     public function test_it_searches_by_title_and_author(): void
@@ -110,9 +147,11 @@ class BookCatalogueTest extends TestCase
         }
     }
 
-    public function test_it_shows_an_empty_state(): void
+    public function test_an_empty_subject_says_so(): void
     {
-        $this->get('/en/books')->assertSee(__('books.empty', [], 'en'));
+        $empty = Category::create(['name' => 'بەتاڵ', 'sort_order' => 1]);
+
+        $this->get("/en/books?category={$empty->id}")->assertSee(__('books.empty', [], 'en'));
     }
 
     public function test_staff_can_add_a_book(): void
