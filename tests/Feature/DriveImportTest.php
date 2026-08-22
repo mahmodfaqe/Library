@@ -42,6 +42,83 @@ class DriveImportTest extends TestCase
         return ['id' => $id, 'name' => $name, 'mimeType' => 'application/pdf', 'size' => (string) $size];
     }
 
+    public function test_a_book_nested_below_its_language_folder_keeps_that_language(): void
+    {
+        // The collection groups some subjects into sub-topics underneath the
+        // language folder. Reading exactly two levels would miss every one of
+        // those books.
+        $this->fakeDrive([
+            self::ROOT => [$this->folder('bio', 'بایۆلۆجی')],
+            'bio' => [$this->folder('bio-ku', 'کوردی')],
+            'bio-ku' => [
+                $this->pdf('loose', 'ژیناسی.pdf'),
+                $this->folder('bio-ku-cells', 'زانستی خانە'),
+            ],
+            'bio-ku-cells' => [$this->pdf('nested', 'خانەی زیندوو.pdf')],
+        ]);
+
+        $this->artisan('books:import-drive', ['folder' => [self::ROOT]])->assertSuccessful();
+
+        $this->assertSame(2, Book::count());
+
+        foreach (Book::all() as $book) {
+            $this->assertSame('کوردی', $book->language, $book->title);
+        }
+    }
+
+    public function test_the_deepest_language_folder_wins(): void
+    {
+        // If a folder inside a language folder names another language, the
+        // nearer one is the one that describes the books in it.
+        $this->fakeDrive([
+            self::ROOT => [$this->folder('bio', 'بایۆلۆجی')],
+            'bio' => [$this->folder('bio-ku', 'کوردی')],
+            'bio-ku' => [$this->folder('bio-ku-en', 'English')],
+            'bio-ku-en' => [$this->pdf('b1', 'Cell Biology.pdf')],
+        ]);
+
+        $this->artisan('books:import-drive', ['folder' => [self::ROOT]])->assertSuccessful();
+
+        $this->assertSame('English', Book::firstOrFail()->language);
+    }
+
+    public function test_it_names_the_folders_whose_language_it_could_not_read(): void
+    {
+        $this->fakeDrive([
+            self::ROOT => [$this->folder('bio', 'بایۆلۆجی')],
+            'bio' => [
+                $this->folder('bio-ku', 'کوردی'),
+                $this->folder('bio-mixed', 'عربی-ئینگلیزی'),
+            ],
+            'bio-ku' => [$this->pdf('b1', 'ژیناسی.pdf')],
+            'bio-mixed' => [$this->pdf('b2', 'Mixed.pdf')],
+        ]);
+
+        $this->artisan('books:import-drive', ['folder' => [self::ROOT]])
+            ->expectsOutputToContain('No language could be read from these folders:')
+            ->expectsOutputToContain('عربی-ئینگلیزی')
+            ->assertSuccessful();
+
+        // The one it could read is still recorded; the other is simply blank.
+        $this->assertSame('کوردی', Book::where('drive_file_id', 'b1')->firstOrFail()->language);
+        $this->assertNull(Book::where('drive_file_id', 'b2')->firstOrFail()->language);
+    }
+
+    public function test_a_readable_language_folder_is_not_reported(): void
+    {
+        $this->fakeDrive([
+            self::ROOT => [$this->folder('bio', 'بایۆلۆجی')],
+            'bio' => [$this->folder('bio-en', 'انگلیزی')],
+            'bio-en' => [$this->pdf('b1', 'Cell Biology.pdf')],
+        ]);
+
+        $this->artisan('books:import-drive', ['folder' => [self::ROOT]])
+            ->doesntExpectOutputToContain('No language could be read')
+            ->assertSuccessful();
+
+        $this->assertSame('English', Book::firstOrFail()->language);
+    }
+
     public function test_subject_folders_become_categories(): void
     {
         $this->fakeDrive([

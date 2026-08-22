@@ -11,11 +11,27 @@ class BookLanguage
      * name so the catalogue can filter and display it.
      */
     private const CANONICAL = [
-        'کوردی' => ['کوردی', 'kurdi', 'kurdish'],
+        'کوردی' => ['کوردی', 'kurdi', 'kurdish', 'sorani', 'badini', 'kurmanci'],
         'عەرەبی' => ['عربی', 'عربي', 'arabi', 'arabic'],
-        'English' => ['english', 'ingilizi', 'ئینگلیزی'],
+        // انگلیزی without the hamza is as common as ئینگلیزی in folder names.
+        'English' => ['english', 'ingilizi', 'ئینگلیزی', 'انگلیزی', 'engilizi', 'inglizi'],
         'فارسی' => ['فارسی', 'farsi', 'persian'],
-        'Türkçe' => ['turkce', 'turkish', 'تورکی'],
+        'Türkçe' => ['turkce', 'turkish', 'تورکی', 'تركي'],
+    ];
+
+    /**
+     * Short forms that are a whole folder name on their own. They are matched
+     * exactly, not as a substring: "en" appears inside far too many words to
+     * be safe anywhere else.
+     */
+    private const ABBREVIATIONS = [
+        'en' => 'English',
+        'eng' => 'English',
+        'ar' => 'عەرەبی',
+        'ku' => 'کوردی',
+        'krd' => 'کوردی',
+        'fa' => 'فارسی',
+        'tr' => 'Türkçe',
     ];
 
     /**
@@ -48,6 +64,13 @@ class BookLanguage
 
         if ($folded === '') {
             return null;
+        }
+
+        // "EN", "1-AR": a bare abbreviation, once the ordering number is gone.
+        $bare = trim(preg_replace('/^\d+\s*/u', '', $folded));
+
+        if (isset(self::ABBREVIATIONS[$bare])) {
+            return self::ABBREVIATIONS[$bare];
         }
 
         // "عربی-ئینگلیزی-کوردی" and the like hold more than one language.

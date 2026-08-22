@@ -24,11 +24,25 @@ class ImportBooksFromDrive extends Command
 
     private const FOLDER_MIME = 'application/vnd.google-apps.folder';
 
+    /**
+     * How deep below a subject the walk will go before assuming something is
+     * wrong. The collection nests two levels: subject, then language.
+     */
+    private const MAX_DEPTH = 6;
+
     private int $created = 0;
 
     private int $skipped = 0;
 
     private int $failed = 0;
+
+    /**
+     * Folder names that named no language, and had none above them. Reported
+     * at the end so the collection can be corrected on Drive.
+     *
+     * @var array<string, true>
+     */
+    private array $unnamed = [];
 
     public function handle(): int
     {
@@ -58,6 +72,8 @@ class ImportBooksFromDrive extends Command
         $this->newLine();
         $this->info("Added {$this->created}, skipped {$this->skipped} already present, {$this->failed} failed.");
 
+        $this->reportUnnamed();
+
         return $this->failed > 0 ? self::FAILURE : self::SUCCESS;
     }
 
@@ -74,22 +90,49 @@ class ImportBooksFromDrive extends Command
 
         $this->line("  <info>{$name}</info>");
 
-        // Each subject is split into language folders. A book sitting loose
-        // in the subject folder has no language recorded.
-        foreach ($this->children($folder['id'], $key) as $entry) {
-            if ($entry['mimeType'] === self::FOLDER_MIME) {
-                $language = BookLanguage::fromFolder($entry['name']);
+        $this->walk($folder['id'], $category, $key, null, 0);
+    }
 
-                foreach ($this->children($entry['id'], $key) as $nested) {
-                    if ($nested['mimeType'] !== self::FOLDER_MIME) {
-                        $this->importFile($nested, $category, $key, $language);
-                    }
-                }
+    /**
+     * Walk a subject folder and everything under it.
+     *
+     * The collection separates each subject into language folders, so the
+     * language comes from the folder a book sits in. It is carried down
+     * through any further nesting: a book in "Biology / کوردی / وانەکان" is
+     * Kurdish, because the nearest folder that named a language said so.
+     *
+     * Recursing rather than reading exactly two levels matters — a subject
+     * that groups its Kurdish books into sub-topics would otherwise have every
+     * one of those books silently missed.
+     */
+    private function walk(string $folder, ?Category $category, string $key, ?string $language, int $depth): void
+    {
+        // Drive folders are a tree, but a shortcut or a cycle would not be, and
+        // the collection is nowhere near this deep.
+        if ($depth > self::MAX_DEPTH) {
+            $this->warn("    stopped at {$depth} levels deep; check for a folder loop.");
+            $this->failed++;
+
+            return;
+        }
+
+        foreach ($this->children($folder, $key) as $entry) {
+            if ($entry['mimeType'] !== self::FOLDER_MIME) {
+                $this->importFile($entry, $category, $key, $language);
 
                 continue;
             }
 
-            $this->importFile($entry, $category, $key, null);
+            $named = BookLanguage::fromFolder($entry['name']);
+
+            // A folder that names no language is a sub-topic, not a mistake —
+            // unless nothing above it named one either, in which case its books
+            // end up with no language at all and the librarian should know.
+            if ($named === null && $language === null) {
+                $this->unnamed[$entry['name']] = true;
+            }
+
+            $this->walk($entry['id'], $category, $key, $named ?? $language, $depth + 1);
         }
     }
 
@@ -140,6 +183,29 @@ class ImportBooksFromDrive extends Command
 
         Book::create($attributes);
         $this->created++;
+    }
+
+    /**
+     * Name the folders whose language could not be read.
+     *
+     * Their books arrive with no language and so cannot be shelved or filtered
+     * by one. Naming them here is the difference between a librarian renaming
+     * one folder on Drive and never finding out.
+     */
+    private function reportUnnamed(): void
+    {
+        if ($this->unnamed === []) {
+            return;
+        }
+
+        $this->newLine();
+        $this->warn('No language could be read from these folders:');
+
+        foreach (array_keys($this->unnamed) as $name) {
+            $this->line("  <comment>{$name}</comment>");
+        }
+
+        $this->line('Rename them on Drive to one of: '.implode(', ', BookLanguage::ORDER));
     }
 
     /**
