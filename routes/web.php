@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminBookController;
+use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\FeedbackController;
@@ -59,6 +60,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('departments/{department}/edit', [AdminController::class, 'edit'])->name('departments.edit');
         Route::put('departments/{department}', [AdminController::class, 'update'])->name('departments.update');
         Route::delete('departments/{department}', [AdminController::class, 'destroy'])->name('departments.destroy');
+        Route::get('categories', [AdminCategoryController::class, 'index'])->name('categories');
+        Route::get('categories/create', [AdminCategoryController::class, 'create'])->name('categories.create');
+        Route::post('categories', [AdminCategoryController::class, 'store'])->name('categories.store');
+        Route::get('categories/{category}/edit', [AdminCategoryController::class, 'edit'])->name('categories.edit');
+        Route::put('categories/{category}', [AdminCategoryController::class, 'update'])->name('categories.update');
+        Route::delete('categories/{category}', [AdminCategoryController::class, 'destroy'])->name('categories.destroy');
+
         Route::get('books', [AdminBookController::class, 'index'])->name('books');
         Route::get('books/create', [AdminBookController::class, 'create'])->name('books.create');
         Route::post('books', [AdminBookController::class, 'store'])->name('books.store');
