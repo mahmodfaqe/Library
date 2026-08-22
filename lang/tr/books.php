@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'breadcrumb' => 'Gezinti yolu',
+    'clear' => 'Temizle',
     'title' => 'Kitap kataloğu',
     'intro' => 'Bir konu seçin veya doğrudan başlık ve yazara göre arayın.',
     'back_to_subjects' => 'Konulara dön',

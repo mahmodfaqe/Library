@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Request;
 
 class Locale
 {
@@ -108,5 +109,33 @@ class Locale
         $locale ??= App::getLocale();
 
         return $locale === self::DEFAULT ? url('books') : url($locale.'/books');
+    }
+
+    /**
+     * The privacy notice URL for a locale, following the same prefixing rule.
+     */
+    public static function privacyUrl(?string $locale = null): string
+    {
+        $locale ??= App::getLocale();
+
+        return $locale === self::DEFAULT ? url('privacy') : url($locale.'/privacy');
+    }
+
+    /**
+     * The current page's address in another locale.
+     *
+     * Switching language should leave the visitor where they were rather than
+     * dropping them back on the home page, so the shared header and the
+     * hreflang tags both resolve the equivalent URL for the page in hand.
+     */
+    public static function switchUrl(?string $locale = null): string
+    {
+        $route = (string) Request::route()?->getName();
+
+        return match (true) {
+            str_starts_with($route, 'books') => self::booksUrl($locale),
+            str_starts_with($route, 'privacy') => self::privacyUrl($locale),
+            default => self::url($locale),
+        };
     }
 }

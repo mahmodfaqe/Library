@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'breadcrumb' => 'Riya naverokê',
+    'clear' => 'Paqijkirin',
     'title' => 'Katalogê pirtûkan',
     'intro' => 'Babetekê hilbijêre, an rasterast li sernav û nivîskar bigere.',
     'back_to_subjects' => 'Vegere bal babetan',

@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'breadcrumb' => 'Breadcrumb',
+    'clear' => 'Clear',
     'title' => 'Book catalogue',
     'intro' => 'Choose a subject, or search by title and author.',
     'back_to_subjects' => 'Back to subjects',

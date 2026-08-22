@@ -33,7 +33,12 @@ Route::get('/{locale}', [HomeController::class, 'index'])
     ->name('home.localised')
     ->middleware('pagecache');
 
+// The privacy notice, at the root and behind each locale prefix, so the
+// language switcher in the shared header keeps the visitor on the page.
 Route::view('privacy', 'pages.privacy')->name('privacy');
+Route::view('{locale}/privacy', 'pages.privacy')
+    ->whereIn('locale', Locale::SUPPORTED)
+    ->name('privacy.localised');
 
 Route::get('sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
