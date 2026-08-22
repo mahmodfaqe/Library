@@ -1,58 +1,186 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# College of Science Electronic Library
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+The electronic library of the College of Science, University of Raparin —
+a Laravel application serving a public catalogue of scientific resources in
+eight languages, with a small admin panel for staff.
 
-## About Laravel
+Production: **https://library.uor.edu.krd**
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requirements
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+| | Version |
+|---|---|
+| PHP | 8.3 or newer (`sqlite3`, `pdo_sqlite`, `dom`, `mbstring`) |
+| Composer | 2.x |
+| Node.js | 22 or newer (build only — not needed at runtime) |
+| Web server | Nginx or Apache with the document root at `public/` |
 
-## Learning Laravel
+The database is SQLite; no database server is required.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## First install
 
 ```bash
-composer require laravel/boost --dev
+git clone <repository> library && cd library
 
-php artisan boost:install
+composer install --no-dev --optimize-autoloader
+npm ci && npm run build          # writes public/build — required, see below
+
+cp .env.example .env
+php artisan key:generate
+
+touch database/database.sqlite
+php artisan migrate --force
+php artisan db:seed --class=DepartmentSeeder   # optional starter departments
+
+php artisan admin:create         # creates the first administrator account
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+`public/build` is **not** in version control. Without `npm run build` the site
+loads with no stylesheet at all.
 
-## Contributing
+Writable by the web server: `storage/` and `bootstrap/cache/`.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## Configuration
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Beyond the standard Laravel keys, `.env` carries the project's own settings.
+They exist so the site can be moved onto university-owned accounts without
+touching code — see `config/library.php`.
 
-## Security Vulnerabilities
+| Key | What it is |
+|---|---|
+| `APP_URL` | `https://library.uor.edu.krd` |
+| `APP_FALLBACK_LOCALE` | `ku-sorani` — the Kurdish variants fall back to it |
+| `LIBRARY_DRIVE_MAIN` | Google Drive folder behind "General Library 1" |
+| `LIBRARY_DRIVE_SECONDARY` | Folder behind "General Library 2" |
+| `LIBRARY_QR_URL` | Where the QR-code link points |
+| `LIBRARY_UNIVERSITY_URL` | The university site linked in the footer |
+| `LIBRARY_ANALYTICS_HOST` | Visitor counter host. **Leave empty to disable** — no third-party request is then made, and the counter disappears from the page |
+| `LIBRARY_FEEDBACK_RETENTION_DAYS` | How long visitor messages are kept. The privacy notice quotes this number |
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+After changing `.env` on the server:
 
-## License
+```bash
+php artisan config:clear
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## Deploying an update
+
+```bash
+git pull
+composer install --no-dev --optimize-autoloader
+npm ci && npm run build
+php artisan migrate --force
+php artisan config:clear && php artisan view:clear
+```
+
+The home page cache invalidates itself: its filename carries a stamp of the
+template, the translation file and the asset build, so a deploy is picked up
+without a manual clear.
+
+---
+
+## Scheduled work
+
+One cron entry runs everything:
+
+```cron
+* * * * * cd /path/to/library && php artisan schedule:run >> /dev/null 2>&1
+```
+
+| Task | When | What it does |
+|---|---|---|
+| `backup:database` | 02:30 daily | Copies the database into `storage/backups`, keeping 14 days |
+| `feedback:prune` | 03:00 daily | Deletes visitor messages past the retention period |
+
+`storage/backups` is excluded from version control. **Copy it off the server**
+— a backup that lives only on the machine it protects is not a backup.
+
+---
+
+## Languages
+
+Eight locales, each at its own URL so search engines can index all of them:
+
+```
+/                 کوردی سۆرانی   (the default; /ku-sorani redirects here)
+/ku-badini        کوردی بادینی
+/ku-badini-lat    Kurmancî (Latînî)
+/ku-hawrami       کوردی هەورامی
+/en /ar /fa /tr
+```
+
+Text lives in `lang/<locale>/messages.php` and carries **no markup** — layout
+belongs to the Blade templates. Where a sentence needs a link or emphasis
+inside it, the translation holds a `:placeholder` and the template supplies
+the markup through `App\Support\RichText`.
+
+Adding a locale: add it to `App\Support\Locale::SUPPORTED`, give it a BCP 47
+tag in `LANGUAGE_TAGS`, and add `lang/<locale>/messages.php`. The test suite
+will tell you if any key is missing.
+
+> The Hawrami translation was drafted without a Hawrami speaker and is marked
+> for review. Treat it as provisional.
+
+---
+
+## Admin panel
+
+`/admin` — sign in with an email and password.
+
+| Role | May do |
+|---|---|
+| `admin` | Everything, including managing accounts and reading the audit trail |
+| `staff` | Manage departments and read feedback |
+
+Every change is written to the `activity_log` table and shown at
+`/admin/activity`, including sign-ins and failed attempts. The record keeps the
+actor's name, so it still reads correctly after an account is removed.
+
+Accounts are created from `/admin/users`, or on the command line:
+
+```bash
+php artisan admin:create
+```
+
+---
+
+## Tests
+
+```bash
+php artisan test
+```
+
+The suite covers all eight locales, the page cache, the admin panel and roles,
+the feedback form, and the translation files themselves — including a guard
+that no personal contact details reach the public page. CI runs it on every
+push (`.github/workflows/ci.yml`).
+
+---
+
+## How the pieces fit
+
+| Path | What lives there |
+|---|---|
+| `app/Support/Locale.php` | Locale list, text direction, hreflang tags, per-locale URLs |
+| `app/Support/RichText.php` | Splices trusted markup into a translated sentence |
+| `app/Support/Asset.php` | Public asset URLs stamped with the file's mtime |
+| `app/Http/Middleware/SetLocale.php` | URL decides the language; session remembers it for `/admin` |
+| `app/Http/Middleware/CachePage.php` | Home-page cache, keyed by locale, host and source stamp |
+| `app/Http/Middleware/SecurityHeaders.php` | CSP and the rest, driven by `config/library.php` |
+| `config/library.php` | Every third-party URL the site depends on |
+| `resources/css/app.css` | All site styling; compiled by Vite with Tailwind |
+
+---
+
+## Credits
+
+Built by the **BioNova** team — students of the Biology Department, College of
+Science, University of Raparin.

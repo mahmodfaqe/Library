@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AdminBookController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SitemapController;
@@ -14,6 +16,12 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/'.Locale::DEFAULT, '/', 301);
 
 Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('pagecache');
+
+// The catalogue, at the root and behind each locale prefix.
+Route::get('books', [BookController::class, 'index'])->name('books');
+Route::get('{locale}/books', [BookController::class, 'index'])
+    ->whereIn('locale', Locale::SUPPORTED)
+    ->name('books.localised');
 
 // One crawlable URL per language: /en, /ar, /ku-badini, ...
 Route::get('/{locale}', [HomeController::class, 'index'])
@@ -48,6 +56,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('departments/{department}/edit', [AdminController::class, 'edit'])->name('departments.edit');
         Route::put('departments/{department}', [AdminController::class, 'update'])->name('departments.update');
         Route::delete('departments/{department}', [AdminController::class, 'destroy'])->name('departments.destroy');
+        Route::get('books', [AdminBookController::class, 'index'])->name('books');
+        Route::get('books/create', [AdminBookController::class, 'create'])->name('books.create');
+        Route::post('books', [AdminBookController::class, 'store'])->name('books.store');
+        Route::get('books/{book}/edit', [AdminBookController::class, 'edit'])->name('books.edit');
+        Route::put('books/{book}', [AdminBookController::class, 'update'])->name('books.update');
+        Route::delete('books/{book}', [AdminBookController::class, 'destroy'])->name('books.destroy');
+
         Route::get('feedback', [AdminController::class, 'feedback'])->name('feedback');
         Route::delete('feedback/{feedback}', [AdminController::class, 'destroyFeedback'])->name('feedback.destroy');
 

@@ -41,3 +41,6 @@ pnpm-debug.log
 
 # Page cache
 /storage/framework/pagecache
+
+# Database backups
+/storage/backups
