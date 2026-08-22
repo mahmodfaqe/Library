@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
-use App\Models\Department;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -18,20 +18,20 @@ class BookController extends Controller
     public function index(Request $request): View
     {
         $search = $this->textQuery($request, 'q');
-        $department = $this->textQuery($request, 'department');
+        $category = $this->textQuery($request, 'category');
 
-        $books = Book::with('department')
+        $books = Book::with('category')
             ->matching($search)
-            ->inDepartment($department)
+            ->inCategory($category)
             ->orderBy('title')
             ->paginate(24)
             ->withQueryString();
 
         return view('books.index', [
             'books' => $books,
-            'departments' => Department::orderBy('sort_order')->get(),
+            'categories' => Category::orderBy('sort_order')->orderBy('name')->get(),
             'search' => $search,
-            'department' => $department,
+            'category' => $category,
         ]);
     }
 

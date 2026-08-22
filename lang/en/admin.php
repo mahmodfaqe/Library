@@ -5,6 +5,7 @@ return [
     'title' => 'Administration',
     'heading' => 'Library Administration',
     'back_home' => 'Back to the site',
+    'pagination' => 'Pages',
     'nav' => [
         'departments' => 'Departments',
         'books' => 'Books',
@@ -87,6 +88,7 @@ return [
             'author' => 'Author',
             'year' => 'Year',
             'language' => 'Language',
+            'category' => 'Category',
             'department' => 'Department',
             'url' => 'Link',
             'cover' => 'Cover image',

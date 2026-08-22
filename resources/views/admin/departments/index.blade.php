@@ -11,6 +11,7 @@
         @if ($departments->isEmpty())
             <p style="color:#6b6b80; padding:1.5rem 0; text-align:center;">{{ __('admin.departments.empty') }}</p>
         @else
+            <div class="table-scroll">
             <table>
                 <thead>
                     <tr>
@@ -45,25 +46,8 @@
                     @endforeach
                 </tbody>
             </table>
-            <div class="pagination">
-                @if ($departments->onFirstPage())
-                    <span>«</span>
-                @else
-                    <a href="{{ $departments->previousPageUrl() }}">«</a>
-                @endif
-                @foreach ($departments->getUrlRange(1, $departments->lastPage()) as $page => $url)
-                    @if ($page === $departments->currentPage())
-                        <span class="current">{{ $page }}</span>
-                    @else
-                        <a href="{{ $url }}">{{ $page }}</a>
-                    @endif
-                @endforeach
-                @if ($departments->hasMorePages())
-                    <a href="{{ $departments->nextPageUrl() }}">»</a>
-                @else
-                    <span>»</span>
-                @endif
             </div>
+            @include('admin.partials.pagination', ['paginator' => $departments])
         @endif
     </div>
 @endsection

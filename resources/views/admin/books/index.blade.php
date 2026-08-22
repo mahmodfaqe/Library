@@ -18,6 +18,7 @@
         @if ($books->isEmpty())
             <p style="color:#6b6b80; padding:1.5rem 0; text-align:center;">{{ __('admin.books.empty') }}</p>
         @else
+            <div class="table-scroll">
             <table>
                 <thead>
                     <tr>
@@ -48,9 +49,10 @@
                     @endforeach
                 </tbody>
             </table>
+            </div>
 
             @if ($books->hasPages())
-                <div class="pagination">{{ $books->links() }}</div>
+                @include('admin.partials.pagination', ['paginator' => $books])
             @endif
         @endif
     </div>

@@ -5,6 +5,7 @@ return [
     'title' => 'پنل مدیریت',
     'heading' => 'مدیریت کتابخانه',
     'back_home' => 'بازگشت به سایت',
+    'pagination' => 'صفحه‌ها',
     'nav' => [
         'departments' => 'گروه‌ها',
         'books' => 'کتاب‌ها',
@@ -87,6 +88,7 @@ return [
             'author' => 'نویسنده',
             'year' => 'سال',
             'language' => 'زبان',
+            'category' => 'دسته',
             'department' => 'گروه',
             'url' => 'پیوند',
             'cover' => 'تصویر جلد',

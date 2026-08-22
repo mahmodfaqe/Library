@@ -8,7 +8,8 @@
             <h2 style="font-size:1.15rem;">{{ __('admin.users.heading', ['count' => $users->count()]) }}</h2>
         </div>
 
-        <table>
+        <div class="table-scroll">
+            <table>
             <thead>
                 <tr>
                     <th>{{ __('admin.users.table.name') }}</th>
@@ -43,6 +44,7 @@
                 @endforeach
             </tbody>
         </table>
+            </div>
     </div>
 
     <div class="card" style="margin-top:1.5rem;">

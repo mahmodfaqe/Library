@@ -13,7 +13,10 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif; background: #f0f2ff; color: #2d2d3a; min-height: 100vh; }
-        .topbar { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+        /* Six nav items plus the account controls do not fit one line on a
+           laptop, let alone a phone, so the bar wraps instead of overflowing. */
+        .topbar { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 0.9rem 1.2rem; display: flex; justify-content: space-between; align-items: center; gap: 0.8rem 1.2rem; flex-wrap: wrap; }
+        .topbar nav { flex-wrap: wrap; }
         .topbar h1 { font-size: 1.15rem; font-weight: 700; }
         .topbar a { color: #fff; text-decoration: none; font-size: 0.9rem; opacity: 0.9; }
         .topbar a:hover { opacity: 1; text-decoration: underline; }
@@ -24,7 +27,11 @@
         .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; }
         .btn-danger { background: #f43f5e; color: #fff; }
         .btn-secondary { background: #e5e7f5; color: #2d2d3a; }
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        /* Admin tables carry up to seven columns; on a narrow screen they
+           scroll inside their own box rather than stretching the page. */
+        .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 1rem; }
+        table { width: 100%; border-collapse: collapse; min-width: 640px; }
+        .table-scroll table { margin-top: 0; }
         th, td { padding: 0.7rem 0.6rem; text-align: start; border-bottom: 1px solid #eef0f8; font-size: 0.92rem; vertical-align: middle; }
         th { color: #6b6b80; font-weight: 600; font-size: 0.82rem; }
         .actions a, .actions button { margin-inline-end: 0.4rem; }
@@ -39,7 +46,10 @@
         .lang-block { border: 1px dashed #c7cdf5; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; background: #fafbff; }
         .lang-block h3 { font-size: 0.95rem; color: #5b5bd6; margin-bottom: 0.9rem; }
         .pagination { margin-top: 1rem; display: flex; gap: 0.4rem; justify-content: center; }
-        .pagination a, .pagination span { padding: 0.4rem 0.8rem; border-radius: 8px; border: 1px solid #d5d9ee; font-size: 0.85rem; text-decoration: none; color: #2d2d3a; }
+        .pagination { flex-wrap: wrap; }
+        .pagination a, .pagination span { padding: 0.4rem 0.8rem; border-radius: 8px; border: 1px solid #d5d9ee; font-size: 0.85rem; text-decoration: none; color: #2d2d3a; font-variant-numeric: tabular-nums; }
+        .pagination .gap { border-color: transparent; padding-inline: 0.3rem; }
+        .card { overflow-wrap: anywhere; }
         .pagination .current { background: #667eea; color: #fff; border-color: #667eea; }
         .icon-preview { font-size: 1.6rem; vertical-align: middle; }
     </style>

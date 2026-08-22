@@ -10,6 +10,7 @@
         @if ($activities->isEmpty())
             <p style="color:#6b6b80; padding:1.5rem 0; text-align:center;">{{ __('admin.activity.empty') }}</p>
         @else
+            <div class="table-scroll">
             <table>
                 <thead>
                     <tr>
@@ -32,25 +33,8 @@
                     @endforeach
                 </tbody>
             </table>
-            <div class="pagination">
-                @if ($activities->onFirstPage())
-                    <span>«</span>
-                @else
-                    <a href="{{ $activities->previousPageUrl() }}">«</a>
-                @endif
-                @foreach ($activities->getUrlRange(1, $activities->lastPage()) as $page => $url)
-                    @if ($page === $activities->currentPage())
-                        <span class="current">{{ $page }}</span>
-                    @else
-                        <a href="{{ $url }}">{{ $page }}</a>
-                    @endif
-                @endforeach
-                @if ($activities->hasMorePages())
-                    <a href="{{ $activities->nextPageUrl() }}">»</a>
-                @else
-                    <span>»</span>
-                @endif
             </div>
+            @include('admin.partials.pagination', ['paginator' => $activities])
         @endif
     </div>
 @endsection

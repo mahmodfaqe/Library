@@ -5,6 +5,7 @@ return [
     'title' => 'بەڕێوەبەر',
     'heading' => 'بەڕێوەبەریی کتێبخانە',
     'back_home' => 'گەڕانەوە بۆ سەرەکی',
+    'pagination' => 'لاپەڕەکان',
     'nav' => [
         'departments' => 'بەشەکان',
         'books' => 'کتێبەکان',
@@ -87,6 +88,7 @@ return [
             'author' => 'نووسەر',
             'year' => 'ساڵ',
             'language' => 'زمان',
+            'category' => 'بابەت',
             'department' => 'بەش',
             'url' => 'بەستەر',
             'cover' => 'وێنەی بەرگ',

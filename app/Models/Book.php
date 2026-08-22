@@ -7,12 +7,22 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['title', 'author', 'year', 'language', 'department_id', 'url', 'cover_url', 'file_path', 'file_size'])]
+#[Fillable(['title', 'author', 'year', 'language', 'department_id', 'category_id', 'drive_file_id', 'url', 'cover_url', 'file_path', 'file_size'])]
 class Book extends Model
 {
     public function department(): BelongsTo
     {
         return $this->belongsTo(Department::class);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function scopeInCategory(Builder $query, ?string $categoryId): Builder
+    {
+        return $categoryId ? $query->where('category_id', $categoryId) : $query;
     }
 
     /**

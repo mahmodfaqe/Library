@@ -8,6 +8,7 @@
         @if ($feedback->isEmpty())
             <p style="color:#6b6b80; padding:1.5rem 0; text-align:center;">{{ __('admin.feedback.empty') }}</p>
         @else
+            <div class="table-scroll">
             <table>
                 <thead>
                     <tr>
@@ -37,25 +38,8 @@
                     @endforeach
                 </tbody>
             </table>
-            <div class="pagination">
-                @if ($feedback->onFirstPage())
-                    <span>«</span>
-                @else
-                    <a href="{{ $feedback->previousPageUrl() }}">«</a>
-                @endif
-                @foreach ($feedback->getUrlRange(1, $feedback->lastPage()) as $page => $url)
-                    @if ($page === $feedback->currentPage())
-                        <span class="current">{{ $page }}</span>
-                    @else
-                        <a href="{{ $url }}">{{ $page }}</a>
-                    @endif
-                @endforeach
-                @if ($feedback->hasMorePages())
-                    <a href="{{ $feedback->nextPageUrl() }}">»</a>
-                @else
-                    <span>»</span>
-                @endif
             </div>
+            @include('admin.partials.pagination', ['paginator' => $feedback])
         @endif
     </div>
 @endsection

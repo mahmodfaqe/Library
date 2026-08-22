@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity;
 use App\Models\Book;
+use App\Models\Category;
 use App\Models\Department;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class AdminBookController extends Controller
         $search = $this->textQuery($request, 'q');
 
         return view('admin.books.index', [
-            'books' => Book::with('department')
+            'books' => Book::with(['department', 'category'])
                 ->matching($search)
                 ->orderBy('title')
                 ->paginate(20)
@@ -31,6 +32,7 @@ class AdminBookController extends Controller
         return view('admin.books.form', [
             'book' => new Book,
             'departments' => Department::orderBy('sort_order')->get(),
+            'categories' => Category::orderBy('sort_order')->orderBy('name')->get(),
         ]);
     }
 
@@ -48,6 +50,7 @@ class AdminBookController extends Controller
         return view('admin.books.form', [
             'book' => $book,
             'departments' => Department::orderBy('sort_order')->get(),
+            'categories' => Category::orderBy('sort_order')->orderBy('name')->get(),
         ]);
     }
 
@@ -82,6 +85,7 @@ class AdminBookController extends Controller
             'year' => ['nullable', 'integer', 'min:1400', 'max:'.((int) date('Y') + 1)],
             'language' => ['nullable', 'string', 'max:40'],
             'department_id' => ['nullable', 'exists:departments,id'],
+            'category_id' => ['nullable', 'exists:categories,id'],
             // A book needs somewhere to be read: an uploaded file or a link.
             'url' => ['nullable', 'url', 'max:500'],
             'cover_url' => ['nullable', 'url', 'max:500'],

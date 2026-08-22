@@ -51,13 +51,13 @@
                    style="border:1px solid #d5d9ee; font-size:0.95rem; font-family:inherit; text-align:start;">
         </div>
         <div style="flex:0 1 220px;">
-            <label for="department" class="block font-semibold mb-1 text-[#4a4a5c]" style="font-size:0.86rem;">{{ __('books.department_label') }}</label>
-            <select id="department" name="department" class="w-full rounded-[12px] px-4 py-3"
+            <label for="category" class="block font-semibold mb-1 text-[#4a4a5c]" style="font-size:0.86rem;">{{ __('books.department_label') }}</label>
+            <select id="category" name="category" class="w-full rounded-[12px] px-4 py-3"
                     style="border:1px solid #d5d9ee; font-size:0.95rem; font-family:inherit;">
                 <option value="">{{ __('books.all_departments') }}</option>
-                @foreach ($departments as $dept)
-                    <option value="{{ $dept->id }}" @selected((string) $department === (string) $dept->id)>
-                        {{ $dept->translation(app()->getLocale(), 'title') }}
+                @foreach ($categories as $option)
+                    <option value="{{ $option->id }}" @selected((string) $category === (string) $option->id)>
+                        {{ $option->name }}
                     </option>
                 @endforeach
             </select>
@@ -88,7 +88,7 @@
                     {{ collect([
                         $book->year,
                         $book->language,
-                        $book->department?->translation(app()->getLocale(), 'title'),
+                        $book->category?->name,
                     ])->filter()->implode(' · ') }}
                 </p>
             </div>

@@ -5,6 +5,7 @@ return [
     'title' => 'لوحة الإدارة',
     'heading' => 'إدارة المكتبة',
     'back_home' => 'العودة إلى الموقع',
+    'pagination' => 'الصفحات',
     'nav' => [
         'departments' => 'الأقسام',
         'books' => 'الكتب',
@@ -87,6 +88,7 @@ return [
             'author' => 'المؤلف',
             'year' => 'السنة',
             'language' => 'اللغة',
+            'category' => 'التصنيف',
             'department' => 'القسم',
             'url' => 'الرابط',
             'cover' => 'صورة الغلاف',

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Book;
+use App\Models\Category;
 use App\Models\Department;
 use App\Models\User;
 use App\Support\Locale;
@@ -66,15 +67,26 @@ class BookCatalogueTest extends TestCase
         $this->get('/en/books?q=%')->assertDontSee('Molecular Biology of the Cell');
     }
 
-    public function test_it_filters_by_department(): void
+    public function test_it_filters_by_category(): void
     {
-        $bio = $this->department();
-        $this->book(['department_id' => $bio->id]);
-        $this->book(['title' => 'Organic Chemistry', 'department_id' => null]);
+        // The catalogue is browsed by the library's own subject categories,
+        // which is how the collection is actually organised.
+        $biology = Category::create(['name' => 'بایۆلۆجی', 'sort_order' => 1]);
 
-        $this->get("/en/books?department={$bio->id}")
+        $this->book(['category_id' => $biology->id]);
+        $this->book(['title' => 'Organic Chemistry', 'category_id' => null]);
+
+        $this->get("/en/books?category={$biology->id}")
             ->assertSee('Molecular Biology of the Cell')
             ->assertDontSee('Organic Chemistry');
+    }
+
+    public function test_the_category_appears_on_the_card(): void
+    {
+        $biology = Category::create(['name' => 'بایۆلۆجی', 'sort_order' => 1]);
+        $this->book(['category_id' => $biology->id]);
+
+        $this->get('/en/books')->assertSee('بایۆلۆجی', false);
     }
 
     public function test_an_array_query_parameter_does_not_crash_the_page(): void

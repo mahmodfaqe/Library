@@ -41,6 +41,18 @@
             </div>
 
             <div class="field">
+                <label for="category_id">{{ __('admin.books.table.category') }}</label>
+                <select id="category_id" name="category_id">
+                    <option value="">{{ __('admin.books.no_department') }}</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}" @selected((string) old('category_id', $book->category_id) === (string) $category->id)>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="field">
                 <label for="department_id">{{ __('admin.books.table.department') }}</label>
                 <select id="department_id" name="department_id">
                     <option value="">{{ __('admin.books.no_department') }}</option>

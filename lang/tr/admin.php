@@ -5,6 +5,7 @@ return [
     'title' => 'Yönetim',
     'heading' => 'Kütüphane Yönetimi',
     'back_home' => 'Siteye dön',
+    'pagination' => 'Sayfalar',
     'nav' => [
         'departments' => 'Bölümler',
         'books' => 'Kitaplar',
@@ -87,6 +88,7 @@ return [
             'author' => 'Yazar',
             'year' => 'Yıl',
             'language' => 'Dil',
+            'category' => 'Kategori',
             'department' => 'Bölüm',
             'url' => 'Bağlantı',
             'cover' => 'Kapak görseli',
