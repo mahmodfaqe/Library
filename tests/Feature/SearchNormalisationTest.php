@@ -82,9 +82,9 @@ class SearchNormalisationTest extends TestCase
         // searching for nothing rather than matching everything by accident.
         $this->assertSame(2, Book::matching('%')->count());
 
-        // And inside a term it stays literal: this must not match "Biology".
-        $this->assertSame(0, Book::matching('Bio%logy')->count());
-        $this->assertSame(0, Book::matching('Mole_ular')->count());
+        // As a LIKE wildcard these would both match; they must not.
+        $this->assertSame(0, Book::matching('Mol%Biology')->count());
+        $this->assertSame(0, Book::matching('M_lecular')->count());
     }
 
     public function test_an_unrelated_term_still_finds_nothing(): void

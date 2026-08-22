@@ -98,12 +98,13 @@ class BookCatalogueTest extends TestCase
 
     public function test_a_wildcard_is_not_a_wildcard(): void
     {
-        $this->book();
+        $this->book(['title' => 'Biology']);
 
-        // '%' carries no meaning, so it cannot be used to widen a search.
-        $this->get('/en/books?q=Molecular%25Biology')
+        // As a LIKE wildcard, "B%iology" would match "Biology". It must not:
+        // the character carries no special meaning in a visitor's search.
+        $this->get('/en/books?q=B%25iology')
             ->assertOk()
-            ->assertDontSee('Molecular Biology of the Cell');
+            ->assertDontSee('Biology');
     }
 
     public function test_it_filters_by_category(): void
