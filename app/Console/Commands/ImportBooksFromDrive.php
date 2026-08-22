@@ -5,8 +5,8 @@ namespace App\Console\Commands;
 use App\Models\Book;
 use App\Models\Category;
 use App\Support\BookLanguage;
+use App\Support\DriveApi;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -255,7 +255,7 @@ class ImportBooksFromDrive extends Command
         $token = null;
 
         do {
-            $response = Http::retry(3, 2000)->get(self::API, array_filter([
+            $response = DriveApi::request()->retry(3, 2000)->get(self::API, array_filter([
                 'q' => "'{$folder}' in parents and trashed=false",
                 'key' => $key,
                 'fields' => 'nextPageToken,files(id,name,mimeType,size)',
@@ -291,7 +291,7 @@ class ImportBooksFromDrive extends Command
             return null;
         }
 
-        $response = Http::timeout(600)->get(self::API."/{$file['id']}", ['alt' => 'media', 'key' => $key]);
+        $response = DriveApi::request(600)->get(self::API."/{$file['id']}", ['alt' => 'media', 'key' => $key]);
 
         if ($response->failed()) {
             $this->warn("    could not download {$file['name']}");

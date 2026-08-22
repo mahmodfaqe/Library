@@ -12,9 +12,12 @@ class BookDetailsTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * The parser reads bytes, not paths: books are never stored on the server.
+     */
     private function fixture(string $name): string
     {
-        return base_path("tests/fixtures/{$name}");
+        return file_get_contents(base_path("tests/fixtures/{$name}"));
     }
 
     public function test_it_reads_the_author_and_the_published_year(): void
@@ -43,15 +46,10 @@ class BookDetailsTest extends TestCase
 
     public function test_an_unreadable_file_is_not_an_error(): void
     {
-        $path = tempnam(sys_get_temp_dir(), 'not-a-pdf');
-        file_put_contents($path, 'this is not a pdf at all');
-
         $this->assertSame(
             ['author' => null, 'year' => null, 'language' => null],
-            PdfDetails::read($path)
+            PdfDetails::read('this is not a pdf at all')
         );
-
-        @unlink($path);
     }
 
     public function test_the_command_fills_in_what_is_missing(): void
@@ -59,9 +57,7 @@ class BookDetailsTest extends TestCase
         config(['library.google_api_key' => 'test-key']);
 
         Http::fake([
-            'www.googleapis.com/*' => Http::response(
-                file_get_contents($this->fixture('book-with-details.pdf'))
-            ),
+            'www.googleapis.com/*' => Http::response($this->fixture('book-with-details.pdf')),
         ]);
 
         $book = Book::create([
@@ -82,9 +78,7 @@ class BookDetailsTest extends TestCase
         config(['library.google_api_key' => 'test-key']);
 
         Http::fake([
-            'www.googleapis.com/*' => Http::response(
-                file_get_contents($this->fixture('book-with-details.pdf'))
-            ),
+            'www.googleapis.com/*' => Http::response($this->fixture('book-with-details.pdf')),
         ]);
 
         $book = Book::create([
@@ -107,9 +101,7 @@ class BookDetailsTest extends TestCase
         config(['library.google_api_key' => 'test-key']);
 
         Http::fake([
-            'www.googleapis.com/*' => Http::response(
-                file_get_contents($this->fixture('book-with-details.pdf'))
-            ),
+            'www.googleapis.com/*' => Http::response($this->fixture('book-with-details.pdf')),
         ]);
 
         $book = Book::create([
@@ -128,9 +120,7 @@ class BookDetailsTest extends TestCase
         config(['library.google_api_key' => 'test-key']);
 
         Http::fake([
-            'www.googleapis.com/*' => Http::response(
-                file_get_contents($this->fixture('book-with-details.pdf'))
-            ),
+            'www.googleapis.com/*' => Http::response($this->fixture('book-with-details.pdf')),
         ]);
 
         $book = Book::create(['title' => 'Molecular Biology', 'drive_file_id' => 'abc123']);
@@ -143,23 +133,21 @@ class BookDetailsTest extends TestCase
         $this->assertNull($book->year);
     }
 
-    public function test_the_borrowed_file_is_not_left_behind(): void
+    public function test_no_book_is_ever_written_to_disk(): void
     {
         config(['library.google_api_key' => 'test-key']);
 
         Http::fake([
-            'www.googleapis.com/*' => Http::response(
-                file_get_contents($this->fixture('book-with-details.pdf'))
-            ),
+            'www.googleapis.com/*' => Http::response($this->fixture('book-with-details.pdf')),
         ]);
 
         Book::create(['title' => 'Molecular Biology', 'drive_file_id' => 'abc123']);
 
-        $before = count(glob(sys_get_temp_dir().'/book-*'));
+        $before = count(glob(sys_get_temp_dir().'/*'));
         $this->artisan('books:extract-details')->assertSuccessful();
 
-        // Thirty gigabytes of PDFs must not accumulate on a server that also
-        // hosts another site.
-        $this->assertSame($before, count(glob(sys_get_temp_dir().'/book-*')));
+        // The server is nearly full and also hosts an unrelated site. Books
+        // are read in memory and dropped; not one may land on the disk.
+        $this->assertSame($before, count(glob(sys_get_temp_dir().'/*')));
     }
 }

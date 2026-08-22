@@ -3,9 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Models\Book;
+use App\Support\DriveApi;
 use App\Support\PdfDetails;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class ExtractBookDetails extends Command
@@ -17,8 +17,6 @@ class ExtractBookDetails extends Command
         {--dry-run : Report what would change without writing anything}';
 
     protected $description = 'Read the author and year out of each book\'s own PDF';
-
-    private const API = 'https://www.googleapis.com/drive/v3/files';
 
     public function handle(): int
     {
@@ -47,23 +45,16 @@ class ExtractBookDetails extends Command
         foreach ($books as $book) {
             $bar->advance();
 
-            $path = $this->fetch($book, $key);
+            $pdf = $this->contents($book, $key);
 
-            if ($path === null) {
+            if ($pdf === null) {
                 $unreadable++;
 
                 continue;
             }
 
-            try {
-                $details = PdfDetails::read($path);
-            } finally {
-                // The file is borrowed, never kept. This server also hosts an
-                // unrelated site, and a thousand PDFs would fill the disk.
-                if ($book->file_path === null) {
-                    @unlink($path);
-                }
-            }
+            $details = PdfDetails::read($pdf);
+            unset($pdf);
 
             $changes = $this->changes($book, $details);
 
@@ -129,42 +120,34 @@ class ExtractBookDetails extends Command
     }
 
     /**
-     * A readable path to the book, downloading it only if it is not held here.
+     * The bytes of the book, or null if they cannot be had.
+     *
+     * Nothing is written to disk. The server is nearly full and also hosts an
+     * unrelated site, so a book is held only long enough to read its opening
+     * pages and is then dropped — one file in memory at a time, never a
+     * thousand on the disk.
      */
-    private function fetch(Book $book, ?string $key): ?string
+    private function contents(Book $book, ?string $key): ?string
     {
         if ($book->file_path !== null && Storage::disk('books')->exists($book->file_path)) {
-            return Storage::disk('books')->path($book->file_path);
+            return Storage::disk('books')->get($book->file_path);
         }
 
         if (blank($book->drive_file_id) || blank($key)) {
             return null;
         }
 
+        // A large book is mostly scanned images; reading it would cost far
+        // more memory than the title page is worth.
         if ($book->file_size !== null && $book->file_size > (int) $this->option('max-mb') * 1024 ** 2) {
             return null;
         }
 
-        $response = Http::timeout(180)->get(self::API."/{$book->drive_file_id}", [
+        $response = DriveApi::request(180)->get(DriveApi::FILES."/{$book->drive_file_id}", [
             'alt' => 'media',
             'key' => $key,
         ]);
 
-        if ($response->failed()) {
-            return null;
-        }
-
-        // tempnam() creates the file it names, so write into that one rather
-        // than a variation on the name — otherwise every book leaves an empty
-        // file behind, a thousand of them by the end of a run.
-        $path = tempnam(sys_get_temp_dir(), 'book-');
-
-        if ($path === false) {
-            return null;
-        }
-
-        file_put_contents($path, $response->body());
-
-        return $path;
+        return $response->successful() ? $response->body() : null;
     }
 }

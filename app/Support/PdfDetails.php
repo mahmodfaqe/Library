@@ -36,15 +36,18 @@ class PdfDetails
     private const EARLIEST_YEAR = 1400;
 
     /**
-     * Read what the file can tell us. Every field is optional: a scanned book
-     * with no text layer yields nothing, which is a fine answer.
+     * Read what the file can tell us, from its bytes rather than from a path:
+     * the books are never stored on this server, only passed through.
+     *
+     * Every field is optional — a scanned book with no text layer yields
+     * nothing, which is a fine answer.
      *
      * @return array{author: ?string, year: ?int, language: ?string}
      */
-    public static function read(string $path): array
+    public static function read(string $contents): array
     {
         try {
-            $pdf = (new Parser)->parseFile($path);
+            $pdf = (new Parser)->parseContent($contents);
         } catch (Throwable) {
             // A corrupt or encrypted file tells us nothing; that is not an
             // error worth stopping an import of a thousand books for.
