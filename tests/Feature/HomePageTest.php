@@ -104,15 +104,17 @@ class HomePageTest extends TestCase
             ->assertSee('<strong>'.__('messages.history.opening_date', [], 'en').'</strong>', false);
     }
 
-    public function test_the_qr_objective_renders_as_a_link(): void
+    public function test_the_qr_code_is_linked_from_the_footer_of_every_page(): void
     {
         // The URL comes from config, so set it here rather than depending on
         // whatever happens to be in .env.
         config(['library.qr_url' => 'https://example.test/qr']);
 
-        $this->get('/en')
-            ->assertSee('https://example.test/qr', false)
-            ->assertSee('>'.__('messages.intro.qr_label', [], 'en').'</a>', false);
+        foreach (['/en', '/en/books', '/en/privacy'] as $page) {
+            $this->get($page)
+                ->assertSee('https://example.test/qr', false)
+                ->assertSee('>'.__('messages.qr_label', [], 'en').'</a>', false);
+        }
     }
 
     public function test_nothing_links_nowhere_when_the_urls_are_not_configured_yet(): void
@@ -128,8 +130,6 @@ class HomePageTest extends TestCase
         $html = $this->get('/en')->assertOk()->getContent();
 
         $this->assertStringNotContainsString('href=""', $html);
-        // The objective still reads correctly, just without a link.
-        $this->assertStringContainsString(__('messages.intro.qr_label', [], 'en'), $html);
     }
 
     public function test_the_home_page_sends_visitors_to_the_catalogue(): void

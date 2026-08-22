@@ -8,8 +8,6 @@ return [
     'back_to_subjects' => 'Konulara dön',
     'search_label' => 'Ara',
     'search_placeholder' => 'Başlık veya yazar…',
-    'department_label' => 'Bölüm',
-    'all_departments' => 'Tüm bölümler',
     'language_label' => 'Dil',
     'all_languages' => 'Tüm diller',
     'search' => 'Ara',

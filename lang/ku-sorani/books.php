@@ -8,8 +8,6 @@ return [
     'back_to_subjects' => 'گەڕانەوە بۆ بابەتەکان',
     'search_label' => 'گەڕان',
     'search_placeholder' => 'ناونیشان یان نووسەر…',
-    'department_label' => 'بەش',
-    'all_departments' => 'هەموو بەشەکان',
     'language_label' => 'زمان',
     'all_languages' => 'هەموو زمانەکان',
     'search' => 'بگەڕێ',

@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'qr_label' => 'QR code',
     'university_name' => 'University of Raparin',
     'library_name' => 'Electronic Library',
     'site_title' => 'Electronic Library of the College of Science - Raparin University',
@@ -19,17 +20,6 @@ return [
             'An e-library is more than just a digital collection, it demonstrates the relationship between science and technology. It encourages critical thinking and continuous learning, while helping students and researchers stay up-to-date on modern scientific developments.',
             'Our mission is to build a supportive academic space where information is freely available, ideas are developed, and future scientists are empowered to discover, innovate, and contribute to the advancement of science and society.',
         ],
-        'objectives_heading' => 'Project Objectives:',
-        'objectives' => [
-            '🎓 Supporting online learning at universities',
-            '⚡ Quick and easy access to scientific resources',
-            '📖 Gathering thousands of scientific resources in one place',
-            '📱 Utilizing modern technology :qr to serve education',
-            '👨‍🏫 Benefiting teachers and students from digital library resources',
-            '⏰ Filling students\' free time with scientific projects',
-            '🌐 Availability of books and resources in all languages',
-        ],
-        'qr_label' => 'QR code',
         'prepared_heading' => 'Prepared by:',
         'people' => [
             [
@@ -53,11 +43,6 @@ return [
             'The College of Science Library was established by order of the esteemed University President, Assistant Professor Dr. Payman Ramazan Ahmad, and was built on the second floor of the College of Science building at the University of Raparin. It was officially opened on :date by the University President, the Vice-President, and the College of Science Council, welcoming the science-seeking students of the College.',
             'The opening of this library marked a new turning point for the students, faculty, and staff of the College of Science, enabling them to access scientific and academic books and resources more easily and quickly, and raising the quality and efficiency of the learning process.',
         ],
-    ],
-    'library' => [
-        'heading' => 'Main Library',
-        'button_1' => 'Enter General Library 1',
-        'button_2' => 'Enter General Library 2',
     ],
     'dept_heading' => 'Scientific Departments',
     'no_departments' => 'No departments found.',

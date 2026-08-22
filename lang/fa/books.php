@@ -8,8 +8,6 @@ return [
     'back_to_subjects' => 'بازگشت به دسته‌ها',
     'search_label' => 'جست‌وجو',
     'search_placeholder' => 'عنوان یا نویسنده…',
-    'department_label' => 'گروه',
-    'all_departments' => 'همه گروه‌ها',
     'language_label' => 'زبان',
     'all_languages' => 'همه زبان‌ها',
     'search' => 'جست‌وجو',

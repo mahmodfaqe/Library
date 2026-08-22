@@ -41,23 +41,6 @@
                     <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">{{ $paragraph }}</p>
                 @endforeach
 
-                <!-- Objectives -->
-                <div class="rounded-[10px] p-6 mb-6 border border-[rgba(102,126,234,0.16)] transition-all duration-300 hover:shadow-md reveal"
-                     style="background:rgba(102,126,234,0.08);">
-                    <h3 class="text-[#667eea] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">{{ __('messages.intro.objectives_heading') }}</h3>
-                    <ul class="list-none p-0 text-[#6b6b80] leading-loose" style="font-size:clamp(0.9rem,2.5vw,1.05rem);">
-                        @php
-                            $qrLabel = e(__('messages.intro.qr_label'));
-                            $qrLink = config('library.qr_url')
-                                ? '<a href="'.e(config('library.qr_url')).'" style="color: gold; text-shadow: 0 0 8px gold, 0 0 15px gold;">'.$qrLabel.'</a>'
-                                : $qrLabel;
-                        @endphp
-                        @foreach (__('messages.intro.objectives') as $objective)
-                            <li class="mb-1 pl-6">{{ RichText::make($objective, ['qr' => $qrLink]) }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-
                 <!-- Prepared by -->
                 <div class="rounded-[10px] p-6 border border-[rgba(255,107,107,0.15)] reveal" style="background:rgba(255,107,107,0.07);">
                     <h3 class="text-[#ff6b6b] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">{{ __('messages.intro.prepared_heading') }}</h3>

@@ -8,8 +8,6 @@ return [
     'back_to_subjects' => 'Vegere bal babetan',
     'search_label' => 'Lêgerîn',
     'search_placeholder' => 'Sernav an nivîskar…',
-    'department_label' => 'Beş',
-    'all_departments' => 'Hemû beş',
     'language_label' => 'Ziman',
     'all_languages' => 'Hemû ziman',
     'search' => 'Bigere',

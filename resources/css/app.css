@@ -174,21 +174,6 @@ transition: background-image 1.5s ease-in-out;
 .uor-logo { transition: all 0.45s cubic-bezier(0.4,0,0.2,1); }
 .logo-title-el, .logo-sub-el { transition: color 0.35s ease; }
 
-/* Main library btn */
-.main-library-btn {
-    position: relative;
-    overflow: hidden;
-}
-.main-library-btn::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(255,255,255,0);
-    transition: background 0.3s ease;
-    pointer-events: none;
-}
-.main-library-btn:hover::after { background: rgba(255,255,255,0.12); }
-
 /* section-btn shimmer
    The overlay is absolutely positioned, so the button must establish the
    containing block itself. Without this it anchors to the viewport instead,

@@ -148,6 +148,11 @@
             <a href="{{ Locale::booksUrl() }}" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">{{ __('books.title') }}</a>
             <span class="opacity-40 mx-2">·</span>
             <a href="{{ Locale::privacyUrl() }}" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">{{ __('privacy.title') }}</a>
+            @if (config('library.qr_url'))
+                <span class="opacity-40 mx-2">·</span>
+                <a href="{{ config('library.qr_url') }}" target="_blank" rel="noopener"
+                   style="color:gold; text-shadow:0 0 8px rgba(255,215,0,0.5);">{{ __('messages.qr_label') }}</a>
+            @endif
         </p>
 
         @if (config('library.analytics.host'))

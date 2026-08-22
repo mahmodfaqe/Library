@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'qr_label' => 'QR code',
     'university_name' => 'Raparin Üniversitesi',
     'library_name' => 'Elektronik Kütüphane',
     'site_title' => 'Fen Fakültesi Elektronik Kütüphanesi - Raparin Üniversitesi',
@@ -19,17 +20,6 @@ return [
             'E-kütüphane, sadece dijital bir koleksiyon olmaktan öte, bilim ve teknoloji arasındaki ilişkiyi gösterir. Eleştirel düşünmeyi ve sürekli öğrenmeyi teşvik ederken, öğrencilerin ve araştırmacıların modern bilimsel gelişmelerden haberdar olmalarına yardımcı olur.',
             'Misyonumuz, bilginin özgürce erişilebildiği, fikirlerin geliştirildiği ve geleceğin bilim insanlarının keşfetme, yenilik yapma ve bilimin ve toplumun ilerlemesine katkıda bulunma konusunda güçlendirildiği destekleyici bir akademik alan oluşturmaktır.',
         ],
-        'objectives_heading' => 'Proje Hedefleri:',
-        'objectives' => [
-            '🎓 Üniversitelerde çevrimiçi öğrenimi destekleme',
-            '⚡ Bilimsel kaynaklara hızlı ve kolay erişim',
-            '📖 Binlerce bilimsel kaynağı tek bir yerde toplama',
-            '📱 Modern teknolojiyi :qr eğitime hizmet için kullanma',
-            '👨‍🏫 Öğretmenlerin ve öğrencilerin dijital kütüphane kaynaklarından yararlanması',
-            '⏰ Öğrencilerin boş zamanlarını bilimsel projelerle değerlendirme',
-            '🌐 Kitap ve kaynakların tüm dillerde erişilebilir olması',
-        ],
-        'qr_label' => 'QR code',
         'prepared_heading' => 'Hazırlayanlar:',
         'people' => [
             [
@@ -53,11 +43,6 @@ return [
             'Fen Fakültesi Kütüphanesi, saygıdeğer Üniversite Rektörü Yardımcı Doçent Dr. Peyman Ramazan Ahmed\'in emriyle kurulmuş olup Raparin Üniversitesi Fen Fakültesi binasının ikinci katında yer almaktadır. Kütüphane, :date tarihinde Rektör, Rektör Yardımcısı ve Fen Fakültesi Kurulu tarafından törenle açılmış ve Fen Fakültesi\'nin bilim meraklısı öğrencilerine kapılarını açmıştır.',
             'Bu kütüphanenin açılışı, Fen Fakültesi\'nin öğrencileri, öğretim üyeleri ve personeli için yeni bir dönüm noktası oldu; bilimsel ve akademik kitap ve kaynaklara daha kolay ve hızlı erişim sağlanarak öğrenme sürecinin kalitesi ve verimliliği artırıldı.',
         ],
-    ],
-    'library' => [
-        'heading' => 'Ana Kütüphane',
-        'button_1' => 'Genel Kütüphane 1\'e Gir',
-        'button_2' => 'Genel Kütüphane 2\'ye Gir',
     ],
     'dept_heading' => 'Bilim Bölümleri',
     'no_departments' => 'Bölüm bulunamadı.',

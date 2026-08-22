@@ -34,6 +34,15 @@ class Book extends Model
     /**
      * Match a visitor's search against the folded title and author, so the
      * spelling of ك/ک and ي/ی on their keyboard does not decide the result.
+     *
+     * Each word has to appear somewhere, but not in the order typed and not
+     * next to each other: "کیمیا ئەندامی" finds "کیمیای ئەندامی" and
+     * "ئەندامی، کیمیای گشتی" alike.
+     *
+     * The folded copy is also compared against the raw title and author. A row
+     * imported before search_text existed, or written by a bulk insert that
+     * skipped the model, would otherwise be invisible to search until the next
+     * reindex; this way the catalogue still finds it.
      */
     public function scopeMatching(Builder $query, ?string $term): Builder
     {
@@ -43,9 +52,17 @@ class Book extends Model
             return $query;
         }
 
-        $like = '%'.str_replace(['%', '_'], ['\\%', '\\_'], $needle).'%';
+        return $query->where(function (Builder $outer) use ($needle) {
+            foreach (explode(' ', $needle) as $word) {
+                $like = '%'.str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $word).'%';
 
-        return $query->where('search_text', 'like', $like);
+                $outer->where(function (Builder $inner) use ($like) {
+                    $inner->where('search_text', 'like', $like)
+                        ->orWhere('title', 'like', $like)
+                        ->orWhere('author', 'like', $like);
+                });
+            }
+        });
     }
 
     /**

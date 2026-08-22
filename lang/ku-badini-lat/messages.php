@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'qr_label' => 'QR code',
     'university_name' => 'Zanîngeha Raperin',
     'library_name' => 'Kitêbxaneya Elektronîkî',
     'site_title' => 'Kitêbxaneya Elektronîkî ya Kolêja Zanistê - Zanîngeha Raperin',
@@ -19,17 +20,6 @@ return [
             'Pirtûkxaneya elektronîk ji berhevokeke dîjîtal bêtir e, ew têkiliya di navbera zanist û teknolojiyê de nîşan dide. Ew ramana rexnegir û fêrbûna berdewam teşwîq dike, di heman demê de alîkariya xwendekar û lêkolîneran dike ku li ser pêşkeftinên zanistî yên nûjen agahdar bimînin.',
             'Erka me avakirina qadeke akademîk a piştgir e ku tê de agahî bi azadî peyda bibin, raman werin pêşxistin, û zanyarên pêşerojê werin hêzdar kirin ku kifş bikin, nûjeniyê bikin û beşdarî pêşveçûna zanist û civakê bibin.',
         ],
-        'objectives_heading' => 'Armancên Projeyê:',
-        'objectives' => [
-            '🎓 Piştgirîkirina xwendina serhêl li zanko',
-            '⚡ Gihîştina zû û hêsan bo çavkaniyên zanistî',
-            '📖 Berhevkirina hezaran çavkaniyên zanistî di yek cihî de',
-            '📱 Bikaranîna teknolojiya nû :qr',
-            '👨‍🏫 Sûdwergirtina mamoste û xwendekaran ji kitêbxaneya dîjîtal',
-            '⏰ Tijîkirina demên vala yên xwendekaran bi projeyek zanistî',
-            '🌐 Berdestbûna pirtûk û çavkaniyan bi hemû zimanan',
-        ],
-        'qr_label' => 'QR code',
         'prepared_heading' => 'Amadekirî ji aliyê:',
         'people' => [
             [
@@ -53,11 +43,6 @@ return [
             'Pirtûkxaneya Koleja Zanistê bi fermana rêzdar Serokê Zanîngehê Profesor Alîkar Dr. Peyman Ramezanê Ehmed hat avakirin, li qata duyemîn a avahiya Koleja Zanistê ya Zanîngeha Raperinê. Di tarîxa :date de ji aliyê Serokê Zanîngehê, Cîgirê wî û Encumena Koleja Zanistê ve hat vekirin û xwendekarên zanistxwaz pêşwazî lê hat kirin.',
             'Vekirina vê pirtûkxaneyê xalek nû û girîng bû ji bo xwendekar, mamoste û karmendên Koleja Zanistê, û derfet da wan ku bi awayekî hêsantir û bilez bigihîjin pirtûk û çavkaniyên zanistî û akademîk, û pêvajoya fêrbûnê kalîtir û kêrhatîtir bibe.',
         ],
-    ],
-    'library' => [
-        'heading' => 'Kitêbxaneya Sereke',
-        'button_1' => 'Têkeve Kitêbxaneya Giştî 1',
-        'button_2' => 'Têkeve Kitêbxaneya Giştî 2',
     ],
     'dept_heading' => 'Beşên Zanistî',
     'no_departments' => 'Ti beş nehat dîtin.',

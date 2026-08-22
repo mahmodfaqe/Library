@@ -8,8 +8,6 @@ return [
     'back_to_subjects' => 'العودة إلى التصنيفات',
     'search_label' => 'بحث',
     'search_placeholder' => 'العنوان أو المؤلف…',
-    'department_label' => 'القسم',
-    'all_departments' => 'كل الأقسام',
     'language_label' => 'اللغة',
     'all_languages' => 'كل اللغات',
     'search' => 'ابحث',

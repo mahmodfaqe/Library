@@ -8,8 +8,6 @@ return [
     'back_to_subjects' => 'زڤڕین بۆ بابەتان',
     'search_label' => 'گەڕان',
     'search_placeholder' => 'ناڤنیشان یان نڤیسەر…',
-    'department_label' => 'بەش',
-    'all_departments' => 'هەمی بەش',
     'language_label' => 'زمان',
     'all_languages' => 'هەمی زمانان',
     'search' => 'بگەڕە',

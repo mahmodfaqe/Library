@@ -8,8 +8,6 @@ return [
     'back_to_subjects' => 'Back to subjects',
     'search_label' => 'Search',
     'search_placeholder' => 'Title or author…',
-    'department_label' => 'Department',
-    'all_departments' => 'All departments',
     'language_label' => 'Language',
     'all_languages' => 'All languages',
     'search' => 'Search',
