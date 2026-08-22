@@ -144,7 +144,7 @@ class BookCatalogueTest extends TestCase
         // book cards themselves.
         $html = $this->get("/books?category={$biology->id}")->assertOk()->getContent();
 
-        $this->assertStringContainsString('dir="auto">Molecular Biology (2nd ed.)</h2>', $html);
+        $this->assertStringContainsString('dir="auto">Molecular Biology (2nd ed.)</h3>', $html);
         $this->assertStringContainsString('dir="auto">Jane Doe</p>', $html);
         // Year and language share a line, so each is isolated.
         $this->assertStringContainsString('<bdi>2019</bdi>', $html);
@@ -160,6 +160,64 @@ class BookCatalogueTest extends TestCase
                 ->assertOk()
                 ->assertSee('dir="'.$dir.'"', false);
         }
+    }
+
+    public function test_books_are_shelved_by_language(): void
+    {
+        $biology = Category::create(['name' => 'بایۆلۆجی', 'sort_order' => 1]);
+
+        // Deliberately created out of order: the shelving, not the insertion
+        // order, has to decide how they come back.
+        $this->book(['title' => 'Zoology', 'language' => 'English', 'category_id' => $biology->id]);
+        $this->book(['title' => 'علم النبات', 'language' => 'عەرەبی', 'category_id' => $biology->id]);
+        $this->book(['title' => 'ژیناسی', 'language' => 'کوردی', 'category_id' => $biology->id]);
+
+        $html = $this->get("/books?category={$biology->id}")->assertOk()->getContent();
+
+        // Kurdish leads, then English, then Arabic.
+        $this->assertLessThan(strpos($html, 'Zoology'), strpos($html, 'ژیناسی'));
+        $this->assertLessThan(strpos($html, 'علم النبات'), strpos($html, 'Zoology'));
+
+        // And each shelf is announced.
+        foreach (['کوردی', 'English', 'عەرەبی'] as $shelf) {
+            $this->assertStringContainsString('<bdi>'.$shelf.'</bdi>', $html);
+        }
+    }
+
+    public function test_one_language_needs_no_shelf_headings(): void
+    {
+        $biology = Category::create(['name' => 'بایۆلۆجی', 'sort_order' => 1]);
+        $this->book(['title' => 'Zoology', 'language' => 'English', 'category_id' => $biology->id]);
+        $this->book(['title' => 'ژیناسی', 'language' => 'کوردی', 'category_id' => $biology->id]);
+
+        // The chips above already say which language this is.
+        $this->get("/books?category={$biology->id}&language=".urlencode('کوردی'))
+            ->assertOk()
+            ->assertSee('ژیناسی')
+            ->assertDontSee('Zoology')
+            ->assertDontSee('language-shelf', false);
+    }
+
+    public function test_a_drive_book_shows_the_cover_drive_renders_for_it(): void
+    {
+        $biology = Category::create(['name' => 'بایۆلۆجی', 'icon' => '🧬', 'sort_order' => 1]);
+        $this->book(['drive_file_id' => 'abc123', 'category_id' => $biology->id]);
+        // Nothing to render a cover from; the subject's icon stands in.
+        $this->book(['title' => 'No cover', 'category_id' => $biology->id]);
+
+        $this->get("/books?category={$biology->id}")
+            ->assertOk()
+            ->assertSee('https://drive.google.com/thumbnail?id=abc123&amp;sz=w400', false)
+            ->assertSee('🧬', false);
+    }
+
+    public function test_the_policy_lets_covers_load(): void
+    {
+        // A cover that the Content-Security-Policy blocks is not a cover.
+        $csp = $this->get('/books')->assertOk()->headers->get('Content-Security-Policy');
+
+        $this->assertStringContainsString('https://drive.google.com', $csp);
+        $this->assertStringContainsString('https://*.googleusercontent.com', $csp);
     }
 
     public function test_a_wildcard_is_not_a_wildcard(): void
