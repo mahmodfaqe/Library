@@ -231,31 +231,9 @@
         </div>
     </div>
 </section>
-<!-- ══════════ LIBRARY SECTION 1 ══════════ -->
-<section style="padding: clamp(1rem,4vw,0.5rem) 0; background: linear-gradient(160deg, #f0f2ff 0%, #e8ebff 100%);">
-    <div class="max-w-[1200px] mx-auto px-6 sm:px-8 lg:px-10">
-        <div class="text-center mb-10 reveal">
-            <h2 class="font-bold text-[#2d2d3a] mb-6" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.library.heading') }}</h2>
-            @if (config('library.drive.main'))
-                <a href="{{ config('library.drive.main') }}"
-                   class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5"
-                   style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;"
-                   target="_blank">{{ __('messages.library.button_1') }}</a>
-            @endif
-        </div>
-    </div>
-</section>
-
 <!-- ══════════ LIBRARY 2 + DEPARTMENTS ══════════ -->
 <section style="padding: clamp(1rem,4vw,3rem) 0; background: linear-gradient(160deg, #f0f2ff 0%, #e8ebff 100%);">
     <div class="max-w-[1200px] mx-auto px-6 sm:px-8 lg:px-10">
-
-        <!-- Library 2 button -->
-        <div class="text-center">
-            @if (config('library.drive.secondary'))
-            <a href="{{ config('library.drive.secondary') }}" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">{{ __('messages.library.button_2') }}</a>
-            @endif
-        </div>
 
         <div class="text-center" style="margin-top:1.4rem;">
             <a href="{{ Locale::booksUrl() }}"

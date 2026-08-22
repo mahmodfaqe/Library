@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\ArabicText;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -26,20 +27,29 @@ class Book extends Model
     }
 
     /**
-     * Match a visitor's search against the title and the author.
+     * Match a visitor's search against the folded title and author, so the
+     * spelling of ك/ک and ي/ی on their keyboard does not decide the result.
      */
     public function scopeMatching(Builder $query, ?string $term): Builder
     {
-        $term = trim((string) $term);
+        $needle = ArabicText::fold($term);
 
-        if ($term === '') {
+        if ($needle === '') {
             return $query;
         }
 
-        $like = '%'.str_replace(['%', '_'], ['\%', '\_'], $term).'%';
+        $like = '%'.str_replace(['%', '_'], ['\\%', '\\_'], $needle).'%';
 
-        return $query->where(function (Builder $q) use ($like) {
-            $q->where('title', 'like', $like)->orWhere('author', 'like', $like);
+        return $query->where('search_text', 'like', $like);
+    }
+
+    /**
+     * Keep the folded copy in step with whatever the record now says.
+     */
+    protected static function booted(): void
+    {
+        static::saving(function (self $book) {
+            $book->search_text = ArabicText::fold($book->title.' '.$book->author);
         });
     }
 
