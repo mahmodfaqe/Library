@@ -6,6 +6,7 @@ use App\Models\Book;
 use App\Support\DriveApi;
 use App\Support\PdfDetails;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
 class ExtractBookDetails extends Command
@@ -14,22 +15,22 @@ class ExtractBookDetails extends Command
         {--force : Replace details that are already recorded}
         {--limit=0 : Stop after this many books, for a first look}
         {--max-mb=60 : Skip files larger than this}
-        {--dry-run : Report what would change without writing anything}';
+        {--dry-run : Report what would change without writing anything}
+        {--targets= : Read the books to look at from this JSON file instead of the database}
+        {--results= : Write what was found to this JSON file instead of the database}
+        {--apply= : Write a results file produced elsewhere into the database}';
 
     protected $description = 'Read the author and year out of each book\'s own PDF';
 
     public function handle(): int
     {
+        if ($this->option('apply')) {
+            return $this->apply($this->option('apply'));
+        }
+
         $key = config('library.google_api_key');
 
-        $books = Book::query()
-            ->where(fn ($q) => $q->whereNotNull('drive_file_id')->orWhereNotNull('file_path'))
-            ->unless($this->option('force'), fn ($q) => $q->where(
-                fn ($q) => $q->whereNull('author')->orWhereNull('year')
-            ))
-            ->when((int) $this->option('limit') > 0, fn ($q) => $q->limit((int) $this->option('limit')))
-            ->orderBy('id')
-            ->get();
+        $books = $this->targets();
 
         if ($books->isEmpty()) {
             $this->info('Nothing to read: every book already has an author and a year.');
@@ -41,6 +42,7 @@ class ExtractBookDetails extends Command
         $bar = $this->output->createProgressBar($books->count());
 
         $found = $unchanged = $unreadable = 0;
+        $collected = [];
 
         foreach ($books as $book) {
             $bar->advance();
@@ -77,12 +79,96 @@ class ExtractBookDetails extends Command
                 continue;
             }
 
+            if ($this->option('results')) {
+                $collected[$book->id] = $changes;
+
+                continue;
+            }
+
             $book->update($changes);
         }
 
         $bar->finish();
         $this->newLine(2);
+
+        if ($this->option('results')) {
+            file_put_contents(
+                $this->option('results'),
+                json_encode($collected, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
+            );
+            $this->line('Wrote '.count($collected).' result(s) to '.$this->option('results'));
+        }
+
         $this->info("Filled in {$found}, found nothing new in {$unchanged}, could not read {$unreadable}.");
+
+        return self::SUCCESS;
+    }
+
+    /**
+     * The books to look at.
+     *
+     * Normally the catalogue itself. With --targets they come from a file, so
+     * the reading can be done on a machine that is not the server: the file
+     * lists only ids and Drive references, and the books never land there.
+     *
+     * @return Collection<int, Book>
+     */
+    private function targets(): Collection
+    {
+        if ($path = $this->option('targets')) {
+            return collect(json_decode(file_get_contents($path), true) ?: [])
+                ->map(fn (array $row) => tap(new Book($row), function (Book $book) use ($row) {
+                    $book->id = $row['id'];
+                    $book->exists = true;
+                }))
+                ->when((int) $this->option('limit') > 0, fn ($c) => $c->take((int) $this->option('limit')));
+        }
+
+        return Book::query()
+            ->where(fn ($q) => $q->whereNotNull('drive_file_id')->orWhereNotNull('file_path'))
+            ->unless($this->option('force'), fn ($q) => $q->where(
+                fn ($q) => $q->whereNull('author')->orWhereNull('year')
+            ))
+            ->when((int) $this->option('limit') > 0, fn ($q) => $q->limit((int) $this->option('limit')))
+            ->orderBy('id')
+            ->get();
+    }
+
+    /**
+     * Write a results file produced elsewhere into the catalogue.
+     */
+    private function apply(string $path): int
+    {
+        if (! is_file($path)) {
+            $this->error("No such file: {$path}");
+
+            return self::FAILURE;
+        }
+
+        $results = json_decode(file_get_contents($path), true) ?: [];
+        $written = $missing = 0;
+
+        foreach ($results as $id => $changes) {
+            $book = Book::find($id);
+
+            if ($book === null) {
+                $missing++;
+
+                continue;
+            }
+
+            // Still never over a librarian's own correction, unless asked.
+            $changes = collect($changes)
+                ->reject(fn ($v, $field) => ! $this->option('force') && filled($book->{$field}))
+                ->all();
+
+            if ($changes !== []) {
+                $book->update($changes);
+                $written++;
+            }
+        }
+
+        $this->info("Updated {$written} book(s), {$missing} no longer in the catalogue.");
 
         return self::SUCCESS;
     }

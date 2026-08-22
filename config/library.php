@@ -19,6 +19,13 @@ return [
     'qr_url' => env('LIBRARY_QR_URL', ''),
 
     /*
+     * Optional proxy for Google Drive calls, e.g. socks5://127.0.0.1:18080.
+     * Lets the import run off-server while still leaving from the address the
+     * IP-restricted API key allows.
+     */
+    'drive_proxy' => env('LIBRARY_DRIVE_PROXY', ''),
+
+    /*
      * Hosts allowed to serve book covers, for the Content-Security-Policy.
      * Drive answers a thumbnail request from drive.google.com by redirecting
      * to googleusercontent, so both have to be listed.

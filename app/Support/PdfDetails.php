@@ -95,19 +95,13 @@ class PdfDetails
                 continue;
             }
 
-            $value = self::tidy($value);
+            $value = self::trimScanJunk(self::tidy($value));
 
             if ($value === '' || mb_strlen($value) > 120) {
                 continue;
             }
 
-            if (in_array(mb_strtolower($value), self::NOT_A_PERSON, true)) {
-                continue;
-            }
-
-            // A name has letters in it. "C:\\Users\\Ali\\book.doc" does not
-            // count, nor does a version string.
-            if (! preg_match('/\p{L}{2}/u', $value) || preg_match('/[\\\\\/]|\.(pdf|docx?|indd)$/iu', $value)) {
+            if (! self::looksLikeAPerson($value)) {
                 continue;
             }
 
@@ -115,6 +109,47 @@ class PdfDetails
         }
 
         return null;
+    }
+
+    /**
+     * Whether this is plausibly a person's name.
+     *
+     * The /Author field of a scanned book is, far more often than not, the
+     * program that made the file or the Windows account of whoever ran it.
+     * Tested against the real collection, this field yielded "Adobe InDesign
+     * 16.0 (Windows)", "husam" and "khaled" — a name, a name and a name, none
+     * of them the author of anything. A wrong author in a university
+     * catalogue is worse than an empty one, so the bar is set high: what gets
+     * through has to look like how an author is actually credited.
+     */
+    private static function looksLikeAPerson(string $value): bool
+    {
+        if (in_array(mb_strtolower($value), self::NOT_A_PERSON, true)) {
+            return false;
+        }
+
+        // A file path, a filename, or a version string.
+        if (preg_match('/[\\\\\/]|\.(pdf|docx?|indd|tex)$|\d+\.\d+|\((?:Windows|Macintosh|Linux)\)/iu', $value)) {
+            return false;
+        }
+
+        // Any known tool anywhere in the string, not only as the whole of it.
+        foreach (self::NOT_A_PERSON as $tool) {
+            if (preg_match('/(?:^|\s)'.preg_quote($tool, '/').'(?:\s|$)/iu', $value)) {
+                return false;
+            }
+        }
+
+        // An author is credited with at least two words — a given name and a
+        // family name. "husam" on its own is a login, not a credit.
+        if (! preg_match('/\p{L}\s+\p{L}/u', $value)) {
+            return false;
+        }
+
+        // And it is mostly letters: "DR.Ahmed Saker 2O11" is a scan artefact.
+        $letters = preg_match_all('/\p{L}/u', $value);
+
+        return $letters >= 5 && $letters >= mb_strlen($value) * 0.6;
     }
 
     /**
@@ -143,20 +178,12 @@ class PdfDetails
             }
         }
 
-        // Otherwise the most recent believable year on the opening pages: a
-        // reprint line lists several, and the newest is the edition in hand.
-        $loose = [];
-        preg_match_all('/\b([0-9\x{0660}-\x{0669}]{4})\b/u', $opening, $loose);
-
-        $years = collect($loose[1] ?? [])
-            ->map(fn (string $v) => (int) ArabicText::fold($v))
-            ->filter(fn (int $y) => $y >= 1800 && $y <= $latest);
-
-        if ($years->isNotEmpty()) {
-            return $years->max();
-        }
-
-        // Deliberately not /CreationDate: that is when the file was made, and
+        // Nothing else. Taking the newest four-digit number on the page reads
+        // 1860 off a nursing textbook and 1930 off another — page numbers,
+        // figure labels and phone numbers all look like years. Only a date the
+        // page marks as one is a date.
+        //
+        // Deliberately not /CreationDate either: that is when the file was made, and
         // for a scanned book it is the year somebody put it on the scanner.
         // Across a thousand books that would fill the catalogue with dates
         // that look right and are not. A blank the librarian fills in is
@@ -180,6 +207,23 @@ class PdfDetails
         }
 
         return $latin > $arabic * 2 ? 'English' : null;
+    }
+
+    /**
+     * Drop trailing debris from a credit line.
+     *
+     * OCR turns a year into things like "2O11" (letter O for zero) and leaves
+     * it hanging off the end of the name. "DR.Ahmed Saker 2O11" is a real
+     * author with rubbish attached, not rubbish.
+     */
+    private static function trimScanJunk(string $value): string
+    {
+        // Trailing tokens that mix digits with letters, or are just digits.
+        while (preg_match('/^(.*\p{L})\s+[\p{Nd}][\p{L}\p{Nd}]*$/u', $value, $m)) {
+            $value = $m[1];
+        }
+
+        return trim($value, " \t.,-–—_");
     }
 
     private static function tidy(string $value): string

@@ -17,11 +17,22 @@ class DriveApi
      * address, which is not on the list, and every call comes back 403
      * API_KEY_IP_ADDRESS_BLOCKED — for a reason the message makes clear only
      * if you read the address in it carefully.
+     *
+     * Guzzle manages the cURL handle itself, so this goes through its own
+     * force_ip_resolve option rather than CURLOPT_IPRESOLVE, which it rejects.
      */
     public static function request(int $timeout = 60): PendingRequest
     {
-        return Http::timeout($timeout)->withOptions([
-            'curl' => [CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4],
-        ]);
+        $options = ['force_ip_resolve' => 'v4'];
+
+        // Set LIBRARY_DRIVE_PROXY to run the import or the detail extraction
+        // from somewhere other than the server — an SSH SOCKS tunnel makes the
+        // calls leave from the address the key trusts while the files
+        // themselves never reach the server at all.
+        if (filled($proxy = config('library.drive_proxy'))) {
+            $options['proxy'] = $proxy;
+        }
+
+        return Http::timeout($timeout)->withOptions($options);
     }
 }
