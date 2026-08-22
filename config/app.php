@@ -82,7 +82,10 @@ return [
 
     'locale' => env('APP_LOCALE', 'en'),
 
-    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
+    // Kurdish, not English: a reader who asked for Badini or Hawrami is far
+    // better served by Sorani than by English when a string is not translated
+    // yet. The deploy regenerates .env, so the default has to be right here.
+    'fallback_locale' => env('APP_FALLBACK_LOCALE', 'ku-sorani'),
 
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
 
