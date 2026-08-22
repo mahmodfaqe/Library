@@ -21,9 +21,17 @@ class SetLocale
      * Pick the locale for this request.
      *
      * The URL wins: /ar is Arabic no matter what the visitor chose before, so
-     * every language has one stable, crawlable address. Pages without a locale
-     * prefix — the admin panel — fall back to the visitor's last choice, and
-     * the site root is always the default locale.
+     * every language has one stable, crawlable address.
+     *
+     * Every public page has an unprefixed address that IS the default locale —
+     * /, /books, /privacy — so those are Sorani whatever the visitor looked at
+     * last. Reading it from the session instead would mean a visitor who
+     * switched to Sorani from the English catalogue landed on /books and was
+     * handed English again, and it would let one cached copy be served under
+     * the wrong language.
+     *
+     * Only the admin panel, which has no localised address, falls back to the
+     * staff member's last choice.
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -32,12 +40,12 @@ class SetLocale
         if (Locale::supports($fromUrl)) {
             App::setLocale($fromUrl);
             $request->session()->put('locale', $fromUrl);
-        } elseif ($request->path() === '/') {
-            App::setLocale(Locale::DEFAULT);
-        } else {
+        } elseif ($request->is('admin', 'admin/*')) {
             $locale = $request->session()->get('locale', Locale::DEFAULT);
 
             App::setLocale(Locale::supports($locale) ? $locale : Locale::DEFAULT);
+        } else {
+            App::setLocale(Locale::DEFAULT);
         }
 
         return $next($request);

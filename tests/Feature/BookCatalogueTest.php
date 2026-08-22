@@ -96,6 +96,36 @@ class BookCatalogueTest extends TestCase
             ->assertDontSee('Molecular Biology of the Cell');
     }
 
+    public function test_the_unprefixed_catalogue_is_the_default_locale_whatever_was_viewed_before(): void
+    {
+        $biology = Category::create(['name' => 'بایۆلۆجی', 'translations' => ['en' => 'Biology'], 'sort_order' => 1]);
+        $this->book(['category_id' => $biology->id]);
+
+        // Look at the English catalogue first: that writes the session locale.
+        $this->get('/en/books')->assertOk()->assertSee('Biology');
+
+        // Switching back to Sorani lands on the unprefixed address. It has to
+        // be Sorani — reading the session here would hand back English.
+        $this->get('/books')
+            ->assertOk()
+            ->assertSee('بایۆلۆجی')
+            ->assertDontSee('Biology');
+    }
+
+    public function test_the_language_switcher_keeps_the_visitor_on_the_page(): void
+    {
+        // Switching language on the catalogue must not drop the visitor back
+        // on the home page.
+        $this->get('/en/books')
+            ->assertOk()
+            ->assertSee(url('/ar/books'), false)
+            ->assertSee(url('/books'), false);
+
+        $this->get('/en/privacy')
+            ->assertOk()
+            ->assertSee(url('/ar/privacy'), false);
+    }
+
     public function test_a_wildcard_is_not_a_wildcard(): void
     {
         $this->book(['title' => 'Biology']);
