@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\CachePage;
 use App\Models\Activity;
 use App\Models\Category;
 use App\Support\Locale;
@@ -31,7 +32,7 @@ class AdminCategoryController extends Controller
     {
         $category = Category::create($this->validated($request));
         Activity::record('category.created', $category->name);
-        $this->clearPageCache();
+        CachePage::flush();
 
         return redirect()->route('admin.categories')->with('status', __('admin.flash.category_created'));
     }
@@ -45,7 +46,7 @@ class AdminCategoryController extends Controller
     {
         $category->update($this->validated($request, $category));
         Activity::record('category.updated', $category->name);
-        $this->clearPageCache();
+        CachePage::flush();
 
         return redirect()->route('admin.categories')->with('status', __('admin.flash.category_updated'));
     }
@@ -56,7 +57,7 @@ class AdminCategoryController extends Controller
         // cascading, so deleting a shelf never deletes its books.
         Activity::record('category.deleted', $category->name);
         $category->delete();
-        $this->clearPageCache();
+        CachePage::flush();
 
         return redirect()->route('admin.categories')->with('status', __('admin.flash.category_deleted'));
     }
@@ -80,12 +81,5 @@ class AdminCategoryController extends Controller
         $data['translations'] = array_filter($data['translations'] ?? [], 'filled');
 
         return $data;
-    }
-
-    private function clearPageCache(): void
-    {
-        foreach (glob(storage_path('framework/pagecache').'/*') ?: [] as $file) {
-            @unlink($file);
-        }
     }
 }

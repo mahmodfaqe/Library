@@ -15,9 +15,22 @@ class CachePage
     private const TTL_SECONDS = 3600;
 
     /**
+     * Drop every cached copy.
+     *
+     * Called after any admin write, so a renamed department or a new book
+     * shows up on the next request rather than up to an hour later.
+     */
+    public static function flush(): void
+    {
+        foreach (glob(storage_path('framework/pagecache').'/*.html') ?: [] as $file) {
+            @unlink($file);
+        }
+    }
+
+    /**
      * Cache the rendered home page to storage/framework/pagecache so repeat
      * visits skip the full Blade/DB render. Admin writes invalidate the cache
-     * (see AdminController::clearPageCache()).
+     * (see self::flush()).
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -91,6 +104,9 @@ class CachePage
     {
         $sources = [
             resource_path('views/home.blade.php'),
+            // The header, footer and <head> now live in the shared layout, so
+            // an edit there has to invalidate the cached copy as well.
+            resource_path('views/layouts/base.blade.php'),
             lang_path(App::getLocale().'/messages.php'),
             public_path('build/manifest.json'),
         ];

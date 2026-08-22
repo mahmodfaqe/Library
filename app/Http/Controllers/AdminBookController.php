@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\CachePage;
 use App\Models\Activity;
 use App\Models\Book;
 use App\Models\Category;
@@ -40,7 +41,7 @@ class AdminBookController extends Controller
     {
         $book = Book::create($this->validated($request));
         Activity::record('book.created', $book->title);
-        $this->clearPageCache();
+        CachePage::flush();
 
         return redirect()->route('admin.books')->with('status', __('admin.flash.book_created'));
     }
@@ -58,7 +59,7 @@ class AdminBookController extends Controller
     {
         $book->update($this->validated($request, $book));
         Activity::record('book.updated', $book->title);
-        $this->clearPageCache();
+        CachePage::flush();
 
         return redirect()->route('admin.books')->with('status', __('admin.flash.book_updated'));
     }
@@ -72,7 +73,7 @@ class AdminBookController extends Controller
         }
 
         $book->delete();
-        $this->clearPageCache();
+        CachePage::flush();
 
         return redirect()->route('admin.books')->with('status', __('admin.flash.book_deleted'));
     }
@@ -111,13 +112,6 @@ class AdminBookController extends Controller
         unset($data['file']);
 
         return $data;
-    }
-
-    private function clearPageCache(): void
-    {
-        foreach (glob(storage_path('framework/pagecache').'/*') ?: [] as $file) {
-            @unlink($file);
-        }
     }
 
     /**

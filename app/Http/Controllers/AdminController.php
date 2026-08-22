@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\CachePage;
 use App\Models\Activity;
 use App\Models\Department;
 use App\Models\Feedback;
@@ -71,7 +72,7 @@ class AdminController extends Controller
 
         $department = Department::create($data);
         Activity::record('department.created', $department->translation('en', 'title'));
-        $this->clearPageCache();
+        CachePage::flush();
 
         return redirect()->route('admin.index')->with('status', __('admin.flash.department_created'));
     }
@@ -90,7 +91,7 @@ class AdminController extends Controller
 
         $department->update($data);
         Activity::record('department.updated', $department->translation('en', 'title'));
-        $this->clearPageCache();
+        CachePage::flush();
 
         return redirect()->route('admin.index')->with('status', __('admin.flash.department_updated'));
     }
@@ -99,7 +100,7 @@ class AdminController extends Controller
     {
         Activity::record('department.deleted', $department->translation('en', 'title'));
         $department->delete();
-        $this->clearPageCache();
+        CachePage::flush();
 
         return redirect()->route('admin.index')->with('status', __('admin.flash.department_deleted'));
     }
@@ -135,18 +136,5 @@ class AdminController extends Controller
         $feedback->delete();
 
         return redirect()->route('admin.feedback')->with('status', __('admin.flash.feedback_deleted'));
-    }
-
-    private function clearPageCache(): void
-    {
-        $dir = storage_path('framework/pagecache');
-
-        if (is_dir($dir)) {
-            foreach (glob($dir.'/*') ?: [] as $file) {
-                if (is_file($file)) {
-                    @unlink($file);
-                }
-            }
-        }
     }
 }
