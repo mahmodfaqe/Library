@@ -110,14 +110,25 @@
             @endif
 
             <article class="book-card bg-white/85 backdrop-blur-md border border-white/70 rounded-[16px] flex flex-col">
-                <div class="book-cover">
-                    @if ($book->coverUrl())
-                        <img src="{{ $book->coverUrl() }}" alt="" loading="lazy" decoding="async"
+                {{-- The cover opens the book, like the button below it. It is
+                     hidden from the keyboard and from screen readers on
+                     purpose: the button is the same link, and announcing each
+                     book twice would only get in the way. --}}
+                @php $cover = $book->coverUrl(); @endphp
+
+                <{{ $book->readUrl() ? 'a' : 'div' }} class="book-cover"
+                    @if ($book->readUrl())
+                        href="{{ $book->readUrl() }}"
+                        @unless ($book->hasFile()) target="_blank" rel="noopener" @endunless
+                        aria-hidden="true" tabindex="-1"
+                    @endif>
+                    @if ($cover)
+                        <img src="{{ $cover }}" alt="" loading="lazy" decoding="async"
                              referrerpolicy="no-referrer" onerror="this.closest('.book-cover').classList.add('is-blank')">
                     @endif
                     {{-- Shown when there is no cover, and when one fails to load. --}}
                     <span class="book-cover-fallback" aria-hidden="true">{{ $book->category?->icon ?: '📘' }}</span>
-                </div>
+                </{{ $book->readUrl() ? 'a' : 'div' }}>
 
                 <div class="book-body">
                     <div>

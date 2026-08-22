@@ -220,6 +220,34 @@ class BookCatalogueTest extends TestCase
         $this->assertStringContainsString('https://*.googleusercontent.com', $csp);
     }
 
+    public function test_the_cover_opens_the_book(): void
+    {
+        $biology = Category::create(['name' => 'بایۆلۆجی', 'icon' => '🧬', 'sort_order' => 1]);
+        $this->book(['drive_file_id' => 'abc123', 'url' => 'https://drive.test/abc', 'category_id' => $biology->id]);
+
+        $html = $this->get("/books?category={$biology->id}")->assertOk()->getContent();
+
+        // The cover is a link to the same place as the button under it.
+        $this->assertMatchesRegularExpression(
+            '/<a class="book-cover"\s+href="https:\/\/drive\.test\/abc"/',
+            $html
+        );
+        // And it is skipped by the keyboard and by screen readers, because the
+        // button already offers the same link once.
+        $this->assertStringContainsString('aria-hidden="true" tabindex="-1"', $html);
+    }
+
+    public function test_a_book_with_nowhere_to_go_has_no_cover_link(): void
+    {
+        $biology = Category::create(['name' => 'بایۆلۆجی', 'sort_order' => 1]);
+        $this->book(['url' => null, 'file_path' => null, 'category_id' => $biology->id]);
+
+        $html = $this->get("/books?category={$biology->id}")->assertOk()->getContent();
+
+        $this->assertStringContainsString('<div class="book-cover"', $html);
+        $this->assertStringNotContainsString('<a class="book-cover"', $html);
+    }
+
     public function test_a_wildcard_is_not_a_wildcard(): void
     {
         $this->book(['title' => 'Biology']);

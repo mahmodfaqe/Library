@@ -377,6 +377,7 @@ transition: background-image 1.5s ease-in-out;
    Drive renders the first page of each PDF, so most books have a cover for
    free. The tile keeps its shape whether the image arrives or not, so the
    grid does not reflow as the lazy images load. */
+a.book-cover { cursor: pointer; text-decoration: none; }
 .book-cover {
     position: relative;
     aspect-ratio: 3 / 4;
@@ -398,6 +399,15 @@ transition: background-image 1.5s ease-in-out;
 }
 .book-cover.is-blank img { display: none; }
 .book-card:hover .book-cover img { transform: scale(1.04); }
+/* The cover is a link, so it lights up under the pointer like one. */
+a.book-cover::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(102, 126, 234, 0);
+    transition: background 0.25s ease;
+}
+a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
 .book-cover-fallback {
     font-size: clamp(2rem, 6vw, 2.8rem);
     opacity: 0.45;
