@@ -62,7 +62,7 @@ Writable by the web server: `storage/` and `bootstrap/cache/`.
 ## Running with Docker
 
 The application ships as a single container: nginx, PHP-FPM and the task
-scheduler under supervisor. It binds to `127.0.0.1:8080` only, so the host's
+scheduler under supervisor. It binds to `127.0.0.1:8090` only, so the host's
 nginx terminates TLS and proxies to it.
 
 Nothing outside the container is written to. Anything else running on the same

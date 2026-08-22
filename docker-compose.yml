@@ -8,10 +8,13 @@ services:
 
     # Bound to localhost only. The host's nginx terminates TLS for
     # dormitory-uor.online and proxies to this port, so the container is never
-    # reachable from the internet directly and cannot collide with any other
-    # site on the machine.
+    # reachable from the internet directly.
+    #
+    # 8090, not 8080: on the target server 8080 is already taken by the
+    # weather station (gwrc-airstation.uor.edu.krd) and 8001 by the site
+    # being replaced. Check with `ss -ltnp` before changing this.
     ports:
-      - "127.0.0.1:8080:80"
+      - "127.0.0.1:8090:80"
 
     env_file:
       - .env
