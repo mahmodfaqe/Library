@@ -59,6 +59,69 @@ Writable by the web server: `storage/` and `bootstrap/cache/`.
 
 ---
 
+## Running with Docker
+
+The application ships as a single container: nginx, PHP-FPM and the task
+scheduler under supervisor. It binds to `127.0.0.1:8080` only, so the host's
+nginx terminates TLS and proxies to it.
+
+Nothing outside the container is written to. Anything else running on the same
+machine — another site, another PHP version, another database — is untouched,
+and removing the library leaves nothing behind.
+
+```bash
+cp .env.example .env
+php artisan key:generate --show     # paste the result into APP_KEY
+# fill in the LIBRARY_* values
+
+docker compose up -d --build
+docker compose exec library php artisan admin:create
+```
+
+Then put the site on a domain:
+
+```bash
+sudo cp docker/nginx-host.conf.example /etc/nginx/sites-available/library
+sudo ln -s /etc/nginx/sites-available/library /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
+sudo certbot --nginx -d dormitory-uor.online
+```
+
+### Everyday commands
+
+```bash
+docker compose logs -f library          # follow the logs
+docker compose up -d --build            # deploy a new version
+docker compose exec library php artisan backup:database
+docker compose restart library
+```
+
+Migrations, the config/route/view caches and the page-cache reset all run
+automatically on start, so a deploy is `up -d --build` and nothing else.
+
+### What persists
+
+Two named volumes, and only these:
+
+| Volume | Holds |
+|---|---|
+| `library-database` | The SQLite database |
+| `library-storage` | Logs, page cache, database backups |
+
+`docker compose down` keeps them. To remove the library completely, including
+its data:
+
+```bash
+docker compose down -v
+docker image rm uor-library:latest
+sudo rm /etc/nginx/sites-enabled/library /etc/nginx/sites-available/library
+sudo systemctl reload nginx
+```
+
+Copy the backups out of `library-storage` first if you want to keep them.
+
+---
+
 ## Configuration
 
 Beyond the standard Laravel keys, `.env` carries the project's own settings.

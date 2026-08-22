@@ -1,0 +1,36 @@
+# Host nginx: terminate TLS for the library and pass it to the container.
+#
+# This is the ONLY file the library needs on the host. It touches nothing
+# belonging to any other site on the machine — no shared PHP-FPM pool, no
+# shared document root, no shared database.
+#
+#   sudo cp nginx-host.conf.example /etc/nginx/sites-available/library
+#   sudo ln -s /etc/nginx/sites-available/library /etc/nginx/sites-enabled/
+#   sudo nginx -t && sudo systemctl reload nginx
+#   sudo certbot --nginx -d dormitory-uor.online
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name dormitory-uor.online;
+
+    # certbot rewrites this block to redirect to https and adds the
+    # certificate paths below.
+
+    location / {
+        proxy_pass http://127.0.0.1:8080;
+        proxy_http_version 1.1;
+
+        # The container generates canonical, hreflang and asset URLs from
+        # these. Without them every URL on the page would say http:// and
+        # carry the wrong host.
+        proxy_set_header Host              $host;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host  $host;
+        proxy_set_header X-Forwarded-Port  $server_port;
+
+        proxy_read_timeout 60s;
+    }
+}
