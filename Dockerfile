@@ -42,8 +42,9 @@ RUN { \
         echo 'opcache.memory_consumption=128'; \
         echo 'opcache.max_accelerated_files=10000'; \
         echo 'expose_php=Off'; \
-        echo 'upload_max_filesize=16M'; \
-        echo 'post_max_size=16M'; \
+        echo 'upload_max_filesize=64M'; \
+        echo 'post_max_size=64M'; \
+        echo 'max_execution_time=300'; \
     } > /usr/local/etc/php/conf.d/zz-library.ini
 
 WORKDIR /var/www/html
