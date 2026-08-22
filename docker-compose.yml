@@ -1,4 +1,40 @@
 services:
+  db:
+    image: mariadb:11
+    container_name: uor-library-db
+    restart: unless-stopped
+
+    # Not published to the host at all — only the library container reaches it
+    # over the private compose network.
+    environment:
+      MARIADB_DATABASE: ${DB_DATABASE:-library}
+      MARIADB_USER: ${DB_USERNAME:-library}
+      MARIADB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set in .env}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?DB_ROOT_PASSWORD must be set in .env}
+      # Kurdish, Arabic and Persian titles sort and search correctly under
+      # this collation; the default latin1 would mangle them.
+      MARIADB_AUTO_UPGRADE: "1"
+
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+
+    volumes:
+      - library-mysql:/var/lib/mysql
+
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
   library:
     build:
       context: .
@@ -19,8 +55,12 @@ services:
     env_file:
       - .env
 
+    depends_on:
+      db:
+        condition: service_healthy
+
     volumes:
-      # Everything that must survive a rebuild. Nothing outside these two
+      # Everything that must survive a rebuild. Nothing outside these
       # volumes is written to at runtime.
       - library-database:/var/www/html/database
       - library-storage:/var/www/html/storage
@@ -32,5 +72,6 @@ services:
         max-file: "3"
 
 volumes:
-  library-database:
-  library-storage:
+  library-database:   # kept for the local SQLite fallback
+  library-storage:    # uploads, logs, page cache, backups
+  library-mysql:
