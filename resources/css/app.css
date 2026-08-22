@@ -36,6 +36,10 @@ body { font-family: 'Rabar', sans-serif; }
 }
 
 /* Shimmer bar on intro-card top border */
+.shimmer-border {
+    position: relative;
+    overflow: hidden;
+}
 .shimmer-border::before {
     content: '';
     position: absolute;
@@ -44,9 +48,13 @@ body { font-family: 'Rabar', sans-serif; }
     background: linear-gradient(90deg, #667eea, #ff6b6b, #764ba2);
     background-size: 200% 100%;
     animation: shimmerBar 3s linear infinite;
+    pointer-events: none;
 }
 
 /* Section card top bar */
+.card-top-bar {
+    position: relative;
+}
 .card-top-bar::before {
     content: '';
     position: absolute;
@@ -56,10 +64,14 @@ body { font-family: 'Rabar', sans-serif; }
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+    pointer-events: none;
 }
 .card-top-bar:hover::before { transform: scaleX(1); }
 
 /* Card glow on hover */
+.card-glow {
+    position: relative;
+}
 .card-glow::after {
     content: '';
     position: absolute;
@@ -163,12 +175,17 @@ transition: background-image 1.5s ease-in-out;
 .logo-title-el, .logo-sub-el { transition: color 0.35s ease; }
 
 /* Main library btn */
+.main-library-btn {
+    position: relative;
+    overflow: hidden;
+}
 .main-library-btn::after {
     content: '';
     position: absolute;
     inset: 0;
     background: rgba(255,255,255,0);
     transition: background 0.3s ease;
+    pointer-events: none;
 }
 .main-library-btn:hover::after { background: rgba(255,255,255,0.12); }
 
