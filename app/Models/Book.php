@@ -81,11 +81,6 @@ class Book extends Model
         });
     }
 
-    public function scopeInDepartment(Builder $query, ?string $departmentId): Builder
-    {
-        return $departmentId ? $query->where('department_id', $departmentId) : $query;
-    }
-
     /**
      * A book is readable if it is either held here or linked elsewhere.
      */

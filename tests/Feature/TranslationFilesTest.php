@@ -85,10 +85,9 @@ class TranslationFilesTest extends TestCase
             $this->assertStringContainsString(':year', $messages['footer']['copyright'], $locale);
             $this->assertStringContainsString(':link', $messages['footer']['uor_line'], $locale);
 
-            $this->assertCount(1, array_filter(
-                $messages['intro']['objectives'],
-                fn (string $o) => str_contains($o, ':qr')
-            ), "$locale should have exactly one objective with a :qr placeholder");
+            // The QR code is linked from the shared footer, so every locale
+            // needs a label for it.
+            $this->assertNotEmpty($messages['qr_label'], $locale);
 
             $this->assertCount(1, array_filter(
                 $messages['history']['paragraphs'],
