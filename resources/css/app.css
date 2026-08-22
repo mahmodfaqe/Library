@@ -172,13 +172,22 @@ transition: background-image 1.5s ease-in-out;
 }
 .main-library-btn:hover::after { background: rgba(255,255,255,0.12); }
 
-/* section-btn shimmer */
+/* section-btn shimmer
+   The overlay is absolutely positioned, so the button must establish the
+   containing block itself. Without this it anchors to the viewport instead,
+   stretches the full page width and swallows clicks meant for anything
+   beside it — which is how it once covered the catalogue's search box. */
+.section-btn {
+    position: relative;
+    overflow: hidden;
+}
 .section-btn::before {
     content: '';
     position: absolute;
     inset: 0;
     background: rgba(255,255,255,0);
     transition: background 0.25s ease;
+    pointer-events: none;
 }
 .section-btn:hover::before { background: rgba(255,255,255,0.14); }
 
