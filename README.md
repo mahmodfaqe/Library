@@ -92,9 +92,13 @@ sudo certbot --nginx -d dormitory-uor.online
 ```bash
 docker compose logs -f library          # follow the logs
 docker compose up -d --build            # deploy a new version
+docker compose up -d                    # apply an .env change
 docker compose exec library php artisan backup:database
-docker compose restart library
 ```
+
+`docker compose restart` does **not** re-read `.env` — a container keeps the
+environment it was created with. After editing `.env`, run `up -d`, which
+recreates the container. The volumes are untouched, so no data is lost.
 
 Migrations, the config/route/view caches and the page-cache reset all run
 automatically on start, so a deploy is `up -d --build` and nothing else.
