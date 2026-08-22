@@ -66,6 +66,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('feedback', [AdminController::class, 'feedback'])->name('feedback');
         Route::delete('feedback/{feedback}', [AdminController::class, 'destroyFeedback'])->name('feedback.destroy');
 
+        // Anyone signed in may manage their own account.
+        Route::get('account', [UserController::class, 'account'])->name('account');
+        Route::put('account', [UserController::class, 'updateAccount'])->name('account.update');
+        Route::put('account/password', [UserController::class, 'updatePassword'])->name('account.password');
+
         // Accounts and the audit trail are for administrators only.
         Route::middleware('admin.auth:admin')->group(function () {
             Route::get('users', [UserController::class, 'index'])->name('users');

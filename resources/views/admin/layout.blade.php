@@ -62,7 +62,7 @@
         </div>
         <div style="display:flex; align-items:center; gap:1rem;">
             @auth
-                <span style="font-size:0.85rem; opacity:0.85;">{{ auth()->user()->name }}</span>
+                <a href="{{ route('admin.account') }}" style="font-size:0.85rem; opacity:0.9;">{{ auth()->user()->name }}</a>
                 <form method="POST" action="{{ route('admin.logout') }}" style="display:inline;">
                     @csrf
                     <button type="submit" style="background:none; border:none; color:#fff; font:inherit; font-size:0.9rem; cursor:pointer; text-decoration:underline; padding:0;">{{ __('admin.nav.sign_out') }}</button>

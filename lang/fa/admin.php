@@ -11,6 +11,7 @@ return [
         'feedback' => 'نظرها و پیشنهادها',
         'users' => 'حساب‌ها',
         'activity' => 'گزارش فعالیت',
+        'account' => 'حساب من',
         'sign_out' => 'خروج',
     ],
     'actions' => [
@@ -20,6 +21,16 @@ return [
         'cancel' => 'انصراف',
         'save' => 'ذخیره',
         'create' => 'افزودن',
+    ],
+    'account' => [
+        'title' => 'حساب من',
+        'heading' => 'اطلاعات حساب',
+        'blurb' => 'نام و ایمیل خود را اینجا تغییر دهید. این تنها بر حساب شما اثر دارد.',
+        'password_heading' => 'تغییر رمز عبور',
+        'current_password' => 'رمز عبور فعلی',
+        'new_password' => 'رمز عبور جدید',
+        'confirm_password' => 'تکرار رمز عبور جدید',
+        'change_password' => 'تغییر رمز عبور',
     ],
     'users' => [
         'title' => 'حساب‌ها',
@@ -121,6 +132,8 @@ return [
         ],
     ],
     'flash' => [
+        'account_updated' => 'حساب شما به‌روزرسانی شد.',
+        'password_changed' => 'رمز عبور شما تغییر کرد.',
         'book_created' => 'کتاب افزوده شد.',
         'book_updated' => 'کتاب به‌روزرسانی شد.',
         'book_deleted' => 'کتاب حذف شد.',

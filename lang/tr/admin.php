@@ -11,6 +11,7 @@ return [
         'feedback' => 'Görüş ve öneriler',
         'users' => 'Hesaplar',
         'activity' => 'Etkinlik kaydı',
+        'account' => 'Hesabım',
         'sign_out' => 'Çıkış',
     ],
     'actions' => [
@@ -20,6 +21,16 @@ return [
         'cancel' => 'Vazgeç',
         'save' => 'Kaydet',
         'create' => 'Ekle',
+    ],
+    'account' => [
+        'title' => 'Hesabım',
+        'heading' => 'Hesap bilgileri',
+        'blurb' => 'Kendi adınızı ve e-postanızı burada değiştirin. Yalnızca sizin hesabınızı etkiler.',
+        'password_heading' => 'Parola değiştir',
+        'current_password' => 'Mevcut parola',
+        'new_password' => 'Yeni parola',
+        'confirm_password' => 'Yeni parolayı tekrarlayın',
+        'change_password' => 'Parolayı değiştir',
     ],
     'users' => [
         'title' => 'Hesaplar',
@@ -121,6 +132,8 @@ return [
         ],
     ],
     'flash' => [
+        'account_updated' => 'Hesabınız güncellendi.',
+        'password_changed' => 'Parolanız değiştirildi.',
         'book_created' => 'Kitap eklendi.',
         'book_updated' => 'Kitap güncellendi.',
         'book_deleted' => 'Kitap silindi.',

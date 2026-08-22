@@ -55,6 +55,47 @@ class UserController extends Controller
         return redirect()->route('admin.users')->with('status', __('admin.flash.user_deleted'));
     }
 
+    /**
+     * The signed-in user's own name, email and password. Anyone with an
+     * account may change their own; only administrators manage other people's.
+     */
+    public function account(): View
+    {
+        return view('admin.users.account');
+    }
+
+    public function updateAccount(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:120'],
+            'email' => ['required', 'email', 'max:190', Rule::unique('users', 'email')->ignore($user->id)],
+        ]);
+
+        $user->update($data);
+        Activity::record('account.updated', $user->email);
+
+        return redirect()->route('admin.account')->with('status', __('admin.flash.account_updated'));
+    }
+
+    public function updatePassword(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        $request->validate([
+            // Knowing the current one stops a walked-away session being used
+            // to lock the real owner out.
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', 'string', 'min:12', 'confirmed'],
+        ]);
+
+        $user->update(['password' => $request->string('password')->value()]);
+        Activity::record('account.password_changed', $user->email);
+
+        return redirect()->route('admin.account')->with('status', __('admin.flash.password_changed'));
+    }
+
     public function activity(): View
     {
         return view('admin.activity.index', [

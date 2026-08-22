@@ -11,6 +11,7 @@ return [
         'feedback' => 'الآراء والاقتراحات',
         'users' => 'الحسابات',
         'activity' => 'سجل النشاط',
+        'account' => 'حسابي',
         'sign_out' => 'تسجيل الخروج',
     ],
     'actions' => [
@@ -20,6 +21,16 @@ return [
         'cancel' => 'إلغاء',
         'save' => 'حفظ',
         'create' => 'إضافة',
+    ],
+    'account' => [
+        'title' => 'حسابي',
+        'heading' => 'بيانات الحساب',
+        'blurb' => 'غيّر اسمك وبريدك هنا. هذا يؤثر على حسابك فقط.',
+        'password_heading' => 'تغيير كلمة المرور',
+        'current_password' => 'كلمة المرور الحالية',
+        'new_password' => 'كلمة المرور الجديدة',
+        'confirm_password' => 'أعد كتابة كلمة المرور الجديدة',
+        'change_password' => 'تغيير كلمة المرور',
     ],
     'users' => [
         'title' => 'الحسابات',
@@ -121,6 +132,8 @@ return [
         ],
     ],
     'flash' => [
+        'account_updated' => 'تم تحديث حسابك.',
+        'password_changed' => 'تم تغيير كلمة المرور.',
         'book_created' => 'تمت إضافة الكتاب.',
         'book_updated' => 'تم تحديث الكتاب.',
         'book_deleted' => 'تم حذف الكتاب.',

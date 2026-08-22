@@ -11,6 +11,7 @@ return [
         'feedback' => 'Feedback',
         'users' => 'Accounts',
         'activity' => 'Activity log',
+        'account' => 'My account',
         'sign_out' => 'Sign out',
     ],
     'actions' => [
@@ -20,6 +21,16 @@ return [
         'cancel' => 'Cancel',
         'save' => 'Save',
         'create' => 'Add',
+    ],
+    'account' => [
+        'title' => 'My account',
+        'heading' => 'Account details',
+        'blurb' => 'Change your own name and email here. This affects only your account.',
+        'password_heading' => 'Change password',
+        'current_password' => 'Current password',
+        'new_password' => 'New password',
+        'confirm_password' => 'Repeat the new password',
+        'change_password' => 'Change password',
     ],
     'users' => [
         'title' => 'Accounts',
@@ -121,6 +132,8 @@ return [
         ],
     ],
     'flash' => [
+        'account_updated' => 'Your account was updated.',
+        'password_changed' => 'Your password was changed.',
         'book_created' => 'The book was added.',
         'book_updated' => 'The book was updated.',
         'book_deleted' => 'The book was deleted.',
