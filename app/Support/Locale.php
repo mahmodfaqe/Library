@@ -99,4 +99,14 @@ class Locale
 
         return $locale === self::DEFAULT ? url('/') : url($locale);
     }
+
+    /**
+     * The catalogue URL for a locale, following the same prefixing rule.
+     */
+    public static function booksUrl(?string $locale = null): string
+    {
+        $locale ??= App::getLocale();
+
+        return $locale === self::DEFAULT ? url('books') : url($locale.'/books');
+    }
 }

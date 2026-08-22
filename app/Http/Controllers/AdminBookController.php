@@ -13,13 +13,15 @@ class AdminBookController extends Controller
 {
     public function index(Request $request): View
     {
+        $search = $request->str('q')->trim()->value() ?: null;
+
         return view('admin.books.index', [
             'books' => Book::with('department')
-                ->matching($request->query('q'))
+                ->matching($search)
                 ->orderBy('title')
                 ->paginate(20)
                 ->withQueryString(),
-            'search' => $request->query('q'),
+            'search' => $search,
         ]);
     }
 

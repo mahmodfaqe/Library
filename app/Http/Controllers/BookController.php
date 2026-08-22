@@ -14,12 +14,14 @@ class BookController extends Controller
      */
     public function index(Request $request): View
     {
-        $search = $request->query('q');
-        $department = $request->query('department');
+        // Query strings are attacker-controlled and can arrive as arrays
+        // (?q[]=x), so normalise to a string before anything else touches them.
+        $search = $request->str('q')->trim()->value() ?: null;
+        $department = $request->str('department')->trim()->value() ?: null;
 
         $books = Book::with('department')
-            ->matching(is_string($search) ? $search : null)
-            ->inDepartment(is_string($department) ? $department : null)
+            ->matching($search)
+            ->inDepartment($department)
             ->orderBy('title')
             ->paginate(24)
             ->withQueryString();

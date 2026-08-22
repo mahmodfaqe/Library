@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Support\Locale;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -28,7 +29,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function homeUrl(string $locale): string
     {
-        return $locale === \App\Support\Locale::DEFAULT ? '/' : "/$locale";
+        return $locale === Locale::DEFAULT ? '/' : "/$locale";
     }
 
     protected function clearPageCache(): void

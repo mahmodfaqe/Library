@@ -251,6 +251,14 @@
             <a href="{{ config('library.drive.secondary') }}" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">{{ __('messages.library.button_2') }}</a>
         </div>
 
+        <div class="text-center" style="margin-top:1.4rem;">
+            <a href="{{ Locale::booksUrl() }}"
+               class="section-btn inline-block font-semibold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1"
+               style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:clamp(0.6rem,2.2vw,0.85rem) clamp(1.5rem,4vw,2.2rem); font-size:clamp(0.88rem,2.2vw,1rem); box-shadow:0 4px 14px rgba(102,126,234,0.28);">
+                {{ __('books.title') }}
+            </a>
+        </div>
+
         <!-- Department cards (DB-driven) -->
         <div id="dept-{{ app()->getLocale() }}" style="direction:{{ Locale::dir() }};">
             <h2 class="text-center font-bold text-[#2d2d3a] mb-10" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.dept_heading') }}</h2>

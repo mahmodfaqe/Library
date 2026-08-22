@@ -6,6 +6,4 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable(['name', 'message'])]
-class Feedback extends Model
-{
-}
+class Feedback extends Model {}
