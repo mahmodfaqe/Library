@@ -13,7 +13,7 @@ class AdminBookController extends Controller
 {
     public function index(Request $request): View
     {
-        $search = $request->str('q')->trim()->value() ?: null;
+        $search = $this->textQuery($request, 'q');
 
         return view('admin.books.index', [
             'books' => Book::with('department')
@@ -86,5 +86,23 @@ class AdminBookController extends Controller
         foreach (glob(storage_path('framework/pagecache').'/*') ?: [] as $file) {
             @unlink($file);
         }
+    }
+
+    /**
+     * A query-string value as a string, or null.
+     *
+     * Query parameters are attacker-controlled and can arrive as arrays
+     * (?q[]=x), which would otherwise reach the view and blow up on
+     * "Array to string conversion".
+     */
+    private function textQuery(Request $request, string $key): ?string
+    {
+        $value = $request->query($key);
+
+        if (! is_string($value)) {
+            return null;
+        }
+
+        return trim($value) === '' ? null : trim($value);
     }
 }

@@ -14,10 +14,8 @@ class BookController extends Controller
      */
     public function index(Request $request): View
     {
-        // Query strings are attacker-controlled and can arrive as arrays
-        // (?q[]=x), so normalise to a string before anything else touches them.
-        $search = $request->str('q')->trim()->value() ?: null;
-        $department = $request->str('department')->trim()->value() ?: null;
+        $search = $this->textQuery($request, 'q');
+        $department = $this->textQuery($request, 'department');
 
         $books = Book::with('department')
             ->matching($search)
@@ -32,5 +30,23 @@ class BookController extends Controller
             'search' => $search,
             'department' => $department,
         ]);
+    }
+
+    /**
+     * A query-string value as a string, or null.
+     *
+     * Query parameters are attacker-controlled and can arrive as arrays
+     * (?q[]=x), which would otherwise reach the view and blow up on
+     * "Array to string conversion".
+     */
+    private function textQuery(Request $request, string $key): ?string
+    {
+        $value = $request->query($key);
+
+        if (! is_string($value)) {
+            return null;
+        }
+
+        return trim($value) === '' ? null : trim($value);
     }
 }

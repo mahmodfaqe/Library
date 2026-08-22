@@ -19,17 +19,25 @@ class SitemapController extends Controller
             .'xmlns:xhtml="http://www.w3.org/1999/xhtml"/>'
         );
 
-        foreach (Locale::SUPPORTED as $locale) {
-            $url = $xml->addChild('url');
-            $url->addChild('loc', htmlspecialchars(Locale::url($locale)));
-            $url->addChild('changefreq', 'weekly');
-            $url->addChild('priority', $locale === Locale::DEFAULT ? '1.0' : '0.8');
+        // The home page and the catalogue, each in every language.
+        $pages = [
+            ['url' => fn (string $l) => Locale::url($l), 'priority' => '1.0'],
+            ['url' => fn (string $l) => Locale::booksUrl($l), 'priority' => '0.9'],
+        ];
 
-            foreach (Locale::SUPPORTED as $alternate) {
-                $link = $url->addChild('xhtml:link', null, 'http://www.w3.org/1999/xhtml');
-                $link->addAttribute('rel', 'alternate');
-                $link->addAttribute('hreflang', Locale::languageTag($alternate));
-                $link->addAttribute('href', Locale::url($alternate));
+        foreach ($pages as $page) {
+            foreach (Locale::SUPPORTED as $locale) {
+                $url = $xml->addChild('url');
+                $url->addChild('loc', htmlspecialchars(($page['url'])($locale)));
+                $url->addChild('changefreq', 'weekly');
+                $url->addChild('priority', $locale === Locale::DEFAULT ? $page['priority'] : '0.8');
+
+                foreach (Locale::SUPPORTED as $alternate) {
+                    $link = $url->addChild('xhtml:link', null, 'http://www.w3.org/1999/xhtml');
+                    $link->addAttribute('rel', 'alternate');
+                    $link->addAttribute('hreflang', Locale::languageTag($alternate));
+                    $link->addAttribute('href', ($page['url'])($alternate));
+                }
             }
         }
 
