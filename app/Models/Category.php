@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['name', 'sort_order', 'drive_folder_id'])]
+#[Fillable(['name', 'icon', 'sort_order', 'drive_folder_id'])]
 class Category extends Model
 {
     public function books(): HasMany

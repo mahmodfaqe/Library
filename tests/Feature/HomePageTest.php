@@ -2,7 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Models\Department;
+use App\Models\Book;
+use App\Models\Category;
 use App\Support\Asset;
 use App\Support\Locale;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -143,28 +144,30 @@ class HomePageTest extends TestCase
             ->assertSee('https://drive.example.test/second', false);
     }
 
-    public function test_it_lists_the_departments_in_sort_order(): void
+    public function test_it_lists_the_subjects_in_order_with_their_icons(): void
     {
-        Department::create([
-            'sort_order' => 2,
-            'icon' => '🧪',
-            'drive_url' => 'https://drive.google.com/drive/folders/second',
-            'translations' => ['en' => ['title' => 'Chemistry', 'desc' => 'Chem desc', 'button' => 'Open']],
-        ]);
-        Department::create([
-            'sort_order' => 1,
-            'icon' => '🔭',
-            'drive_url' => 'https://drive.google.com/drive/folders/first',
-            'translations' => ['en' => ['title' => 'Astrophysics', 'desc' => 'Astro desc', 'button' => 'Open']],
-        ]);
+        // The College of Science's own subjects lead; the rest follow.
+        Category::create(['name' => 'کیمیا', 'icon' => '⚗️', 'sort_order' => 2]);
+        Category::create(['name' => 'بایۆلۆجی', 'icon' => '🧬', 'sort_order' => 1]);
 
         $html = $this->get('/en')->assertOk()->getContent();
 
-        $this->assertLessThan(strpos($html, 'Chemistry'), strpos($html, 'Astrophysics'));
-        $this->assertStringContainsString('https://drive.google.com/drive/folders/first', $html);
+        $this->assertLessThan(mb_strpos($html, 'کیمیا'), mb_strpos($html, 'بایۆلۆجی'));
+        $this->assertStringContainsString('🧬', $html);
+        $this->assertStringContainsString('⚗️', $html);
     }
 
-    public function test_it_shows_the_empty_state_when_there_are_no_departments(): void
+    public function test_each_subject_links_into_its_shelf(): void
+    {
+        $biology = Category::create(['name' => 'بایۆلۆجی', 'icon' => '🧬', 'sort_order' => 1]);
+        Book::create(['title' => 'A book', 'url' => 'https://example.test/x', 'category_id' => $biology->id]);
+
+        $this->get('/en')
+            ->assertSee(url('en/books').'?category='.$biology->id, false)
+            ->assertSee(trans_choice('books.results', 1, ['count' => 1], 'en'));
+    }
+
+    public function test_it_shows_the_empty_state_when_there_are_no_subjects(): void
     {
         $this->get('/en')->assertSee(__('messages.no_departments', [], 'en'));
     }

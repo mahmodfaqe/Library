@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Department;
+use App\Models\Category;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -13,7 +13,10 @@ class HomeController extends Controller
     public function index(): View
     {
         return view('home', [
-            'departments' => Department::orderBy('sort_order')->get(),
+            'subjects' => Category::withCount('books')
+                ->orderBy('sort_order')
+                ->orderBy('name')
+                ->get(),
         ]);
     }
 }

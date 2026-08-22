@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Department;
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -158,14 +158,9 @@ class PageCacheTest extends TestCase
     {
         $this->get('/en');
 
-        // A title that appears nowhere else on the page, so seeing it can only
-        // mean the department list was re-rendered.
-        Department::create([
-            'sort_order' => 1,
-            'icon' => '🔭',
-            'drive_url' => 'https://drive.google.com/drive/folders/abc',
-            'translations' => ['en' => ['title' => 'Astrophysics', 'desc' => 'd', 'button' => 'b']],
-        ]);
+        // A name that appears nowhere else on the page, so seeing it can only
+        // mean the subject list was re-rendered.
+        Category::create(['name' => 'Astrophysics', 'icon' => '🔭', 'sort_order' => 1]);
 
         $this->get('/en')->assertDontSee('Astrophysics');
 

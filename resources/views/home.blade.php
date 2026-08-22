@@ -269,15 +269,18 @@
         <div id="dept-{{ app()->getLocale() }}" style="direction:{{ Locale::dir() }};">
             <h2 class="text-center font-bold text-[#2d2d3a] mb-10" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.dept_heading') }}</h2>
             <div class="grid gap-5" style="grid-template-columns: repeat(auto-fit, minmax(260px,1fr));">
-                @forelse ($departments as $department)
-                <div class="section-card card-top-bar card-glow relative flex flex-col justify-between bg-white/85 backdrop-blur-md border border-white/70 rounded-[18px] text-center transition-all duration-300 hover:-translate-y-3 reveal" style="padding:clamp(1.5rem,4vw,2.2rem); min-height:280px; box-shadow:0 4px 16px rgba(102,126,234,0.10);">
+                @forelse ($subjects as $subject)
+                <a href="{{ Locale::booksUrl() }}?category={{ $subject->id }}"
+                   class="section-card card-top-bar card-glow relative flex flex-col justify-between bg-white/85 backdrop-blur-md border border-white/70 rounded-[18px] text-center no-underline transition-all duration-300 hover:-translate-y-3 reveal"
+                   style="padding:clamp(1.3rem,3.5vw,1.9rem); min-height:190px; box-shadow:0 4px 16px rgba(102,126,234,0.10);">
                     <div>
-                        <span class="block text-5xl mb-4 transition-transform duration-300">{{ $department->icon }}</span>
-                        <h3 class="font-bold text-[#2d2d3a] mb-3" style="font-size:clamp(1.1rem,3vw,1.4rem);">{{ $department->translation(app()->getLocale(), 'title') }}</h3>
-                        <p class="text-[#6b6b80] mb-4 grow" style="font-size:clamp(0.88rem,2.2vw,0.98rem); line-height:1.65;">{{ $department->translation(app()->getLocale(), 'desc') }}</p>
+                        <span class="block text-5xl mb-3 transition-transform duration-300">{{ $subject->icon }}</span>
+                        <h3 class="font-bold text-[#2d2d3a] mb-2" style="font-size:clamp(1rem,2.6vw,1.2rem); line-height:1.6;">{{ $subject->name }}</h3>
                     </div>
-                    <a href="{{ $department->drive_url }}" class="section-btn relative inline-block font-semibold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1 font-[inherit]" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:clamp(0.6rem,2.2vw,0.85rem) clamp(1.3rem,3.5vw,1.9rem); font-size:clamp(0.85rem,2.2vw,0.95rem); min-width:130px; box-shadow:0 4px 14px rgba(102,126,234,0.28);" target="_blank">{{ $department->translation(app()->getLocale(), 'button') }}</a>
-                </div>
+                    <span class="text-[#6b6b80]" style="font-size:clamp(0.82rem,2vw,0.92rem);">
+                        {{ trans_choice('books.results', $subject->books_count, ['count' => $subject->books_count]) }}
+                    </span>
+                </a>
                 @empty
                 <p class="text-center text-[#6b6b80]">{{ __('messages.no_departments') }}</p>
                 @endforelse
