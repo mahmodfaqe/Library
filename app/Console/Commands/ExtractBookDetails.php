@@ -42,10 +42,22 @@ class ExtractBookDetails extends Command
         $bar = $this->output->createProgressBar($books->count());
 
         $found = $unchanged = $unreadable = 0;
-        $collected = [];
+
+        // A run over a thousand books takes hours. Results are written as they
+        // are found and re-read on the next run, so an interruption costs the
+        // book in hand and nothing else.
+        $collected = $this->option('results') && is_file($this->option('results'))
+            ? (json_decode(file_get_contents($this->option('results')), true) ?: [])
+            : [];
 
         foreach ($books as $book) {
             $bar->advance();
+
+            if (array_key_exists((string) $book->id, $collected)) {
+                $unchanged++;
+
+                continue;
+            }
 
             $pdf = $this->contents($book, $key);
 
@@ -80,7 +92,8 @@ class ExtractBookDetails extends Command
             }
 
             if ($this->option('results')) {
-                $collected[$book->id] = $changes;
+                $collected[(string) $book->id] = $changes;
+                $this->save($collected);
 
                 continue;
             }
@@ -92,16 +105,24 @@ class ExtractBookDetails extends Command
         $this->newLine(2);
 
         if ($this->option('results')) {
-            file_put_contents(
-                $this->option('results'),
-                json_encode($collected, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
-            );
+            $this->save($collected);
             $this->line('Wrote '.count($collected).' result(s) to '.$this->option('results'));
         }
 
         $this->info("Filled in {$found}, found nothing new in {$unchanged}, could not read {$unreadable}.");
 
         return self::SUCCESS;
+    }
+
+    /**
+     * @param  array<string, array<string, string|int>>  $collected
+     */
+    private function save(array $collected): void
+    {
+        file_put_contents(
+            $this->option('results'),
+            json_encode($collected, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
+        );
     }
 
     /**

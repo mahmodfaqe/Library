@@ -27,6 +27,10 @@ class PdfDetails
         'canon', 'epson', 'xerox', 'ricoh', 'kyocera', 'unknown', 'none', 'null',
         'default', 'anonymous', 'test', 'temp', 'my computer', 'home', 'lap', 'laptop',
         'calibre', 'ghostscript', 'latex', 'pdftex', 'tex', 'abbyy', 'finereader',
+        // Typing shops and internet cafés credit themselves in the files they
+        // produce: "Asia Computer" came back as an author from the collection.
+        'computer', 'computers', 'center', 'centre', 'net', 'cafe', 'print',
+        'printing', 'press center', 'design', 'graphics', 'studio',
     ];
 
     /**
