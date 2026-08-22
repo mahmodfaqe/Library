@@ -132,16 +132,19 @@ class HomePageTest extends TestCase
         $this->assertStringContainsString(__('messages.intro.qr_label', [], 'en'), $html);
     }
 
-    public function test_the_library_buttons_appear_once_configured(): void
+    public function test_the_home_page_sends_visitors_to_the_catalogue(): void
     {
+        // The raw Drive folder buttons were replaced by the catalogue, which
+        // is searchable and does not expose the storage account.
         config([
             'library.drive.main' => 'https://drive.example.test/main',
             'library.drive.secondary' => 'https://drive.example.test/second',
         ]);
 
         $this->get('/en')
-            ->assertSee('https://drive.example.test/main', false)
-            ->assertSee('https://drive.example.test/second', false);
+            ->assertSee(url('en/books'), false)
+            ->assertDontSee('https://drive.example.test/main', false)
+            ->assertDontSee('https://drive.example.test/second', false);
     }
 
     public function test_it_lists_the_subjects_in_order_with_their_icons(): void

@@ -96,12 +96,14 @@ class BookCatalogueTest extends TestCase
             ->assertDontSee('Molecular Biology of the Cell');
     }
 
-    public function test_a_wildcard_in_the_search_is_treated_as_text(): void
+    public function test_a_wildcard_is_not_a_wildcard(): void
     {
         $this->book();
 
-        // '%' must not act as "match everything".
-        $this->get('/en/books?q=%')->assertDontSee('Molecular Biology of the Cell');
+        // '%' carries no meaning, so it cannot be used to widen a search.
+        $this->get('/en/books?q=Molecular%25Biology')
+            ->assertOk()
+            ->assertDontSee('Molecular Biology of the Cell');
     }
 
     public function test_it_filters_by_category(): void

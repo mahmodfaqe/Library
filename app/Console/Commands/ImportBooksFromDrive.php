@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Book;
 use App\Models\Category;
+use App\Support\BookLanguage;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -45,7 +46,7 @@ class ImportBooksFromDrive extends Command
             foreach ($this->children($root, $key) as $entry) {
                 if ($entry['mimeType'] !== self::FOLDER_MIME) {
                     // A PDF sitting loose in the root, with no subject folder.
-                    $this->importFile($entry, null, $key);
+                    $this->importFile($entry, null, $key, null);
 
                     continue;
                 }
@@ -73,29 +74,43 @@ class ImportBooksFromDrive extends Command
 
         $this->line("  <info>{$name}</info>");
 
-        // Books may sit directly in the subject folder or one level deeper.
+        // Each subject is split into language folders. A book sitting loose
+        // in the subject folder has no language recorded.
         foreach ($this->children($folder['id'], $key) as $entry) {
             if ($entry['mimeType'] === self::FOLDER_MIME) {
+                $language = BookLanguage::fromFolder($entry['name']);
+
                 foreach ($this->children($entry['id'], $key) as $nested) {
                     if ($nested['mimeType'] !== self::FOLDER_MIME) {
-                        $this->importFile($nested, $category, $key);
+                        $this->importFile($nested, $category, $key, $language);
                     }
                 }
 
                 continue;
             }
 
-            $this->importFile($entry, $category, $key);
+            $this->importFile($entry, $category, $key, null);
         }
     }
 
-    private function importFile(array $file, ?Category $category, string $key): void
+    private function importFile(array $file, ?Category $category, string $key, ?string $language): void
     {
         if (! str_contains($file['mimeType'] ?? '', 'pdf')) {
             return;
         }
 
-        if (Book::where('drive_file_id', $file['id'])->exists()) {
+        $existing = Book::where('drive_file_id', $file['id'])->first();
+
+        if ($existing) {
+            // A re-run refreshes what Drive owns — subject, language, size —
+            // but leaves title, author and year alone, since a librarian may
+            // have corrected those by hand.
+            $existing->update(array_filter([
+                'category_id' => $category?->id,
+                'language' => $language,
+                'file_size' => isset($file['size']) ? (int) $file['size'] : null,
+            ], fn ($v) => $v !== null));
+
             $this->skipped++;
 
             return;
@@ -113,6 +128,7 @@ class ImportBooksFromDrive extends Command
         $attributes = [
             'title' => $title,
             'category_id' => $category?->id,
+            'language' => $language,
             'drive_file_id' => $file['id'],
             'url' => "https://drive.google.com/file/d/{$file['id']}/view",
             'file_size' => isset($file['size']) ? (int) $file['size'] : null,

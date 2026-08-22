@@ -84,7 +84,7 @@ class SearchNormalisationTest extends TestCase
 
         // And inside a term it stays literal: this must not match "Biology".
         $this->assertSame(0, Book::matching('Bio%logy')->count());
-        $this->assertSame(0, Book::matching('_iology')->count());
+        $this->assertSame(0, Book::matching('Mole_ular')->count());
     }
 
     public function test_an_unrelated_term_still_finds_nothing(): void

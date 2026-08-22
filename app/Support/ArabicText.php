@@ -38,6 +38,20 @@ class ArabicText
     ];
 
     /**
+     * Latin diacritics, so Türkçe matches turkce and Kurmancî matches kurmanci.
+     */
+    private const LATIN = [
+        'á' => 'a', 'à' => 'a', 'â' => 'a', 'ä' => 'a', 'ã' => 'a', 'å' => 'a',
+        'ç' => 'c', 'ć' => 'c', 'č' => 'c',
+        'é' => 'e', 'è' => 'e', 'ê' => 'e', 'ë' => 'e', 'ə' => 'e',
+        'í' => 'i', 'ì' => 'i', 'î' => 'i', 'ï' => 'i', 'ı' => 'i',
+        'ñ' => 'n', 'ó' => 'o', 'ò' => 'o', 'ô' => 'o', 'ö' => 'o', 'õ' => 'o',
+        'ş' => 's', 'ś' => 's', 'š' => 's',
+        'ú' => 'u', 'ù' => 'u', 'û' => 'u', 'ü' => 'u',
+        'ý' => 'y', 'ÿ' => 'y', 'ž' => 'z', 'ğ' => 'g',
+    ];
+
+    /**
      * Fold a title or a search term to one comparable form: a single spelling
      * per letter, no diacritics, ASCII digits, lower case, tidy spacing.
      */
@@ -53,7 +67,7 @@ class ArabicText
 
         $value = strtr($value, self::LETTERS);
         $value = strtr($value, self::DIGITS);
-        $value = mb_strtolower($value, 'UTF-8');
+        $value = strtr(mb_strtolower($value, 'UTF-8'), self::LATIN);
 
         // Punctuation varies between scans of the same book.
         $value = preg_replace('/[^\p{L}\p{N}\s]+/u', ' ', $value);
