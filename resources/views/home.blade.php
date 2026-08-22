@@ -101,7 +101,7 @@
                    style="padding:clamp(1.3rem,3.5vw,1.9rem); min-height:190px; box-shadow:0 4px 16px rgba(102,126,234,0.10);">
                     <div>
                         <span class="block text-5xl mb-3 transition-transform duration-300">{{ $subject->icon }}</span>
-                        <h3 class="font-bold text-[#2d2d3a] mb-2" style="font-size:clamp(1rem,2.6vw,1.2rem); line-height:1.6;">{{ $subject->localName() }}</h3>
+                        <h3 class="font-bold text-[#2d2d3a] mb-2" style="font-size:clamp(1rem,2.6vw,1.2rem); line-height:1.6;" dir="auto">{{ $subject->localName() }}</h3>
                     </div>
                     <span class="text-[#6b6b80]" style="font-size:clamp(0.82rem,2vw,0.92rem);">
                         {{ trans_choice('books.results', $subject->books_count, ['count' => $subject->books_count]) }}
@@ -181,14 +181,14 @@
                     <label for="fb-name" class="block font-semibold mb-1 text-[#4a4a5c]" style="font-size:0.9rem;">
                         {{ __('messages.feedback.name_label') }}
                     </label>
-                    <input type="text" id="fb-name" name="name" maxlength="120" value="{{ old('name') }}"
+                    <input type="text" id="fb-name" name="name" maxlength="120" dir="auto" value="{{ old('name') }}"
                            class="w-full rounded-[12px] px-4 py-3" style="border:1px solid #d5d9ee; font-size:0.95rem; font-family:inherit; text-align:start;">
                 </div>
                 <div class="mb-5 text-start">
                     <label for="fb-msg" class="block font-semibold mb-1 text-[#4a4a5c]" style="font-size:0.9rem;">
                         {{ __('messages.feedback.message_label') }}
                     </label>
-                    <textarea id="fb-msg" name="message" rows="4" maxlength="2000" required
+                    <textarea id="fb-msg" name="message" rows="4" maxlength="2000" required dir="auto"
                               class="w-full rounded-[12px] px-4 py-3" style="border:1px solid #d5d9ee; font-size:0.95rem; font-family:inherit; text-align:start;">{{ old('message') }}</textarea>
                 </div>
                 <div style="text-align:center;">

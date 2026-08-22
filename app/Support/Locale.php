@@ -47,14 +47,19 @@ class Locale
         'tr' => 'tr',
     ];
 
-    public static function isLtr(): bool
+    public static function isLtr(?string $locale = null): bool
     {
-        return in_array(App::getLocale(), self::LTR, true);
+        return in_array($locale ?? App::getLocale(), self::LTR, true);
     }
 
-    public static function dir(): string
+    /**
+     * The writing direction of a locale — the current one unless another is
+     * named. Naming one matters where a page shows text in a language other
+     * than its own, such as the dialect names in the language menu.
+     */
+    public static function dir(?string $locale = null): string
     {
-        return self::isLtr() ? 'ltr' : 'rtl';
+        return self::isLtr($locale) ? 'ltr' : 'rtl';
     }
 
     /**

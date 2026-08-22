@@ -99,16 +99,22 @@
                         کوردی <span class="text-[0.5rem] transition-transform duration-300" id="kuArrow">▼</span>
                     </button>
                     <div class="ku-dropdown" id="kuDropdown">
+                        {{-- Each dialect is written in its own script, so each
+                             carries its own direction rather than inheriting
+                             the page's: Badînî stays left-to-right on a Sorani
+                             page, and سۆرانی stays right-to-left on an English
+                             one. --}}
                         @foreach ([
-                            'ku-sorani' => ['سۆرانی', 'Soranî', 'right', 'Rabar,sans-serif'],
-                            'ku-badini' => ['بادینی', 'Kurmancî (عەرەبی)', 'right', 'Rabar,sans-serif'],
-                            'ku-badini-lat' => ['Badînî', 'Kurmancî (Latînî)', 'left', 'sans-serif'],
-                            'ku-hawrami' => ['هەورامی', 'Hewramî', 'right', 'Rabar,sans-serif'],
-                        ] as $dialect => [$label, $native, $align, $font])
+                            'ku-sorani' => ['سۆرانی', 'Soranî', 'Rabar,sans-serif'],
+                            'ku-badini' => ['بادینی', 'Kurmancî (عەرەبی)', 'Rabar,sans-serif'],
+                            'ku-badini-lat' => ['Badînî', 'Kurmancî (Latînî)', 'sans-serif'],
+                            'ku-hawrami' => ['هەورامی', 'Hewramî', 'Rabar,sans-serif'],
+                        ] as $dialect => [$label, $native, $font])
                             <a href="{{ Locale::switchUrl($dialect) }}"
-                               class="ku-dialect-btn block w-full bg-transparent border-0 text-{{ $align }} cursor-pointer transition-colors duration-200 hover:bg-white/15 no-underline text-white{{ app()->getLocale() === $dialect ? ' active' : '' }}"
+                               dir="{{ Locale::dir($dialect) }}"
+                               class="ku-dialect-btn block w-full bg-transparent border-0 text-start cursor-pointer transition-colors duration-200 hover:bg-white/15 no-underline text-white{{ app()->getLocale() === $dialect ? ' active' : '' }}"
                                style="padding: clamp(0.38rem,1.2vw,0.55rem) clamp(0.6rem,2vw,1rem); font-size:clamp(0.58rem,1.4vw,0.8rem); min-height:36px; font-family:{{ $font }};">
-                                {{ $label }}<span class="block text-[0.5em] opacity-65 mt-px">{{ $native }}</span>
+                                {{ $label }}<span class="block text-[0.5em] opacity-65 mt-px" dir="auto">{{ $native }}</span>
                             </a>
                         @endforeach
                     </div>
@@ -206,9 +212,13 @@ function toggleKuDropdown(){
     var open=dd.classList.contains('open');
     closeKuDropdown();
     if(!open){
+        // Pin the panel to the edge the button sits against, which is the end
+        // of the header in both reading directions.
         var rect=btn.getBoundingClientRect();
+        var rtl=document.documentElement.dir==='rtl';
         dd.style.top=(rect.bottom+6)+'px';
-        dd.style.right=(window.innerWidth-rect.right)+'px';
+        dd.style.left=rtl ? 'auto' : rect.left+'px';
+        dd.style.right=rtl ? (window.innerWidth-rect.right)+'px' : 'auto';
         btn.classList.add('active');
         btn.setAttribute('aria-expanded','true');
         dd.classList.add('open');

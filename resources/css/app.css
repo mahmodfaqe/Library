@@ -26,7 +26,7 @@ body { font-family: 'Rabar', sans-serif; }
 
 /* Scroll progress bar */
 #scrollProgress {
-    position: fixed; top: 0; left: 0; width: 0%;
+    position: fixed; top: 0; inset-inline-start: 0; width: 0%;
     height: 3px;
     background: linear-gradient(90deg, #ff6b6b, #667eea, #764ba2, #ff6b6b);
     background-size: 200% 100%;
@@ -43,7 +43,7 @@ body { font-family: 'Rabar', sans-serif; }
 .shimmer-border::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0;
+    top: 0; inset-inline: 0;
     height: 4px;
     background: linear-gradient(90deg, #667eea, #ff6b6b, #764ba2);
     background-size: 200% 100%;
@@ -58,15 +58,17 @@ body { font-family: 'Rabar', sans-serif; }
 .card-top-bar::before {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0;
+    top: 0; inset-inline: 0;
     height: 3px;
     background: linear-gradient(90deg, #667eea, #764ba2);
     transform: scaleX(0);
+    /* transform-origin has no logical keyword, so mirror it explicitly. */
     transform-origin: left;
     transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
     pointer-events: none;
 }
 .card-top-bar:hover::before { transform: scaleX(1); }
+[dir="rtl"] .card-top-bar::before { transform-origin: right; }
 
 /* Card glow on hover */
 .card-glow {
@@ -116,7 +118,7 @@ transition: background-image 1.5s ease-in-out;
 #scrollTopBtn {
     position: fixed;
     bottom: clamp(1.2rem,4vw,2rem);
-    left: clamp(1.2rem,4vw,2rem);
+    inset-inline-end: clamp(1.2rem,4vw,2rem);
     width: clamp(44px,6vw,54px);
     height: clamp(44px,6vw,54px);
     border-radius: 50%;
@@ -158,6 +160,9 @@ transition: background-image 1.5s ease-in-out;
     box-shadow: 0 16px 48px rgba(0,0,0,0.35);
     min-width: clamp(110px,28vw,155px);
     transform-origin: top right;
+}
+[dir="ltr"] .ku-dropdown {
+    transform-origin: top left;
 }
 .ku-dropdown.open {
     display: block;

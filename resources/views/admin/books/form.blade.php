@@ -18,25 +18,25 @@
 
             <div class="field">
                 <label for="title">{{ __('admin.books.table.title') }}</label>
-                <input type="text" id="title" name="title" required maxlength="255"
+                <input type="text" id="title" name="title" required maxlength="255" dir="auto"
                        value="{{ old('title', $book->title) }}">
             </div>
 
             <div class="field">
                 <label for="author">{{ __('admin.books.table.author') }}</label>
-                <input type="text" id="author" name="author" maxlength="190"
+                <input type="text" id="author" name="author" maxlength="190" dir="auto"
                        value="{{ old('author', $book->author) }}">
             </div>
 
             <div class="field">
                 <label for="year">{{ __('admin.books.table.year') }}</label>
-                <input type="number" id="year" name="year" min="1400" max="{{ date('Y') + 1 }}"
+                <input type="number" id="year" name="year" dir="ltr" min="1400" max="{{ date('Y') + 1 }}"
                        value="{{ old('year', $book->year) }}">
             </div>
 
             <div class="field">
                 <label for="language">{{ __('admin.books.table.language') }}</label>
-                <input type="text" id="language" name="language" maxlength="40"
+                <input type="text" id="language" name="language" maxlength="40" dir="auto"
                        value="{{ old('language', $book->language) }}">
             </div>
 

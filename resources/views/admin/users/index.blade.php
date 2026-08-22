@@ -22,7 +22,7 @@
             <tbody>
                 @foreach ($users as $user)
                     <tr>
-                        <td>{{ $user->name }}</td>
+                        <td dir="auto">{{ $user->name }}</td>
                         <td dir="ltr">{{ $user->email }}</td>
                         <td>{{ __("admin.users.roles.{$user->role}") }}</td>
                         <td style="white-space:nowrap; font-size:0.82rem; color:#6b6b80;">

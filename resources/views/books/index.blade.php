@@ -13,7 +13,7 @@
         @if ($selected)
             <a href="{{ Locale::booksUrl() }}" class="text-[#667eea] no-underline hover:underline">{{ __('books.title') }}</a>
             <span class="text-[#b5b5c8]">/</span>
-            <span class="text-[#6b6b80]">{{ $selected->localName() }}</span>
+            <span class="text-[#6b6b80]" dir="auto">{{ $selected->localName() }}</span>
         @else
             <span class="text-[#6b6b80]">{{ __('books.title') }}</span>
         @endif
@@ -23,7 +23,7 @@
         <a href="{{ Locale::booksUrl() }}" class="inline-block text-[#667eea] no-underline mb-3 hover:underline" style="font-size:0.92rem;">
             <span aria-hidden="true">{{ Locale::isLtr() ? '←' : '→' }}</span> {{ __('books.back_to_subjects') }}
         </a>
-        <h1 class="font-bold text-[#2d2d3a] mb-3" style="font-size:clamp(1.6rem,4.5vw,2.2rem);">{{ $selected->localName() }}</h1>
+        <h1 class="font-bold text-[#2d2d3a] mb-3" style="font-size:clamp(1.6rem,4.5vw,2.2rem);" dir="auto">{{ $selected->localName() }}</h1>
     @else
         <h1 class="font-bold text-[#2d2d3a] mb-3" style="font-size:clamp(1.6rem,4.5vw,2.2rem);">{{ __('books.title') }}</h1>
         <p class="text-[#6b6b80] mb-8" style="font-size:clamp(0.95rem,2.4vw,1.08rem);">{{ __('books.intro') }}</p>
@@ -36,7 +36,7 @@
         @endif
         <div style="flex:1 1 260px;">
             <label for="q" class="block font-semibold mb-1 text-[#4a4a5c]" style="font-size:0.86rem;">{{ __('books.search_label') }}</label>
-            <input type="search" id="q" name="q" value="{{ $search }}" placeholder="{{ __('books.search_placeholder') }}"
+            <input type="search" id="q" name="q" value="{{ $search }}" placeholder="{{ __('books.search_placeholder') }}" dir="auto"
                    class="w-full rounded-[12px] px-4 py-3"
                    style="border:1px solid #d5d9ee; font-size:0.95rem; font-family:inherit; text-align:start;">
         </div>
@@ -63,7 +63,7 @@
             @foreach ($languages as $name => $total)
                 <a href="{{ url()->current() }}?{{ http_build_query($base + ['language' => $name]) }}"
                    class="lang-chip{{ $language === $name ? ' is-active' : '' }}">
-                    {{ $name }} <span class="lang-count">{{ $total }}</span>
+                    <bdi>{{ $name }}</bdi> <span class="lang-count">{{ $total }}</span>
                 </a>
             @endforeach
         </nav>
@@ -81,7 +81,7 @@
                 <a href="{{ url()->current() }}?category={{ $shelf->id }}"
                    class="subject-card bg-white/85 backdrop-blur-md border border-white/70 rounded-[16px] no-underline flex flex-col justify-between"
                    style="padding:1.3rem; box-shadow:0 4px 16px rgba(102,126,234,0.10);">
-                    <span class="font-bold text-[#2d2d3a]" style="font-size:1.02rem; line-height:1.6;">{{ $shelf->localName() }}</span>
+                    <span class="font-bold text-[#2d2d3a]" style="font-size:1.02rem; line-height:1.6;" dir="auto">{{ $shelf->localName() }}</span>
                     <span class="text-[#6b6b80]" style="font-size:0.85rem; margin-top:0.6rem;">
                         {{ trans_choice('books.results', $shelf->books_count, ['count' => $shelf->books_count]) }}
                     </span>
@@ -96,17 +96,19 @@
 
             <article class="book-card bg-white/85 backdrop-blur-md border border-white/70 rounded-[16px] flex flex-col justify-between">
                 <div>
-                    <h2 class="book-title font-bold text-[#2d2d3a] mb-1">{{ $book->title }}</h2>
+                    <h2 class="book-title font-bold text-[#2d2d3a] mb-1" dir="auto">{{ $book->title }}</h2>
                     @if ($book->author)
-                        <p class="text-[#6b6b80] mb-1" style="font-size:0.88rem;">{{ $book->author }}</p>
+                        <p class="text-[#6b6b80] mb-1" style="font-size:0.88rem;" dir="auto">{{ $book->author }}</p>
                     @endif
                     <p class="text-[#8a8aa0] mb-3" style="font-size:0.8rem;">
-                        {{ collect([
+                        @foreach (collect([
                             $book->year,
                             $book->language,
                             // Redundant once the whole page is one subject.
                             $selected ? null : $book->category?->localName(),
-                        ])->filter()->implode(' · ') }}
+                        ])->filter() as $fact)
+                            <bdi>{{ $fact }}</bdi>@unless ($loop->last) <span class="opacity-60">·</span> @endunless
+                        @endforeach
                     </p>
                 </div>
                 @if ($book->readUrl())
@@ -116,7 +118,7 @@
                        style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:0.55rem 1.2rem; font-size:0.86rem;">
                         {{ $book->hasFile() ? __('books.download') : __('books.open') }}
                         @if ($book->humanFileSize())
-                            <span style="opacity:0.75; font-size:0.85em;">({{ $book->humanFileSize() }})</span>
+                            <bdi style="opacity:0.75; font-size:0.85em;">({{ $book->humanFileSize() }})</bdi>
                         @endif
                     </a>
                 @endif

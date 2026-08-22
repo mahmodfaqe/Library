@@ -32,10 +32,10 @@
                 <tbody>
                     @foreach ($books as $book)
                         <tr>
-                            <td>{{ $book->title }}</td>
-                            <td>{{ $book->author ?: '—' }}</td>
-                            <td>{{ $book->year ?: '—' }}</td>
-                            <td>{{ $book->department?->translation('ku-sorani', 'title') ?: '—' }}</td>
+                            <td dir="auto">{{ $book->title }}</td>
+                            <td dir="auto">{{ $book->author ?: '—' }}</td>
+                            <td><bdi>{{ $book->year ?: '—' }}</bdi></td>
+                            <td dir="auto">{{ $book->department?->translation('ku-sorani', 'title') ?: '—' }}</td>
                             <td class="actions">
                                 <a href="{{ route('admin.books.edit', $book) }}" class="btn btn-secondary">{{ __('admin.actions.edit') }}</a>
                                 <form method="POST" action="{{ route('admin.books.destroy', $book) }}" style="display:inline;"

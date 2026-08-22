@@ -126,6 +126,42 @@ class BookCatalogueTest extends TestCase
             ->assertSee(url('/ar/privacy'), false);
     }
 
+    public function test_mixed_script_text_is_laid_out_in_its_own_direction(): void
+    {
+        // The catalogue holds Kurdish, Arabic and English books together. On a
+        // right-to-left page an English title has to keep its own direction,
+        // or its brackets and trailing punctuation land on the wrong end.
+        $biology = Category::create(['name' => 'بایۆلۆجی', 'sort_order' => 1]);
+        $this->book([
+            'title' => 'Molecular Biology (2nd ed.)',
+            'author' => 'Jane Doe',
+            'year' => 2019,
+            'language' => 'English',
+            'category_id' => $biology->id,
+        ]);
+
+        // The catalogue opens on the subject shelves, so pick one to get the
+        // book cards themselves.
+        $html = $this->get("/books?category={$biology->id}")->assertOk()->getContent();
+
+        $this->assertStringContainsString('dir="auto">Molecular Biology (2nd ed.)</h2>', $html);
+        $this->assertStringContainsString('dir="auto">Jane Doe</p>', $html);
+        // Year and language share a line, so each is isolated.
+        $this->assertStringContainsString('<bdi>2019</bdi>', $html);
+        $this->assertStringContainsString('<bdi>English</bdi>', $html);
+    }
+
+    public function test_the_page_carries_the_direction_of_its_language(): void
+    {
+        foreach (['/books' => 'rtl', '/en/books' => 'ltr', '/ar/books' => 'rtl',
+            '/ku-badini-lat/books' => 'ltr', '/tr/books' => 'ltr', '/fa/books' => 'rtl',
+            '/ku-badini/books' => 'rtl', '/ku-hawrami/books' => 'rtl'] as $url => $dir) {
+            $this->get($url)
+                ->assertOk()
+                ->assertSee('dir="'.$dir.'"', false);
+        }
+    }
+
     public function test_a_wildcard_is_not_a_wildcard(): void
     {
         $this->book(['title' => 'Biology']);
