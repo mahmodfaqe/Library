@@ -35,17 +35,14 @@ return [
             [
                 'name' => 'ZHYAW YUSF HUSEN',
                 'role' => 'Biology Department Student - Provision of books',
-                'social' => false,
             ],
             [
                 'name' => 'NYAR QADR RASUL',
                 'role' => 'Biology Department Student - Organization of the library',
-                'social' => false,
             ],
             [
                 'name' => 'MAHMOOD KHDIR FAQE RASUL',
                 'role' => 'Biology Department Student - Web Developer',
-                'social' => true,
             ],
         ],
     ],
@@ -85,6 +82,7 @@ return [
         'uor_line' => '🎓 :link  |  uor.edu.krd',
         'uor_link_label' => 'University of Raparin Website',
     ],
+    'skip_to_content' => 'Skip to content',
     'visitors_label' => 'Visitors',
     'scroll_top' => 'Back to top',
 ];

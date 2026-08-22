@@ -35,17 +35,14 @@ return [
             [
                 'name' => 'ZHYAW YUSF HUSEN',
                 'role' => 'Biyoloji Bölümü Öğrencisi - Kitap temini',
-                'social' => false,
             ],
             [
                 'name' => 'NYAR QADR RASUL',
                 'role' => 'Biyoloji Bölümü Öğrencisi - Kütüphane organizasyonu',
-                'social' => false,
             ],
             [
                 'name' => 'MAHMOOD KHDIR FAQE RASUL',
                 'role' => 'Biyoloji Bölümü Öğrencisi - Web Geliştirici',
-                'social' => true,
             ],
         ],
     ],
@@ -85,6 +82,7 @@ return [
         'uor_line' => '🎓 :link  |  uor.edu.krd',
         'uor_link_label' => 'Raparin Üniversitesi Web Sitesi',
     ],
+    'skip_to_content' => 'İçeriğe geç',
     'visitors_label' => 'Ziyaretçi',
     'scroll_top' => 'Başa dön',
 ];

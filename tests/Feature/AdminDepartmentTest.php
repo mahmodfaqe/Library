@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Department;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -14,7 +15,12 @@ class AdminDepartmentTest extends TestCase
     {
         parent::setUp();
 
-        $this->withSession(['admin_authenticated' => true]);
+        $this->actingAs(User::create([
+            'name' => 'Library Staff',
+            'email' => 'staff@uor.edu.krd',
+            'password' => 'correct-horse-battery-staple',
+            'role' => User::ROLE_STAFF,
+        ]));
     }
 
     /**

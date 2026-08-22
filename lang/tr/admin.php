@@ -8,6 +8,9 @@ return [
     'nav' => [
         'departments' => 'Bölümler',
         'feedback' => 'Görüş ve öneriler',
+        'users' => 'Hesaplar',
+        'activity' => 'Etkinlik kaydı',
+        'sign_out' => 'Çıkış',
     ],
     'actions' => [
         'edit' => 'Düzenle',
@@ -17,9 +20,36 @@ return [
         'save' => 'Kaydet',
         'create' => 'Ekle',
     ],
+    'users' => [
+        'title' => 'Hesaplar',
+        'heading' => 'Yönetim hesapları (:count)',
+        'add' => 'Hesap ekle',
+        'you' => 'siz',
+        'password_hint' => 'En az 12 karakter. Uzunluk karmaşıklıktan önemlidir.',
+        'confirm_delete' => 'Bu hesap silinsin mi?',
+        'cannot_delete_self' => 'Kendi hesabınızı silemezsiniz.',
+        'last_admin' => 'Tek yöneticiyi silemezsiniz.',
+        'roles' => ['admin' => 'Yönetici', 'staff' => 'Personel'],
+        'table' => [
+            'name' => 'Ad', 'email' => 'E-posta', 'role' => 'Rol',
+            'last_login' => 'Son giriş', 'actions' => 'İşlemler',
+        ],
+    ],
+    'activity' => [
+        'title' => 'Etkinlik kaydı',
+        'heading' => 'Etkinlik kaydı (:count)',
+        'blurb' => 'Yönetim panelindeki her değişiklik burada kaydedilir.',
+        'empty' => 'Henüz kayıt yok.',
+        'table' => [
+            'when' => 'Ne zaman', 'who' => 'Kim', 'what' => 'İşlem',
+            'subject' => 'Konu', 'ip' => 'IP',
+        ],
+    ],
     'login' => [
         'title' => 'Giriş — Yönetim',
         'heading' => 'Yönetici girişi',
+        'email' => 'E-posta',
+        'remember' => 'Beni hatırla',
         'password' => 'Parola',
         'submit' => 'Giriş yap',
         'back_site' => 'Siteye dön',
@@ -68,6 +98,8 @@ return [
         ],
     ],
     'flash' => [
+        'user_created' => 'Hesap oluşturuldu.',
+        'user_deleted' => 'Hesap silindi.',
         'department_created' => 'Bölüm eklendi.',
         'department_updated' => 'Bölüm güncellendi.',
         'department_deleted' => 'Bölüm silindi.',

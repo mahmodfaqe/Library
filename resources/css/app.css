@@ -199,3 +199,25 @@ transition: background-image 1.5s ease-in-out;
     transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .bionova-mark:hover { transform: translateY(-4px) scale(1.03); }
+
+/* Keyboard users get a way past the language switcher straight to the page. */
+.skip-link {
+    position: absolute;
+    inset-inline-start: 1rem;
+    top: -3rem;
+    z-index: 3000;
+    padding: 0.6rem 1.1rem;
+    border-radius: 0 0 10px 10px;
+    background: #fff;
+    color: #2d2d3a;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    transition: top 0.2s ease;
+}
+.skip-link:focus { top: 0; }
+
+:where(a, button, input, textarea, [tabindex]):focus-visible {
+    outline: 3px solid #ff6b6b;
+    outline-offset: 2px;
+}

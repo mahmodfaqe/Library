@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
 use App\Models\Department;
 use App\Models\Feedback;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class AdminController extends Controller
@@ -19,24 +20,31 @@ class AdminController extends Controller
     public function login(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
+            'email' => ['required', 'email'],
             'password' => ['required', 'string'],
         ]);
 
-        $hash = config('app.admin_password_hash', '');
-
-        if ($hash !== '' && Hash::check($credentials['password'], $hash)) {
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            $request->session()->put('admin_authenticated', true);
+            Auth::user()->forceFill(['last_login_at' => now()])->save();
+            Activity::record('auth.signed_in');
 
             return redirect()->intended(route('admin.index'));
         }
 
-        return back()->withErrors(['password' => __('admin.login.wrong_password')])->onlyInput('password');
+        Activity::record('auth.failed', $credentials['email']);
+
+        return back()
+            ->withErrors(['email' => __('admin.login.wrong_password')])
+            ->onlyInput('email');
     }
 
     public function logout(Request $request): RedirectResponse
     {
-        $request->session()->forget('admin_authenticated');
+        Activity::record('auth.signed_out');
+
+        Auth::logout();
+        $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return redirect()->route('home');
@@ -61,7 +69,8 @@ class AdminController extends Controller
     {
         $data = $this->validated($request);
 
-        Department::create($data);
+        $department = Department::create($data);
+        Activity::record('department.created', $department->translation('en', 'title'));
         $this->clearPageCache();
 
         return redirect()->route('admin.index')->with('status', __('admin.flash.department_created'));
@@ -80,6 +89,7 @@ class AdminController extends Controller
         $data = $this->validated($request);
 
         $department->update($data);
+        Activity::record('department.updated', $department->translation('en', 'title'));
         $this->clearPageCache();
 
         return redirect()->route('admin.index')->with('status', __('admin.flash.department_updated'));
@@ -87,6 +97,7 @@ class AdminController extends Controller
 
     public function destroy(Department $department): RedirectResponse
     {
+        Activity::record('department.deleted', $department->translation('en', 'title'));
         $department->delete();
         $this->clearPageCache();
 
@@ -120,6 +131,7 @@ class AdminController extends Controller
 
     public function destroyFeedback(Feedback $feedback): RedirectResponse
     {
+        Activity::record('feedback.deleted', '#'.$feedback->id);
         $feedback->delete();
 
         return redirect()->route('admin.feedback')->with('status', __('admin.flash.feedback_deleted'));

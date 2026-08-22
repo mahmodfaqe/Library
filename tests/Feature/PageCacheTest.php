@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Department;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -121,7 +122,12 @@ class PageCacheTest extends TestCase
 
     public function test_the_admin_neither_reads_nor_warms_the_cache(): void
     {
-        $this->withSession(['admin_authenticated' => true])->get('/en')->assertOk();
+        $this->actingAs(User::create([
+            'name' => 'Library Administrator',
+            'email' => 'admin@uor.edu.krd',
+            'password' => 'correct-horse-battery-staple',
+            'role' => User::ROLE_ADMIN,
+        ]))->get('/en')->assertOk();
 
         $this->assertSame([], $this->cachedCopies('en'));
     }

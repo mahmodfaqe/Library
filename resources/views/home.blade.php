@@ -6,7 +6,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <link rel="dns-prefetch" href="https://mahmodfaqe.goatcounter.com">
+    @if (config('library.analytics.host'))
+        <link rel="dns-prefetch" href="{{ config('library.analytics.host') }}">
+    @endif
     <link rel="preload" href="{{ asset('fonts/Rabar_015.woff2') }}" as="font" type="font/woff2" crossorigin>
     <style>
         @font-face {
@@ -58,6 +60,8 @@
     </script>
 </head>
 <body class="bg-[#f8f9ff] text-[#2d2d3a] overflow-x-hidden" dir="{{ Locale::dir() }}">
+
+<a class="skip-link" href="#main">{{ __('messages.skip_to_content') }}</a>
 
 <div id="scrollProgress"></div>
 
@@ -131,69 +135,9 @@
     </div>
 </header>
 
-<!-- Social Icons Template (Pure Icons - No Circles) -->
-<style>
-    .social-icons-container {
-        display: flex;
-        gap: 18px;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-top: 15px;
-    }
 
-    .social-link {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: transform 0.2s ease, opacity 0.2s ease;
-        text-decoration: none;
-    }
 
-    .social-link:hover {
-        transform: scale(1.2);
-        opacity: 0.8;
-    }
-
-    .social-link svg {
-        width: 30px;
-        height: 30px;
-    }
-</style>
-
-<template id="social-tpl">
-    <div class="social-icons-container">
-        <!-- Telegram -->
-        <a href="https://t.me/mahmod_faqe" target="_blank" title="Telegram" class="social-link">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#0088cc"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L8.32 14.26l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.828.299z"/></svg>
-        </a>
-
-        <!-- Facebook -->
-        <a href="https://www.facebook.com/Mahmod.Faqe" target="_blank" title="Facebook" class="social-link">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1877f2"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
-        </a>
-
-        <!-- WhatsApp -->
-        <a href="https://wa.me/9647704692000" target="_blank" title="WhatsApp" class="social-link">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#25D366"><path d="M12.004 0C5.374 0 .006 5.367.006 11.997c0 2.117.554 4.103 1.522 5.83L0 24l6.335-1.507a11.964 11.964 0 0 0 5.669 1.43h.005C18.634 23.923 24 18.557 24 11.928 24 5.368 18.634 0 12.004 0zm0 21.887a9.916 9.916 0 0 1-5.058-1.383l-.362-.215-3.757.984 1.003-3.651-.236-.374a9.884 9.884 0 0 1-1.517-5.251c0-5.455 4.439-9.893 9.894-9.893 5.455 0 9.893 4.438 9.893 9.893 0 5.456-4.438 9.89-9.86 9.89zm5.422-7.403c-.297-.149-1.758-.867-2.031-.967-.272-.099-.47-.148-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.457.13-.605.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51a12.1 12.1 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.463 1.065 2.876 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
-        </a>
-
-        <!-- Phone -->
-        <a href="tel:+9647507087901" title="Phone" class="social-link">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#4CAF50"><path d="M6.62 10.79a15.053 15.053 0 0 0 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.61 21 3 13.39 3 4c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.24 1.02l-2.21 2.2z"/></svg>
-        </a>
-
-        <!-- Snapchat -->
-        <a href="https://snapchat.com/add/mahmod.faqe" target="_blank" title="Snapchat" class="social-link">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" fill="#FFFC00"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm169.5 338.9c-3.5 8.1-18.1 14-44.8 18.2-1.4 1.9-2.5 9.8-4.3 15.9-1.1 3.7-3.7 5.9-8.1 5.9h-.2c-6.2 0-12.8-2.9-25.8-2.9-17.6 0-23.7 4-37.4 13.7-14.5 10.3-28.4 19.1-49.2 18.2-21 1.6-38.6-11.2-48.5-18.2-13.8-9.7-19.8-13.7-37.4-13.7-12.5 0-20.4 3.1-25.8 3.1-5.4 0-7.5-3.3-8.3-6-1.8-6.1-2.9-14.1-4.3-16-13.8-2.1-44.8-7.5-45.5-21.4-.2-3.6 2.3-6.8 5.9-7.4 46.3-7.6 67.1-55.1 68-57.1 0-.1.1-.2.2-.3 2.5-5 3-9.2 1.6-12.5-3.4-7.9-17.9-10.7-24-13.2-15.8-6.2-18-13.4-17-18.3 1.6-8.5 14.4-13.8 21.9-10.3 5.9 2.8 11.2 4.2 15.7 4.2 3.3 0 5.5-.8 6.6-1.4-1.4-23.9-4.7-58 3.8-77.1C183.1 100 230.7 96 244.7 96c.6 0 6.1-.1 6.7-.1 34.7 0 68 17.8 84.3 54.3 8.5 19.1 5.2 53.1 3.8 77.1 1.1.6 2.9 1.3 5.7 1.4 4.3-.2 9.2-1.6 14.7-4.2 4-1.9 9.6-1.6 13.6 0 6.3 2.3 10.3 6.8 10.4 11.9.1 6.5-5.7 12.1-17.2 16.6-1.4.6-3.1 1.1-4.9 1.7-6.5 2.1-16.4 5.2-19 11.5-1.4 3.3-.8 7.5 1.6 12.5.1.1.1.2.2.3.9 2 21.7 49.5 68 57.1 4 1 7.1 5.5 4.9 10.8z"/></svg>
-        </a>
-
-        <!-- TikTok -->
-        <a href="https://www.tiktok.com/@mahmod.faqe" target="_blank" title="TikTok" class="social-link">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000000"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>
-        </a>
-    </div>
-</template>
-
+<main id="main">
 
 <!-- ══════════ HERO ══════════ -->
 <section id="hero-section" class="relative overflow-hidden flex items-center text-white text-center transition-all duration-1000 ease-in-out"
@@ -210,7 +154,7 @@
     <div class="container mx-auto relative z-20 px-4">
         <div class="max-w-4xl mx-auto">
 
-            <h2 class="opacity-80 tracking-widest mb-2" style="font-size:clamp(1rem,3vw,1.3rem);">{{ __('messages.hero.welcome') }}</h2>
+            <p class="opacity-80 tracking-widest mb-2" style="font-size:clamp(1rem,3vw,1.3rem);">{{ __('messages.hero.welcome') }}</p>
             <h1 class="font-bold mb-6 leading-tight" style="font-size:clamp(2.5rem,8vw,4.5rem);">{{ __('messages.hero.title') }}</h1>
             <p class="mb-8 opacity-95 mx-auto max-w-3xl" style="font-size:clamp(0.95rem,2.5vw,1.25rem);">{{ __('messages.hero.subtitle') }}</p>
 
@@ -238,7 +182,7 @@
                     <h3 class="text-[#667eea] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">{{ __('messages.intro.objectives_heading') }}</h3>
                     <ul class="list-none p-0 text-[#6b6b80] leading-loose" style="font-size:clamp(0.9rem,2.5vw,1.05rem);">
                         @php
-                            $qrLink = '<a href="https://scence-bio.github.io/Qr-Code/" style="color: gold; text-shadow: 0 0 8px gold, 0 0 15px gold;">'
+                            $qrLink = '<a href="'.e(config('library.qr_url')).'" style="color: gold; text-shadow: 0 0 8px gold, 0 0 15px gold;">'
                                 .e(__('messages.intro.qr_label')).'</a>';
                         @endphp
                         @foreach (__('messages.intro.objectives') as $objective)
@@ -255,9 +199,6 @@
                             <div class="text-center p-5 bg-white rounded-xl shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
                                 <h4 class="text-[#2d2d3a] mb-2 font-bold">{{ $person['name'] }}</h4>
                                 <p class="text-[#6b6b80]">{{ $person['role'] }}</p>
-                                @if ($person['social'])
-                                    <div class="social-placeholder"></div>
-                                @endif
                             </div>
                         @endforeach
                     </div>
@@ -293,7 +234,7 @@
     <div class="max-w-[1200px] mx-auto px-6 sm:px-8 lg:px-10">
         <div class="text-center mb-10 reveal">
             <h2 class="font-bold text-[#2d2d3a] mb-6" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.library.heading') }}</h2>
-            <a href="https://drive.google.com/drive/folders/12PipzBzMVgfr1tFSy-4bplnVMnNHTy4d"
+            <a href="{{ config('library.drive.main') }}"
                class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5"
                style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;"
                target="_blank">{{ __('messages.library.button_1') }}</a>
@@ -307,7 +248,7 @@
 
         <!-- Library 2 button -->
         <div class="text-center">
-            <a href="https://drive.google.com/drive/folders/1KkvwcZdKCZzV7gjExlnOdl1JnCELHCkC" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">{{ __('messages.library.button_2') }}</a>
+            <a href="{{ config('library.drive.secondary') }}" class="main-library-btn relative inline-block font-bold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1.5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%); padding: clamp(0.9rem,3vw,1.15rem) clamp(2rem,6vw,3rem); font-size:clamp(0.95rem,2.5vw,1.15rem); box-shadow: 0 8px 24px rgba(255,107,107,0.35); min-width:200px;" target="_blank">{{ __('messages.library.button_2') }}</a>
         </div>
 
         <!-- Department cards (DB-driven) -->
@@ -388,6 +329,8 @@
             </h2>
             <p class="text-[#6b6b80] mb-6" style="font-size:clamp(0.9rem,2.2vw,1rem); line-height:1.7;">
                     {{ __('messages.feedback.subtitle') }}
+                <br>
+                <a href="{{ route('privacy') }}" style="color:#667eea; text-decoration:underline; text-underline-offset:3px; font-size:0.88em;">{{ __('privacy.title') }}</a>
             </p>
             <form method="POST" action="{{ route('feedback.store') }}" style="text-align:start;">
                 @csrf
@@ -414,30 +357,35 @@
         </div>
     </div>
 </section>
+</main>
+
 <!-- ══════════ FOOTER ══════════ -->
 <footer class="text-center" style="background: linear-gradient(135deg, #1e1e2e 0%, #2d2b4e 100%); color: rgba(255,255,255,0.82); padding: clamp(1.5rem,4vw,2.2rem) 0;">
     <div class="max-w-[1200px] mx-auto px-4">
         @php
             $year = '<span class="'.Locale::yearClass().'"></span>';
-            $uorLink = '<a href="https://uor.edu.krd" target="_blank" rel="noopener" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">'
+            $uorLink = '<a href="'.e(config('library.university_url')).'" target="_blank" rel="noopener" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">'
                 .e(__('messages.footer.uor_link_label')).'</a>';
         @endphp
         <p style="font-size:clamp(0.85rem,2vw,0.95rem);">{{ RichText::make(__('messages.footer.copyright'), ['year' => $year]) }}</p>
         <p style="font-size:clamp(0.85rem,2vw,0.95rem);">{{ RichText::make(__('messages.footer.uor_line'), ['link' => $uorLink]) }}</p>
+        <p style="font-size:clamp(0.85rem,2vw,0.95rem);"><a href="{{ route('privacy') }}" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">{{ __('privacy.title') }}</a></p>
 
+        @if (config('library.analytics.host'))
         <div class="mt-3 flex items-center justify-center gap-3 opacity-75 hover:opacity-100 transition-opacity duration-300">
             <span style="font-size: 1rem;">👁</span>
             <div class="flex items-center gap-3 no-underline rounded-full border border-white/20 px-4 py-1.5"
             style="background:rgba(255,255,255,0.12); font-size: 1rem; color:rgba(255,255,255,0.85);">
         
-            <img src="https://mahmodfaqe.goatcounter.com/counter/TOTAL.svg" 
-                  alt="visitor count" 
-                  class="h-[40px] w-auto align-middle" 
+            <img src="{{ rtrim(config('library.analytics.host'), '/') }}/counter/TOTAL.svg"
+                  alt="{{ __('messages.visitors_label') }}"
+                  class="h-[40px] w-auto align-middle"
                   loading="lazy" decoding="async">
              
                 <span id="visitor-label">{{ __('messages.visitors_label') }}</span>
             </div>
         </div>
+        @endif
     </div>
 </footer>
 
@@ -455,14 +403,6 @@
     function toAr(n){ return String(n).replace(/\d/g,function(d){ return '٠١٢٣٤٥٦٧٨٩'[d]; }); }
     document.querySelectorAll('.footer-year-en').forEach(function(el){ el.textContent=y; });
     document.querySelectorAll('.footer-year-ar').forEach(function(el){ el.textContent=toAr(y); });
-})();
-
-// Inject social icons
-(function(){
-    var tpl = document.getElementById('social-tpl');
-    document.querySelectorAll('.social-placeholder').forEach(function(ph){
-        ph.replaceWith(tpl.content.cloneNode(true));
-    });
 })();
 
 // Hero particles
@@ -593,6 +533,9 @@ document.querySelectorAll('.section-card').forEach(function(card){
     setInterval(changeBackground, 5000);
 </script>
 
-<script data-goatcounter="https://mahmodfaqe.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+@if (config('library.analytics.host'))
+    <script data-goatcounter="{{ rtrim(config('library.analytics.host'), '/') }}/count"
+            async src="{{ config('library.analytics.script') }}"></script>
+@endif
 </body>
 </html>

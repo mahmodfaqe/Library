@@ -3,6 +3,8 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\UserController;
 use App\Support\Locale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +20,10 @@ Route::get('/{locale}', [HomeController::class, 'index'])
     ->whereIn('locale', Locale::SUPPORTED)
     ->name('home.localised')
     ->middleware('pagecache');
+
+Route::view('privacy', 'pages.privacy')->name('privacy');
+
+Route::get('sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
 // The old query-string switcher, kept so existing links keep working.
 Route::get('language', function (Request $request) {
@@ -44,5 +50,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('departments/{department}', [AdminController::class, 'destroy'])->name('departments.destroy');
         Route::get('feedback', [AdminController::class, 'feedback'])->name('feedback');
         Route::delete('feedback/{feedback}', [AdminController::class, 'destroyFeedback'])->name('feedback.destroy');
+
+        // Accounts and the audit trail are for administrators only.
+        Route::middleware('admin.auth:admin')->group(function () {
+            Route::get('users', [UserController::class, 'index'])->name('users');
+            Route::post('users', [UserController::class, 'store'])->name('users.store');
+            Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+            Route::get('activity', [UserController::class, 'activity'])->name('activity');
+        });
     });
 });

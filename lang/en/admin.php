@@ -8,6 +8,9 @@ return [
     'nav' => [
         'departments' => 'Departments',
         'feedback' => 'Feedback',
+        'users' => 'Accounts',
+        'activity' => 'Activity log',
+        'sign_out' => 'Sign out',
     ],
     'actions' => [
         'edit' => 'Edit',
@@ -17,9 +20,36 @@ return [
         'save' => 'Save',
         'create' => 'Add',
     ],
+    'users' => [
+        'title' => 'Accounts',
+        'heading' => 'Administrator accounts (:count)',
+        'add' => 'Add an account',
+        'you' => 'you',
+        'password_hint' => 'At least 12 characters. Length matters more than complexity.',
+        'confirm_delete' => 'Delete this account?',
+        'cannot_delete_self' => 'You cannot delete your own account.',
+        'last_admin' => 'You cannot delete the only administrator.',
+        'roles' => ['admin' => 'Administrator', 'staff' => 'Staff'],
+        'table' => [
+            'name' => 'Name', 'email' => 'Email', 'role' => 'Role',
+            'last_login' => 'Last sign-in', 'actions' => 'Actions',
+        ],
+    ],
+    'activity' => [
+        'title' => 'Activity log',
+        'heading' => 'Activity log (:count)',
+        'blurb' => 'Every change made in the admin panel is recorded here.',
+        'empty' => 'Nothing recorded yet.',
+        'table' => [
+            'when' => 'When', 'who' => 'Who', 'what' => 'Action',
+            'subject' => 'Subject', 'ip' => 'IP',
+        ],
+    ],
     'login' => [
         'title' => 'Sign in — Administration',
         'heading' => 'Administrator sign in',
+        'email' => 'Email',
+        'remember' => 'Remember me',
         'password' => 'Password',
         'submit' => 'Sign in',
         'back_site' => 'Back to the site',
@@ -68,6 +98,8 @@ return [
         ],
     ],
     'flash' => [
+        'user_created' => 'The account was created.',
+        'user_deleted' => 'The account was deleted.',
         'department_created' => 'The department was added.',
         'department_updated' => 'The department was updated.',
         'department_deleted' => 'The department was deleted.',

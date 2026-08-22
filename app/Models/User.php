@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'role'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -22,11 +22,29 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
+    /**
+     * Full access, including managing other accounts.
+     */
+    public const ROLE_ADMIN = 'admin';
+
+    /**
+     * May manage departments and read feedback, but not accounts.
+     */
+    public const ROLE_STAFF = 'staff';
+
+    public const ROLES = [self::ROLE_ADMIN, self::ROLE_STAFF];
+
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
+            'last_login_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === self::ROLE_ADMIN;
     }
 }

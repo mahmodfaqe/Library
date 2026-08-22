@@ -35,17 +35,14 @@ return [
             [
                 'name' => 'JIYAW YUSIF HUSÊN',
                 'role' => 'Xwendekarê Beşê Biyolojiyê - Dabînkirina pirtûkan',
-                'social' => false,
             ],
             [
                 'name' => 'NIYAR QADIR RASÛL',
                 'role' => 'Xwendekarê Beşê Biyolojiyê - Rêxistina kitêbxanê',
-                'social' => false,
             ],
             [
                 'name' => 'MEHMÛD XIDIR FAQÊ RASÛL',
                 'role' => 'Xwendekarê Beşê Biyolojiyê - Pêşxistinkarê malperê',
-                'social' => true,
             ],
         ],
     ],
@@ -85,6 +82,7 @@ return [
         'uor_line' => '🎓 :link  |  uor.edu.krd',
         'uor_link_label' => 'Malpera Zanîngeha Raperîn',
     ],
+    'skip_to_content' => 'Bazde bo naverokê',
     'visitors_label' => 'Serdankar',
     'scroll_top' => 'Vegere jor',
 ];

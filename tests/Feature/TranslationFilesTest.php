@@ -3,10 +3,13 @@
 namespace Tests\Feature;
 
 use App\Http\Middleware\SetLocale;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class TranslationFilesTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * Flatten a translation array to its key paths, ignoring list indices so a
      * locale is free to have a different number of paragraphs or objectives.
@@ -94,12 +97,27 @@ class TranslationFilesTest extends TestCase
         }
     }
 
-    public function test_exactly_one_person_carries_the_social_links(): void
+    public function test_the_public_page_carries_no_personal_contact_details(): void
+    {
+        // An official university page cannot link to a student's personal
+        // accounts, and must not publish anyone's phone number.
+        $html = $this->get('/')->assertOk()->getContent();
+
+        foreach (['snapchat.com', 'tiktok.com', 'facebook.com', 't.me/', 'wa.me/', 'tel:+'] as $trace) {
+            $this->assertStringNotContainsString($trace, $html);
+        }
+    }
+
+    public function test_every_locale_lists_the_same_people(): void
     {
         foreach (SetLocale::LOCALES as $locale) {
             $people = $this->load($locale, 'messages')['intro']['people'];
 
-            $this->assertCount(1, array_filter($people, fn (array $p) => $p['social']), $locale);
+            $this->assertCount(3, $people, $locale);
+
+            foreach ($people as $person) {
+                $this->assertSame(['name', 'role'], array_keys($person), $locale);
+            }
         }
     }
 

@@ -1,0 +1,39 @@
+<?php
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | External services
+    |--------------------------------------------------------------------------
+    | Every third party the public page depends on. These live here rather
+    | than in the templates so moving the project onto university-owned
+    | accounts is a change to .env, not a change to code.
+    */
+
+    'drive' => [
+        'main' => env('LIBRARY_DRIVE_MAIN', ''),
+        'secondary' => env('LIBRARY_DRIVE_SECONDARY', ''),
+    ],
+
+    'qr_url' => env('LIBRARY_QR_URL', ''),
+
+    'university_url' => env('LIBRARY_UNIVERSITY_URL', 'https://uor.edu.krd'),
+
+    'analytics' => [
+        // Empty disables the counter entirely — no third-party request is made.
+        'host' => env('LIBRARY_ANALYTICS_HOST', ''),
+        'script' => env('LIBRARY_ANALYTICS_SCRIPT', 'https://gc.zgo.at/count.js'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Visitor feedback
+    |--------------------------------------------------------------------------
+    | How long a submitted message is kept before it is deleted. The privacy
+    | notice quotes this number, so change both together.
+    */
+
+    'feedback_retention_days' => (int) env('LIBRARY_FEEDBACK_RETENTION_DAYS', 365),
+
+];

@@ -119,20 +119,23 @@ class CachePage
     }
 
     /**
-     * Whether this request renders something specific to one visitor: the
-     * admin's own view, a feedback confirmation, validation errors, or the
-     * old input repopulating the feedback form.
+     * Whether this request renders something specific to one visitor: a
+     * signed-in staff member's view, a feedback confirmation, validation
+     * errors, or the old input repopulating the feedback form.
      */
     private function isPersonalised(Request $request): bool
     {
+        if ($request->user() !== null) {
+            return true;
+        }
+
         if (! $request->hasSession()) {
             return false;
         }
 
         $session = $request->session();
 
-        return $session->has('admin_authenticated')
-            || $session->has('feedback_sent')
+        return $session->has('feedback_sent')
             || $session->has('errors')
             || $session->hasOldInput();
     }

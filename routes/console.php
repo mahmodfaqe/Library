@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+// Visitor messages are kept for the period quoted in the privacy notice and
+// then deleted. See config/library.php.
+Schedule::command('feedback:prune')->dailyAt('03:00');

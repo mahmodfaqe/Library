@@ -8,6 +8,9 @@ return [
     'nav' => [
         'departments' => 'گروه‌ها',
         'feedback' => 'نظرها و پیشنهادها',
+        'users' => 'حساب‌ها',
+        'activity' => 'گزارش فعالیت',
+        'sign_out' => 'خروج',
     ],
     'actions' => [
         'edit' => 'ویرایش',
@@ -17,9 +20,36 @@ return [
         'save' => 'ذخیره',
         'create' => 'افزودن',
     ],
+    'users' => [
+        'title' => 'حساب‌ها',
+        'heading' => 'حساب‌های مدیریت (:count)',
+        'add' => 'افزودن حساب',
+        'you' => 'شما',
+        'password_hint' => 'دست‌کم ۱۲ نویسه. طول مهم‌تر از پیچیدگی است.',
+        'confirm_delete' => 'این حساب حذف شود؟',
+        'cannot_delete_self' => 'نمی‌توانید حساب خود را حذف کنید.',
+        'last_admin' => 'نمی‌توانید تنها مدیر را حذف کنید.',
+        'roles' => ['admin' => 'مدیر', 'staff' => 'کارمند'],
+        'table' => [
+            'name' => 'نام', 'email' => 'ایمیل', 'role' => 'نقش',
+            'last_login' => 'آخرین ورود', 'actions' => 'عملیات',
+        ],
+    ],
+    'activity' => [
+        'title' => 'گزارش فعالیت',
+        'heading' => 'گزارش فعالیت (:count)',
+        'blurb' => 'هر تغییری در پنل مدیریت اینجا ثبت می‌شود.',
+        'empty' => 'هنوز فعالیتی ثبت نشده است.',
+        'table' => [
+            'when' => 'زمان', 'who' => 'چه کسی', 'what' => 'عمل',
+            'subject' => 'روی چه', 'ip' => 'IP',
+        ],
+    ],
     'login' => [
         'title' => 'ورود — مدیریت',
         'heading' => 'ورود مدیر',
+        'email' => 'ایمیل',
+        'remember' => 'مرا به خاطر بسپار',
         'password' => 'رمز عبور',
         'submit' => 'ورود',
         'back_site' => 'بازگشت به سایت',
@@ -68,6 +98,8 @@ return [
         ],
     ],
     'flash' => [
+        'user_created' => 'حساب افزوده شد.',
+        'user_deleted' => 'حساب حذف شد.',
         'department_created' => 'گروه افزوده شد.',
         'department_updated' => 'گروه به‌روزرسانی شد.',
         'department_deleted' => 'گروه حذف شد.',

@@ -51,9 +51,24 @@
             <nav style="display:flex; gap:1rem; font-size:0.9rem;">
                 <a href="{{ route('admin.index') }}">{{ __('admin.nav.departments') }}</a>
                 <a href="{{ route('admin.feedback') }}">{{ __('admin.nav.feedback') }}</a>
+                @auth
+                    @if (auth()->user()->isAdmin())
+                        <a href="{{ route('admin.users') }}">{{ __('admin.nav.users') }}</a>
+                        <a href="{{ route('admin.activity') }}">{{ __('admin.nav.activity') }}</a>
+                    @endif
+                @endauth
             </nav>
         </div>
-        <a href="{{ Locale::url() }}">{{ __('admin.back_home') }}</a>
+        <div style="display:flex; align-items:center; gap:1rem;">
+            @auth
+                <span style="font-size:0.85rem; opacity:0.85;">{{ auth()->user()->name }}</span>
+                <form method="POST" action="{{ route('admin.logout') }}" style="display:inline;">
+                    @csrf
+                    <button type="submit" style="background:none; border:none; color:#fff; font:inherit; font-size:0.9rem; cursor:pointer; text-decoration:underline; padding:0;">{{ __('admin.nav.sign_out') }}</button>
+                </form>
+            @endauth
+            <a href="{{ Locale::url() }}">{{ __('admin.back_home') }}</a>
+        </div>
     </div>
     <div class="container">
         @if (session('status'))

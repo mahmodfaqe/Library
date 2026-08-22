@@ -2,8 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Activity;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
@@ -13,11 +14,23 @@ class AdminAuthTest extends TestCase
 
     private const PASSWORD = 'correct-horse-battery-staple';
 
-    protected function setUp(): void
+    private function admin(array $overrides = []): User
     {
-        parent::setUp();
+        return User::create(array_replace([
+            'name' => 'Library Administrator',
+            'email' => 'admin@uor.edu.krd',
+            'password' => self::PASSWORD,
+            'role' => User::ROLE_ADMIN,
+        ], $overrides));
+    }
 
-        config(['app.admin_password_hash' => Hash::make(self::PASSWORD)]);
+    private function staff(): User
+    {
+        return $this->admin([
+            'email' => 'staff@uor.edu.krd',
+            'name' => 'Library Staff',
+            'role' => User::ROLE_STAFF,
+        ]);
     }
 
     public static function guardedRoutes(): array
@@ -26,6 +39,8 @@ class AdminAuthTest extends TestCase
             ['get', '/admin'],
             ['get', '/admin/departments/create'],
             ['get', '/admin/feedback'],
+            ['get', '/admin/users'],
+            ['get', '/admin/activity'],
         ];
     }
 
@@ -42,46 +57,88 @@ class AdminAuthTest extends TestCase
             ->assertSee(__('admin.login.heading', [], 'ku-sorani'), false);
     }
 
-    public function test_the_correct_password_signs_the_admin_in(): void
+    public function test_the_right_credentials_sign_the_user_in(): void
     {
-        $this->post('/admin/login', ['password' => self::PASSWORD])
-            ->assertRedirect(route('admin.index'))
-            ->assertSessionHas('admin_authenticated', true);
+        $user = $this->admin();
+
+        $this->post('/admin/login', ['email' => $user->email, 'password' => self::PASSWORD])
+            ->assertRedirect(route('admin.index'));
+
+        $this->assertAuthenticatedAs($user);
+        $this->assertNotNull($user->fresh()->last_login_at);
     }
 
     public function test_a_wrong_password_is_rejected(): void
     {
+        $user = $this->admin();
+
         $this->from(route('admin.login'))
-            ->post('/admin/login', ['password' => 'wrong'])
+            ->post('/admin/login', ['email' => $user->email, 'password' => 'wrong'])
             ->assertRedirect(route('admin.login'))
-            ->assertSessionHasErrors('password')
-            ->assertSessionMissing('admin_authenticated');
+            ->assertSessionHasErrors('email');
+
+        $this->assertGuest();
     }
 
-    public function test_no_password_signs_anyone_in_when_no_hash_is_configured(): void
+    public function test_an_unknown_email_is_rejected(): void
     {
-        config(['app.admin_password_hash' => '']);
-
         $this->from(route('admin.login'))
-            ->post('/admin/login', ['password' => ''])
-            ->assertSessionMissing('admin_authenticated');
+            ->post('/admin/login', ['email' => 'nobody@uor.edu.krd', 'password' => self::PASSWORD])
+            ->assertSessionHasErrors('email');
+
+        $this->assertGuest();
     }
 
-    public function test_logging_out_clears_the_session_flag(): void
+    public function test_a_failed_attempt_is_recorded(): void
     {
-        $this->withSession(['admin_authenticated' => true])
-            ->post('/admin/logout')
-            ->assertRedirect(route('home'))
-            ->assertSessionMissing('admin_authenticated');
+        $this->post('/admin/login', ['email' => 'nobody@uor.edu.krd', 'password' => 'wrong']);
+
+        $this->assertDatabaseHas('activity_log', ['action' => 'auth.failed', 'subject' => 'nobody@uor.edu.krd']);
+    }
+
+    public function test_signing_in_and_out_is_recorded(): void
+    {
+        $user = $this->admin();
+
+        $this->post('/admin/login', ['email' => $user->email, 'password' => self::PASSWORD]);
+        $this->post('/admin/logout');
+
+        $this->assertGuest();
+        $this->assertSame(['auth.signed_in', 'auth.signed_out'],
+            Activity::orderBy('id')->pluck('action')->all());
     }
 
     public function test_the_login_form_is_rate_limited(): void
     {
         foreach (range(1, 5) as $attempt) {
-            $this->post('/admin/login', ['password' => 'wrong'])->assertRedirect();
+            $this->post('/admin/login', ['email' => 'nobody@uor.edu.krd', 'password' => 'wrong'])->assertRedirect();
         }
 
-        $this->post('/admin/login', ['password' => 'wrong'])->assertStatus(429);
+        $this->post('/admin/login', ['email' => 'nobody@uor.edu.krd', 'password' => 'wrong'])->assertStatus(429);
+    }
+
+    public function test_staff_may_manage_content(): void
+    {
+        $staff = $this->staff();
+
+        $this->actingAs($staff)->get('/admin')->assertOk();
+        $this->actingAs($staff)->get('/admin/feedback')->assertOk();
+    }
+
+    public function test_staff_may_not_reach_accounts_or_the_audit_trail(): void
+    {
+        $staff = $this->staff();
+
+        $this->actingAs($staff)->get('/admin/users')->assertForbidden();
+        $this->actingAs($staff)->get('/admin/activity')->assertForbidden();
+    }
+
+    public function test_an_administrator_reaches_accounts_and_the_audit_trail(): void
+    {
+        $admin = $this->admin();
+
+        $this->actingAs($admin)->get('/admin/users')->assertOk();
+        $this->actingAs($admin)->get('/admin/activity')->assertOk();
     }
 
     public function test_the_admin_pages_are_not_indexable(): void

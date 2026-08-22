@@ -24,6 +24,8 @@
         .error { background: #fee2e2; color: #991b1b; padding: 0.7rem 0.9rem; border-radius: 10px; margin-bottom: 1rem; font-size: 0.88rem; }
         .back { text-align: center; margin-top: 1.1rem; font-size: 0.85rem; }
         .back a { color: #667eea; text-decoration: none; }
+        .remember { display: flex; align-items: center; gap: 0.45rem; font-size: 0.85rem; color: #4a4a5c; margin-bottom: 1.1rem; }
+        .remember input { width: auto; }
     </style>
 </head>
 <body>
@@ -39,9 +41,17 @@
         <form method="POST" action="{{ route('admin.login') }}">
             @csrf
             <div class="field">
-                <label for="password">{{ __('admin.login.password') }}</label>
-                <input type="password" id="password" name="password" required autofocus autocomplete="current-password">
+                <label for="email">{{ __('admin.login.email') }}</label>
+                <input type="email" id="email" name="email" required autofocus
+                       autocomplete="username" value="{{ old('email') }}">
             </div>
+            <div class="field">
+                <label for="password">{{ __('admin.login.password') }}</label>
+                <input type="password" id="password" name="password" required autocomplete="current-password">
+            </div>
+            <label class="remember">
+                <input type="checkbox" name="remember" value="1"> {{ __('admin.login.remember') }}
+            </label>
             <button type="submit" class="btn">{{ __('admin.login.submit') }}</button>
         </form>
         <div class="back"><a href="{{ Locale::url() }}">{{ __('admin.login.back_site') }}</a></div>

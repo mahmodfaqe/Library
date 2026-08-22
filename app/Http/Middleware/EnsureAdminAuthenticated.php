@@ -4,17 +4,24 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureAdminAuthenticated
 {
     /**
-     * Allow the request through only when the admin session flag is set.
+     * Let signed-in staff through, optionally narrowing to one role.
+     *
+     * Usage: ->middleware('admin.auth') or ->middleware('admin.auth:admin')
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, ?string $role = null): Response
     {
-        if (! $request->session()->has('admin_authenticated')) {
+        if (! Auth::check()) {
             return redirect()->guest(route('admin.login'));
+        }
+
+        if ($role !== null && Auth::user()->role !== $role) {
+            abort(403);
         }
 
         return $next($request);
