@@ -154,7 +154,15 @@ class ExtractBookDetails extends Command
             return null;
         }
 
-        $path = tempnam(sys_get_temp_dir(), 'book-').'.pdf';
+        // tempnam() creates the file it names, so write into that one rather
+        // than a variation on the name — otherwise every book leaves an empty
+        // file behind, a thousand of them by the end of a run.
+        $path = tempnam(sys_get_temp_dir(), 'book-');
+
+        if ($path === false) {
+            return null;
+        }
+
         file_put_contents($path, $response->body());
 
         return $path;

@@ -68,7 +68,7 @@ class PdfDetails
 
         return [
             'author' => self::author($details),
-            'year' => self::year($details, $opening),
+            'year' => self::year($opening),
             'language' => self::language($opening),
         ];
     }
@@ -117,13 +117,10 @@ class PdfDetails
     /**
      * The year the book was published.
      *
-     * The text is preferred over the file's own dates: /CreationDate is when
-     * somebody scanned or typeset the file, which for an older book is not
-     * the same thing at all. The dates are a last resort.
-     *
-     * @param  array<string, mixed>  $details
+     * Only what the opening pages actually say. The file's own dates are not
+     * used at all — see below.
      */
-    private static function year(array $details, string $opening): ?int
+    private static function year(string $opening): ?int
     {
         $latest = (int) date('Y') + 1;
 
@@ -156,16 +153,11 @@ class PdfDetails
             return $years->max();
         }
 
-        foreach (['CreationDate', 'ModDate'] as $field) {
-            if (preg_match('/(\d{4})/', (string) ($details[$field] ?? ''), $m)) {
-                $year = (int) $m[1];
-
-                if ($year >= self::EARLIEST_YEAR && $year <= $latest) {
-                    return $year;
-                }
-            }
-        }
-
+        // Deliberately not /CreationDate: that is when the file was made, and
+        // for a scanned book it is the year somebody put it on the scanner.
+        // Across a thousand books that would fill the catalogue with dates
+        // that look right and are not. A blank the librarian fills in is
+        // worth more than a plausible wrong answer.
         return null;
     }
 
