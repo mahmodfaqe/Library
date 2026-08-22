@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'previous_page' => 'Previous page',
+    'next_page' => 'Next page',
+    'showing' => 'Showing :from–:to of :total',
     'breadcrumb' => 'Breadcrumb',
     'clear' => 'Clear',
     'title' => 'Book catalogue',

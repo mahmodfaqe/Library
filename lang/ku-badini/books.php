@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'previous_page' => 'رویپەلا بەری',
+    'next_page' => 'رویپەلا پاشی',
+    'showing' => 'نیشاندانا :from–:to ژ کۆما :total',
     'breadcrumb' => 'ڕێکا ناڤەرۆکێ',
     'clear' => 'پاقژکرن',
     'title' => 'کاتالۆگا پرتوکان',

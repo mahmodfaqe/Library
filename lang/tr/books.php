@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'previous_page' => 'Önceki sayfa',
+    'next_page' => 'Sonraki sayfa',
+    'showing' => ':total kayıttan :from–:to gösteriliyor',
     'breadcrumb' => 'Gezinti yolu',
     'clear' => 'Temizle',
     'title' => 'Kitap kataloğu',

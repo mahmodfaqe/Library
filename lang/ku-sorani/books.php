@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'previous_page' => 'پەڕەی پێشوو',
+    'next_page' => 'پەڕەی داهاتوو',
+    'showing' => 'پیشاندانی :from–:to لە کۆی :total',
     'breadcrumb' => 'ڕێڕەوی ناوەڕۆک',
     'clear' => 'پاککردنەوە',
     'title' => 'کاتالۆگی کتێبەکان',

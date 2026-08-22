@@ -69,11 +69,11 @@
         </nav>
     @endif
 
-    @unless ($browsing)
+    @if (! $browsing && $books->total() > 0)
         <p class="text-[#6b6b80] mb-5" style="font-size:0.92rem;" aria-live="polite">
             {{ trans_choice('books.results', $books->total(), ['count' => $books->total()]) }}
         </p>
-    @endunless
+    @endif
 
     @if ($browsing)
         <div class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(min(230px,100%),1fr));">
@@ -130,8 +130,8 @@
         @endforelse
     @endif
 
-    @if (! $browsing && $books->hasPages())
-        {{ $books->links() }}
+    @if (! $browsing)
+        @include('partials.pagination', ['paginator' => $books])
     @endif
 
 </div>

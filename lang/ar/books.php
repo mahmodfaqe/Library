@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'previous_page' => 'الصفحة السابقة',
+    'next_page' => 'الصفحة التالية',
+    'showing' => 'عرض :from–:to من أصل :total',
     'breadcrumb' => 'مسار التصفح',
     'clear' => 'مسح',
     'title' => 'فهرس الكتب',

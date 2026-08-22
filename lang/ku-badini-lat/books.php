@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'previous_page' => 'Rûpela berî',
+    'next_page' => 'Rûpela paşî',
+    'showing' => 'Nîşandana :from–:to ji koma :total',
     'breadcrumb' => 'Riya naverokê',
     'clear' => 'Paqijkirin',
     'title' => 'Katalogê pirtûkan',

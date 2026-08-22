@@ -285,3 +285,58 @@ transition: background-image 1.5s ease-in-out;
     word-break: break-word;
     hyphens: auto;
 }
+
+/* ── Catalogue pagination ────────────────────────────────────────────────
+   Shared shape with the admin panel's paginator, in the public palette.
+   The numbers are laid out logically (start/end), so the row reads in the
+   right order in both Arabic-script and Latin locales. */
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 2.5rem;
+}
+.pagination a,
+.pagination span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 42px;
+    min-height: 42px;
+    padding: 0 0.7rem;
+    border-radius: 11px;
+    border: 1px solid #dfe3f5;
+    background: #fff;
+    color: #4a4a5c;
+    font-size: 0.92rem;
+    text-decoration: none;
+    transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.pagination a:hover {
+    border-color: #667eea;
+    color: #667eea;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(102, 126, 234, 0.18);
+}
+.pagination .current {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: transparent;
+    color: #fff;
+    font-weight: 700;
+}
+/* The ellipsis and the disabled arrows are markers, not controls. */
+.pagination .gap,
+.pagination span:not(.current) {
+    border-color: transparent;
+    background: transparent;
+    color: #b5b5c8;
+    min-width: auto;
+}
+.pagination-summary {
+    margin-top: 0.8rem;
+    text-align: center;
+    color: #8a8aa0;
+    font-size: 0.85rem;
+}
