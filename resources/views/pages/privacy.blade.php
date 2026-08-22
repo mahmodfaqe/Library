@@ -1,3 +1,4 @@
+@use('App\Support\Locale')
 @extends('layouts.base')
 
 @section('title', __('privacy.title').' — '.__('messages.site_title'))
@@ -7,7 +8,7 @@
 <div class="max-w-[820px] mx-auto px-4" style="padding: clamp(2rem,6vw,4rem) 1rem;">
 
     <nav class="mb-4 flex items-center gap-2 flex-wrap" style="font-size:0.9rem;" aria-label="{{ __('books.breadcrumb') }}">
-        <a href="{{ \App\Support\Locale::url() }}" class="text-[#667eea] no-underline hover:underline">{{ __('messages.library_name') }}</a>
+        <a href="{{ Locale::url() }}" class="text-[#667eea] no-underline hover:underline">{{ __('messages.library_name') }}</a>
         <span class="text-[#b5b5c8]">/</span>
         <span class="text-[#6b6b80]">{{ __('privacy.title') }}</span>
     </nav>
@@ -29,8 +30,8 @@
 
     <p class="text-[#8a8aa0] mt-10" style="font-size:0.88rem;">{{ __('privacy.updated') }}</p>
 
-    <a href="{{ \App\Support\Locale::url() }}" class="inline-block mt-6 text-[#667eea] no-underline hover:underline" style="font-size:0.92rem;">
-        <span aria-hidden="true">{{ \App\Support\Locale::isLtr() ? '←' : '→' }}</span> {{ __('privacy.back') }}
+    <a href="{{ Locale::url() }}" class="inline-block mt-6 text-[#667eea] no-underline hover:underline" style="font-size:0.92rem;">
+        <span aria-hidden="true">{{ Locale::isLtr() ? '←' : '→' }}</span> {{ __('privacy.back') }}
     </a>
 
 </div>

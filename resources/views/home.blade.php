@@ -1,3 +1,6 @@
+@use('App\Support\Asset')
+@use('App\Support\Locale')
+@use('App\Support\RichText')
 @extends('layouts.base')
 
 @section('content')

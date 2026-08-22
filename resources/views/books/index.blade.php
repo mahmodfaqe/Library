@@ -1,3 +1,4 @@
+@use('App\Support\Locale')
 @extends('layouts.base')
 
 @section('title', __('books.title').' — '.__('messages.site_title'))
@@ -7,10 +8,10 @@
 <div class="max-w-[1200px] mx-auto px-4" style="padding: clamp(2rem,5vw,3.5rem) 1rem;">
 
     <nav class="mb-4 flex items-center gap-2 flex-wrap" style="font-size:0.9rem;" aria-label="{{ __('books.breadcrumb') }}">
-        <a href="{{ \App\Support\Locale::url() }}" class="text-[#667eea] no-underline hover:underline">{{ __('messages.library_name') }}</a>
+        <a href="{{ Locale::url() }}" class="text-[#667eea] no-underline hover:underline">{{ __('messages.library_name') }}</a>
         <span class="text-[#b5b5c8]">/</span>
         @if ($selected)
-            <a href="{{ \App\Support\Locale::booksUrl() }}" class="text-[#667eea] no-underline hover:underline">{{ __('books.title') }}</a>
+            <a href="{{ Locale::booksUrl() }}" class="text-[#667eea] no-underline hover:underline">{{ __('books.title') }}</a>
             <span class="text-[#b5b5c8]">/</span>
             <span class="text-[#6b6b80]">{{ $selected->localName() }}</span>
         @else
@@ -19,8 +20,8 @@
     </nav>
 
     @if ($selected)
-        <a href="{{ \App\Support\Locale::booksUrl() }}" class="inline-block text-[#667eea] no-underline mb-3 hover:underline" style="font-size:0.92rem;">
-            <span aria-hidden="true">{{ \App\Support\Locale::isLtr() ? '←' : '→' }}</span> {{ __('books.back_to_subjects') }}
+        <a href="{{ Locale::booksUrl() }}" class="inline-block text-[#667eea] no-underline mb-3 hover:underline" style="font-size:0.92rem;">
+            <span aria-hidden="true">{{ Locale::isLtr() ? '←' : '→' }}</span> {{ __('books.back_to_subjects') }}
         </a>
         <h1 class="font-bold text-[#2d2d3a] mb-3" style="font-size:clamp(1.6rem,4.5vw,2.2rem);">{{ $selected->localName() }}</h1>
     @else
@@ -44,7 +45,7 @@
             {{ __('books.search') }}
         </button>
         @if ($search !== null || $selected)
-            <a href="{{ \App\Support\Locale::booksUrl() }}" class="text-[#6b6b80] no-underline hover:underline self-center" style="font-size:0.88rem;">
+            <a href="{{ Locale::booksUrl() }}" class="text-[#6b6b80] no-underline hover:underline self-center" style="font-size:0.88rem;">
                 {{ __('books.clear') }}
             </a>
         @endif
