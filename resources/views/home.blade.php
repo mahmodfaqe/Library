@@ -253,7 +253,7 @@
                    style="padding:clamp(1.3rem,3.5vw,1.9rem); min-height:190px; box-shadow:0 4px 16px rgba(102,126,234,0.10);">
                     <div>
                         <span class="block text-5xl mb-3 transition-transform duration-300">{{ $subject->icon }}</span>
-                        <h3 class="font-bold text-[#2d2d3a] mb-2" style="font-size:clamp(1rem,2.6vw,1.2rem); line-height:1.6;">{{ $subject->name }}</h3>
+                        <h3 class="font-bold text-[#2d2d3a] mb-2" style="font-size:clamp(1rem,2.6vw,1.2rem); line-height:1.6;">{{ $subject->localName() }}</h3>
                     </div>
                     <span class="text-[#6b6b80]" style="font-size:clamp(0.82rem,2vw,0.92rem);">
                         {{ trans_choice('books.results', $subject->books_count, ['count' => $subject->books_count]) }}

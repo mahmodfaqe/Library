@@ -60,6 +60,7 @@
             <h1>{{ __('admin.heading') }}</h1>
             <nav style="display:flex; gap:1rem; font-size:0.9rem;">
                 <a href="{{ route('admin.index') }}">{{ __('admin.nav.departments') }}</a>
+                <a href="{{ route('admin.categories') }}">{{ __('admin.nav.categories') }}</a>
                 <a href="{{ route('admin.books') }}">{{ __('admin.nav.books') }}</a>
                 <a href="{{ route('admin.feedback') }}">{{ __('admin.nav.feedback') }}</a>
                 @auth

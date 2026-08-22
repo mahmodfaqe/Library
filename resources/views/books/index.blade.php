@@ -43,7 +43,7 @@
         <a href="{{ url()->current() }}" class="inline-block text-[#667eea] no-underline mb-3" style="font-size:0.92rem;">
             ← {{ __('books.back_to_subjects') }}
         </a>
-        <h1 class="font-bold text-[#2d2d3a] mb-3" style="font-size:clamp(1.6rem,4.5vw,2.2rem);">{{ $selected->name }}</h1>
+        <h1 class="font-bold text-[#2d2d3a] mb-3" style="font-size:clamp(1.6rem,4.5vw,2.2rem);">{{ $selected->localName() }}</h1>
     @else
         <h1 class="font-bold text-[#2d2d3a] mb-3" style="font-size:clamp(1.6rem,4.5vw,2.2rem);">{{ __('books.title') }}</h1>
         <p class="text-[#6b6b80] mb-8" style="font-size:clamp(0.95rem,2.4vw,1.08rem);">{{ __('books.intro') }}</p>
@@ -95,7 +95,7 @@
                 <a href="{{ url()->current() }}?category={{ $shelf->id }}"
                    class="subject-card bg-white/85 backdrop-blur-md border border-white/70 rounded-[16px] no-underline flex flex-col justify-between"
                    style="padding:1.3rem; box-shadow:0 4px 16px rgba(102,126,234,0.10);">
-                    <span class="font-bold text-[#2d2d3a]" style="font-size:1.02rem; line-height:1.6;">{{ $shelf->name }}</span>
+                    <span class="font-bold text-[#2d2d3a]" style="font-size:1.02rem; line-height:1.6;">{{ $shelf->localName() }}</span>
                     <span class="text-[#6b6b80]" style="font-size:0.85rem; margin-top:0.6rem;">
                         {{ trans_choice('books.results', $shelf->books_count, ['count' => $shelf->books_count]) }}
                     </span>
@@ -119,7 +119,7 @@
                         $book->year,
                         $book->language,
                         // Redundant once the whole page is one subject.
-                        $selected ? null : $book->category?->name,
+                        $selected ? null : $book->category?->localName(),
                     ])->filter()->implode(' · ') }}
                 </p>
             </div>
