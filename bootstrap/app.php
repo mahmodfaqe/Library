@@ -26,6 +26,15 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->append(SecurityHeaders::class);
+
+        // The app runs in a container behind the host's nginx, so the real
+        // scheme and host arrive in X-Forwarded-*. Without this every
+        // generated URL — canonical, hreflang, assets — would say http and
+        // the wrong host.
+        $middleware->trustProxies(at: '*', headers: Request::HEADER_X_FORWARDED_FOR
+            | Request::HEADER_X_FORWARDED_HOST
+            | Request::HEADER_X_FORWARDED_PORT
+            | Request::HEADER_X_FORWARDED_PROTO);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
