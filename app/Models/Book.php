@@ -35,9 +35,12 @@ class Book extends Model
      * Match a visitor's search against the folded title and author, so the
      * spelling of ك/ک and ي/ی on their keyboard does not decide the result.
      *
-     * Each word has to appear somewhere, but not in the order typed and not
-     * next to each other: "کیمیا ئەندامی" finds "کیمیای ئەندامی" and
-     * "ئەندامی، کیمیای گشتی" alike.
+     * Words the visitor separated with a space have to appear, but not in the
+     * order typed and not next to each other: "کیمیا ئەندامی" finds "کیمیای
+     * ئەندامی" and "ئەندامی، کیمیای گشتی" alike. Splitting happens before
+     * folding, so punctuation inside a word stays inside it — "Mol%Biology" is
+     * one term that matches nothing, not two that would match "Molecular
+     * Biology", and % keeps its lack of meaning as a LIKE wildcard.
      *
      * The folded copy is also compared against the raw title and author. A row
      * imported before search_text existed, or written by a bulk insert that
@@ -46,14 +49,17 @@ class Book extends Model
      */
     public function scopeMatching(Builder $query, ?string $term): Builder
     {
-        $needle = ArabicText::fold($term);
+        $terms = collect(preg_split('/\s+/u', (string) $term, -1, PREG_SPLIT_NO_EMPTY) ?: [])
+            ->map(fn (string $word) => ArabicText::fold($word))
+            ->filter()
+            ->values();
 
-        if ($needle === '') {
+        if ($terms->isEmpty()) {
             return $query;
         }
 
-        return $query->where(function (Builder $outer) use ($needle) {
-            foreach (explode(' ', $needle) as $word) {
+        return $query->where(function (Builder $outer) use ($terms) {
+            foreach ($terms as $word) {
                 $like = '%'.str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $word).'%';
 
                 $outer->where(function (Builder $inner) use ($like) {
