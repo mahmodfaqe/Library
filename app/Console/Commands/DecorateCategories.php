@@ -19,6 +19,39 @@ class DecorateCategories extends Command
      *
      * @var array<string, array{0: string, 1: int}>
      */
+    /**
+     * Name in each locale. Kurdish Sorani is the imported original and lives
+     * in the `name` column; the Kurdish variants share it unless they differ,
+     * and fall back to it when absent.
+     *
+     * @var array<string, array<string, string>>
+     */
+    private const NAMES = [
+        'بایۆلۆجی' => ['en' => 'Biology', 'ar' => 'علم الأحياء', 'fa' => 'زیست‌شناسی', 'tr' => 'Biyoloji'],
+        'کیمیا' => ['en' => 'Chemistry', 'ar' => 'الكيمياء', 'fa' => 'شیمی', 'tr' => 'Kimya'],
+        'فیزیا' => ['en' => 'Physics', 'ar' => 'الفيزياء', 'fa' => 'فیزیک', 'tr' => 'Fizik'],
+        'زانستی تاقیگەی پزیشکی' => ['en' => 'Medical Laboratory Science', 'ar' => 'علوم المختبرات الطبية', 'fa' => 'علوم آزمایشگاهی پزشکی', 'tr' => 'Tıbbi Laboratuvar Bilimleri'],
+        'پەرستاری' => ['en' => 'Nursing', 'ar' => 'التمريض', 'fa' => 'پرستاری', 'tr' => 'Hemşirelik'],
+        'دەرمانسازی' => ['en' => 'Pharmacy', 'ar' => 'الصيدلة', 'fa' => 'داروسازی', 'tr' => 'Eczacılık'],
+        'بابەتی پزیشکی' => ['en' => 'Medicine', 'ar' => 'مواضيع طبية', 'fa' => 'موضوعات پزشکی', 'tr' => 'Tıp konuları'],
+        'فریاگوزاری' => ['en' => 'Emergency care', 'ar' => 'الإسعاف', 'fa' => 'فوریت‌های پزشکی', 'tr' => 'Acil yardım'],
+        'زاراوەزانی' => ['en' => 'Terminology', 'ar' => 'المصطلحات', 'fa' => 'اصطلاح‌شناسی', 'tr' => 'Terminoloji'],
+        'ڕێگاکانی توێژینەوە' => ['en' => 'Research methods', 'ar' => 'مناهج البحث', 'fa' => 'روش تحقیق', 'tr' => 'Araştırma yöntemleri'],
+        'وەرزشی' => ['en' => 'Sport', 'ar' => 'الرياضة', 'fa' => 'ورزش', 'tr' => 'Spor'],
+        'بیرکاری' => ['en' => 'Mathematics', 'ar' => 'الرياضيات', 'fa' => 'ریاضیات', 'tr' => 'Matematik'],
+        'فێربوونی زمان' => ['en' => 'Language learning', 'ar' => 'تعلم اللغات', 'fa' => 'آموزش زبان', 'tr' => 'Dil öğrenimi'],
+        'ئاینی' => ['en' => 'Religion', 'ar' => 'الدين', 'fa' => 'دین', 'tr' => 'Din'],
+        'هۆنراوە و ئەدەبیات' => ['en' => 'Poetry and literature', 'ar' => 'الشعر والأدب', 'fa' => 'شعر و ادبیات', 'tr' => 'Şiir ve edebiyat'],
+        'ئابووری' => ['en' => 'Economics', 'ar' => 'الاقتصاد', 'fa' => 'اقتصاد', 'tr' => 'Ekonomi'],
+        'ئەندازیاری' => ['en' => 'Engineering', 'ar' => 'الهندسة', 'fa' => 'مهندسی', 'tr' => 'Mühendislik'],
+        'تەکنەلۆجیای زانیاری' => ['en' => 'Information technology', 'ar' => 'تقنية المعلومات', 'fa' => 'فناوری اطلاعات', 'tr' => 'Bilişim teknolojisi'],
+        'جوگرافیا' => ['en' => 'Geography', 'ar' => 'الجغرافيا', 'fa' => 'جغرافیا', 'tr' => 'Coğrafya'],
+        'مێژوو' => ['en' => 'History', 'ar' => 'التاريخ', 'fa' => 'تاریخ', 'tr' => 'Tarih'],
+        'پەروەردەیی' => ['en' => 'Education', 'ar' => 'التربية', 'fa' => 'آموزش و پرورش', 'tr' => 'Eğitim'],
+        'ڕۆمان و چیرۆک' => ['en' => 'Novels and stories', 'ar' => 'الروايات والقصص', 'fa' => 'رمان و داستان', 'tr' => 'Roman ve öykü'],
+        'بابەتی جۆراوجۆری تر' => ['en' => 'Other subjects', 'ar' => 'مواضيع متنوعة', 'fa' => 'موضوعات گوناگون', 'tr' => 'Diğer konular'],
+    ];
+
     private const SUBJECTS = [
         // College of Science
         'بایۆلۆجی' => ['🧬', 1],
@@ -62,7 +95,15 @@ class DecorateCategories extends Command
                 continue;
             }
 
-            $category->update(['icon' => $icon, 'sort_order' => $order]);
+            $category->update([
+                'icon' => $icon,
+                'sort_order' => $order,
+                // Never overwrite a name a librarian has already corrected.
+                'translations' => array_replace(
+                    $this->namesFor($category->name),
+                    array_filter($category->translations ?? []),
+                ),
+            ]);
             $this->line("  {$icon}  {$category->name}");
             $matched++;
         }
@@ -93,5 +134,22 @@ class DecorateCategories extends Command
         }
 
         return null;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function namesFor(string $name): array
+    {
+        $normalise = fn (string $v) => trim(preg_replace('/[\s.،…]+/u', ' ', $v));
+        $needle = $normalise($name);
+
+        foreach (self::NAMES as $subject => $names) {
+            if (str_starts_with($needle, $normalise($subject))) {
+                return $names;
+            }
+        }
+
+        return [];
     }
 }

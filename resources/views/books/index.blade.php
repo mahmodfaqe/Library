@@ -64,6 +64,24 @@
         </button>
     </form>
 
+    @if ($languages->count() > 1)
+        @php
+            $base = collect(['q' => $search, 'category' => $selected?->id])->filter()->all();
+        @endphp
+        <nav class="lang-chips" aria-label="{{ __('books.language_label') }}">
+            <a href="{{ url()->current() }}{{ $base ? '?'.http_build_query($base) : '' }}"
+               class="lang-chip{{ $language === null ? ' is-active' : '' }}">
+                {{ __('books.all_languages') }}
+            </a>
+            @foreach ($languages as $name => $total)
+                <a href="{{ url()->current() }}?{{ http_build_query($base + ['language' => $name]) }}"
+                   class="lang-chip{{ $language === $name ? ' is-active' : '' }}">
+                    {{ $name }} <span class="lang-count">{{ $total }}</span>
+                </a>
+            @endforeach
+        </nav>
+    @endif
+
     @unless ($browsing)
         <p class="text-[#6b6b80] mb-5" style="font-size:0.92rem;" aria-live="polite">
             {{ trans_choice('books.results', $books->total(), ['count' => $books->total()]) }}
@@ -90,10 +108,9 @@
             <div class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(min(260px,100%),1fr));">
         @endif
 
-        <article class="bg-white/85 backdrop-blur-md border border-white/70 rounded-[16px] flex flex-col justify-between"
-                 style="padding:1.2rem; box-shadow:0 4px 16px rgba(102,126,234,0.10);">
+        <article class="book-card bg-white/85 backdrop-blur-md border border-white/70 rounded-[16px] flex flex-col justify-between">
             <div>
-                <h2 class="font-bold text-[#2d2d3a] mb-1" style="font-size:1.02rem; line-height:1.55;">{{ $book->title }}</h2>
+                <h2 class="book-title font-bold text-[#2d2d3a] mb-1">{{ $book->title }}</h2>
                 @if ($book->author)
                     <p class="text-[#6b6b80] mb-1" style="font-size:0.88rem;">{{ $book->author }}</p>
                 @endif

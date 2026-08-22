@@ -26,6 +26,11 @@ class Book extends Model
         return $categoryId ? $query->where('category_id', $categoryId) : $query;
     }
 
+    public function scopeInLanguage(Builder $query, ?string $language): Builder
+    {
+        return $language ? $query->where('language', $language) : $query;
+    }
+
     /**
      * Match a visitor's search against the folded title and author, so the
      * spelling of ك/ک and ي/ی on their keyboard does not decide the result.

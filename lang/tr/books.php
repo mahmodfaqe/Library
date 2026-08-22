@@ -8,6 +8,8 @@ return [
     'search_placeholder' => 'Başlık veya yazar…',
     'department_label' => 'Bölüm',
     'all_departments' => 'Tüm bölümler',
+    'language_label' => 'Dil',
+    'all_languages' => 'Tüm diller',
     'search' => 'Ara',
     'download' => 'İndir',
     'open' => 'Aç',

@@ -8,6 +8,8 @@ return [
     'search_placeholder' => 'العنوان أو المؤلف…',
     'department_label' => 'القسم',
     'all_departments' => 'كل الأقسام',
+    'language_label' => 'اللغة',
+    'all_languages' => 'كل اللغات',
     'search' => 'ابحث',
     'download' => 'تنزيل',
     'open' => 'فتح',

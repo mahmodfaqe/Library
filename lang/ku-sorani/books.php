@@ -8,6 +8,8 @@ return [
     'search_placeholder' => 'ناونیشان یان نووسەر…',
     'department_label' => 'بەش',
     'all_departments' => 'هەموو بەشەکان',
+    'language_label' => 'زمان',
+    'all_languages' => 'هەموو زمانەکان',
     'search' => 'بگەڕێ',
     'download' => 'داگرتن',
     'open' => 'کردنەوە',

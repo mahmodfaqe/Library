@@ -152,10 +152,21 @@ class ImportBooksFromDrive extends Command
         $digits = '0-9\x{0660}-\x{0669}\x{06F0}-\x{06F9}';
 
         $name = preg_replace('/\.pdf$/iu', '', $name);
-        $name = preg_replace("/^[{$digits}]+\s*[-–—.]\s*/u", '', $name);
-        $name = preg_replace("/\s*[-–—]\s*[{$digits}]+$/u", '', $name);
+        $name = preg_replace("/^[{$digits}]+\s*[-–—._]\s*/u", '', $name);
+        $name = preg_replace("/\s*[-–—_]\s*[{$digits}]+$/u", '', $name);
 
-        return trim(preg_replace('/\s+/u', ' ', $name)) ?: $name;
+        // A name with no spaces at all is a filename, not a title: the words
+        // are held apart by underscores or hyphens. A name that already has
+        // spaces is left alone, so hyphenated words survive intact.
+        if (! preg_match('/\s/u', $name)) {
+            $name = str_replace(['_', '-'], ' ', $name);
+        } else {
+            $name = str_replace('_', ' ', $name);
+        }
+
+        $name = trim(preg_replace('/\s+/u', ' ', $name));
+
+        return $name !== '' ? $name : $name;
     }
 
     private function leadingNumber(string $name): ?int

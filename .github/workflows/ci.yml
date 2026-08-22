@@ -53,3 +53,37 @@ jobs:
 
       - name: Check formatting
         run: vendor/bin/pint --test
+
+  deploy:
+    # Only a green build reaches the server, and only from main.
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+
+    steps:
+      - name: Open an SSH session
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Deploy
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -o BatchMode=yes \
+              "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
+              'bash /opt/library/docker/deploy.sh'
+
+      - name: Check the site answers
+        run: |
+          for attempt in $(seq 1 10); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "${{ secrets.DEPLOY_URL }}" || true)
+            echo "attempt $attempt: $code"
+            [ "$code" = "200" ] && exit 0
+            sleep 5
+          done
+          echo "The site did not return 200 after the deploy." >&2
+          exit 1

@@ -8,6 +8,8 @@ return [
     'search_placeholder' => 'ناڤنیشان یان نڤیسەر…',
     'department_label' => 'بەش',
     'all_departments' => 'هەمی بەش',
+    'language_label' => 'زمان',
+    'all_languages' => 'هەمی زمانان',
     'search' => 'بگەڕە',
     'download' => 'داگرتن',
     'open' => 'ڤەکرن',

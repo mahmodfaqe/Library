@@ -20,6 +20,7 @@ class BookController extends Controller
         $search = $this->textQuery($request, 'q');
         $category = $this->textQuery($request, 'category');
 
+        $language = $this->textQuery($request, 'language');
         $selected = $category ? Category::find($category) : null;
 
         // With over a thousand books a flat list is unusable, so the catalogue
@@ -27,11 +28,29 @@ class BookController extends Controller
         // has picked one or searched.
         $browsing = $search === null && $selected === null;
 
+        // Each subject is stocked in several languages, as the collection is
+        // organised. Only offer the ones this shelf actually holds.
+        $languages = $browsing ? collect() : Book::query()
+            ->matching($search)
+            ->inCategory($selected?->id)
+            ->whereNotNull('language')
+            ->selectRaw('language, count(*) as total')
+            ->groupBy('language')
+            ->orderByDesc('total')
+            ->pluck('total', 'language');
+
+        if (! $languages->has($language)) {
+            $language = null;
+        }
+
         return view('books.index', [
             'browsing' => $browsing,
+            'languages' => $languages,
+            'language' => $language,
             'books' => $browsing ? null : Book::with('category')
                 ->matching($search)
                 ->inCategory($selected?->id)
+                ->inLanguage($language)
                 ->orderBy('title')
                 ->paginate(24)
                 ->withQueryString(),

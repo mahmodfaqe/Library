@@ -8,6 +8,8 @@ return [
     'search_placeholder' => 'ناونیشان یان نویسەر…',
     'department_label' => 'بەش',
     'all_departments' => 'هەمی بەشەکا',
+    'language_label' => 'زوان',
+    'all_languages' => 'هەمی زوانەکا',
     'search' => 'بگێڵە',
     'download' => 'داگرتەی',
     'open' => 'کەردەوە',

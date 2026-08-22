@@ -77,10 +77,49 @@ class DriveImportTest extends TestCase
         $this->assertSame([
             'أسس الكيمياء العضوية',
             'ECG Mastering',
-            // the inner hyphen is part of the title and must survive
-            'الفحوص-المختبرية',
+            // No spaces anywhere, so the hyphens are holding words apart.
+            'الفحوص المختبرية',
             'Macleod’s Clinical Examination',
         ], $titles);
+    }
+
+    public function test_filename_separators_become_spaces(): void
+    {
+        $this->fakeDrive([
+            self::ROOT => [$this->folder('c', 'Subject')],
+            'c' => [
+                $this->pdf('a', 'for_the_love_of_physics'),
+                $this->pdf('b', 'A-collection-of-questions-in-physics'),
+                $this->pdf('c', 'Fundamentals_of_Physics_Mechanics.pdf'),
+            ],
+        ]);
+
+        $this->artisan('books:import-drive', ['folder' => [self::ROOT]])->assertSuccessful();
+
+        $this->assertSame([
+            'for the love of physics',
+            'A collection of questions in physics',
+            'Fundamentals of Physics Mechanics',
+        ], Book::orderBy('id')->pluck('title')->all());
+    }
+
+    public function test_a_real_title_keeps_its_punctuation(): void
+    {
+        $this->fakeDrive([
+            self::ROOT => [$this->folder('c', 'Subject')],
+            'c' => [
+                // Already has spaces, so the hyphen is the author's own.
+                $this->pdf('a', '7-Evidence-based Nursing Care'),
+                $this->pdf('b', 'Introductory Physics: Problems solving'),
+            ],
+        ]);
+
+        $this->artisan('books:import-drive', ['folder' => [self::ROOT]])->assertSuccessful();
+
+        $this->assertSame([
+            'Evidence-based Nursing Care',
+            'Introductory Physics: Problems solving',
+        ], Book::orderBy('id')->pluck('title')->all());
     }
 
     public function test_it_reaches_books_nested_one_level_deeper(): void
