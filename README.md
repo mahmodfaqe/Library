@@ -4,7 +4,9 @@ The electronic library of the College of Science, University of Raparin —
 a Laravel application serving a public catalogue of scientific resources in
 eight languages, with a small admin panel for staff.
 
-Production: **https://library.uor.edu.krd**
+Production: **https://dormitory-uor.online** — a temporary home until IT
+provisions `library.uor.edu.krd`. Both `APP_URL` and the `Sitemap:` line in
+`public/robots.txt` must be updated when the final domain is ready.
 
 ---
 
@@ -65,7 +67,7 @@ touching code — see `config/library.php`.
 
 | Key | What it is |
 |---|---|
-| `APP_URL` | `https://library.uor.edu.krd` |
+| `APP_URL` | `https://dormitory-uor.online` (temporary; see above) |
 | `APP_FALLBACK_LOCALE` | `ku-sorani` — the Kurdish variants fall back to it |
 | `LIBRARY_DRIVE_MAIN` | Google Drive folder behind "General Library 1" |
 | `LIBRARY_DRIVE_SECONDARY` | Folder behind "General Library 2" |
