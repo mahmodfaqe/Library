@@ -105,9 +105,42 @@ class HomePageTest extends TestCase
 
     public function test_the_qr_objective_renders_as_a_link(): void
     {
+        // The URL comes from config, so set it here rather than depending on
+        // whatever happens to be in .env.
+        config(['library.qr_url' => 'https://example.test/qr']);
+
         $this->get('/en')
-            ->assertSee('https://scence-bio.github.io/Qr-Code/', false)
+            ->assertSee('https://example.test/qr', false)
             ->assertSee('>'.__('messages.intro.qr_label', [], 'en').'</a>', false);
+    }
+
+    public function test_nothing_links_nowhere_when_the_urls_are_not_configured_yet(): void
+    {
+        // A fresh install ships with these blank; the page must not render
+        // buttons and links that go to href="".
+        config([
+            'library.qr_url' => '',
+            'library.drive.main' => '',
+            'library.drive.secondary' => '',
+        ]);
+
+        $html = $this->get('/en')->assertOk()->getContent();
+
+        $this->assertStringNotContainsString('href=""', $html);
+        // The objective still reads correctly, just without a link.
+        $this->assertStringContainsString(__('messages.intro.qr_label', [], 'en'), $html);
+    }
+
+    public function test_the_library_buttons_appear_once_configured(): void
+    {
+        config([
+            'library.drive.main' => 'https://drive.example.test/main',
+            'library.drive.secondary' => 'https://drive.example.test/second',
+        ]);
+
+        $this->get('/en')
+            ->assertSee('https://drive.example.test/main', false)
+            ->assertSee('https://drive.example.test/second', false);
     }
 
     public function test_it_lists_the_departments_in_sort_order(): void
