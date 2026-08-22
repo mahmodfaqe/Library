@@ -60,9 +60,10 @@ services:
         condition: service_healthy
 
     volumes:
-      # Everything that must survive a rebuild. Nothing outside these
-      # volumes is written to at runtime.
-      - library-database:/var/www/html/database
+      # Only storage/ is written to at runtime — uploads, logs, page cache and
+      # backups. Nothing is mounted over database/: doing so shadows the
+      # image's own database/migrations, so a deploy silently ships the
+      # migrations the volume was created with rather than the current ones.
       - library-storage:/var/www/html/storage
 
     logging:
@@ -72,6 +73,5 @@ services:
         max-file: "3"
 
 volumes:
-  library-database:   # kept for the local SQLite fallback
-  library-storage:    # uploads, logs, page cache, backups
-  library-mysql:
+  library-storage:   # uploads, logs, page cache, backups
+  library-mysql:     # the database itself

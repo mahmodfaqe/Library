@@ -6,15 +6,16 @@ cd /var/www/html
 # The database and storage live on volumes, so they start empty on a new host.
 mkdir -p storage/framework/cache storage/framework/sessions \
          storage/framework/views storage/framework/pagecache \
-         storage/logs storage/backups database
+         storage/logs storage/backups storage/app/books
 
-if [ ! -f database/database.sqlite ]; then
-    echo "Creating a fresh database."
+if [ "${DB_CONNECTION}" = "sqlite" ] && [ ! -f database/database.sqlite ]; then
+    echo "Creating a fresh SQLite database."
     touch database/database.sqlite
+    chown www-data:www-data database/database.sqlite
 fi
 
-chown -R www-data:www-data storage database
-chmod -R u+rwX,g+rwX storage database
+chown -R www-data:www-data storage
+chmod -R u+rwX,g+rwX storage
 
 if [ -z "${APP_KEY}" ] && ! grep -q '^APP_KEY=.\+' .env 2>/dev/null; then
     echo "APP_KEY is not set. Generate one with: php artisan key:generate --show" >&2
