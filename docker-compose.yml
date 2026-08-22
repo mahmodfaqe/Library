@@ -1,0 +1,33 @@
+services:
+  library:
+    build:
+      context: .
+    image: uor-library:latest
+    container_name: uor-library
+    restart: unless-stopped
+
+    # Bound to localhost only. The host's nginx terminates TLS for
+    # dormitory-uor.online and proxies to this port, so the container is never
+    # reachable from the internet directly and cannot collide with any other
+    # site on the machine.
+    ports:
+      - "127.0.0.1:8080:80"
+
+    env_file:
+      - .env
+
+    volumes:
+      # Everything that must survive a rebuild. Nothing outside these two
+      # volumes is written to at runtime.
+      - library-database:/var/www/html/database
+      - library-storage:/var/www/html/storage
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  library-database:
+  library-storage:
