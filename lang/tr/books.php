@@ -2,7 +2,8 @@
 
 return [
     'title' => 'Kitap kataloğu',
-    'intro' => 'Başlığa veya yazara göre arayın ya da listeyi tek bir bilimsel bölüme daraltın.',
+    'intro' => 'Bir konu seçin veya doğrudan başlık ve yazara göre arayın.',
+    'back_to_subjects' => 'Konulara dön',
     'search_label' => 'Ara',
     'search_placeholder' => 'Başlık veya yazar…',
     'department_label' => 'Bölüm',

@@ -221,3 +221,7 @@ transition: background-image 1.5s ease-in-out;
     outline: 3px solid #ff6b6b;
     outline-offset: 2px;
 }
+
+/* Subject shelves on the catalogue landing */
+.subject-card { transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease; }
+.subject-card:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(102, 126, 234, 0.20); }

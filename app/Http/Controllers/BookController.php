@@ -20,18 +20,27 @@ class BookController extends Controller
         $search = $this->textQuery($request, 'q');
         $category = $this->textQuery($request, 'category');
 
-        $books = Book::with('category')
-            ->matching($search)
-            ->inCategory($category)
-            ->orderBy('title')
-            ->paginate(24)
-            ->withQueryString();
+        $selected = $category ? Category::find($category) : null;
+
+        // With over a thousand books a flat list is unusable, so the catalogue
+        // opens on the subject shelves and only lists books once the visitor
+        // has picked one or searched.
+        $browsing = $search === null && $selected === null;
 
         return view('books.index', [
-            'books' => $books,
-            'categories' => Category::orderBy('sort_order')->orderBy('name')->get(),
+            'browsing' => $browsing,
+            'books' => $browsing ? null : Book::with('category')
+                ->matching($search)
+                ->inCategory($selected?->id)
+                ->orderBy('title')
+                ->paginate(24)
+                ->withQueryString(),
+            'categories' => Category::withCount('books')
+                ->orderBy('sort_order')
+                ->orderBy('name')
+                ->get(),
             'search' => $search,
-            'category' => $category,
+            'selected' => $selected,
         ]);
     }
 

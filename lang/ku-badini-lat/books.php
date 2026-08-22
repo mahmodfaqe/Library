@@ -2,7 +2,8 @@
 
 return [
     'title' => 'Katalogê pirtûkan',
-    'intro' => 'Li gorî sernav an navê nivîskar bigere, an lîsteyê bi beşek zanistî sînordar bike.',
+    'intro' => 'Babetekê hilbijêre, an rasterast li sernav û nivîskar bigere.',
+    'back_to_subjects' => 'Vegere bal babetan',
     'search_label' => 'Lêgerîn',
     'search_placeholder' => 'Sernav an nivîskar…',
     'department_label' => 'Beş',

@@ -2,7 +2,8 @@
 
 return [
     'title' => 'Book catalogue',
-    'intro' => 'Search by title or author, or narrow the list to one scientific department.',
+    'intro' => 'Choose a subject, or search by title and author.',
+    'back_to_subjects' => 'Back to subjects',
     'search_label' => 'Search',
     'search_placeholder' => 'Title or author…',
     'department_label' => 'Department',
