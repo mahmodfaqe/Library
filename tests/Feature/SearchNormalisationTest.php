@@ -73,11 +73,18 @@ class SearchNormalisationTest extends TestCase
         $this->assertSame(1, Book::matching('الفحوص المختبرية')->count());
     }
 
-    public function test_a_wildcard_is_treated_as_text(): void
+    public function test_a_wildcard_never_widens_the_match(): void
     {
         $this->book('Molecular Biology');
+        $this->book('Organic Chemistry');
 
-        $this->assertSame(0, Book::matching('%')->count());
+        // '%' carries no meaning after folding, so a bare one is the same as
+        // searching for nothing rather than matching everything by accident.
+        $this->assertSame(2, Book::matching('%')->count());
+
+        // And inside a term it stays literal: this must not match "Biology".
+        $this->assertSame(0, Book::matching('Bio%logy')->count());
+        $this->assertSame(0, Book::matching('_iology')->count());
     }
 
     public function test_an_unrelated_term_still_finds_nothing(): void
