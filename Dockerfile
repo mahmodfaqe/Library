@@ -28,9 +28,10 @@ RUN composer dump-autoload --no-dev --optimize --classmap-authoritative
 # ── 3. Runtime ────────────────────────────────────────────────────────
 FROM php:8.3-fpm-alpine AS runtime
 
-RUN apk add --no-cache nginx supervisor sqlite-libs \
+# mariadb-client provides mariadb-dump, used by `php artisan backup:database`.
+RUN apk add --no-cache nginx supervisor sqlite-libs mariadb-client gzip \
     && apk add --no-cache --virtual .build-deps sqlite-dev $PHPIZE_DEPS \
-    && docker-php-ext-install pdo_sqlite opcache \
+    && docker-php-ext-install pdo_sqlite pdo_mysql opcache \
     && apk del .build-deps \
     && rm -rf /var/cache/apk/*
 

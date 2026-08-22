@@ -21,6 +21,22 @@ if [ -z "${APP_KEY}" ] && ! grep -q '^APP_KEY=.\+' .env 2>/dev/null; then
     exit 1
 fi
 
+# Compose waits for the database's own healthcheck, but the first connection
+# can still land a moment early on a cold start.
+if [ "${DB_CONNECTION}" = "mysql" ] || [ "${DB_CONNECTION}" = "mariadb" ]; then
+    echo "Waiting for the database..."
+    i=0
+    until php artisan db:show --json >/dev/null 2>&1; do
+        i=$((i + 1))
+        if [ "$i" -ge 30 ]; then
+            echo "The database did not become reachable in time." >&2
+            exit 1
+        fi
+        sleep 2
+    done
+    echo "Database is up."
+fi
+
 php artisan migrate --force --no-interaction
 
 # Compile config, routes and views into the image's cache for speed. Cleared

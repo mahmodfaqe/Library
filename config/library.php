@@ -36,4 +36,14 @@ return [
 
     'feedback_retention_days' => (int) env('LIBRARY_FEEDBACK_RETENTION_DAYS', 365),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Uploads
+    |--------------------------------------------------------------------------
+    | Largest book PDF accepted, in kilobytes. nginx and PHP inside the
+    | container are configured to match — raise all three together.
+    */
+
+    'max_upload_kb' => (int) env('LIBRARY_MAX_UPLOAD_KB', 51200),
+
 ];

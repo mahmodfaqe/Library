@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\View\View;
 
 class BookController extends Controller
@@ -30,6 +33,25 @@ class BookController extends Controller
             'search' => $search,
             'department' => $department,
         ]);
+    }
+
+    /**
+     * Stream a locally held PDF.
+     *
+     * Files sit outside public/ so every download goes through here, which is
+     * what makes the counter possible and leaves room to restrict access later.
+     */
+    public function download(Book $book): StreamedResponse
+    {
+        abort_unless($book->hasFile() && Storage::disk('books')->exists($book->file_path), 404);
+
+        $book->incrementQuietly('downloads');
+
+        return Storage::disk('books')->response(
+            $book->file_path,
+            Str::of($book->title)->limit(80, '')->slug().'.pdf',
+            ['Content-Type' => 'application/pdf']
+        );
     }
 
     /**

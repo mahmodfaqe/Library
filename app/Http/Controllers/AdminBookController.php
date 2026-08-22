@@ -7,6 +7,7 @@ use App\Models\Book;
 use App\Models\Department;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class AdminBookController extends Controller
@@ -52,7 +53,7 @@ class AdminBookController extends Controller
 
     public function update(Request $request, Book $book): RedirectResponse
     {
-        $book->update($this->validated($request));
+        $book->update($this->validated($request, $book));
         Activity::record('book.updated', $book->title);
         $this->clearPageCache();
 
@@ -62,23 +63,50 @@ class AdminBookController extends Controller
     public function destroy(Book $book): RedirectResponse
     {
         Activity::record('book.deleted', $book->title);
+
+        if ($book->hasFile()) {
+            Storage::disk('books')->delete($book->file_path);
+        }
+
         $book->delete();
         $this->clearPageCache();
 
         return redirect()->route('admin.books')->with('status', __('admin.flash.book_deleted'));
     }
 
-    private function validated(Request $request): array
+    private function validated(Request $request, ?Book $book = null): array
     {
-        return $request->validate([
+        $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'author' => ['nullable', 'string', 'max:190'],
             'year' => ['nullable', 'integer', 'min:1400', 'max:'.((int) date('Y') + 1)],
             'language' => ['nullable', 'string', 'max:40'],
             'department_id' => ['nullable', 'exists:departments,id'],
-            'url' => ['required', 'url', 'max:500'],
+            // A book needs somewhere to be read: an uploaded file or a link.
+            'url' => ['nullable', 'url', 'max:500'],
             'cover_url' => ['nullable', 'url', 'max:500'],
+            'file' => [
+                $book?->hasFile() || $request->filled('url') ? 'nullable' : 'required',
+                'file', 'mimetypes:application/pdf', 'max:'.(int) config('library.max_upload_kb'),
+            ],
+        ], [
+            'file.required' => __('admin.books.file_or_url_required'),
         ]);
+
+        if ($file = $request->file('file')) {
+            // Replacing a file removes the old one rather than leaving it
+            // orphaned on disk.
+            if ($book?->hasFile()) {
+                Storage::disk('books')->delete($book->file_path);
+            }
+
+            $data['file_path'] = $file->store('', 'books');
+            $data['file_size'] = $file->getSize();
+        }
+
+        unset($data['file']);
+
+        return $data;
     }
 
     private function clearPageCache(): void

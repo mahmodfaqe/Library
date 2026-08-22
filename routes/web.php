@@ -23,6 +23,9 @@ Route::get('{locale}/books', [BookController::class, 'index'])
     ->whereIn('locale', Locale::SUPPORTED)
     ->name('books.localised');
 
+Route::get('books/{book}/download', [BookController::class, 'download'])
+    ->name('books.download');
+
 // One crawlable URL per language: /en, /ar, /ku-badini, ...
 Route::get('/{locale}', [HomeController::class, 'index'])
     ->whereIn('locale', Locale::SUPPORTED)

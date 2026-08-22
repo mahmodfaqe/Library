@@ -30,6 +30,17 @@ return [
 
     'disks' => [
 
+        /*
+         * Book PDFs. Kept outside public/ so they are always served through
+         * the application, which lets downloads be counted and access
+         * tightened later without moving files.
+         */
+        'books' => [
+            'driver' => 'local',
+            'root' => storage_path('app/books'),
+            'throw' => false,
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),
