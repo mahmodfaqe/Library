@@ -9,7 +9,8 @@
             <a href="{{ route('admin.books') }}" class="btn btn-secondary">{{ __('admin.actions.back') }}</a>
         </div>
 
-        <form method="POST" action="{{ $book->exists ? route('admin.books.update', $book) : route('admin.books.store') }}">
+        <form method="POST" enctype="multipart/form-data"
+              action="{{ $book->exists ? route('admin.books.update', $book) : route('admin.books.store') }}">
             @csrf
             @if ($book->exists)
                 @method('PUT')
@@ -52,8 +53,20 @@
             </div>
 
             <div class="field">
+                <label for="file">{{ __('admin.books.file') }}</label>
+                <input type="file" id="file" name="file" accept="application/pdf">
+                <div class="hint">
+                    @if ($book->hasFile())
+                        {{ __('admin.books.file_present', ['size' => $book->humanFileSize()]) }}
+                    @else
+                        {{ __('admin.books.file_hint') }}
+                    @endif
+                </div>
+            </div>
+
+            <div class="field">
                 <label for="url">{{ __('admin.books.table.url') }}</label>
-                <input type="url" id="url" name="url" required maxlength="500" dir="ltr"
+                <input type="url" id="url" name="url" maxlength="500" dir="ltr"
                        placeholder="https://drive.google.com/…"
                        value="{{ old('url', $book->url) }}">
             </div>

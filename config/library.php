@@ -18,6 +18,13 @@ return [
 
     'qr_url' => env('LIBRARY_QR_URL', ''),
 
+    /*
+     * Read-only Google API key, used by `php artisan books:import-drive` to
+     * list and fetch the PDFs in a publicly shared folder. Not needed at
+     * runtime — only when importing.
+     */
+    'google_api_key' => env('LIBRARY_GOOGLE_API_KEY', ''),
+
     'university_url' => env('LIBRARY_UNIVERSITY_URL', 'https://uor.edu.krd'),
 
     'analytics' => [

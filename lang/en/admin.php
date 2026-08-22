@@ -68,6 +68,10 @@ return [
         'wrong_password' => 'The password is incorrect.',
     ],
     'books' => [
+        'file' => 'PDF file',
+        'file_hint' => 'Upload the file, or give an external link instead.',
+        'file_present' => 'A file is held (:size) — uploading replaces it.',
+        'file_or_url_required' => 'Upload a file or provide a link.',
         'title' => 'Books',
         'heading' => 'Books (:count)',
         'add' => '+ Add a book',

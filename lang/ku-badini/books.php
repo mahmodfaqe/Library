@@ -8,6 +8,7 @@ return [
     'department_label' => 'بەش',
     'all_departments' => 'هەمی بەش',
     'search' => 'بگەڕە',
+    'download' => 'داگرتن',
     'open' => 'ڤەکرن',
     'empty' => 'چ پرتوک نەهاتنە دیتن.',
     'pagination' => 'رویپەل',

@@ -68,6 +68,10 @@ return [
         'wrong_password' => 'Parola hatalı.',
     ],
     'books' => [
+        'file' => 'PDF dosyası',
+        'file_hint' => 'Dosyayı yükleyin veya bunun yerine bir bağlantı verin.',
+        'file_present' => 'Dosya mevcut (:size) — yükleme onu değiştirir.',
+        'file_or_url_required' => 'Bir dosya yükleyin veya bağlantı verin.',
         'title' => 'Kitaplar',
         'heading' => 'Kitaplar (:count)',
         'add' => '+ Kitap ekle',

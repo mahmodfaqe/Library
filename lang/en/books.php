@@ -8,6 +8,7 @@ return [
     'department_label' => 'Department',
     'all_departments' => 'All departments',
     'search' => 'Search',
+    'download' => 'Download',
     'open' => 'Open',
     'empty' => 'No books found.',
     'pagination' => 'Pages',

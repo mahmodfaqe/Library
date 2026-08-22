@@ -8,6 +8,7 @@ return [
     'department_label' => 'گروه',
     'all_departments' => 'همه گروه‌ها',
     'search' => 'جست‌وجو',
+    'download' => 'دانلود',
     'open' => 'باز کردن',
     'empty' => 'کتابی یافت نشد.',
     'pagination' => 'صفحه‌ها',

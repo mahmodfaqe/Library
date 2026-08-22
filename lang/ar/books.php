@@ -8,6 +8,7 @@ return [
     'department_label' => 'القسم',
     'all_departments' => 'كل الأقسام',
     'search' => 'ابحث',
+    'download' => 'تنزيل',
     'open' => 'فتح',
     'empty' => 'لم يُعثر على كتب.',
     'pagination' => 'الصفحات',

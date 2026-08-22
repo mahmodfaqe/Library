@@ -8,6 +8,7 @@ return [
     'department_label' => 'Beş',
     'all_departments' => 'Hemû beş',
     'search' => 'Bigere',
+    'download' => 'Daxe',
     'open' => 'Veke',
     'empty' => 'Ti pirtûk nehat dîtin.',
     'pagination' => 'Rûpel',

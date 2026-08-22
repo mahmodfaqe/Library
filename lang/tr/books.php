@@ -8,6 +8,7 @@ return [
     'department_label' => 'Bölüm',
     'all_departments' => 'Tüm bölümler',
     'search' => 'Ara',
+    'download' => 'İndir',
     'open' => 'Aç',
     'empty' => 'Kitap bulunamadı.',
     'pagination' => 'Sayfalar',

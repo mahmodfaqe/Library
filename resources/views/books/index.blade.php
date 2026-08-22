@@ -92,11 +92,17 @@
                     ])->filter()->implode(' · ') }}
                 </p>
             </div>
-            <a href="{{ $book->url }}" target="_blank" rel="noopener"
-               class="section-btn inline-block font-semibold text-white rounded-full no-underline text-center"
-               style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:0.55rem 1.2rem; font-size:0.86rem;">
-                {{ __('books.open') }}
-            </a>
+            @if ($book->readUrl())
+                <a href="{{ $book->readUrl() }}"
+                   @unless ($book->hasFile()) target="_blank" rel="noopener" @endunless
+                   class="section-btn inline-block font-semibold text-white rounded-full no-underline text-center"
+                   style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:0.55rem 1.2rem; font-size:0.86rem;">
+                    {{ $book->hasFile() ? __('books.download') : __('books.open') }}
+                    @if ($book->humanFileSize())
+                        <span style="opacity:0.75; font-size:0.85em;">({{ $book->humanFileSize() }})</span>
+                    @endif
+                </a>
+            @endif
         </article>
 
         @if ($loop->last)

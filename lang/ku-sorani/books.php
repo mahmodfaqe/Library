@@ -8,6 +8,7 @@ return [
     'department_label' => 'بەش',
     'all_departments' => 'هەموو بەشەکان',
     'search' => 'بگەڕێ',
+    'download' => 'داگرتن',
     'open' => 'کردنەوە',
     'empty' => 'هیچ کتێبێک نەدۆزرایەوە.',
     'pagination' => 'لاپەڕەکان',
