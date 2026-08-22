@@ -19,6 +19,16 @@ return [
     'qr_url' => env('LIBRARY_QR_URL', ''),
 
     /*
+     * Hosts allowed to serve book covers, for the Content-Security-Policy.
+     * Drive answers a thumbnail request from drive.google.com by redirecting
+     * to googleusercontent, so both have to be listed.
+     */
+    'cover_hosts' => [
+        'https://drive.google.com',
+        'https://*.googleusercontent.com',
+    ],
+
+    /*
      * Read-only Google API key, used by `php artisan books:import-drive` to
      * list and fetch the PDFs in a publicly shared folder. Not needed at
      * runtime — only when importing.

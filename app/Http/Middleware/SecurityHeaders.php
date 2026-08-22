@@ -31,7 +31,13 @@ class SecurityHeaders
             // build emits inline styles.
             trim("script-src 'self' 'unsafe-inline' ".($analytics ? $scriptOrigin : '')),
             "style-src 'self' 'unsafe-inline'",
-            trim("img-src 'self' data: ".$analytics),
+            // Book covers are Drive's own thumbnails of the first page, which
+            // it serves from a separate host after a redirect.
+            trim(implode(' ', array_filter([
+                "img-src 'self' data:",
+                $analytics,
+                implode(' ', config('library.cover_hosts', [])),
+            ]))),
             "font-src 'self'",
             trim("connect-src 'self' ".$analytics),
             "form-action 'self'",

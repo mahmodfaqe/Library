@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Support\ArabicText;
+use App\Support\BookLanguage;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -29,6 +30,31 @@ class Book extends Model
     public function scopeInLanguage(Builder $query, ?string $language): Builder
     {
         return $language ? $query->where('language', $language) : $query;
+    }
+
+    /**
+     * Shelve by language first, in the catalogue's own order, then by title.
+     *
+     * A CASE expression rather than a join: the order is a presentation
+     * choice, and every database the site runs on understands it.
+     */
+    public function scopeOrderByLanguageThenTitle(Builder $query): Builder
+    {
+        $cases = [];
+        $bindings = [];
+
+        foreach (BookLanguage::ORDER as $rank => $language) {
+            $cases[] = 'when language = ? then '.$rank;
+            $bindings[] = $language;
+        }
+
+        return $query
+            ->orderByRaw(
+                'case '.implode(' ', $cases).' else '.count(BookLanguage::ORDER).' end',
+                $bindings
+            )
+            ->orderBy('language')
+            ->orderBy('title');
     }
 
     /**
@@ -79,6 +105,27 @@ class Book extends Model
         static::saving(function (self $book) {
             $book->search_text = ArabicText::fold($book->title.' '.$book->author);
         });
+    }
+
+    /**
+     * The cover to show in the catalogue, or null when there is none.
+     *
+     * Almost every book is a PDF on Google Drive, and Drive renders a
+     * thumbnail of the first page on request — so the cover comes for free,
+     * without storing a second copy of anything. A cover_url entered by hand
+     * wins over it.
+     */
+    public function coverUrl(): ?string
+    {
+        if (filled($this->cover_url)) {
+            return $this->cover_url;
+        }
+
+        if (filled($this->drive_file_id)) {
+            return 'https://drive.google.com/thumbnail?id='.urlencode($this->drive_file_id).'&sz=w400';
+        }
+
+        return null;
     }
 
     /**

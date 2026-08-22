@@ -19,6 +19,26 @@ class BookLanguage
     ];
 
     /**
+     * The order the languages are shelved in on the catalogue page. Kurdish
+     * leads because it is the university's own language; anything not listed
+     * here follows, in alphabetical order.
+     *
+     * @var list<string>
+     */
+    public const ORDER = ['کوردی', 'English', 'عەرەبی', 'فارسی', 'Türkçe'];
+
+    /**
+     * Where a language sits in the shelving order. Unlisted languages sort
+     * after every listed one.
+     */
+    public static function rank(?string $language): int
+    {
+        $position = array_search($language, self::ORDER, true);
+
+        return $position === false ? count(self::ORDER) : $position;
+    }
+
+    /**
      * The canonical language for a folder name, or null when the folder mixes
      * several — a few do, and guessing one would be wrong.
      */

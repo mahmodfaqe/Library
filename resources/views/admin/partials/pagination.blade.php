@@ -13,14 +13,19 @@
     $pages = collect(range(max(1, $current - $window), min($last, $current + $window)))
         ->when($current - $window > 1, fn ($p) => $p->prepend(null)->prepend(1))
         ->when($current + $window < $last, fn ($p) => $p->push(null)->push($last));
+
+    // The panel is read right-to-left in Kurdish and Arabic, where "back" is
+    // the arrow pointing right.
+    $previous = \App\Support\Locale::isLtr() ? '«' : '»';
+    $next = \App\Support\Locale::isLtr() ? '»' : '«';
 @endphp
 
 @if ($paginator->hasPages())
     <nav class="pagination" aria-label="{{ __('admin.pagination') }}">
         @if ($paginator->onFirstPage())
-            <span aria-hidden="true">«</span>
+            <span aria-hidden="true">{{ $previous }}</span>
         @else
-            <a href="{{ $paginator->previousPageUrl() }}" rel="prev">«</a>
+            <a href="{{ $paginator->previousPageUrl() }}" rel="prev">{{ $previous }}</a>
         @endif
 
         @foreach ($pages as $page)
@@ -34,9 +39,9 @@
         @endforeach
 
         @if ($paginator->hasMorePages())
-            <a href="{{ $paginator->nextPageUrl() }}" rel="next">»</a>
+            <a href="{{ $paginator->nextPageUrl() }}" rel="next">{{ $next }}</a>
         @else
-            <span aria-hidden="true">»</span>
+            <span aria-hidden="true">{{ $next }}</span>
         @endif
     </nav>
 @endif

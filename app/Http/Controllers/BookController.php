@@ -47,11 +47,14 @@ class BookController extends Controller
             'browsing' => $browsing,
             'languages' => $languages,
             'language' => $language,
+            // Books are shelved by language and only then by title, so the
+            // Kurdish shelf runs out before the English one begins rather than
+            // the three being interleaved.
             'books' => $browsing ? null : Book::with('category')
                 ->matching($search)
                 ->inCategory($selected?->id)
                 ->inLanguage($language)
-                ->orderBy('title')
+                ->orderByLanguageThenTitle()
                 ->paginate(24)
                 ->withQueryString(),
             'categories' => Category::withCount('books')
