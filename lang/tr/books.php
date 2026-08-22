@@ -4,6 +4,7 @@ return [
     'previous_page' => 'Önceki sayfa',
     'next_page' => 'Sonraki sayfa',
     'showing' => ':total kayıttan :from–:to gösteriliyor',
+    'other_language' => 'Diğer dil',
     'breadcrumb' => 'Gezinti yolu',
     'clear' => 'Temizle',
     'title' => 'Kitap kataloğu',

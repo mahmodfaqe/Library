@@ -90,38 +90,64 @@
         </div>
     @else
         @forelse ($books as $book)
-            @if ($loop->first)
-                <div class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(min(260px,100%),1fr));">
+            {{-- Books arrive shelved by language, so a heading goes in
+                 wherever the shelf changes. When the visitor has already
+                 picked one language there is only ever one shelf, and the
+                 chips above already say which. --}}
+            @php $shelf = $book->language ?: __('books.other_language'); @endphp
+
+            @if ($language === null && (! isset($currentShelf) || $currentShelf !== $shelf))
+                @unless ($loop->first)
+                    </div>
+                @endunless
+                <h2 class="language-shelf" dir="auto">
+                    <bdi>{{ $shelf }}</bdi>
+                </h2>
+                <div class="book-grid">
+                @php $currentShelf = $shelf; @endphp
+            @elseif ($loop->first)
+                <div class="book-grid">
             @endif
 
-            <article class="book-card bg-white/85 backdrop-blur-md border border-white/70 rounded-[16px] flex flex-col justify-between">
-                <div>
-                    <h2 class="book-title font-bold text-[#2d2d3a] mb-1" dir="auto">{{ $book->title }}</h2>
-                    @if ($book->author)
-                        <p class="text-[#6b6b80] mb-1" style="font-size:0.88rem;" dir="auto">{{ $book->author }}</p>
+            <article class="book-card bg-white/85 backdrop-blur-md border border-white/70 rounded-[16px] flex flex-col">
+                <div class="book-cover">
+                    @if ($book->coverUrl())
+                        <img src="{{ $book->coverUrl() }}" alt="" loading="lazy" decoding="async"
+                             referrerpolicy="no-referrer" onerror="this.closest('.book-cover').classList.add('is-blank')">
                     @endif
-                    <p class="text-[#8a8aa0] mb-3" style="font-size:0.8rem;">
-                        @foreach (collect([
-                            $book->year,
-                            $book->language,
-                            // Redundant once the whole page is one subject.
-                            $selected ? null : $book->category?->localName(),
-                        ])->filter() as $fact)
-                            <bdi>{{ $fact }}</bdi>@unless ($loop->last) <span class="opacity-60">·</span> @endunless
-                        @endforeach
-                    </p>
+                    {{-- Shown when there is no cover, and when one fails to load. --}}
+                    <span class="book-cover-fallback" aria-hidden="true">{{ $book->category?->icon ?: '📘' }}</span>
                 </div>
-                @if ($book->readUrl())
-                    <a href="{{ $book->readUrl() }}"
-                       @unless ($book->hasFile()) target="_blank" rel="noopener" @endunless
-                       class="section-btn inline-block font-semibold text-white rounded-full no-underline text-center"
-                       style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:0.55rem 1.2rem; font-size:0.86rem;">
-                        {{ $book->hasFile() ? __('books.download') : __('books.open') }}
-                        @if ($book->humanFileSize())
-                            <bdi style="opacity:0.75; font-size:0.85em;">({{ $book->humanFileSize() }})</bdi>
+
+                <div class="book-body">
+                    <div>
+                        <h3 class="book-title font-bold text-[#2d2d3a] mb-1" dir="auto">{{ $book->title }}</h3>
+                        @if ($book->author)
+                            <p class="text-[#6b6b80] mb-1" style="font-size:0.88rem;" dir="auto">{{ $book->author }}</p>
                         @endif
-                    </a>
-                @endif
+                        <p class="text-[#8a8aa0] mb-3" style="font-size:0.8rem;">
+                            @foreach (collect([
+                                $book->year,
+                                // Redundant once the shelf heading says it.
+                                $language === null ? null : $book->language,
+                                $selected ? null : $book->category?->localName(),
+                            ])->filter() as $fact)
+                                <bdi>{{ $fact }}</bdi>@unless ($loop->last) <span class="opacity-60">·</span> @endunless
+                            @endforeach
+                        </p>
+                    </div>
+                    @if ($book->readUrl())
+                        <a href="{{ $book->readUrl() }}"
+                           @unless ($book->hasFile()) target="_blank" rel="noopener" @endunless
+                           class="section-btn inline-block font-semibold text-white rounded-full no-underline text-center"
+                           style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:0.55rem 1.2rem; font-size:0.86rem;">
+                            {{ $book->hasFile() ? __('books.download') : __('books.open') }}
+                            @if ($book->humanFileSize())
+                                <bdi style="opacity:0.75; font-size:0.85em;">({{ $book->humanFileSize() }})</bdi>
+                            @endif
+                        </a>
+                    @endif
+                </div>
             </article>
 
             @if ($loop->last)

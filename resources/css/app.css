@@ -345,3 +345,66 @@ transition: background-image 1.5s ease-in-out;
     color: #8a8aa0;
     font-size: 0.85rem;
 }
+
+/* ── Language shelves ────────────────────────────────────────────────────
+   The collection is organised by language, so the catalogue is too: one
+   heading per shelf, and the books under it. */
+.language-shelf {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 2.2rem 0 1rem;
+    font-size: clamp(1.05rem, 2.8vw, 1.3rem);
+    font-weight: 700;
+    color: #4a4a5c;
+}
+.language-shelf:first-of-type { margin-top: 0; }
+.language-shelf::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to var(--shelf-fade, right), #d5d9ee, transparent);
+}
+[dir="rtl"] .language-shelf { --shelf-fade: left; }
+
+.book-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+}
+
+/* ── Book covers ─────────────────────────────────────────────────────────
+   Drive renders the first page of each PDF, so most books have a cover for
+   free. The tile keeps its shape whether the image arrives or not, so the
+   grid does not reflow as the lazy images load. */
+.book-cover {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    border-radius: 12px;
+    overflow: hidden;
+    background: linear-gradient(145deg, #eef0fb 0%, #e3e7f7 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.9rem;
+}
+.book-cover img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.book-cover.is-blank img { display: none; }
+.book-card:hover .book-cover img { transform: scale(1.04); }
+.book-cover-fallback {
+    font-size: clamp(2rem, 6vw, 2.8rem);
+    opacity: 0.45;
+}
+.book-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+}

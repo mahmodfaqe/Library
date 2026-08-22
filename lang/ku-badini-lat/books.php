@@ -4,6 +4,7 @@ return [
     'previous_page' => 'Rûpela berî',
     'next_page' => 'Rûpela paşî',
     'showing' => 'Nîşandana :from–:to ji koma :total',
+    'other_language' => 'Zimanê din',
     'breadcrumb' => 'Riya naverokê',
     'clear' => 'Paqijkirin',
     'title' => 'Katalogê pirtûkan',

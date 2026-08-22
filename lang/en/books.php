@@ -4,6 +4,7 @@ return [
     'previous_page' => 'Previous page',
     'next_page' => 'Next page',
     'showing' => 'Showing :from–:to of :total',
+    'other_language' => 'Other language',
     'breadcrumb' => 'Breadcrumb',
     'clear' => 'Clear',
     'title' => 'Book catalogue',

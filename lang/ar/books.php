@@ -4,6 +4,7 @@ return [
     'previous_page' => 'الصفحة السابقة',
     'next_page' => 'الصفحة التالية',
     'showing' => 'عرض :from–:to من أصل :total',
+    'other_language' => 'لغة أخرى',
     'breadcrumb' => 'مسار التصفح',
     'clear' => 'مسح',
     'title' => 'فهرس الكتب',

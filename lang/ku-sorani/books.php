@@ -4,6 +4,7 @@ return [
     'previous_page' => 'پەڕەی پێشوو',
     'next_page' => 'پەڕەی داهاتوو',
     'showing' => 'پیشاندانی :from–:to لە کۆی :total',
+    'other_language' => 'زمانی تر',
     'breadcrumb' => 'ڕێڕەوی ناوەڕۆک',
     'clear' => 'پاککردنەوە',
     'title' => 'کاتالۆگی کتێبەکان',

@@ -4,6 +4,7 @@ return [
     'previous_page' => 'رویپەلا بەری',
     'next_page' => 'رویپەلا پاشی',
     'showing' => 'نیشاندانا :from–:to ژ کۆما :total',
+    'other_language' => 'زمانێ دی',
     'breadcrumb' => 'ڕێکا ناڤەرۆکێ',
     'clear' => 'پاقژکرن',
     'title' => 'کاتالۆگا پرتوکان',

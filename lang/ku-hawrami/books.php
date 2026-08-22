@@ -4,6 +4,7 @@ return [
     'previous_page' => 'لاپەڕەی پەیسەر',
     'next_page' => 'لاپەڕەی دماتەر',
     'showing' => 'نمایشی :from–:to لە کۆی :total',
+    'other_language' => 'زوانی تەر',
     'breadcrumb' => 'ڕاگەی ناوەڕۆی',
     'clear' => 'پاکەرکەردەی',
     'title' => 'کاتالۆگی کتێوەکا',
