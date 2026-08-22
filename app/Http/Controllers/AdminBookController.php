@@ -73,7 +73,7 @@ class AdminBookController extends Controller
         return $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'author' => ['nullable', 'string', 'max:190'],
-            'year' => ['nullable', 'integer', 'min:1400', 'max:'.(date('Y') + 1)],
+            'year' => ['nullable', 'integer', 'min:1400', 'max:'.((int) date('Y') + 1)],
             'language' => ['nullable', 'string', 'max:40'],
             'department_id' => ['nullable', 'exists:departments,id'],
             'url' => ['required', 'url', 'max:500'],
