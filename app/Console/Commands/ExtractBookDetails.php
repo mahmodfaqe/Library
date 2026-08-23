@@ -18,7 +18,8 @@ class ExtractBookDetails extends Command
         {--dry-run : Report what would change without writing anything}
         {--targets= : Read the books to look at from this JSON file instead of the database}
         {--results= : Write what was found to this JSON file instead of the database}
-        {--apply= : Write a results file produced elsewhere into the database}';
+        {--apply= : Write a results file produced elsewhere into the database}
+        {--delay=2 : Seconds to wait between books, to stay under Drive\'s rate limit}';
 
     protected $description = 'Read the author and year out of each book\'s own PDF';
 
@@ -60,6 +61,15 @@ class ExtractBookDetails extends Command
             }
 
             $pdf = $this->contents($book, $key);
+
+            if ($pdf === self::RATE_LIMITED) {
+                $bar->finish();
+                $this->newLine(2);
+                $this->warn('Drive is still refusing downloads after backing off. Stopping here.');
+                $this->line('Everything found so far is saved; run the same command again later to carry on.');
+
+                break;
+            }
 
             if ($pdf === null) {
                 $unreadable++;
@@ -227,6 +237,11 @@ class ExtractBookDetails extends Command
     }
 
     /**
+     * Returned instead of the file when Drive has started refusing downloads.
+     */
+    private const RATE_LIMITED = "\0rate-limited";
+
+    /**
      * The bytes of the book, or null if they cannot be had.
      *
      * Nothing is written to disk. The server is nearly full and also hosts an
@@ -250,11 +265,52 @@ class ExtractBookDetails extends Command
             return null;
         }
 
-        $response = DriveApi::request(180)->get(DriveApi::FILES."/{$book->drive_file_id}", [
-            'alt' => 'media',
-            'key' => $key,
-        ]);
+        // Drive tolerates a steady trickle and blocks a flood. Asking for a
+        // thousand books back to back earns an IP-wide "Sorry..." page that
+        // takes hours to clear, so the run waits between books and backs off
+        // hard the moment it is refused.
+        if (($delay = (float) $this->option('delay')) > 0) {
+            usleep((int) ($delay * 1_000_000));
+        }
 
-        return $response->successful() ? $response->body() : null;
+        foreach ([0, 30, 90, 240] as $wait) {
+            if ($wait > 0) {
+                $this->newLine();
+                $this->warn("  Drive refused the download; waiting {$wait}s before trying again.");
+                sleep($wait);
+            }
+
+            $response = DriveApi::request(180)->get(DriveApi::FILES."/{$book->drive_file_id}", [
+                'alt' => 'media',
+                'key' => $key,
+            ]);
+
+            if ($response->successful()) {
+                return $response->body();
+            }
+
+            // A missing or private file is a fact about that file; only a
+            // refusal aimed at us is worth waiting out.
+            if (! $this->isRateLimited($response->status(), $response->body())) {
+                return null;
+            }
+        }
+
+        return self::RATE_LIMITED;
+    }
+
+    /**
+     * Whether this refusal is aimed at us rather than at the file.
+     *
+     * A rate-limited download comes back as Google's HTML "Sorry..." page
+     * rather than as a JSON API error, so the body has to be looked at.
+     */
+    private function isRateLimited(int $status, string $body): bool
+    {
+        if ($status === 429) {
+            return true;
+        }
+
+        return $status === 403 && ! str_contains($body, '"error"');
     }
 }
