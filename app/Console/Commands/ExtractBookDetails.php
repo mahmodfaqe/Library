@@ -60,6 +60,15 @@ class ExtractBookDetails extends Command
                 continue;
             }
 
+            // Marked as attempted before the file is touched. Parsing a very
+            // large scanned book can exhaust memory and take the process with
+            // it; without this the next run reaches the same book and dies the
+            // same way, and the run never gets past it.
+            if ($this->option('results')) {
+                $collected[(string) $book->id] = [];
+                $this->save($collected);
+            }
+
             $pdf = $this->contents($book, $key);
 
             if ($pdf === self::RATE_LIMITED) {
