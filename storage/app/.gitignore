@@ -1,0 +1,4 @@
+# A service account key must never reach the repository: it grants read
+# access to the library's Drive to anyone holding it.
+*
+!.gitignore

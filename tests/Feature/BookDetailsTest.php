@@ -143,11 +143,16 @@ class BookDetailsTest extends TestCase
 
         Book::create(['title' => 'Molecular Biology', 'drive_file_id' => 'abc123']);
 
-        $before = count(glob(sys_get_temp_dir().'/*'));
+        $before = glob(sys_get_temp_dir().'/*') ?: [];
         $this->artisan('books:extract-details')->assertSuccessful();
+        $after = glob(sys_get_temp_dir().'/*') ?: [];
 
         // The server is nearly full and also hosts an unrelated site. Books
         // are read in memory and dropped; not one may land on the disk.
-        $this->assertSame($before, count(glob(sys_get_temp_dir().'/*')));
+        //
+        // Only additions are checked: the temp directory is shared, and other
+        // processes clearing their own files out mid-test is not this
+        // command's doing.
+        $this->assertSame([], array_values(array_diff($after, $before)));
     }
 }

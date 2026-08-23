@@ -26,6 +26,14 @@ return [
     'drive_proxy' => env('LIBRARY_DRIVE_PROXY', ''),
 
     /*
+     * Path to a Google service account key file. When set, Drive is called as
+     * that account instead of with the anonymous API key — which is what makes
+     * bulk reading possible, since an anonymous caller is cut off after a few
+     * dozen downloads.
+     */
+    'drive_service_account' => env('LIBRARY_DRIVE_SERVICE_ACCOUNT', ''),
+
+    /*
      * Hosts allowed to serve book covers, for the Content-Security-Policy.
      * Drive answers a thumbnail request from drive.google.com by redirecting
      * to googleusercontent, so both have to be listed.

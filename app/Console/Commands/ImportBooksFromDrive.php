@@ -277,11 +277,10 @@ class ImportBooksFromDrive extends Command
         do {
             $response = DriveApi::request()->retry(3, 2000)->get(self::API, array_filter([
                 'q' => "'{$folder}' in parents and trashed=false",
-                'key' => $key,
                 'fields' => 'nextPageToken,files(id,name,mimeType,size)',
                 'pageSize' => 1000,
                 'pageToken' => $token,
-            ]));
+            ] + DriveApi::credentials($key)));
 
             if ($response->failed()) {
                 $this->error('  Drive API: '.($response->json('error.message') ?? $response->status()));
@@ -311,7 +310,10 @@ class ImportBooksFromDrive extends Command
             return null;
         }
 
-        $response = DriveApi::request(600)->get(self::API."/{$file['id']}", ['alt' => 'media', 'key' => $key]);
+        $response = DriveApi::request(600)->get(
+            self::API."/{$file['id']}",
+            ['alt' => 'media'] + DriveApi::credentials($key)
+        );
 
         if ($response->failed()) {
             $this->warn("    could not download {$file['name']}");

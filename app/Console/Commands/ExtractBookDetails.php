@@ -255,7 +255,7 @@ class ExtractBookDetails extends Command
             return Storage::disk('books')->get($book->file_path);
         }
 
-        if (blank($book->drive_file_id) || blank($key)) {
+        if (blank($book->drive_file_id) || (blank($key) && DriveApi::accessToken() === null)) {
             return null;
         }
 
@@ -280,10 +280,10 @@ class ExtractBookDetails extends Command
                 sleep($wait);
             }
 
-            $response = DriveApi::request(180)->get(DriveApi::FILES."/{$book->drive_file_id}", [
-                'alt' => 'media',
-                'key' => $key,
-            ]);
+            $response = DriveApi::request(180)->get(
+                DriveApi::FILES."/{$book->drive_file_id}",
+                ['alt' => 'media'] + DriveApi::credentials($key)
+            );
 
             if ($response->successful()) {
                 return $response->body();
