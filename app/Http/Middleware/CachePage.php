@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
 class CachePage
@@ -25,6 +26,10 @@ class CachePage
         foreach (glob(storage_path('framework/pagecache').'/*.html') ?: [] as $file) {
             @unlink($file);
         }
+
+        // Search suggestions are cached from the same records, so a renamed
+        // book must not keep answering under its old title.
+        Cache::flush();
     }
 
     /**

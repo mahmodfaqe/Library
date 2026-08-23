@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use App\Http\Middleware\SetLocale;
+use App\Support\Locale;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
 class TranslationFilesTest extends TestCase
@@ -75,6 +77,94 @@ class TranslationFilesTest extends TestCase
 
             $this->assertSame([], $withMarkup, "messages.php for $locale still contains HTML");
         }
+    }
+
+    public function test_every_file_exists_in_every_language(): void
+    {
+        // A missing file does not fail loudly: Laravel falls back, and the
+        // page renders in the wrong language without anybody noticing.
+        foreach (['messages', 'books', 'privacy', 'admin', 'validation', 'errors'] as $group) {
+            foreach (SetLocale::LOCALES as $locale) {
+                $this->assertFileExists(
+                    lang_path("{$locale}/{$group}.php"),
+                    "{$group}.php is missing for {$locale}"
+                );
+            }
+        }
+    }
+
+    public function test_every_key_is_translated_into_every_language(): void
+    {
+        foreach (['messages', 'books', 'privacy', 'admin', 'validation', 'errors'] as $group) {
+            $base = $this->namedKeys($this->load('en', $group));
+
+            foreach (SetLocale::LOCALES as $locale) {
+                $keys = $this->namedKeys($this->load($locale, $group));
+
+                $this->assertSame([], array_values(array_diff($base, $keys)),
+                    "{$locale}/{$group}.php is missing keys");
+                $this->assertSame([], array_values(array_diff($keys, $base)),
+                    "{$locale}/{$group}.php has keys nothing else does");
+            }
+        }
+    }
+
+    public function test_a_form_error_is_a_sentence_in_every_language(): void
+    {
+        // The fallback locale is Kurdish, so Laravel's own English validation
+        // messages are never reached: without lang/*/validation.php a form
+        // error shows the raw key, "validation.required".
+        foreach (SetLocale::LOCALES as $locale) {
+            $this->app->setLocale($locale);
+
+            $errors = Validator::make(['title' => ''], ['title' => ['required']])
+                ->errors()
+                ->all();
+
+            $this->assertCount(1, $errors, $locale);
+            $this->assertStringNotContainsString('validation.', $errors[0], $locale);
+            $this->assertStringNotContainsString(':attribute', $errors[0], $locale);
+        }
+    }
+
+    public function test_the_page_not_found_page_speaks_the_language_of_its_address(): void
+    {
+        // Nothing routes a 404, so the locale middleware has to run outside the
+        // route group for this to hold.
+        foreach (SetLocale::LOCALES as $locale) {
+            $prefix = $locale === Locale::DEFAULT ? '' : "/{$locale}";
+
+            $this->get("{$prefix}/no-such-page")
+                ->assertNotFound()
+                ->assertSee(__('errors.404.title', [], $locale))
+                ->assertSee('dir="'.Locale::dir($locale).'"', false);
+        }
+    }
+
+    /**
+     * Keys, less the positions of lists: a language may legitimately break the
+     * introduction into a different number of paragraphs.
+     *
+     * @param  array<string, mixed>  $translations
+     * @return list<string>
+     */
+    private function namedKeys(array $translations): array
+    {
+        $flat = function (array $values, string $prefix = '') use (&$flat): array {
+            $keys = [];
+
+            foreach ($values as $key => $value) {
+                $path = $prefix === '' ? (string) $key : "{$prefix}.{$key}";
+                $keys = array_merge($keys, is_array($value) ? $flat($value, $path) : [$path]);
+            }
+
+            return $keys;
+        };
+
+        return array_values(array_filter(
+            $flat($translations),
+            fn (string $key) => ! preg_match('/\.\d+$/', $key)
+        ));
     }
 
     public function test_the_placeholders_the_views_rely_on_are_present(): void

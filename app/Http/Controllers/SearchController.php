@@ -6,6 +6,8 @@ use App\Support\BookSearch;
 use App\Support\Locale;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 
 class SearchController extends Controller
 {
@@ -26,9 +28,26 @@ class SearchController extends Controller
         }
 
         $category = $request->query('category');
+        $category = is_string($category) ? $category : null;
+
+        // Typing "chemistry" asks for "ch", "che", "chem" and so on, and the
+        // next visitor asks for the same. The catalogue changes rarely, so a
+        // short cache turns most keystrokes into no work at all.
+        return response()->json(Cache::remember(
+            'suggest:'.App::getLocale().':'.$category.':'.mb_strtolower($term),
+            now()->addMinutes(10),
+            fn () => $this->results($term, $category),
+        ));
+    }
+
+    /**
+     * @return array{books: mixed, categories: mixed}
+     */
+    private function results(string $term, ?string $category): array
+    {
         $search = new BookSearch($term);
 
-        $books = $search->books(8, is_string($category) ? $category : null)
+        $books = $search->books(8, $category)
             ->map(fn ($book) => [
                 'title' => $book->title,
                 'author' => $book->author,
@@ -50,9 +69,9 @@ class SearchController extends Controller
             ])
             ->values();
 
-        return response()->json([
+        return [
             'books' => $books,
             'categories' => $categories,
-        ]);
+        ];
     }
 }

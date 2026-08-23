@@ -25,6 +25,11 @@ return Application::configure(basePath: dirname(__DIR__))
             SetLocale::class,
         ]);
 
+        // Globally as well as in the web group: an unrouted request never
+        // reaches the group, so without this a 404 would always be English
+        // whatever address the visitor typed.
+        $middleware->prepend(SetLocale::class);
+
         $middleware->append(SecurityHeaders::class);
 
         // The app runs in a container behind the host's nginx, so the real

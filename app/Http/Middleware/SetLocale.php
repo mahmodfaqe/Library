@@ -32,6 +32,11 @@ class SetLocale
      *
      * Only the admin panel, which has no localised address, falls back to the
      * staff member's last choice.
+     *
+     * This runs twice: once globally, so that a page nobody routed to — a 404
+     * — is still in the language its address asked for, and again inside the
+     * web group once the session exists, which is what the admin panel needs.
+     * The session is therefore only read when there is one.
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -39,9 +44,14 @@ class SetLocale
 
         if (Locale::supports($fromUrl)) {
             App::setLocale($fromUrl);
-            $request->session()->put('locale', $fromUrl);
+
+            if ($request->hasSession()) {
+                $request->session()->put('locale', $fromUrl);
+            }
         } elseif ($request->is('admin', 'admin/*')) {
-            $locale = $request->session()->get('locale', Locale::DEFAULT);
+            $locale = $request->hasSession()
+                ? $request->session()->get('locale', Locale::DEFAULT)
+                : Locale::DEFAULT;
 
             App::setLocale(Locale::supports($locale) ? $locale : Locale::DEFAULT);
         } else {

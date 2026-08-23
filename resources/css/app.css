@@ -600,3 +600,53 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
     .search-suggestions { animation: none; }
     .search-input-wrap.is-loading .search-spinner { animation-duration: 2s; }
 }
+
+/* ── Error pages ─────────────────────────────────────────────────────── */
+.error-page {
+    max-width: 34rem;
+    margin: 0 auto;
+    padding: clamp(3rem, 12vw, 7rem) 1.5rem;
+    text-align: center;
+}
+.error-code {
+    font-size: clamp(4rem, 18vw, 8rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    opacity: 0.9;
+}
+.error-title {
+    margin-top: 0.5rem;
+    font-size: clamp(1.4rem, 5vw, 2rem);
+    font-weight: 700;
+    color: #2d2d3a;
+}
+.error-body {
+    margin-top: 0.9rem;
+    color: #6b6b80;
+    line-height: 1.9;
+    font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+}
+.error-actions {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.error-home {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 9999px;
+    padding: 0.7rem 1.8rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+.error-link { color: #667eea; text-decoration: none; font-size: 0.95rem; }
+.error-link:hover { text-decoration: underline; }

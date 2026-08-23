@@ -30,6 +30,15 @@ class BookSearch
      */
     private const PROBE = 4;
 
+    /**
+     * How many candidates are scored.
+     *
+     * Scoring happens in PHP, so this bounds the work regardless of how large
+     * the catalogue grows. What matters is not the number but the order they
+     * arrive in — see below.
+     */
+    private const CANDIDATES = 600;
+
     public function __construct(private readonly string $term) {}
 
     /**
@@ -60,13 +69,47 @@ class BookSearch
                     $query->orWhere('search_text', 'like', '%'.self::escape(self::opening($word)).'%');
                 }
             })
-            ->limit(400)
+            // A common opening — "کتێب" — matches most of the catalogue, so the
+            // cap below would otherwise keep an arbitrary few hundred rows and
+            // the best answer might never be scored at all. Rows whose text
+            // begins with what was typed are taken first.
+            ->orderByRaw($this->candidateOrder($words), $this->candidateBindings($words))
+            ->limit(self::CANDIDATES)
             ->get()
             ->map(fn (Book $book) => tap($book, fn ($b) => $b->relevance = $this->score($b, $words)))
             ->filter(fn (Book $book) => $book->relevance > 0)
             ->sortByDesc('relevance')
             ->take($limit)
             ->values();
+    }
+
+    /**
+     * Orders candidates so the most promising survive the cap: a title that
+     * starts with the word, then one that has it at the start of any word,
+     * then the rest.
+     *
+     * @param  Collection<int, string>  $words
+     */
+    private function candidateOrder(Collection $words): string
+    {
+        return 'case '.$words
+            ->map(fn () => 'when search_text like ? then 0 when search_text like ? then 1')
+            ->implode(' ').' else 2 end';
+    }
+
+    /**
+     * @param  Collection<int, string>  $words
+     * @return list<string>
+     */
+    private function candidateBindings(Collection $words): array
+    {
+        return $words
+            ->flatMap(function (string $word) {
+                $opening = self::escape(self::opening($word));
+
+                return [$opening.'%', '% '.$opening.'%'];
+            })
+            ->all();
     }
 
     /**
