@@ -5,7 +5,7 @@
 @section('content')
     <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-            <h2 style="font-size:1.15rem;">{{ __('admin.users.heading', ['count' => $users->count()]) }}</h2>
+            <h2>{{ __('admin.users.heading', ['count' => $users->count()]) }}</h2>
         </div>
 
         <div class="table-scroll">
@@ -34,7 +34,7 @@
                                       onsubmit="return confirm(@js(__('admin.users.confirm_delete')));">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">{{ __('admin.actions.delete') }}</button>
+                                    <button type="submit" class="btn btn-danger btn-sm">{{ __('admin.actions.delete') }}</button>
                                 </form>
                             @else
                                 <span style="color:#8a8aa0; font-size:0.85rem;">{{ __('admin.users.you') }}</span>

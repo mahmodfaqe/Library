@@ -6,88 +6,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#4c3f8f">
     <link rel="icon" href="{{ Asset::versioned('favicon.ico') }}" sizes="16x16 32x32 48x48">
     <link rel="icon" type="image/png" href="{{ Asset::versioned('favicon-96.png') }}" sizes="96x96">
     <link rel="apple-touch-icon" href="{{ Asset::versioned('apple-touch-icon.png') }}">
     <title>@yield('title', __('admin.title')) — {{ __('admin.suffix') }}</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif; background: #f0f2ff; color: #2d2d3a; min-height: 100vh; }
-        /* Six nav items plus the account controls do not fit one line on a
-           laptop, let alone a phone, so the bar wraps instead of overflowing. */
-        .topbar { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 0.9rem 1.2rem; display: flex; justify-content: space-between; align-items: center; gap: 0.8rem 1.2rem; flex-wrap: wrap; }
-        .topbar nav { flex-wrap: wrap; }
-        .topbar h1 { font-size: 1.15rem; font-weight: 700; }
-        .topbar a { color: #fff; text-decoration: none; font-size: 0.9rem; opacity: 0.9; }
-        .topbar a:hover { opacity: 1; text-decoration: underline; }
-        .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
-        .card { background: #fff; border: 1px solid #e5e7f5; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 16px rgba(102,126,234,0.10); }
-        .btn { display: inline-block; padding: 0.55rem 1.1rem; border-radius: 9999px; border: none; cursor: pointer; font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: opacity 0.2s; }
-        .btn:hover { opacity: 0.88; }
-        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; }
-        .btn-danger { background: #f43f5e; color: #fff; }
-        .btn-secondary { background: #e5e7f5; color: #2d2d3a; }
-        /* Admin tables carry up to seven columns; on a narrow screen they
-           scroll inside their own box rather than stretching the page. */
-        .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 1rem; }
-        table { width: 100%; border-collapse: collapse; min-width: 640px; }
-        .table-scroll table { margin-top: 0; }
-        th, td { padding: 0.7rem 0.6rem; text-align: start; border-bottom: 1px solid #eef0f8; font-size: 0.92rem; vertical-align: middle; }
-        th { color: #6b6b80; font-weight: 600; font-size: 0.82rem; }
-        .actions a, .actions button { margin-inline-end: 0.4rem; }
-        .alert { background: #d1fae5; color: #065f46; padding: 0.8rem 1rem; border-radius: 10px; margin-bottom: 1rem; font-size: 0.95rem; }
-        .error { background: #fee2e2; color: #991b1b; padding: 0.8rem 1rem; border-radius: 10px; margin-bottom: 1rem; font-size: 0.95rem; }
-        .field { margin-bottom: 1.1rem; }
-        .field label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem; color: #4a4a5c; }
-        .field input, .field textarea, .field select { width: 100%; padding: 0.6rem 0.8rem; border: 1px solid #d5d9ee; border-radius: 10px; font-size: 0.95rem; font-family: inherit; }
-        .field input:focus, .field textarea:focus, .field select:focus { outline: 2px solid #a5b4fc; border-color: transparent; }
-        .field .hint { font-size: 0.78rem; color: #8a8aa0; margin-top: 0.25rem; }
-        .error-msg { color: #dc2626; font-size: 0.8rem; margin-top: 0.25rem; }
-        .lang-block { border: 1px dashed #c7cdf5; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; background: #fafbff; }
-        .lang-block h3 { font-size: 0.95rem; color: #5b5bd6; margin-bottom: 0.9rem; }
-        .pagination { margin-top: 1rem; display: flex; gap: 0.4rem; justify-content: center; }
-        .pagination { flex-wrap: wrap; }
-        .pagination a, .pagination span { padding: 0.4rem 0.8rem; border-radius: 8px; border: 1px solid #d5d9ee; font-size: 0.85rem; text-decoration: none; color: #2d2d3a; font-variant-numeric: tabular-nums; }
-        .pagination .gap { border-color: transparent; padding-inline: 0.3rem; }
-        .card { overflow-wrap: anywhere; }
-        .pagination .current { background: #667eea; color: #fff; border-color: #667eea; }
-        .icon-preview { font-size: 1.6rem; vertical-align: middle; }
-    </style>
+    <link rel="preload" href="{{ asset('fonts/Rabar_015.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="{{ Asset::versioned('admin.css') }}">
 </head>
 <body>
-    <div class="topbar">
-        <div style="display:flex; align-items:center; gap:1.4rem; flex-wrap:wrap;">
-            <h1>{{ __('admin.heading') }}</h1>
-            <nav style="display:flex; gap:1rem; font-size:0.9rem;">
-                <a href="{{ route('admin.index') }}">{{ __('admin.nav.departments') }}</a>
-                <a href="{{ route('admin.categories') }}">{{ __('admin.nav.categories') }}</a>
-                <a href="{{ route('admin.books') }}">{{ __('admin.nav.books') }}</a>
-                <a href="{{ route('admin.feedback') }}">{{ __('admin.nav.feedback') }}</a>
-                @auth
-                    @if (auth()->user()->isAdmin())
-                        <a href="{{ route('admin.users') }}">{{ __('admin.nav.users') }}</a>
-                        <a href="{{ route('admin.activity') }}">{{ __('admin.nav.activity') }}</a>
-                    @endif
-                @endauth
-            </nav>
+
+<a class="skip-link" href="#main">{{ __('messages.skip_to_content') }}</a>
+
+{{-- The panel is a sidebar on a desk and a top bar on a phone; one list of
+     links either way, so there is nothing to keep in step. --}}
+<div class="shell">
+    <aside class="sidebar">
+        <div class="brand">
+            <img src="{{ asset('file/uor-logo.webp') }}" alt="" width="512" height="523">
+            <div>
+                <strong>{{ __('admin.heading') }}</strong>
+                <span>{{ __('admin.suffix') }}</span>
+            </div>
         </div>
-        <div style="display:flex; align-items:center; gap:1rem;">
+
+        @php
+            $links = [
+                ['admin.index', 'admin.nav.departments', '🏛'],
+                ['admin.categories', 'admin.nav.categories', '🗂'],
+                ['admin.books', 'admin.nav.books', '📚'],
+                ['admin.feedback', 'admin.nav.feedback', '💬'],
+            ];
+
+            if (auth()->check() && auth()->user()->isAdmin()) {
+                $links[] = ['admin.users', 'admin.nav.users', '👤'];
+                $links[] = ['admin.activity', 'admin.nav.activity', '📋'];
+            }
+        @endphp
+
+        <nav class="nav" aria-label="{{ __('admin.heading') }}">
+            @foreach ($links as [$route, $label, $icon])
+                @php $active = request()->routeIs($route) || request()->routeIs($route.'.*'); @endphp
+                <a href="{{ route($route) }}" class="nav-link{{ $active ? ' is-active' : '' }}"
+                   @if ($active) aria-current="page" @endif>
+                    <span class="nav-icon" aria-hidden="true">{{ $icon }}</span>
+                    <span>{{ __($label) }}</span>
+                </a>
+            @endforeach
+        </nav>
+
+        <div class="sidebar-foot">
             @auth
-                <a href="{{ route('admin.account') }}" style="font-size:0.85rem; opacity:0.9;">{{ auth()->user()->name }}</a>
-                <form method="POST" action="{{ route('admin.logout') }}" style="display:inline;">
+                <a href="{{ route('admin.account') }}" class="who">
+                    <span class="avatar" aria-hidden="true">{{ mb_substr(auth()->user()->name, 0, 1) }}</span>
+                    <span class="who-name" dir="auto">{{ auth()->user()->name }}</span>
+                </a>
+                <form method="POST" action="{{ route('admin.logout') }}">
                     @csrf
-                    <button type="submit" style="background:none; border:none; color:#fff; font:inherit; font-size:0.9rem; cursor:pointer; text-decoration:underline; padding:0;">{{ __('admin.nav.sign_out') }}</button>
+                    <button type="submit" class="sign-out">{{ __('admin.nav.sign_out') }}</button>
                 </form>
             @endauth
-            <a href="{{ Locale::url() }}">{{ __('admin.back_home') }}</a>
+            <a href="{{ Locale::url() }}" class="back-site">{{ __('admin.back_home') }}</a>
         </div>
-    </div>
-    <div class="container">
+    </aside>
+
+    <main class="content" id="main">
         @if (session('status'))
-            <div class="alert">{{ session('status') }}</div>
+            <div class="alert alert-good" role="status">
+                <span aria-hidden="true">✓</span>
+                <p>{{ session('status') }}</p>
+            </div>
         @endif
+
         @if ($errors->any())
-            <div class="error">
+            <div class="alert alert-bad" role="alert">
+                <span aria-hidden="true">!</span>
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -95,7 +88,10 @@
                 </ul>
             </div>
         @endif
+
         @yield('content')
-    </div>
+    </main>
+</div>
+
 </body>
 </html>

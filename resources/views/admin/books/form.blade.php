@@ -4,8 +4,8 @@
 
 @section('content')
     <div class="card">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.2rem;">
-            <h2 style="font-size:1.15rem;">{{ $book->exists ? __('admin.books.edit_title') : __('admin.books.new_title') }}</h2>
+        <div class="card-head">
+            <h2>{{ $book->exists ? __('admin.books.edit_title') : __('admin.books.new_title') }}</h2>
             <a href="{{ route('admin.books') }}" class="btn btn-secondary">{{ __('admin.actions.back') }}</a>
         </div>
 
@@ -89,7 +89,7 @@
                        value="{{ old('cover_url', $book->cover_url) }}">
             </div>
 
-            <div style="display:flex; gap:0.6rem; margin-top:1rem;">
+            <div class="form-actions">
                 <button type="submit" class="btn btn-primary">{{ $book->exists ? __('admin.actions.save') : __('admin.actions.create') }}</button>
                 <a href="{{ route('admin.books') }}" class="btn btn-secondary">{{ __('admin.actions.cancel') }}</a>
             </div>

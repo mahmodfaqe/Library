@@ -5,11 +5,11 @@
 @section('content')
     <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-            <h2 style="font-size:1.15rem;">{{ __('admin.departments.heading', ['count' => $departments->total()]) }}</h2>
+            <h2>{{ __('admin.departments.heading', ['count' => $departments->total()]) }}</h2>
             <a href="{{ route('admin.departments.create') }}" class="btn btn-primary">{{ __('admin.departments.add') }}</a>
         </div>
         @if ($departments->isEmpty())
-            <p style="color:#6b6b80; padding:1.5rem 0; text-align:center;">{{ __('admin.departments.empty') }}</p>
+            <p class="empty">{{ __('admin.departments.empty') }}</p>
         @else
             <div class="table-scroll">
             <table>
@@ -34,12 +34,12 @@
                                 <a href="{{ $department->drive_url }}" target="_blank" rel="noopener" style="color:#667eea;">{{ $department->drive_url }}</a>
                             </td>
                             <td class="actions">
-                                <a href="{{ route('admin.departments.edit', $department) }}" class="btn btn-secondary">{{ __('admin.actions.edit') }}</a>
+                                <a href="{{ route('admin.departments.edit', $department) }}" class="btn btn-secondary btn-sm">{{ __('admin.actions.edit') }}</a>
                                 <form method="POST" action="{{ route('admin.departments.destroy', $department) }}" style="display:inline;"
                                       onsubmit="return confirm(@js(__('admin.departments.confirm_delete')));">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">{{ __('admin.actions.delete') }}</button>
+                                    <button type="submit" class="btn btn-danger btn-sm">{{ __('admin.actions.delete') }}</button>
                                 </form>
                             </td>
                         </tr>

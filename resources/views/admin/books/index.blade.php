@@ -5,7 +5,7 @@
 @section('content')
     <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:0.8rem;">
-            <h2 style="font-size:1.15rem;">{{ __('admin.books.heading', ['count' => $books->total()]) }}</h2>
+            <h2>{{ __('admin.books.heading', ['count' => $books->total()]) }}</h2>
             <a href="{{ route('admin.books.create') }}" class="btn btn-primary">{{ __('admin.books.add') }}</a>
         </div>
 
@@ -16,7 +16,7 @@
         </form>
 
         @if ($books->isEmpty())
-            <p style="color:#6b6b80; padding:1.5rem 0; text-align:center;">{{ __('admin.books.empty') }}</p>
+            <p class="empty">{{ __('admin.books.empty') }}</p>
         @else
             <div class="table-scroll">
             <table>
@@ -37,12 +37,12 @@
                             <td><bdi>{{ $book->year ?: '—' }}</bdi></td>
                             <td dir="auto">{{ $book->department?->translation('ku-sorani', 'title') ?: '—' }}</td>
                             <td class="actions">
-                                <a href="{{ route('admin.books.edit', $book) }}" class="btn btn-secondary">{{ __('admin.actions.edit') }}</a>
+                                <a href="{{ route('admin.books.edit', $book) }}" class="btn btn-secondary btn-sm">{{ __('admin.actions.edit') }}</a>
                                 <form method="POST" action="{{ route('admin.books.destroy', $book) }}" style="display:inline;"
                                       onsubmit="return confirm(@js(__('admin.books.confirm_delete')));">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">{{ __('admin.actions.delete') }}</button>
+                                    <button type="submit" class="btn btn-danger btn-sm">{{ __('admin.actions.delete') }}</button>
                                 </form>
                             </td>
                         </tr>

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Category;
+use App\Support\ArabicText;
 use Illuminate\Console\Command;
 
 class DecorateCategories extends Command
@@ -115,18 +116,22 @@ class DecorateCategories extends Command
     }
 
     /**
-     * Names arrive from folder titles, so match on a normalised form rather
-     * than requiring them to be identical.
+     * Names arrive from folder titles, so match on a folded form rather than
+     * requiring them to be identical.
+     *
+     * Folding, not just trimming: Drive holds "ئاینی" with the hamza as a
+     * separate combining mark on a plain yeh, while this file has the single
+     * precomposed letter. The two look identical and compare unequal, and
+     * two subjects went undecorated for exactly that reason.
      *
      * @return array{0: string, 1: int}|null
      */
     private function lookup(string $name): ?array
     {
-        $normalise = fn (string $v) => trim(preg_replace('/[\s.،…]+/u', ' ', $v));
-        $needle = $normalise($name);
+        $needle = ArabicText::fold($name);
 
         foreach (self::SUBJECTS as $subject => $pair) {
-            $candidate = $normalise($subject);
+            $candidate = ArabicText::fold($subject);
 
             if ($needle === $candidate || str_starts_with($needle, $candidate)) {
                 return $pair;
@@ -141,11 +146,10 @@ class DecorateCategories extends Command
      */
     private function namesFor(string $name): array
     {
-        $normalise = fn (string $v) => trim(preg_replace('/[\s.،…]+/u', ' ', $v));
-        $needle = $normalise($name);
+        $needle = ArabicText::fold($name);
 
         foreach (self::NAMES as $subject => $names) {
-            if (str_starts_with($needle, $normalise($subject))) {
+            if (str_starts_with($needle, ArabicText::fold($subject))) {
                 return $names;
             }
         }

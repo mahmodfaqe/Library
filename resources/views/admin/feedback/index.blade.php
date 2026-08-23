@@ -4,9 +4,9 @@
 
 @section('content')
     <div class="card">
-        <h2 style="font-size:1.15rem;">{{ __('admin.feedback.heading', ['count' => $feedback->total()]) }}</h2>
+        <h2>{{ __('admin.feedback.heading', ['count' => $feedback->total()]) }}</h2>
         @if ($feedback->isEmpty())
-            <p style="color:#6b6b80; padding:1.5rem 0; text-align:center;">{{ __('admin.feedback.empty') }}</p>
+            <p class="empty">{{ __('admin.feedback.empty') }}</p>
         @else
             <div class="table-scroll">
             <table>
@@ -31,7 +31,7 @@
                                       onsubmit="return confirm(@js(__('admin.feedback.confirm_delete')));">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">{{ __('admin.actions.delete') }}</button>
+                                    <button type="submit" class="btn btn-danger btn-sm">{{ __('admin.actions.delete') }}</button>
                                 </form>
                             </td>
                         </tr>

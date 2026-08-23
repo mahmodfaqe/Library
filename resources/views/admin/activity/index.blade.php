@@ -4,11 +4,11 @@
 
 @section('content')
     <div class="card">
-        <h2 style="font-size:1.15rem;">{{ __('admin.activity.heading', ['count' => $activities->total()]) }}</h2>
+        <h2>{{ __('admin.activity.heading', ['count' => $activities->total()]) }}</h2>
         <p style="color:#6b6b80; font-size:0.88rem; margin-top:0.4rem;">{{ __('admin.activity.blurb') }}</p>
 
         @if ($activities->isEmpty())
-            <p style="color:#6b6b80; padding:1.5rem 0; text-align:center;">{{ __('admin.activity.empty') }}</p>
+            <p class="empty">{{ __('admin.activity.empty') }}</p>
         @else
             <div class="table-scroll">
             <table>
