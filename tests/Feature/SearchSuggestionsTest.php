@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Book;
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -180,6 +181,37 @@ class SearchSuggestionsTest extends TestCase
         $this->get('/books')
             ->assertOk()
             ->assertSee('data-suggest="'.url('/search/suggest').'"', false);
+    }
+
+    public function test_a_renamed_book_does_not_keep_answering_under_its_old_title(): void
+    {
+        $book = $this->book(['title' => 'Molecular Biology of the Cell']);
+
+        $this->getJson('/search/suggest?q=molecular')
+            ->assertJsonPath('books.0.title', 'Molecular Biology of the Cell');
+
+        // Suggestions are cached; an admin write has to clear them, or the
+        // catalogue answers with a title that no longer exists.
+        $this->actingAs($this->administrator())
+            ->put("/admin/books/{$book->id}", [
+                'title' => 'Cell Biology',
+                'url' => $book->url,
+            ])
+            ->assertRedirect();
+
+        $this->getJson('/search/suggest?q=molecular')->assertJsonCount(0, 'books');
+        $this->getJson('/search/suggest?q=cell')
+            ->assertJsonPath('books.0.title', 'Cell Biology');
+    }
+
+    private function administrator(): User
+    {
+        return User::create([
+            'name' => 'Admin',
+            'email' => 'admin@test.local',
+            'password' => bcrypt('password-for-the-test'),
+            'role' => 'admin',
+        ]);
     }
 
     public function test_the_catalogue_still_works_without_any_of_this(): void
