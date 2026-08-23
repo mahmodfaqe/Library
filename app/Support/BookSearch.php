@@ -25,6 +25,11 @@ class BookSearch
      */
     private const NEAR_ENOUGH = 0.72;
 
+    /**
+     * How many characters of a word are used to look for candidates.
+     */
+    private const PROBE = 4;
+
     public function __construct(private readonly string $term) {}
 
     /**
@@ -45,8 +50,14 @@ class BookSearch
                 // Any word, not all of them: a book that matches most of what
                 // was typed is still worth showing, and the ranking below
                 // decides how far up it goes.
+                //
+                // Candidates are gathered on the opening of each word rather
+                // than the whole of it. A misspelling never matches a LIKE, so
+                // scoring alone could never rescue it — "chemistrey" has to
+                // reach the scorer as a candidate before being recognised as
+                // "chemistry".
                 foreach ($words as $word) {
-                    $query->orWhere('search_text', 'like', '%'.self::escape($word).'%');
+                    $query->orWhere('search_text', 'like', '%'.self::escape(self::opening($word)).'%');
                 }
             })
             ->limit(400)
@@ -200,6 +211,17 @@ class BookSearch
         similar_text($word, $token, $percent);
 
         return $percent / 100 >= self::NEAR_ENOUGH ? $percent / 100 : 0;
+    }
+
+    /**
+     * The opening of a word, used to find candidates.
+     *
+     * Short enough to survive a typo anywhere after it, long enough that the
+     * catalogue is not returned wholesale.
+     */
+    private static function opening(string $word): string
+    {
+        return mb_strlen($word) <= self::PROBE ? $word : mb_substr($word, 0, self::PROBE);
     }
 
     private static function escape(string $value): string
