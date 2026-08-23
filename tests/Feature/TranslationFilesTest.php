@@ -199,10 +199,17 @@ class TranslationFilesTest extends TestCase
 
     public function test_every_locale_lists_the_same_people(): void
     {
+        // How many people are credited is for the library to decide; that
+        // every language names the same number of them is not, or one would
+        // silently lose somebody the others still credit.
+        $expected = count($this->load('en', 'messages')['intro']['people']);
+
+        $this->assertGreaterThan(0, $expected);
+
         foreach (SetLocale::LOCALES as $locale) {
             $people = $this->load($locale, 'messages')['intro']['people'];
 
-            $this->assertCount(3, $people, $locale);
+            $this->assertCount($expected, $people, $locale);
 
             foreach ($people as $person) {
                 $this->assertSame(['name', 'role'], array_keys($person), $locale);
