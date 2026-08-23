@@ -29,6 +29,24 @@ class BookDetailsTest extends TestCase
         $this->assertSame(2015, $details['year']);
     }
 
+    public function test_it_reads_the_author_off_the_title_page(): void
+    {
+        // Most of the collection is scanned and carries no /Author field, but
+        // the title page credits the author in the text.
+        $details = PdfDetails::read($this->fixture('book-credited-on-page.pdf'));
+
+        $this->assertSame('Bruce Alberts', $details['author']);
+    }
+
+    public function test_only_an_explicit_credit_counts_as_an_author(): void
+    {
+        // The second line of a title page is the subtitle as often as it is
+        // the author, so a line with no credit marker names nobody.
+        $details = PdfDetails::read($this->fixture('book-no-credit.pdf'));
+
+        $this->assertNull($details['author']);
+    }
+
     public function test_it_does_not_mistake_the_software_for_the_author(): void
     {
         $details = PdfDetails::read($this->fixture('book-by-software.pdf'));

@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use RuntimeException;
 use Smalot\PdfParser\Parser;
 use Throwable;
 
@@ -31,6 +32,10 @@ class PdfDetails
         // produce: "Asia Computer" came back as an author from the collection.
         'computer', 'computers', 'center', 'centre', 'net', 'cafe', 'print',
         'printing', 'press center', 'design', 'graphics', 'studio',
+        // The last few that got through a run over the whole collection.
+        'nitro', 'nitro pro', 'prinect', 'prinect printready', 'scansnap',
+        'scansnap manager', 'view apart', 'foxit', 'nuance', 'scansoft',
+        'primopdf', 'dopdf', 'cutepdf', 'bullzip', 'novapdf', 'pdfsam',
     ];
 
     /**
@@ -48,14 +53,34 @@ class PdfDetails
      *
      * @return array{author: ?string, year: ?int, language: ?string}
      */
-    public static function read(string $contents): array
+    public static function read(string $contents, int $seconds = 60): array
     {
+        $nothing = ['author' => null, 'year' => null, 'language' => null];
+
+        // One malformed PDF in the collection sends the parser into a loop it
+        // never comes out of — an hour of one core at full tilt on a single
+        // book, with the rest of the catalogue waiting behind it. An alarm
+        // turns that into an exception like any other failure to read.
+        $alarm = function_exists('pcntl_alarm') && function_exists('pcntl_signal');
+
+        if ($alarm) {
+            pcntl_async_signals(true);
+            pcntl_signal(SIGALRM, function () {
+                throw new RuntimeException('Timed out reading the PDF.');
+            });
+            pcntl_alarm($seconds);
+        }
+
         try {
             $pdf = (new Parser)->parseContent($contents);
         } catch (Throwable) {
             // A corrupt or encrypted file tells us nothing; that is not an
             // error worth stopping an import of a thousand books for.
-            return ['author' => null, 'year' => null, 'language' => null];
+            return $nothing;
+        } finally {
+            if ($alarm) {
+                pcntl_alarm(0);
+            }
         }
 
         $details = $pdf->getDetails();
@@ -65,16 +90,26 @@ class PdfDetails
         // slow and would pick up every year mentioned in the text.
         $opening = '';
 
+        if ($alarm) {
+            pcntl_alarm($seconds);
+        }
+
         try {
             foreach (array_slice($pdf->getPages(), 0, 4) as $page) {
                 $opening .= "\n".$page->getText();
             }
         } catch (Throwable) {
-            // Some PDFs parse but cannot render text. The metadata still can.
+            // Some PDFs parse but cannot render text, and some take forever
+            // trying. The metadata may still say something.
+        } finally {
+            if ($alarm) {
+                pcntl_alarm(0);
+            }
         }
 
         return [
-            'author' => self::author($details),
+            // The file's own metadata first, then what the title page says.
+            'author' => self::author($details) ?? self::creditedAuthor($opening),
             'year' => self::year($opening),
             'language' => self::language($opening),
         ];
@@ -113,6 +148,37 @@ class PdfDetails
         }
 
         return null;
+    }
+
+    /**
+     * The author as the title page credits them.
+     *
+     * Most of the collection is scanned, and a scan carries no /Author field —
+     * but the title page names the author in the text, if there is a text
+     * layer at all. Only an explicit credit counts: "by", "تأليف", "نووسینی"
+     * and the like. Taking the second line of the page instead would pick up
+     * the subtitle, the university, the department and the year with roughly
+     * equal frequency.
+     */
+    private static function creditedAuthor(string $opening): ?string
+    {
+        $markers = 'by|written by|authored by|edited by|author'
+            .'|تأليف|تاليف|إعداد|اعداد|بقلم|المؤلف'
+            .'|نووسینی|نوسینی|نووسەر|ئامادەکردنی';
+
+        if (! preg_match('/(?:^|\n)\s*(?:'.$markers.')\s*[:：\-–—]?\s*(.+)/iu', $opening, $m)) {
+            return null;
+        }
+
+        // A credit is one line; anything past the end of it belongs to
+        // something else on the page.
+        $value = self::trimScanJunk(self::tidy(explode("\n", $m[1])[0]));
+
+        // Titles of address are part of how an author is credited, but on
+        // their own they name nobody.
+        $value = trim(preg_replace('/^(?:dr|prof|professor|mr|mrs|ms|د|أ\.د|الدكتور|الأستاذ)\.?\s+/iu', '', $value));
+
+        return $value !== '' && self::looksLikeAPerson($value) ? $value : null;
     }
 
     /**
