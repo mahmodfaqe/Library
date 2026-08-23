@@ -83,7 +83,7 @@ class ImportBooksFromDrive extends Command
      */
     public static function folderId(string $value): string
     {
-        if (preg_match('#/folders/([^/?#]+)#', $value, $m)) {
+        if (preg_match('~/folders/([^/?\#]+)~', $value, $m)) {
             return $m[1];
         }
 
