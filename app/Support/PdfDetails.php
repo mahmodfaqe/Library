@@ -36,6 +36,7 @@ class PdfDetails
         'nitro', 'nitro pro', 'prinect', 'prinect printready', 'scansnap',
         'scansnap manager', 'view apart', 'foxit', 'nuance', 'scansoft',
         'primopdf', 'dopdf', 'cutepdf', 'bullzip', 'novapdf', 'pdfsam',
+        'pdffactory', 'pdffactory pro', 'pdf995', 'jaws', 'quartz', 'skia',
     ];
 
     /**
@@ -216,6 +217,36 @@ class PdfDetails
             return false;
         }
 
+        if (mb_strlen($value) > 120) {
+            return false;
+        }
+
+        // Words that belong to a licence, not to a person.
+        if (preg_match('/\b(?:reserved|permission|reproduced|photocopying|recipient|granted?|'
+            .'copyright|otherwise|without|hereby|herein|thereof|shall|all rights)\b/iu', $value)) {
+            return false;
+        }
+
+        // A credit is a name, not a sentence — but "G. H. JEFFERY J. BASSETT
+        // J. MENDHAM R C. DENNEY" is four authors and looks nothing like one
+        // name, so counting words gets it wrong. What separates a name list
+        // from prose is capitalisation: names are capitalised, sentences are
+        // mostly not. Arabic script has no case, so this only judges text
+        // that is actually written in Latin letters.
+        preg_match_all('/[\p{Latin}][\p{Latin}.\x{2019}\x{0027}-]*/u', $value, $words);
+        $words = array_filter($words[0] ?? [], fn (string $w) => mb_strlen($w) > 1);
+
+        if (count($words) < 3) {
+            return true;
+        }
+
+        $lower = count(array_filter(
+            $words,
+            fn (string $w) => mb_strtolower(mb_substr($w, 0, 1)) === mb_substr($w, 0, 1)
+        ));
+
+        return $lower / count($words) <= 0.4;
+
         // And it is mostly letters: "DR.Ahmed Saker 2O11" is a scan artefact.
         $letters = preg_match_all('/\p{L}/u', $value);
 
@@ -288,6 +319,17 @@ class PdfDetails
      */
     private static function trimScanJunk(string $value): string
     {
+        // A credit line often carries the author's website or email after the
+        // name: "عبد الله بن جار الله www.islamhouse.com". The name is the
+        // part worth keeping.
+        $value = preg_replace('~\s*(?:https?://|www\.)\S+~iu', '', $value);
+        $value = preg_replace('~\s*[(\[]?\S+@\S+\.\w+[)\]]?~u', '', $value);
+
+        // "et al" is how a credit says there are more authors, not part of
+        // anyone's name — and being two lowercase words it would otherwise
+        // make a short credit look like prose.
+        $value = preg_replace('~[,;]?\s*(?:et\.?\s*al\.?|and others|و آخرون|وآخرون)\s*$~iu', '', $value);
+
         // Trailing tokens that mix digits with letters, or are just digits.
         while (preg_match('/^(.*\p{L})\s+[\p{Nd}][\p{L}\p{Nd}]*$/u', $value, $m)) {
             $value = $m[1];
