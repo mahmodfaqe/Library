@@ -133,6 +133,74 @@ class BookDetailsTest extends TestCase
         $this->assertNull($book->year);
     }
 
+    public function test_applying_a_results_file_fills_the_catalogue_in(): void
+    {
+        $a = Book::create(['title' => 'One', 'drive_file_id' => 'a']);
+        $b = Book::create(['title' => 'Two', 'drive_file_id' => 'b']);
+
+        $path = $this->resultsFile([
+            (string) $a->id => ['author' => 'Bruce Alberts', 'year' => 2015],
+            (string) $b->id => ['year' => 1998],
+        ]);
+
+        $this->artisan('books:extract-details', ['--apply' => $path])->assertSuccessful();
+
+        $this->assertSame('Bruce Alberts', $a->refresh()->author);
+        $this->assertSame(2015, $a->year);
+        $this->assertSame(1998, $b->refresh()->year);
+        $this->assertNull($b->author);
+    }
+
+    public function test_applying_never_overwrites_a_librarian(): void
+    {
+        // The reading was done on another machine hours earlier; in the
+        // meantime somebody may have corrected the record by hand, and they
+        // outrank a guess made from the file.
+        $book = Book::create([
+            'title' => 'One',
+            'drive_file_id' => 'a',
+            'author' => 'ناوی ڕاستکراوە',
+        ]);
+
+        $path = $this->resultsFile([
+            (string) $book->id => ['author' => 'Bruce Alberts', 'year' => 2015],
+        ]);
+
+        $this->artisan('books:extract-details', ['--apply' => $path])->assertSuccessful();
+
+        $book->refresh();
+
+        $this->assertSame('ناوی ڕاستکراوە', $book->author);
+        $this->assertSame(2015, $book->year);
+    }
+
+    public function test_applying_skips_a_book_that_is_no_longer_there(): void
+    {
+        $path = $this->resultsFile(['999999' => ['author' => 'Nobody']]);
+
+        $this->artisan('books:extract-details', ['--apply' => $path])
+            ->expectsOutputToContain('1 no longer in the catalogue')
+            ->assertSuccessful();
+    }
+
+    public function test_applying_a_missing_file_fails_loudly(): void
+    {
+        $this->artisan('books:extract-details', ['--apply' => '/no/such/file.json'])
+            ->expectsOutputToContain('No such file')
+            ->assertFailed();
+    }
+
+    /**
+     * @param  array<string, array<string, string|int>>  $results
+     */
+    private function resultsFile(array $results): string
+    {
+        $path = tempnam(sys_get_temp_dir(), 'results-');
+        file_put_contents($path, json_encode($results));
+
+        return $path;
+    }
+
     public function test_no_book_is_ever_written_to_disk(): void
     {
         config(['library.google_api_key' => 'test-key']);
@@ -143,16 +211,16 @@ class BookDetailsTest extends TestCase
 
         Book::create(['title' => 'Molecular Biology', 'drive_file_id' => 'abc123']);
 
-        $before = glob(sys_get_temp_dir().'/*') ?: [];
         $this->artisan('books:extract-details')->assertSuccessful();
-        $after = glob(sys_get_temp_dir().'/*') ?: [];
 
-        // The server is nearly full and also hosts an unrelated site. Books
-        // are read in memory and dropped; not one may land on the disk.
+        // The server is nearly full and also hosts an unrelated site, so books
+        // are read in memory and dropped rather than written down. An earlier
+        // version saved each one to a temp file first — and, because
+        // tempnam() creates the file it names, left an empty one behind for
+        // every book on top of that.
         //
-        // Only additions are checked: the temp directory is shared, and other
-        // processes clearing their own files out mid-test is not this
-        // command's doing.
-        $this->assertSame([], array_values(array_diff($after, $before)));
+        // The HTTP client's own transient streams are not this command's
+        // doing, so the check is for the files it used to leave.
+        $this->assertSame([], glob(sys_get_temp_dir().'/book-*') ?: []);
     }
 }

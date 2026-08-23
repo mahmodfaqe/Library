@@ -19,6 +19,12 @@
     </source>
     <php>
         <env name="APP_ENV" value="testing"/>
+        <!-- The suite fakes Drive; it must never reach for a real credential
+             that happens to sit in the developer's .env, or it would pass
+             locally and fail in CI, or the reverse. -->
+        <env name="LIBRARY_DRIVE_SERVICE_ACCOUNT" value=""/>
+        <env name="LIBRARY_GOOGLE_API_KEY" value="test-key"/>
+        <env name="LIBRARY_DRIVE_PROXY" value=""/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="BROADCAST_CONNECTION" value="null"/>
