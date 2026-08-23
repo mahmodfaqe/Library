@@ -257,12 +257,6 @@ transition: background-image 1.5s ease-in-out;
     *, ::before, ::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
 
-/* BioNova mark in the About section */
-.bionova-mark {
-    filter: drop-shadow(0 6px 14px rgba(102, 126, 234, 0.22));
-    transition: transform 0.45s var(--ease);
-}
-.bionova-mark:hover { transform: translateY(-4px) scale(1.03); }
 
 /* Keyboard users get a way past the language switcher straight to the page. */
 .skip-link {

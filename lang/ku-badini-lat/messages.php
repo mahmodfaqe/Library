@@ -46,12 +46,6 @@ return [
     ],
     'dept_heading' => 'Beşên Zanistî',
     'no_departments' => 'Ti beş nehat dîtin.',
-    'about' => [
-        'heading' => '👥 Derbarê Me',
-        'intro' => 'Wek tîma BioNova ya ji sê xwendekarên zanîngehê pêk tê, em ji bo fêrbûn û teknolojiyê heweseke hevpar parve dikin. Di dema xwendina xwe de, me dît ku dîtina çavkaniyên pêbawer û baş-rêxistinkirî li yek cîhekî pir dijwar e. Ev yek îlham da min ku ez vê pirtûkxaneya elektronîkî biafirînim.',
-        'mission_heading' => 'Mîsyona Me',
-        'mission_text' => '"Deriyê agahdariyê ji bo her xwendekarekî vedike û platformek yekane peyda dike ku hemî hewcedariyên akademîk bi awayekî nûjen û hemdem pêk tîne “',
-    ],
     'prefooter_note' => 'Ev malpera wek navendek geşesendî, ji aliyê tîma BioNova ve berdewam tê çavdêrîkirin û nûkirin.',
     'feedback' => [
         'success' => 'Spas! Rexne û pêşniyara te gihîşt.',

@@ -46,12 +46,6 @@ return [
     ],
     'dept_heading' => 'Scientific Departments',
     'no_departments' => 'No departments found.',
-    'about' => [
-        'heading' => '👥 About Us',
-        'intro' => 'We are three university students as BioNova team who share a passion for learning and technology. During our studies, we noticed that finding reliable, quality, and well-organized resources in one place was very difficult. This inspired us to create this electronic library.',
-        'mission_heading' => 'Our Mission',
-        'mission_text' => '“ Opening the door to information for every student and providing a single platform that meets all academic needs in a modern and contemporary manner “',
-    ],
     'prefooter_note' => 'This website, as a growing hub, is continuously monitored and updated by the BioNova team.',
     'feedback' => [
         'success' => 'Thank you! Your feedback has been received.',

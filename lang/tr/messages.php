@@ -46,12 +46,6 @@ return [
     ],
     'dept_heading' => 'Bilim Bölümleri',
     'no_departments' => 'Bölüm bulunamadı.',
-    'about' => [
-        'heading' => '👥 Hakkımızda',
-        'intro' => 'Üç üniversite öğrencisinden oluşan BioNova ekibi olarak, öğrenmeye ve teknolojiye olan tutkumuzu paylaşıyoruz. Öğrenimimiz sırasında, güvenilir ve iyi organize edilmiş kaynakları tek bir yerde bulmanın çok zor olduğunu fark ettik. Bu da beni bu e-kütüphaneyi oluşturmaya teşvik etti.',
-        'mission_heading' => 'Misyonumuz',
-        'mission_text' => '"Her öğrenci için bilgiye erişim kapısını açmak ve tüm akademik ihtiyaçları modern ve çağdaş bir şekilde karşılayan tek bir platform sağlamak “',
-    ],
     'prefooter_note' => 'Bu web sitesi, gelişen bir merkez olarak BioNova ekibi tarafından sürekli izlenmekte ve güncellenmektedir.',
     'feedback' => [
         'success' => 'Teşekkürler! Geri bildiriminiz alındı.',

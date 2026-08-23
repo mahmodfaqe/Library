@@ -115,36 +115,6 @@
     </div>
 </section>
 
-<!-- ══════════ ABOUT SECTION ══════════ -->
-<section class="bg-white" style="padding: clamp(3rem,8vw,6rem) 0;">
-    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="max-w-[900px] mx-auto">
-
-            <!-- BioNova, the team behind the library -->
-            <img src="{{ Asset::versioned('file/bionova-logo.webp') }}"
-                 alt="BioNova"
-                 width="400" height="464"
-                 loading="lazy" decoding="async"
-                 class="bionova-mark block mx-auto mb-6 reveal"
-                 style="width: clamp(104px, 20vw, 156px); height: auto;">
-
-            <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.about.heading') }}</h2>
-
-            <div class="relative rounded-[18px] overflow-hidden reveal"
-                 style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
-                <div class="absolute top-0 left-0 right-0 h-1" style="background: linear-gradient(90deg, #667eea, #764ba2);"></div>
-
-                <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">{{ __('messages.about.intro') }}</p>
-
-                <div class="rounded-[10px] p-6" style="background:rgba(102,126,234,0.09); border:1px solid rgba(102,126,234,0.16);">
-                    <h3 class="text-[#667eea] mb-3 text-center font-bold" style="font-size:clamp(1.1rem,3vw,1.35rem);">{{ __('messages.about.mission_heading') }}</h3>
-                    <p class="text-[#6b6b80] mb-0 italic text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem); font-style: italic;">{{ __('messages.about.mission_text') }}</p>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
 <!-- ══════════ PRE-FOOTER BANNER ══════════ -->
 <section style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: clamp(1.2rem,3vw,1.8rem) 0;">
     <div class="max-w-[1200px] mx-auto px-4 text-center text-white">
