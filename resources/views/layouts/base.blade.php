@@ -93,7 +93,6 @@
                 <div class="relative" id="kuGroup">
                     <button id="kuMainBtn" type="button"
                             class="{{ str_starts_with(app()->getLocale(), 'ku') ? 'active ' : '' }}flex items-center gap-1 px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-[transform,box-shadow,background,border-color,color] duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md font-[inherit]"
-                            style="font-size: clamp(0.52rem,1.4vw,0.8rem); min-height:30px;"
                             aria-haspopup="true" aria-expanded="false"
                             onclick="toggleKuDropdown()">
                         کوردی <span class="text-[0.5rem] transition-transform duration-300" id="kuArrow">▼</span>
@@ -113,7 +112,7 @@
                             <a href="{{ Locale::switchUrl($dialect) }}"
                                dir="{{ Locale::dir($dialect) }}"
                                class="ku-dialect-btn block w-full bg-transparent border-0 text-start cursor-pointer transition-colors duration-200 hover:bg-white/15 no-underline text-white{{ app()->getLocale() === $dialect ? ' active' : '' }}"
-                               style="padding: clamp(0.38rem,1.2vw,0.55rem) clamp(0.6rem,2vw,1rem); font-size:clamp(0.58rem,1.4vw,0.8rem); min-height:36px; font-family:{{ $font }};">
+                               style="font-family:{{ $font }};">
                                 {{ $label }}<span class="block text-[0.5em] opacity-65 mt-px" dir="auto">{{ $native }}</span>
                             </a>
                         @endforeach
@@ -128,7 +127,7 @@
                     @foreach (['en' => 'English', 'ar' => 'العربية', 'fa' => 'فارسی', 'tr' => 'Türkçe'] as $code => $label)
                         <a href="{{ Locale::switchUrl($code) }}"
                            class="lang-btn px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-[transform,box-shadow,background,border-color,color] duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md whitespace-nowrap shrink-0 font-[inherit] no-underline{{ app()->getLocale() === $code ? ' active' : '' }}"
-                           style="font-size:clamp(0.52rem,1.4vw,0.8rem); min-height:30px;">{{ $label }}</a>
+                           >{{ $label }}</a>
                     @endforeach
                 </div>
             </div>

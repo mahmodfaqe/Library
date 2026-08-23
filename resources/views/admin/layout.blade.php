@@ -55,6 +55,36 @@
             @endforeach
         </nav>
 
+        {{-- The panel has no localised address, so the language is a choice
+             the staff member makes here rather than something the URL says.
+             The same five controls as the public header. --}}
+        <div class="lang-switch">
+            <details class="lang-ku">
+                <summary>
+                    <span>کوردی</span>
+                    <span class="caret" aria-hidden="true">▾</span>
+                </summary>
+                <div class="lang-ku-list">
+                    @foreach ([
+                        'ku-sorani' => 'سۆرانی',
+                        'ku-badini' => 'بادینی',
+                        'ku-badini-lat' => 'Badînî',
+                        'ku-hawrami' => 'هەورامی',
+                    ] as $dialect => $label)
+                        <a href="{{ route('admin.language', $dialect) }}"
+                           dir="{{ Locale::dir($dialect) }}"
+                           class="{{ app()->getLocale() === $dialect ? 'is-active' : '' }}">{{ $label }}</a>
+                    @endforeach
+                </div>
+            </details>
+
+            @foreach (['en' => 'EN', 'ar' => 'ع', 'fa' => 'فا', 'tr' => 'TR'] as $code => $label)
+                <a href="{{ route('admin.language', $code) }}"
+                   class="lang-pill{{ app()->getLocale() === $code ? ' is-active' : '' }}"
+                   title="{{ $code }}">{{ $label }}</a>
+            @endforeach
+        </div>
+
         <div class="sidebar-foot">
             @auth
                 <a href="{{ route('admin.account') }}" class="who">

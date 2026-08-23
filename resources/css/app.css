@@ -731,3 +731,90 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
 
     .reveal { opacity: 1; transform: none; }
 }
+
+/* ── Tap targets ─────────────────────────────────────────────────────────
+   The header controls were sized for a mouse: 30px tall, which is under the
+   44px a finger needs and under the 24px minimum the accessibility guidance
+   sets even for a stylus. Their size lives here now rather than inline, so a
+   phone can be given bigger ones. */
+.lang-btn,
+#kuMainBtn {
+    font-size: clamp(0.52rem, 1.4vw, 0.8rem);
+    min-height: 30px;
+}
+.ku-dialect-btn {
+    padding: clamp(0.38rem, 1.2vw, 0.55rem) clamp(0.6rem, 2vw, 1rem);
+    font-size: clamp(0.58rem, 1.4vw, 0.8rem);
+    min-height: 36px;
+}
+
+@media (pointer: coarse) {
+    .lang-btn,
+    #kuMainBtn {
+        min-height: 40px;
+        font-size: 0.8rem;
+        padding-inline: 0.7rem;
+    }
+    .ku-dialect-btn { min-height: 44px; font-size: 0.85rem; }
+
+    /* Text links are 19px of glyphs; a finger needs the whole line. Every
+       link a visitor is meant to press gets the room, wherever it sits. */
+    nav[aria-label] a,
+    .error-link,
+    .search-clear,
+    footer a,
+    main a:not(.section-btn):not(.subject-card):not(.book-cover):not(.lang-chip) {
+        display: inline-block;
+        padding-block: 0.5rem;
+    }
+    .lang-chip { min-height: 40px; }
+    .suggest-item { min-height: 52px; }
+}
+
+/* ── Phones ──────────────────────────────────────────────────────────────
+   A book card that stacks a 3:4 cover above its title is most of a phone
+   screen for one book. Beside the text instead, it is a list a reader can
+   actually scan. */
+@media (max-width: 640px) {
+    .book-grid {
+        grid-template-columns: 1fr;
+        gap: 0.7rem;
+    }
+
+    .book-card {
+        display: grid;
+        grid-template-columns: 84px 1fr;
+        gap: 0.9rem;
+        align-items: start;
+        padding: 0.85rem;
+    }
+    .book-cover {
+        margin: 0;
+        border-radius: 9px;
+    }
+    .book-cover-fallback { font-size: 1.6rem; }
+    .book-title { font-size: 0.95rem; }
+    .book-card .section-btn {
+        margin-top: 0.6rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.82rem;
+    }
+
+    /* Subjects read better two-up than one enormous card each. */
+    .subject-card { padding: 1rem; }
+}
+
+/* The language row scrolled sideways, so Türkçe sat off the edge of a phone
+   with nothing to say it was there. It wraps instead. */
+@media (max-width: 560px) {
+    #site-header .flex.items-center.gap-1.flex-nowrap.overflow-x-auto {
+        flex-wrap: wrap;
+        overflow: visible;
+        max-width: none;
+        justify-content: flex-end;
+        gap: 0.3rem;
+    }
+    #site-header .flex.items-center.gap-2 { flex-wrap: wrap; }
+    .logo-title { font-size: 0.8rem; }
+    .logo-subtitle { display: none; }
+}

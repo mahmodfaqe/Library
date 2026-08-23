@@ -167,8 +167,11 @@ body {
     border-radius: var(--radius);
     padding: clamp(1.1rem, 3vw, 1.7rem);
     box-shadow: var(--shadow-sm);
-    overflow-wrap: anywhere;
 }
+/* break-word, not anywhere: a scanned filename arrives as one unbroken token
+   and has to be split somewhere, but an ordinary word should wrap before it
+   rather than being chopped into "Departmen / t Library". */
+.card td, .card .break { overflow-wrap: break-word; }
 .card + .card { margin-top: 1.2rem; }
 
 .card-head {
@@ -425,34 +428,178 @@ tbody tr:last-child td { border-bottom: none; }
 }
 .remember input { width: auto; }
 
-/* ── Narrow screens ─────────────────────────────────────────────────── */
+/* ── Narrow screens ──────────────────────────────────────────────────────
+   The sidebar cannot simply become a top bar: six links, an account, a sign
+   out and five language controls wrapped onto five rows and took two fifths
+   of a phone screen before any content began.
+
+   So on a phone it becomes two rows that never wrap — an identity row, and a
+   nav that scrolls sideways — and the whole thing scrolls away with the page
+   rather than staying put. */
 @media (max-width: 860px) {
     .shell { flex-direction: column; }
+
     .sidebar {
         flex: 0 0 auto;
         position: static;
         height: auto;
-        flex-direction: row;
+        display: grid;
+        grid-template-areas: 'brand who lang' 'nav nav nav';
+        grid-template-columns: 1fr auto auto;
         align-items: center;
-        flex-wrap: wrap;
-        gap: 0.8rem 1rem;
-        padding: 0.9rem 1rem;
+        gap: 0.6rem;
+        padding: 0.7rem 0.9rem;
     }
-    .brand { border: none; padding: 0; }
-    .brand span { display: none; }
-    .nav { flex-direction: row; flex-wrap: wrap; gap: 0.3rem; }
-    .nav-link { padding: 0.45rem 0.7rem; font-size: 0.85rem; }
-    .sidebar-foot {
-        margin: 0;
-        margin-inline-start: auto;
-        flex-direction: row;
-        align-items: center;
+
+    .brand {
+        grid-area: brand;
         border: none;
         padding: 0;
+        min-width: 0;
     }
+    .brand img { width: 30px; }
+    .brand strong { font-size: 0.85rem; }
+    .brand span { display: none; }
+
+    /* One row that scrolls, rather than three that wrap. */
+    .nav {
+        grid-area: nav;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 0.25rem;
+        overflow-x: auto;
+        scrollbar-width: none;
+        margin: 0 -0.9rem;
+        padding: 0 0.9rem;
+        scroll-padding-inline: 0.9rem;
+    }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav-link {
+        flex: 0 0 auto;
+        padding: 0.4rem 0.7rem;
+        font-size: 0.82rem;
+        scroll-snap-align: start;
+    }
+
+    /* Identity and language sit beside the logo on the same row, so the whole
+       bar is two rows rather than five. */
+    .sidebar-foot {
+        grid-area: who;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.2rem;
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+    .who { padding: 0.25rem; gap: 0; }
+    .who-name, .back-site { display: none; }
+    .sign-out { font-size: 0.75rem; padding: 0.3rem 0.4rem; }
+
+    .lang-switch { grid-area: lang; border: none; padding: 0; }
+    .lang-ku-list { bottom: auto; top: calc(100% + 0.4rem); inset-inline-start: auto; inset-inline-end: 0; }
+
+    .content { padding: 1rem 0.9rem 2rem; }
+    .card { padding: 1rem; }
     thead th { position: static; }
+
+    /* The table scrolls sideways anyway, so give the columns room to hold a
+       title on one or two lines instead of squeezing six columns into 640px. */
+    table { min-width: 760px; }
+    th, td { padding: 0.65rem 0.7rem; }
+
+    /* A row of actions on a phone is two small buttons, not two wide ones. */
+    .card-head { gap: 0.6rem; }
+    .card-head h2 { font-size: 1.02rem; }
+}
+
+/* Phones proper: the language pills lose their labels before the nav does. */
+@media (max-width: 420px) {
+    .brand strong { font-size: 0.78rem; }
+    .lang-pill { min-width: 1.6rem; padding: 0.25rem 0.35rem; font-size: 0.7rem; }
+    .lang-ku summary { padding: 0.25rem 0.4rem; font-size: 0.72rem; }
+    .form-actions .btn { flex: 1 1 auto; justify-content: center; }
 }
 
 @media (prefers-reduced-motion: reduce) {
     * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* ── Language ────────────────────────────────────────────────────────────
+   The panel has no address per language, so the choice lives here. Five
+   controls, as on the public header: Kurdish opens onto its four dialects,
+   the rest are one tap each. */
+.lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.lang-ku { position: relative; }
+.lang-ku summary {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.3rem 0.55rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.78rem;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    transition: background var(--ease-quick, 0.18s) var(--ease);
+}
+.lang-ku summary::-webkit-details-marker { display: none; }
+.lang-ku summary:hover { background: rgba(255, 255, 255, 0.2); }
+.lang-ku[open] summary { background: rgba(255, 255, 255, 0.24); }
+.lang-ku .caret { font-size: 0.6rem; transition: transform 0.2s var(--ease); }
+.lang-ku[open] .caret { transform: rotate(180deg); }
+
+.lang-ku-list {
+    position: absolute;
+    bottom: calc(100% + 0.4rem);
+    inset-inline-start: 0;
+    z-index: 20;
+    min-width: 8.5rem;
+    display: flex;
+    flex-direction: column;
+    padding: 0.3rem;
+    border-radius: 10px;
+    background: #3f3577;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 12px 32px rgba(20, 15, 50, 0.45);
+}
+.lang-ku-list a {
+    padding: 0.42rem 0.6rem;
+    border-radius: 7px;
+    color: rgba(255, 255, 255, 0.82);
+    text-decoration: none;
+    font-size: 0.82rem;
+    text-align: start;
+    transition: background 0.18s var(--ease), color 0.18s var(--ease);
+}
+.lang-ku-list a:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+.lang-ku-list a.is-active { background: rgba(255, 255, 255, 0.2); color: #fff; font-weight: 600; }
+
+.lang-pill {
+    min-width: 1.9rem;
+    padding: 0.3rem 0.45rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.10);
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.75rem;
+    text-align: center;
+    text-decoration: none;
+    transition: background 0.18s var(--ease), color 0.18s var(--ease);
+}
+.lang-pill:hover { background: rgba(255, 255, 255, 0.2); color: #fff; }
+.lang-pill.is-active { background: rgba(255, 255, 255, 0.24); color: #fff; font-weight: 700; }
+
+@media (max-width: 860px) {
+    .lang-switch { border: none; padding: 0; }
+    .lang-ku-list { bottom: auto; top: calc(100% + 0.4rem); }
 }

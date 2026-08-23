@@ -69,6 +69,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('login', [AdminController::class, 'login'])->middleware('throttle:5,1')->name('login.submit');
     Route::post('logout', [AdminController::class, 'logout'])->name('logout');
 
+    // The panel has no localised address, so the language it is read in comes
+    // from the session. This is how a staff member sets it.
+    Route::get('language/{locale}', function (string $locale, Request $request) {
+        $request->session()->put('locale', $locale);
+
+        return back();
+    })->whereIn('locale', Locale::SUPPORTED)->name('language');
+
     Route::middleware('admin.auth')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('index');
         Route::get('departments/create', [AdminController::class, 'create'])->name('departments.create');
