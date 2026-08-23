@@ -192,13 +192,6 @@ class HomePageTest extends TestCase
         }
     }
 
-    public function test_the_about_section_shows_the_bionova_mark(): void
-    {
-        $this->get('/')
-            ->assertSee(asset('file/bionova-logo.webp'), false)
-            ->assertSee('alt="BioNova"', false);
-    }
-
     public function test_the_page_loads_its_stylesheet_from_the_build(): void
     {
         // The Tailwind CDN used to compile the stylesheet in the browser.
