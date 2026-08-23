@@ -33,6 +33,10 @@ Route::get('books/{book}/download', [BookController::class, 'download'])
 Route::get('search/suggest', [SearchController::class, 'suggest'])
     ->middleware('throttle:120,1')
     ->name('search.suggest');
+Route::get('{locale}/search/suggest', [SearchController::class, 'suggest'])
+    ->whereIn('locale', Locale::SUPPORTED)
+    ->middleware('throttle:120,1')
+    ->name('search.suggest.localised');
 
 // One crawlable URL per language: /en, /ar, /ku-badini, ...
 Route::get('/{locale}', [HomeController::class, 'index'])

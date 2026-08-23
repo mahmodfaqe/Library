@@ -32,7 +32,7 @@
     {{-- The form still submits and the catalogue still renders without any of
          this; the suggestions below only make the answer arrive sooner. --}}
     <form method="GET" action="{{ url()->current() }}" class="search-form" role="search"
-          data-suggest="{{ route('search.suggest') }}">
+          data-suggest="{{ Locale::suggestUrl() }}">
         @if ($selected)
             <input type="hidden" name="category" value="{{ $selected->id }}">
         @endif

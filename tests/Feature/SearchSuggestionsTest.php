@@ -148,6 +148,40 @@ class SearchSuggestionsTest extends TestCase
             ->assertJsonCount(0, 'books');
     }
 
+    public function test_suggestions_answer_in_the_language_they_were_asked_in(): void
+    {
+        $biology = Category::create([
+            'name' => 'بایۆلۆجی',
+            'translations' => ['en' => 'Biology', 'ar' => 'علم الأحياء'],
+            'sort_order' => 1,
+        ]);
+        $this->book(['category_id' => $biology->id]);
+
+        // An unprefixed address is Sorani, like every other page.
+        $this->getJson('/search/suggest?q=biolo')
+            ->assertJsonPath('categories.0.name', 'بایۆلۆجی')
+            ->assertJsonPath('categories.0.url', url('/books').'?category='.$biology->id);
+
+        $this->getJson('/en/search/suggest?q=biolo')
+            ->assertJsonPath('categories.0.name', 'Biology')
+            ->assertJsonPath('categories.0.url', url('/en/books').'?category='.$biology->id);
+
+        $this->getJson('/ar/search/suggest?q=biolo')
+            ->assertJsonPath('categories.0.name', 'علم الأحياء')
+            ->assertJsonPath('categories.0.url', url('/ar/books').'?category='.$biology->id);
+    }
+
+    public function test_the_form_points_at_the_endpoint_for_its_own_language(): void
+    {
+        $this->get('/en/books')
+            ->assertOk()
+            ->assertSee('data-suggest="'.url('/en/search/suggest').'"', false);
+
+        $this->get('/books')
+            ->assertOk()
+            ->assertSee('data-suggest="'.url('/search/suggest').'"', false);
+    }
+
     public function test_the_catalogue_still_works_without_any_of_this(): void
     {
         $biology = Category::create(['name' => 'Biology', 'sort_order' => 1]);

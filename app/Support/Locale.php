@@ -127,6 +127,22 @@ class Locale
     }
 
     /**
+     * The search suggestion endpoint for a locale.
+     *
+     * It needs a prefix like every other page: the subject names it returns
+     * and the links it builds are both in whatever language it is asked in,
+     * and an unprefixed address is always Sorani.
+     */
+    public static function suggestUrl(?string $locale = null): string
+    {
+        $locale ??= App::getLocale();
+
+        return $locale === self::DEFAULT
+            ? url('search/suggest')
+            : url($locale.'/search/suggest');
+    }
+
+    /**
      * The current page's address in another locale.
      *
      * Switching language should leave the visitor where they were rather than
