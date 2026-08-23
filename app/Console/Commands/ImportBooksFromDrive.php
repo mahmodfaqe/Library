@@ -55,6 +55,7 @@ class ImportBooksFromDrive extends Command
         }
 
         foreach ($this->argument('folder') as $root) {
+            $root = self::folderId($root);
             $this->line("Reading folder {$root}");
 
             foreach ($this->children($root, $key) as $entry) {
@@ -75,6 +76,18 @@ class ImportBooksFromDrive extends Command
         $this->reportUnnamed();
 
         return $this->failed > 0 ? self::FAILURE : self::SUCCESS;
+    }
+
+    /**
+     * The folder id, whether given as an id or as the address bar's URL.
+     */
+    public static function folderId(string $value): string
+    {
+        if (preg_match('#/folders/([^/?#]+)#', $value, $m)) {
+            return $m[1];
+        }
+
+        return trim($value);
     }
 
     private function importCategory(array $folder, string $key): void
@@ -148,11 +161,18 @@ class ImportBooksFromDrive extends Command
             // A re-run refreshes what Drive owns — subject, language, size —
             // but leaves title, author and year alone, since a librarian may
             // have corrected those by hand.
-            $existing->update(array_filter([
-                'category_id' => $category?->id,
-                'language' => $language,
-                'file_size' => isset($file['size']) ? (int) $file['size'] : null,
-            ], fn ($v) => $v !== null));
+            //
+            // The dry-run check belongs here, not further down: it used to sit
+            // below this block, so a run asked to write nothing quietly
+            // rewrote the subject and language of every book already in the
+            // catalogue.
+            if (! $this->option('dry-run')) {
+                $existing->update(array_filter([
+                    'category_id' => $category?->id,
+                    'language' => $language,
+                    'file_size' => isset($file['size']) ? (int) $file['size'] : null,
+                ], fn ($v) => $v !== null));
+            }
 
             $this->skipped++;
 

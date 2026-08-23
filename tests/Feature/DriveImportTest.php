@@ -119,6 +119,67 @@ class DriveImportTest extends TestCase
         $this->assertSame('English', Book::firstOrFail()->language);
     }
 
+    public function test_a_dry_run_does_not_touch_a_book_already_in_the_catalogue(): void
+    {
+        $existing = Book::create([
+            'title' => 'ژیناسی',
+            'drive_file_id' => 'b1',
+            'language' => 'کوردی',
+        ]);
+
+        // The same file, now filed under English on Drive.
+        $this->fakeDrive([
+            self::ROOT => [$this->folder('bio', 'بایۆلۆجی')],
+            'bio' => [$this->folder('bio-en', 'English')],
+            'bio-en' => [$this->pdf('b1', 'ژیناسی.pdf')],
+        ]);
+
+        $this->artisan('books:import-drive', ['folder' => [self::ROOT], '--dry-run' => true])
+            ->assertSuccessful();
+
+        // A run asked to write nothing must write nothing — not even to the
+        // records it merely refreshes.
+        $existing->refresh();
+
+        $this->assertSame('کوردی', $existing->language);
+        $this->assertNull($existing->category_id);
+        $this->assertSame(0, Category::count());
+    }
+
+    public function test_a_real_run_does_refresh_what_drive_owns(): void
+    {
+        $existing = Book::create([
+            'title' => 'ژیناسی',
+            'drive_file_id' => 'b1',
+            'language' => 'کوردی',
+        ]);
+
+        $this->fakeDrive([
+            self::ROOT => [$this->folder('bio', 'بایۆلۆجی')],
+            'bio' => [$this->folder('bio-en', 'English')],
+            'bio-en' => [$this->pdf('b1', 'ژیناسی.pdf')],
+        ]);
+
+        $this->artisan('books:import-drive', ['folder' => [self::ROOT]])->assertSuccessful();
+
+        $this->assertSame('English', $existing->refresh()->language);
+    }
+
+    public function test_a_folder_may_be_given_as_the_url_from_the_address_bar(): void
+    {
+        $this->fakeDrive([
+            self::ROOT => [$this->folder('bio', 'بایۆلۆجی')],
+            'bio' => [$this->pdf('b1', 'Cell Biology.pdf')],
+        ]);
+
+        // What a librarian actually has to hand is the URL, not the bare id.
+        $this->artisan('books:import-drive', [
+            'folder' => ['https://drive.google.com/drive/folders/'.self::ROOT],
+        ])->assertSuccessful();
+
+        $this->assertSame(1, Book::count());
+    }
+
     public function test_subject_folders_become_categories(): void
     {
         $this->fakeDrive([
