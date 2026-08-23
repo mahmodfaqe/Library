@@ -115,14 +115,6 @@
     </div>
 </section>
 
-<!-- ══════════ PRE-FOOTER BANNER ══════════ -->
-<section style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: clamp(1.2rem,3vw,1.8rem) 0;">
-    <div class="max-w-[1200px] mx-auto px-4 text-center text-white">
-        <p style="font-size:clamp(0.88rem,2.2vw,1.05rem); opacity:0.92; margin:0; line-height:1.7;">
-            {{ __('messages.prefooter_note') }}
-        </p>
-    </div>
-</section>
 <!-- ══════════ FEEDBACK & SUGGESTIONS ══════════ -->
 <section id="feedback" style="padding: clamp(3rem,8vw,6rem) 0; background: linear-gradient(160deg, #eef1ff 0%, #e3e9ff 100%);">
     <div class="max-w-[760px] mx-auto px-4 sm:px-6">

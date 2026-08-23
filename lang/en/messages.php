@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'language' => 'Language',
     'qr_label' => 'QR code',
     'university_name' => 'University of Raparin',
     'library_name' => 'Electronic Library',
@@ -23,10 +24,6 @@ return [
         'prepared_heading' => 'Prepared by:',
         'people' => [
             [
-                'name' => 'ZHYAW YUSF HUSEN',
-                'role' => 'Biology Department Student - Provision of books',
-            ],
-            [
                 'name' => 'NYAR QADR RASUL',
                 'role' => 'Biology Department Student - Organization of the library',
             ],
@@ -46,7 +43,6 @@ return [
     ],
     'dept_heading' => 'Scientific Departments',
     'no_departments' => 'No departments found.',
-    'prefooter_note' => 'This website, as a growing hub, is continuously monitored and updated by the BioNova team.',
     'feedback' => [
         'success' => 'Thank you! Your feedback has been received.',
         'error' => 'Please write your feedback or suggestion.',

@@ -87,31 +87,23 @@
             <!-- Divider -->
             <div class="shrink-0 w-px bg-white/30" style="height: clamp(22px,5vw,36px);"></div>
 
-            <!-- Language Switcher — stays on the current page -->
-            <div class="flex items-center gap-1 flex-nowrap ms-auto shrink-0">
-                <!-- Kurdish dropdown group -->
+            {{-- Two switchers for one job. A phone cannot hold five controls
+                 beside a logo — they wrapped, or scrolled with the last
+                 language off the edge — so there it is one button that opens
+                 the full list. Both are plain markup; neither needs script. --}}
+            <div class="lang-wide">
                 <div class="relative" id="kuGroup">
                     <button id="kuMainBtn" type="button"
-                            class="{{ str_starts_with(app()->getLocale(), 'ku') ? 'active ' : '' }}flex items-center gap-1 px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-[transform,box-shadow,background,border-color,color] duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md font-[inherit]"
+                            class="{{ str_starts_with(app()->getLocale(), 'ku') ? 'active ' : '' }}lang-btn flex items-center gap-1"
                             aria-haspopup="true" aria-expanded="false"
                             onclick="toggleKuDropdown()">
                         کوردی <span class="text-[0.5rem] transition-transform duration-300" id="kuArrow">▼</span>
                     </button>
                     <div class="ku-dropdown" id="kuDropdown">
-                        {{-- Each dialect is written in its own script, so each
-                             carries its own direction rather than inheriting
-                             the page's: Badînî stays left-to-right on a Sorani
-                             page, and سۆرانی stays right-to-left on an English
-                             one. --}}
-                        @foreach ([
-                            'ku-sorani' => ['سۆرانی', 'Soranî', 'Rabar,sans-serif'],
-                            'ku-badini' => ['بادینی', 'Kurmancî (عەرەبی)', 'Rabar,sans-serif'],
-                            'ku-badini-lat' => ['Badînî', 'Kurmancî (Latînî)', 'sans-serif'],
-                            'ku-hawrami' => ['هەورامی', 'Hewramî', 'Rabar,sans-serif'],
-                        ] as $dialect => [$label, $native, $font])
+                        @foreach (Locale::KURDISH as $dialect => [$label, $native, $font])
                             <a href="{{ Locale::switchUrl($dialect) }}"
                                dir="{{ Locale::dir($dialect) }}"
-                               class="ku-dialect-btn block w-full bg-transparent border-0 text-start cursor-pointer transition-colors duration-200 hover:bg-white/15 no-underline text-white{{ app()->getLocale() === $dialect ? ' active' : '' }}"
+                               class="ku-dialect-btn block w-full text-start no-underline text-white{{ app()->getLocale() === $dialect ? ' active' : '' }}"
                                style="font-family:{{ $font }};">
                                 {{ $label }}<span class="block text-[0.5em] opacity-65 mt-px" dir="auto">{{ $native }}</span>
                             </a>
@@ -119,18 +111,43 @@
                     </div>
                 </div>
 
-                <!-- Divider -->
-                <div class="shrink-0 w-px bg-white/25 mx-1" style="height:clamp(16px,3.5vw,22px);"></div>
+                <div class="w-px bg-white/25 mx-1" style="height:clamp(16px,3.5vw,22px);"></div>
 
-                <!-- Other languages -->
-                <div class="flex items-center gap-1 flex-nowrap overflow-x-auto" style="scrollbar-width:none; max-width:clamp(100px,40vw,400px);">
-                    @foreach (['en' => 'English', 'ar' => 'العربية', 'fa' => 'فارسی', 'tr' => 'Türkçe'] as $code => $label)
+                @foreach (Locale::OTHERS as $code => $label)
+                    <a href="{{ Locale::switchUrl($code) }}"
+                       class="lang-btn no-underline{{ app()->getLocale() === $code ? ' active' : '' }}">{{ $label }}</a>
+                @endforeach
+            </div>
+
+            <details class="lang-menu">
+                <summary aria-label="{{ __('messages.language') }}">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="1.8" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9"></circle>
+                        <path d="M3 12h18M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18"></path>
+                    </svg>
+                    <span>{{ Locale::shortLabel() }}</span>
+                </summary>
+
+                <div class="lang-menu-list">
+                    @foreach (Locale::KURDISH as $dialect => [$label, $native, $font])
+                        <a href="{{ Locale::switchUrl($dialect) }}"
+                           dir="{{ Locale::dir($dialect) }}"
+                           class="{{ app()->getLocale() === $dialect ? 'is-active' : '' }}"
+                           style="font-family:{{ $font }};">
+                            {{ $label }}<em dir="auto">{{ $native }}</em>
+                        </a>
+                    @endforeach
+
+                    <hr>
+
+                    @foreach (Locale::OTHERS as $code => $label)
                         <a href="{{ Locale::switchUrl($code) }}"
-                           class="lang-btn px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-[transform,box-shadow,background,border-color,color] duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md whitespace-nowrap shrink-0 font-[inherit] no-underline{{ app()->getLocale() === $code ? ' active' : '' }}"
-                           >{{ $label }}</a>
+                           dir="{{ Locale::dir($code) }}"
+                           class="{{ app()->getLocale() === $code ? 'is-active' : '' }}">{{ $label }}</a>
                     @endforeach
                 </div>
-            </div>
+            </details>
         </div>
     </div>
 </header>

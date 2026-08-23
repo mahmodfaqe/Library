@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'language' => 'Dil',
     'qr_label' => 'QR code',
     'university_name' => 'Raparin Üniversitesi',
     'library_name' => 'Elektronik Kütüphane',
@@ -23,10 +24,6 @@ return [
         'prepared_heading' => 'Hazırlayanlar:',
         'people' => [
             [
-                'name' => 'ZHYAW YUSF HUSEN',
-                'role' => 'Biyoloji Bölümü Öğrencisi - Kitap temini',
-            ],
-            [
                 'name' => 'NYAR QADR RASUL',
                 'role' => 'Biyoloji Bölümü Öğrencisi - Kütüphane organizasyonu',
             ],
@@ -46,7 +43,6 @@ return [
     ],
     'dept_heading' => 'Bilim Bölümleri',
     'no_departments' => 'Bölüm bulunamadı.',
-    'prefooter_note' => 'Bu web sitesi, gelişen bir merkez olarak BioNova ekibi tarafından sürekli izlenmekte ve güncellenmektedir.',
     'feedback' => [
         'success' => 'Teşekkürler! Geri bildiriminiz alındı.',
         'error' => 'Lütfen eleştirinizi veya önerinizi yazın.',

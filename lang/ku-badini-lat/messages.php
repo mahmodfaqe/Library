@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'language' => 'Ziman',
     'qr_label' => 'QR code',
     'university_name' => 'Zanîngeha Raperin',
     'library_name' => 'Kitêbxaneya Elektronîkî',
@@ -23,10 +24,6 @@ return [
         'prepared_heading' => 'Amadekirî ji aliyê:',
         'people' => [
             [
-                'name' => 'JIYAW YUSIF HUSÊN',
-                'role' => 'Xwendekarê Beşê Biyolojiyê - Dabînkirina pirtûkan',
-            ],
-            [
                 'name' => 'NIYAR QADIR RASÛL',
                 'role' => 'Xwendekarê Beşê Biyolojiyê - Rêxistina kitêbxanê',
             ],
@@ -46,7 +43,6 @@ return [
     ],
     'dept_heading' => 'Beşên Zanistî',
     'no_departments' => 'Ti beş nehat dîtin.',
-    'prefooter_note' => 'Ev malpera wek navendek geşesendî, ji aliyê tîma BioNova ve berdewam tê çavdêrîkirin û nûkirin.',
     'feedback' => [
         'success' => 'Spas! Rexne û pêşniyara te gihîşt.',
         'error' => 'Ji kerema xwe rexne an pêşniyara xwe binivîse.',

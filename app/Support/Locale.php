@@ -27,6 +27,34 @@ class Locale
     ];
 
     /**
+     * The Kurdish dialects, as the switcher lists them: label, the name in
+     * its own romanisation, and the face it needs.
+     *
+     * Here rather than in the view because two switchers show them — the wide
+     * one and the phone's menu — and they must not drift apart.
+     *
+     * @var array<string, array{0: string, 1: string, 2: string}>
+     */
+    public const KURDISH = [
+        'ku-sorani' => ['سۆرانی', 'Soranî', 'Rabar,sans-serif'],
+        'ku-badini' => ['بادینی', 'Kurmancî (عەرەبی)', 'Rabar,sans-serif'],
+        'ku-badini-lat' => ['Badînî', 'Kurmancî (Latînî)', 'sans-serif'],
+        'ku-hawrami' => ['هەورامی', 'Hewramî', 'Rabar,sans-serif'],
+    ];
+
+    /**
+     * Every other language, in menu order.
+     *
+     * @var array<string, string>
+     */
+    public const OTHERS = [
+        'en' => 'English',
+        'ar' => 'العربية',
+        'fa' => 'فارسی',
+        'tr' => 'Türkçe',
+    ];
+
+    /**
      * Supported locales written left-to-right. Every other supported locale
      * (the Arabic-script ones) is right-to-left.
      */
@@ -80,6 +108,17 @@ class Locale
     public static function yearClass(): string
     {
         return self::isLtr() ? 'footer-year-en' : 'footer-year-ar';
+    }
+
+    /**
+     * A short name for the current language, for the phone's switcher where
+     * there is room for one word rather than five buttons.
+     */
+    public static function shortLabel(?string $locale = null): string
+    {
+        $locale ??= App::getLocale();
+
+        return self::KURDISH[$locale][0] ?? self::OTHERS[$locale] ?? $locale;
     }
 
     public static function supports(?string $locale): bool

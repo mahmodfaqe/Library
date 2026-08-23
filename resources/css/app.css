@@ -727,30 +727,9 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
 }
 
 /* ── Tap targets ─────────────────────────────────────────────────────────
-   The header controls were sized for a mouse: 30px tall, which is under the
-   44px a finger needs and under the 24px minimum the accessibility guidance
-   sets even for a stylus. Their size lives here now rather than inline, so a
-   phone can be given bigger ones. */
-.lang-btn,
-#kuMainBtn {
-    font-size: clamp(0.52rem, 1.4vw, 0.8rem);
-    min-height: 30px;
-}
-.ku-dialect-btn {
-    padding: clamp(0.38rem, 1.2vw, 0.55rem) clamp(0.6rem, 2vw, 1rem);
-    font-size: clamp(0.58rem, 1.4vw, 0.8rem);
-    min-height: 36px;
-}
-
+   Text links are sized for a mouse; a finger needs the whole line rather
+   than the glyphs. */
 @media (pointer: coarse) {
-    .lang-btn,
-    #kuMainBtn {
-        min-height: 40px;
-        font-size: 0.8rem;
-        padding-inline: 0.7rem;
-    }
-    .ku-dialect-btn { min-height: 44px; font-size: 0.85rem; }
-
     /* Text links are 19px of glyphs; a finger needs the whole line. Every
        link a visitor is meant to press gets the room, wherever it sits. */
     nav[aria-label] a,
@@ -798,17 +777,129 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
     .subject-card { padding: 1rem; }
 }
 
-/* The language row scrolled sideways, so Türkçe sat off the edge of a phone
-   with nothing to say it was there. It wraps instead. */
 @media (max-width: 560px) {
-    #site-header .flex.items-center.gap-1.flex-nowrap.overflow-x-auto {
-        flex-wrap: wrap;
-        overflow: visible;
-        max-width: none;
-        justify-content: flex-end;
-        gap: 0.3rem;
-    }
-    #site-header .flex.items-center.gap-2 { flex-wrap: wrap; }
     .logo-title { font-size: 0.8rem; }
     .logo-subtitle { display: none; }
+}
+
+/* ── The language switcher, twice ─────────────────────────────────────────
+   Five controls beside a logo fit a laptop and do not fit a phone. Rather
+   than shrinking them until they are unreadable or letting them wrap into a
+   second row, the phone gets one button that opens the whole list. */
+.lang-wide {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-wrap: nowrap;
+}
+
+.lang-btn,
+#kuMainBtn {
+    padding: 0.35rem 0.6rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    white-space: nowrap;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: clamp(0.52rem, 1.4vw, 0.8rem);
+    min-height: 30px;
+    display: inline-flex;
+    align-items: center;
+    transition: background 0.2s var(--ease), border-color 0.2s var(--ease),
+                transform 0.2s var(--ease);
+}
+.lang-btn:hover,
+#kuMainBtn:hover {
+    background: rgba(255, 255, 255, 0.26);
+    border-color: rgba(255, 255, 255, 0.45);
+    transform: translateY(-1px);
+}
+.lang-btn.active,
+#kuMainBtn.active { background: rgba(255, 255, 255, 0.3); font-weight: 600; }
+
+.ku-dialect-btn {
+    padding: clamp(0.38rem, 1.2vw, 0.55rem) clamp(0.6rem, 2vw, 1rem);
+    font-size: clamp(0.58rem, 1.4vw, 0.8rem);
+    min-height: 36px;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+}
+.ku-dialect-btn:hover { background: rgba(255, 255, 255, 0.15); }
+.ku-dialect-btn.active { background: rgba(255, 255, 255, 0.2); }
+
+/* The phone's switcher. <details> rather than script: it opens with no
+   JavaScript, closes on Escape by itself, and is reachable from a keyboard. */
+.lang-menu { display: none; position: relative; }
+.lang-menu summary {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.7rem;
+    min-height: 40px;
+    border-radius: 9px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+    font-size: 0.82rem;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    white-space: nowrap;
+}
+.lang-menu summary::-webkit-details-marker { display: none; }
+.lang-menu[open] summary { background: rgba(255, 255, 255, 0.28); }
+
+.lang-menu-list {
+    position: absolute;
+    z-index: 1200;
+    top: calc(100% + 0.5rem);
+    inset-inline-end: 0;
+    min-width: 12rem;
+    display: flex;
+    flex-direction: column;
+    padding: 0.35rem;
+    border-radius: 14px;
+    background: rgba(70, 50, 130, 0.98);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 18px 48px rgba(30, 20, 70, 0.5);
+    animation: langIn 0.16s var(--ease);
+}
+@keyframes langIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.lang-menu-list a {
+    padding: 0.6rem 0.75rem;
+    min-height: 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 9px;
+    color: rgba(255, 255, 255, 0.86);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background 0.16s var(--ease);
+}
+.lang-menu-list a em {
+    font-style: normal;
+    font-size: 0.72em;
+    opacity: 0.6;
+    margin-top: 1px;
+}
+.lang-menu-list a:hover { background: rgba(255, 255, 255, 0.14); color: #fff; }
+.lang-menu-list a.is-active { background: rgba(255, 255, 255, 0.22); color: #fff; font-weight: 600; }
+.lang-menu-list hr {
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    margin: 0.3rem 0.4rem;
+}
+
+/* One or the other, never both. */
+@media (max-width: 720px) {
+    .lang-wide { display: none; }
+    .lang-menu { display: block; }
 }
