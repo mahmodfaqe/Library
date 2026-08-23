@@ -5,7 +5,7 @@
 
 @section('content')
 <!-- ══════════ HERO ══════════ -->
-<section id="hero-section" class="relative overflow-hidden flex items-center text-white text-center transition-all duration-1000 ease-in-out"
+<section id="hero-section" class="relative overflow-hidden flex items-center text-white text-center transition-[background-image,opacity] duration-1000 ease-in-out"
          style="background-image: url('{{ asset('file/image1.webp') }}'); background-size: cover; background-position: center; background-repeat: no-repeat; padding: clamp(6rem,14vw,11rem) 0 clamp(5rem,10vw,9rem); min-height: clamp(420px,65vh,680px);">
 
     <div class="absolute inset-0 bg-black/40 z-0"></div>
@@ -46,7 +46,7 @@
                     <h3 class="text-[#ff6b6b] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">{{ __('messages.intro.prepared_heading') }}</h3>
                     <div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(min(220px,100%),1fr));">
                         @foreach (__('messages.intro.people') as $person)
-                            <div class="text-center p-5 bg-white rounded-xl shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                            <div class="text-center p-5 bg-white rounded-xl shadow-xs transition-[transform,box-shadow,background,border-color,color] duration-300 hover:-translate-y-1 hover:shadow-md">
                                 <h4 class="text-[#2d2d3a] mb-2 font-bold">{{ $person['name'] }}</h4>
                                 <p class="text-[#6b6b80]">{{ $person['role'] }}</p>
                             </div>
@@ -85,7 +85,7 @@
 
         <div class="text-center" style="margin-top:1.4rem;">
             <a href="{{ Locale::booksUrl() }}"
-               class="section-btn inline-block font-semibold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1"
+               class="section-btn inline-block font-semibold text-white rounded-full no-underline text-center transition-[transform,box-shadow,background,border-color,color] duration-300 hover:-translate-y-1"
                style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:clamp(0.6rem,2.2vw,0.85rem) clamp(1.5rem,4vw,2.2rem); font-size:clamp(0.88rem,2.2vw,1rem); box-shadow:0 4px 14px rgba(102,126,234,0.28);">
                 {{ __('books.title') }}
             </a>
@@ -97,7 +97,7 @@
             <div class="grid gap-5" style="grid-template-columns: repeat(auto-fit, minmax(260px,1fr));">
                 @forelse ($subjects as $subject)
                 <a href="{{ Locale::booksUrl() }}?category={{ $subject->id }}"
-                   class="section-card card-top-bar card-glow relative flex flex-col justify-between bg-white/85 backdrop-blur-md border border-white/70 rounded-[18px] text-center no-underline transition-all duration-300 hover:-translate-y-3 reveal"
+                   class="section-card card-top-bar card-glow relative flex flex-col justify-between bg-white/85 backdrop-blur-md border border-white/70 rounded-[18px] text-center no-underline transition-[transform,box-shadow,background,border-color,color] duration-300 hover:-translate-y-3 reveal"
                    style="padding:clamp(1.3rem,3.5vw,1.9rem); min-height:190px; box-shadow:0 4px 16px rgba(102,126,234,0.10);">
                     <div>
                         <span class="block text-5xl mb-3 transition-transform duration-300">{{ $subject->icon }}</span>
@@ -192,7 +192,7 @@
                               class="w-full rounded-[12px] px-4 py-3" style="border:1px solid #d5d9ee; font-size:0.95rem; font-family:inherit; text-align:start;">{{ old('message') }}</textarea>
                 </div>
                 <div style="text-align:center;">
-                    <button type="submit" class="section-btn relative inline-block font-semibold text-white rounded-full no-underline text-center transition-all duration-300 hover:-translate-y-1 font-[inherit] cursor-pointer" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:clamp(0.65rem,2.2vw,0.9rem) clamp(1.6rem,4vw,2.4rem); font-size:clamp(0.9rem,2.2vw,1rem); box-shadow:0 4px 14px rgba(102,126,234,0.28); border:none;">
+                    <button type="submit" class="section-btn relative inline-block font-semibold text-white rounded-full no-underline text-center transition-[transform,box-shadow,background,border-color,color] duration-300 hover:-translate-y-1 font-[inherit] cursor-pointer" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:clamp(0.65rem,2.2vw,0.9rem) clamp(1.6rem,4vw,2.4rem); font-size:clamp(0.9rem,2.2vw,1rem); box-shadow:0 4px 14px rgba(102,126,234,0.28); border:none;">
                         {{ __('messages.feedback.send') }}
                     </button>
                 </div>

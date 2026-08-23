@@ -92,7 +92,7 @@
                 <!-- Kurdish dropdown group -->
                 <div class="relative" id="kuGroup">
                     <button id="kuMainBtn" type="button"
-                            class="{{ str_starts_with(app()->getLocale(), 'ku') ? 'active ' : '' }}flex items-center gap-1 px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md font-[inherit]"
+                            class="{{ str_starts_with(app()->getLocale(), 'ku') ? 'active ' : '' }}flex items-center gap-1 px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-[transform,box-shadow,background,border-color,color] duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md font-[inherit]"
                             style="font-size: clamp(0.52rem,1.4vw,0.8rem); min-height:30px;"
                             aria-haspopup="true" aria-expanded="false"
                             onclick="toggleKuDropdown()">
@@ -127,7 +127,7 @@
                 <div class="flex items-center gap-1 flex-nowrap overflow-x-auto" style="scrollbar-width:none; max-width:clamp(100px,40vw,400px);">
                     @foreach (['en' => 'English', 'ar' => 'العربية', 'fa' => 'فارسی', 'tr' => 'Türkçe'] as $code => $label)
                         <a href="{{ Locale::switchUrl($code) }}"
-                           class="lang-btn px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md whitespace-nowrap shrink-0 font-[inherit] no-underline{{ app()->getLocale() === $code ? ' active' : '' }}"
+                           class="lang-btn px-2 py-1.5 rounded-md text-white border border-white/20 bg-white/15 cursor-pointer transition-[transform,box-shadow,background,border-color,color] duration-200 hover:-translate-y-0.5 hover:border-white/45 hover:shadow-md whitespace-nowrap shrink-0 font-[inherit] no-underline{{ app()->getLocale() === $code ? ' active' : '' }}"
                            style="font-size:clamp(0.52rem,1.4vw,0.8rem); min-height:30px;">{{ $label }}</a>
                     @endforeach
                 </div>
