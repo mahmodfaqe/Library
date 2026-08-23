@@ -12,6 +12,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable(['title', 'author', 'year', 'language', 'department_id', 'category_id', 'drive_file_id', 'url', 'cover_url', 'file_path', 'file_size'])]
 class Book extends Model
 {
+    /**
+     * How well this book answers the search that found it. Set by BookSearch
+     * while ranking; not a column.
+     */
+    public float $relevance = 0;
+
     public function department(): BelongsTo
     {
         return $this->belongsTo(Department::class);

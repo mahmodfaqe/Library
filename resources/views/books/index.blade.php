@@ -29,23 +29,41 @@
         <p class="text-[#6b6b80] mb-8" style="font-size:clamp(0.95rem,2.4vw,1.08rem);">{{ __('books.intro') }}</p>
     @endif
 
-    <form method="GET" action="{{ url()->current() }}" class="mb-8"
-          style="display:flex; gap:0.7rem; flex-wrap:wrap; align-items:flex-end;">
+    {{-- The form still submits and the catalogue still renders without any of
+         this; the suggestions below only make the answer arrive sooner. --}}
+    <form method="GET" action="{{ url()->current() }}" class="search-form" role="search"
+          data-suggest="{{ route('search.suggest') }}">
         @if ($selected)
             <input type="hidden" name="category" value="{{ $selected->id }}">
         @endif
-        <div style="flex:1 1 260px;">
+
+        <div class="search-field">
             <label for="q" class="block font-semibold mb-1 text-[#4a4a5c]" style="font-size:0.86rem;">{{ __('books.search_label') }}</label>
-            <input type="search" id="q" name="q" value="{{ $search }}" placeholder="{{ __('books.search_placeholder') }}" dir="auto"
-                   class="w-full rounded-[12px] px-4 py-3"
-                   style="border:1px solid #d5d9ee; font-size:0.95rem; font-family:inherit; text-align:start;">
+
+            <div class="search-input-wrap">
+                <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path>
+                </svg>
+
+                <input type="search" id="q" name="q" value="{{ $search }}"
+                       placeholder="{{ __('books.search_placeholder') }}" dir="auto"
+                       autocomplete="off" role="combobox" aria-expanded="false"
+                       aria-controls="search-suggestions" aria-autocomplete="list">
+
+                <span class="search-spinner" aria-hidden="true"></span>
+            </div>
+
+            <div id="search-suggestions" class="search-suggestions" role="listbox"
+                 aria-label="{{ __('books.suggest.books') }}" hidden></div>
         </div>
-        <button type="submit" class="section-btn font-semibold text-white rounded-full cursor-pointer"
-                style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:0.78rem 1.9rem; font-size:0.95rem; border:none; font-family:inherit;">
+
+        <button type="submit" class="section-btn search-submit font-semibold text-white rounded-full cursor-pointer">
             {{ __('books.search') }}
         </button>
+
         @if ($search !== null || $selected)
-            <a href="{{ Locale::booksUrl() }}" class="text-[#6b6b80] no-underline hover:underline self-center" style="font-size:0.88rem;">
+            <a href="{{ Locale::booksUrl() }}" class="search-clear text-[#6b6b80] no-underline hover:underline">
                 {{ __('books.clear') }}
             </a>
         @endif
@@ -175,3 +193,157 @@
 
 </div>
 @endsection
+
+@push('scripts')
+@php
+    $labels = [
+        'subjects' => __('books.suggest.subjects'),
+        'books' => __('books.suggest.books'),
+        'empty' => __('books.suggest.empty'),
+        'all' => __('books.suggest.all'),
+        'download' => __('books.download'),
+        'open' => __('books.open'),
+    ];
+@endphp
+<script>
+(function () {
+    var form = document.querySelector('.search-form');
+    if (!form || !window.fetch || !window.AbortController) return;
+
+    var input = form.querySelector('#q');
+    var panel = form.querySelector('#search-suggestions');
+    var wrap  = form.querySelector('.search-input-wrap');
+    var text  = @js($labels);
+    var url   = form.dataset.suggest;
+    var category = (form.querySelector('[name=category]') || {}).value || '';
+
+    var timer = null, inflight = null, items = [], active = -1, lastTerm = '';
+
+    function escapeHtml(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+            return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+        });
+    }
+
+    // Show the visitor where their words landed, without trusting either the
+    // text or the term as markup.
+    function highlight(value, term) {
+        var safe = escapeHtml(value);
+        var words = term.split(/\s+/).filter(function (w) { return w.length > 1; });
+        words.forEach(function (word) {
+            var pattern = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            safe = safe.replace(new RegExp('(' + pattern + ')', 'ig'), '<mark>$1</mark>');
+        });
+        return safe;
+    }
+
+    function close() {
+        panel.hidden = true;
+        panel.innerHTML = '';
+        input.setAttribute('aria-expanded', 'false');
+        items = []; active = -1;
+    }
+
+    function move(step) {
+        if (!items.length) return;
+        if (active >= 0) items[active].classList.remove('is-active');
+        active = (active + step + items.length) % items.length;
+        items[active].classList.add('is-active');
+        items[active].scrollIntoView({ block: 'nearest' });
+    }
+
+    function render(data, term) {
+        var html = '';
+
+        if (data.categories.length) {
+            html += '<p class="suggest-heading">' + escapeHtml(text.subjects) + '</p>';
+            data.categories.forEach(function (c) {
+                html += '<a class="suggest-item suggest-subject" role="option" href="' + escapeHtml(c.url) + '">'
+                     +  '<span class="suggest-title" dir="auto">' + highlight(c.name, term) + '</span>'
+                     +  '<span class="suggest-count">' + escapeHtml(c.count) + '</span></a>';
+            });
+        }
+
+        if (data.books.length) {
+            html += '<p class="suggest-heading">' + escapeHtml(text.books) + '</p>';
+            data.books.forEach(function (b) {
+                var facts = [b.year, b.language, b.subject].filter(Boolean)
+                    .map(function (f) { return '<bdi>' + escapeHtml(f) + '</bdi>'; }).join(' · ');
+                html += '<a class="suggest-item" role="option" href="' + escapeHtml(b.url || '#') + '"'
+                     +  (b.url && !b.download ? ' target="_blank" rel="noopener"' : '') + '>'
+                     +  '<span class="suggest-cover">' + (b.cover
+                            ? '<img src="' + escapeHtml(b.cover) + '" alt="" loading="lazy" referrerpolicy="no-referrer">'
+                            : '\u{1F4D8}') + '</span>'
+                     +  '<span class="suggest-body">'
+                     +    '<span class="suggest-title" dir="auto">' + highlight(b.title, term) + '</span>'
+                     +    (b.author ? '<span class="suggest-author" dir="auto">' + highlight(b.author, term) + '</span>' : '')
+                     +    (facts ? '<span class="suggest-facts">' + facts + '</span>' : '')
+                     +  '</span></a>';
+            });
+        }
+
+        if (!html) {
+            html = '<p class="suggest-empty">' + escapeHtml(text.empty) + '</p>';
+        } else {
+            html += '<button type="submit" class="suggest-all">' + escapeHtml(text.all) + '</button>';
+        }
+
+        panel.innerHTML = html;
+        panel.hidden = false;
+        input.setAttribute('aria-expanded', 'true');
+        items = Array.prototype.slice.call(panel.querySelectorAll('.suggest-item'));
+        active = -1;
+    }
+
+    function ask(term) {
+        if (inflight) inflight.abort();
+        inflight = new AbortController();
+        wrap.classList.add('is-loading');
+
+        fetch(url + '?q=' + encodeURIComponent(term) + (category ? '&category=' + encodeURIComponent(category) : ''),
+              { signal: inflight.signal, headers: { 'Accept': 'application/json' } })
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (data) {
+                wrap.classList.remove('is-loading');
+                // A slower earlier request must not overwrite a later answer.
+                if (data && input.value.trim() === term) render(data, term);
+            })
+            .catch(function (e) {
+                if (e.name !== 'AbortError') wrap.classList.remove('is-loading');
+            });
+    }
+
+    input.addEventListener('input', function () {
+        var term = input.value.trim();
+        clearTimeout(timer);
+
+        if (term.length < 2) { close(); wrap.classList.remove('is-loading'); return; }
+        if (term === lastTerm) return;
+        lastTerm = term;
+
+        // Long enough that a fast typist makes one request, not eight.
+        timer = setTimeout(function () { ask(term); }, 160);
+    });
+
+    input.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { close(); return; }
+        if (panel.hidden) return;
+
+        if (e.key === 'ArrowDown') { e.preventDefault(); move(1); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1); }
+        else if (e.key === 'Enter' && active >= 0) { e.preventDefault(); items[active].click(); }
+    });
+
+    input.addEventListener('focus', function () {
+        if (input.value.trim().length >= 2 && panel.innerHTML) {
+            panel.hidden = false;
+            input.setAttribute('aria-expanded', 'true');
+        }
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!form.contains(e.target)) close();
+    });
+})();
+</script>
+@endpush

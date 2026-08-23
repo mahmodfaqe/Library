@@ -5,6 +5,13 @@ return [
     'next_page' => 'Rûpela paşî',
     'showing' => 'Nîşandana :from–:to ji koma :total',
     'other_language' => 'Zimanê din',
+    'suggest' => [
+        'subjects' => 'Babet',
+        'books' => 'Pirtûk',
+        'empty' => 'Çi tişt nehate dîtin',
+        'searching' => 'Digeriyt…',
+        'all' => 'Hemî encaman bibîne',
+    ],
     'breadcrumb' => 'Riya naverokê',
     'clear' => 'Paqijkirin',
     'title' => 'Katalogê pirtûkan',

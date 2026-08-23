@@ -5,6 +5,13 @@ return [
     'next_page' => 'Sonraki sayfa',
     'showing' => ':total kayıttan :from–:to gösteriliyor',
     'other_language' => 'Diğer dil',
+    'suggest' => [
+        'subjects' => 'Konular',
+        'books' => 'Kitaplar',
+        'empty' => 'Sonuç yok',
+        'searching' => 'Aranıyor…',
+        'all' => 'Tüm sonuçları gör',
+    ],
     'breadcrumb' => 'Gezinti yolu',
     'clear' => 'Temizle',
     'title' => 'Kitap kataloğu',

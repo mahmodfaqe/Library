@@ -5,6 +5,13 @@ return [
     'next_page' => 'Next page',
     'showing' => 'Showing :from–:to of :total',
     'other_language' => 'Other language',
+    'suggest' => [
+        'subjects' => 'Subjects',
+        'books' => 'Books',
+        'empty' => 'Nothing found',
+        'searching' => 'Searching…',
+        'all' => 'See all results',
+    ],
     'breadcrumb' => 'Breadcrumb',
     'clear' => 'Clear',
     'title' => 'Book catalogue',

@@ -5,6 +5,13 @@ return [
     'next_page' => 'لاپەڕەی دماتەر',
     'showing' => 'نمایشی :from–:to لە کۆی :total',
     'other_language' => 'زوانی تەر',
+    'suggest' => [
+        'subjects' => 'بەشێ',
+        'books' => 'کتێبێ',
+        'empty' => 'هیچ نەدیاری',
+        'searching' => 'گێڵۆ…',
+        'all' => 'هەمە ئەنجامەکا وینە',
+    ],
     'breadcrumb' => 'ڕاگەی ناوەڕۆی',
     'clear' => 'پاکەرکەردەی',
     'title' => 'کاتالۆگی کتێوەکا',

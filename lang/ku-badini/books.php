@@ -5,6 +5,13 @@ return [
     'next_page' => 'رویپەلا پاشی',
     'showing' => 'نیشاندانا :from–:to ژ کۆما :total',
     'other_language' => 'زمانێ دی',
+    'suggest' => [
+        'subjects' => 'بابەت',
+        'books' => 'پرتوک',
+        'empty' => 'چ تشت نەهاتە دیتن',
+        'searching' => 'دگەڕیت…',
+        'all' => 'هەمی ئەنجاما ببینە',
+    ],
     'breadcrumb' => 'ڕێکا ناڤەرۆکێ',
     'clear' => 'پاقژکرن',
     'title' => 'کاتالۆگا پرتوکان',

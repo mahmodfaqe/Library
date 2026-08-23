@@ -5,6 +5,13 @@ return [
     'next_page' => 'صفحهٔ بعدی',
     'showing' => 'نمایش :from–:to از :total',
     'other_language' => 'زبان دیگر',
+    'suggest' => [
+        'subjects' => 'موضوع‌ها',
+        'books' => 'کتاب‌ها',
+        'empty' => 'چیزی یافت نشد',
+        'searching' => 'در حال جست‌وجو…',
+        'all' => 'دیدن همهٔ نتایج',
+    ],
     'breadcrumb' => 'مسیر ناوبری',
     'clear' => 'پاک‌کردن',
     'title' => 'فهرست کتاب‌ها',

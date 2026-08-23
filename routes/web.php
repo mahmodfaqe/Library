@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\UserController;
 use App\Support\Locale;
@@ -26,6 +27,12 @@ Route::get('{locale}/books', [BookController::class, 'index'])
 
 Route::get('books/{book}/download', [BookController::class, 'download'])
     ->name('books.download');
+
+// Suggestions for the catalogue's search box, answered as the visitor types.
+// Throttled because it runs on every keystroke.
+Route::get('search/suggest', [SearchController::class, 'suggest'])
+    ->middleware('throttle:120,1')
+    ->name('search.suggest');
 
 // One crawlable URL per language: /en, /ar, /ku-badini, ...
 Route::get('/{locale}', [HomeController::class, 'index'])

@@ -5,6 +5,13 @@ return [
     'next_page' => 'الصفحة التالية',
     'showing' => 'عرض :from–:to من أصل :total',
     'other_language' => 'لغة أخرى',
+    'suggest' => [
+        'subjects' => 'المواضيع',
+        'books' => 'الكتب',
+        'empty' => 'لا نتائج',
+        'searching' => 'جارٍ البحث…',
+        'all' => 'عرض كل النتائج',
+    ],
     'breadcrumb' => 'مسار التصفح',
     'clear' => 'مسح',
     'title' => 'فهرس الكتب',
