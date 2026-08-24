@@ -49,7 +49,7 @@ class AdminDepartmentTest extends TestCase
     public function test_an_admin_can_create_a_department(): void
     {
         $this->post('/admin/departments', $this->payload())
-            ->assertRedirect(route('admin.index'))
+            ->assertRedirect(route('admin.departments'))
             ->assertSessionHas('status');
 
         $this->assertDatabaseCount('departments', 1);
@@ -61,7 +61,7 @@ class AdminDepartmentTest extends TestCase
         $department = Department::create($this->payload());
 
         $this->put("/admin/departments/{$department->id}", $this->payload(['sort_order' => 9]))
-            ->assertRedirect(route('admin.index'));
+            ->assertRedirect(route('admin.departments'));
 
         $this->assertSame(9, $department->fresh()->sort_order);
     }
@@ -71,7 +71,7 @@ class AdminDepartmentTest extends TestCase
         $department = Department::create($this->payload());
 
         $this->delete("/admin/departments/{$department->id}")
-            ->assertRedirect(route('admin.index'));
+            ->assertRedirect(route('admin.departments'));
 
         $this->assertDatabaseCount('departments', 0);
     }
