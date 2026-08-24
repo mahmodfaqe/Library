@@ -96,7 +96,19 @@
                 <tbody>
                     @foreach ($books as $book)
                         <tr>
-                            <td dir="auto">{{ $book->title }}</td>
+                            <td>
+                                <div class="row-book">
+                                    <span class="row-cover">
+                                        @if ($book->coverUrl())
+                                            <img src="{{ $book->coverUrl() }}" alt="" loading="lazy"
+                                                 decoding="async" referrerpolicy="no-referrer"
+                                                 onerror="this.closest('.row-cover').classList.add('is-blank')">
+                                        @endif
+                                        <span aria-hidden="true">{{ $book->category?->icon ?: '📘' }}</span>
+                                    </span>
+                                    <span class="row-title" dir="auto">{{ $book->title }}</span>
+                                </div>
+                            </td>
                             <td>
                                 <input class="cell" type="text" dir="auto" maxlength="190"
                                        name="books[{{ $book->id }}][author]"

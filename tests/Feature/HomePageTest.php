@@ -180,12 +180,12 @@ class HomePageTest extends TestCase
         foreach (['/', '/en', '/admin/login'] as $uri) {
             $this->get($uri)
                 // Versioned so a replaced icon actually reaches the browser.
-                ->assertSee('href="'.Asset::versioned('favicon.ico').'"', false)
-                ->assertSee('href="'.Asset::versioned('favicon-96.png').'"', false)
+                ->assertSee('href="'.Asset::versioned('uor-icon.ico').'"', false)
+                ->assertSee('href="'.Asset::versioned('uor-icon-96.png').'"', false)
                 ->assertSee('rel="apple-touch-icon"', false);
         }
 
-        foreach (['favicon.ico', 'favicon-96.png', 'apple-touch-icon.png', 'file/bionova-logo.webp'] as $asset) {
+        foreach (['uor-icon.ico', 'uor-icon-96.png', 'uor-apple-icon.png', 'favicon.ico'] as $asset) {
             $path = public_path($asset);
             $this->assertFileExists($path);
             $this->assertGreaterThan(0, filesize($path), "$asset is empty");

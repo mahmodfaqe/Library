@@ -46,7 +46,7 @@ class PageCacheTest extends TestCase
         $html = $this->get('http://localhost/en')->assertOk()->getContent();
 
         $this->assertStringNotContainsString('http://127.0.0.1', $html);
-        $this->assertStringContainsString('http://localhost/favicon.ico', $html);
+        $this->assertStringContainsString('http://localhost/uor-icon.ico', $html);
     }
 
     public function test_each_host_keeps_its_own_copy(): void

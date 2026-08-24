@@ -27,9 +27,9 @@
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#667eea">
 
-    <link rel="icon" href="{{ Asset::versioned('favicon.ico') }}" sizes="16x16 32x32 48x48">
-    <link rel="icon" type="image/png" href="{{ Asset::versioned('favicon-96.png') }}" sizes="96x96">
-    <link rel="apple-touch-icon" href="{{ Asset::versioned('apple-touch-icon.png') }}">
+    <link rel="icon" href="{{ Asset::versioned('uor-icon.ico') }}" sizes="16x16 32x32 48x48">
+    <link rel="icon" type="image/png" href="{{ Asset::versioned('uor-icon-96.png') }}" sizes="96x96">
+    <link rel="apple-touch-icon" href="{{ Asset::versioned('uor-apple-icon.png') }}">
 
     {{-- Every page has one address per language, and each is its own canonical. --}}
     <link rel="canonical" href="{{ Locale::switchUrl() }}">
