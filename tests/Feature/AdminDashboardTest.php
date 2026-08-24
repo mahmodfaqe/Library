@@ -110,12 +110,14 @@ class AdminDashboardTest extends TestCase
         Book::create(['title' => 'Older', 'year' => 1990, 'url' => 'https://x.test/1']);
         Book::create(['title' => 'Newer', 'year' => 2020, 'url' => 'https://x.test/2']);
 
-        $this->actingAs($this->administrator())
+        $librarian = $this->administrator();
+
+        $this->actingAs($librarian)
             ->get('/admin/books?sort=year&dir=desc')
             ->assertOk()
             ->assertSeeInOrder(['Newer', 'Older']);
 
-        $this->actingAs($this->administrator())
+        $this->actingAs($librarian)
             ->get('/admin/books?sort=year&dir=asc')
             ->assertOk()
             ->assertSeeInOrder(['Older', 'Newer']);
