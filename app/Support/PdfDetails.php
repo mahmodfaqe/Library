@@ -46,6 +46,11 @@ class PdfDetails
     private const EARLIEST_YEAR = 1400;
 
     /**
+     * How many pages count as the opening.
+     */
+    private const OPENING_PAGES = 8;
+
+    /**
      * Read what the file can tell us, from its bytes rather than from a path:
      * the books are never stored on this server, only passed through.
      *
@@ -86,9 +91,10 @@ class PdfDetails
 
         $details = $pdf->getDetails();
 
-        // Only the opening pages: a title page carries the author and the
-        // copyright year, and reading the whole book to find them would be
-        // slow and would pick up every year mentioned in the text.
+        // The opening pages only, but enough of them: a scanned book often
+        // begins with a cover image and a blank verso, so the title page —
+        // where the author is named — can be the fifth or sixth. Reading the
+        // whole book would be slow and would pick up every year in the text.
         $opening = '';
 
         if ($alarm) {
@@ -96,7 +102,7 @@ class PdfDetails
         }
 
         try {
-            foreach (array_slice($pdf->getPages(), 0, 4) as $page) {
+            foreach (array_slice($pdf->getPages(), 0, self::OPENING_PAGES) as $page) {
                 $opening .= "\n".$page->getText();
             }
         } catch (Throwable) {
@@ -163,9 +169,10 @@ class PdfDetails
      */
     private static function creditedAuthor(string $opening): ?string
     {
-        $markers = 'by|written by|authored by|edited by|author'
-            .'|تأليف|تاليف|إعداد|اعداد|بقلم|المؤلف'
-            .'|نووسینی|نوسینی|نووسەر|ئامادەکردنی';
+        $markers = 'by|written by|authored by|edited by|compiled by|prepared by'
+            .'|translated by|author|authors|editor|editors'
+            .'|تأليف|تاليف|إعداد|اعداد|بقلم|المؤلف|المؤلفون|تحرير|جمع وترتيب'
+            .'|نووسینی|نوسینی|نووسەر|نووسەری|ئامادەکردنی|کۆکردنەوەی|وەرگێڕانی';
 
         if (! preg_match('/(?:^|\n)\s*(?:'.$markers.')\s*[:：\-–—]?\s*(.+)/iu', $opening, $m)) {
             return null;
