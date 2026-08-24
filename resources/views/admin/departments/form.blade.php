@@ -6,7 +6,7 @@
     <div class="card">
         <div class="card-head">
             <h2>{{ $department->exists ? __('admin.departments.edit_heading') : __('admin.departments.new_heading') }}</h2>
-            <a href="{{ route('admin.index') }}" class="btn btn-secondary">{{ __('admin.actions.back') }}</a>
+            <a href="{{ route('admin.departments') }}" class="btn btn-secondary">{{ __('admin.actions.back') }}</a>
         </div>
 
         <form method="POST"
@@ -74,7 +74,7 @@
 
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary">{{ $department->exists ? __('admin.actions.save') : __('admin.actions.create') }}</button>
-                <a href="{{ route('admin.index') }}" class="btn btn-secondary">{{ __('admin.actions.cancel') }}</a>
+                <a href="{{ route('admin.departments') }}" class="btn btn-secondary">{{ __('admin.actions.cancel') }}</a>
             </div>
         </form>
     </div>

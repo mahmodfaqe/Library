@@ -32,7 +32,8 @@
 
         @php
             $links = [
-                ['admin.index', 'admin.nav.departments', '🏛'],
+                ['admin.index', 'admin.nav.overview', '📊'],
+                ['admin.departments', 'admin.nav.departments', '🏛'],
                 ['admin.categories', 'admin.nav.categories', '🗂'],
                 ['admin.books', 'admin.nav.books', '📚'],
                 ['admin.feedback', 'admin.nav.feedback', '💬'],

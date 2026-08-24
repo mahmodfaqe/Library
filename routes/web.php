@@ -79,6 +79,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware('admin.auth')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('index');
+        Route::get('departments', [AdminController::class, 'departments'])->name('departments');
         Route::get('departments/create', [AdminController::class, 'create'])->name('departments.create');
         Route::post('departments', [AdminController::class, 'store'])->name('departments.store');
         Route::get('departments/{department}/edit', [AdminController::class, 'edit'])->name('departments.edit');

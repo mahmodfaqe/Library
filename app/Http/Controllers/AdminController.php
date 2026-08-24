@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Middleware\CachePage;
 use App\Models\Activity;
+use App\Models\Book;
+use App\Models\Category;
 use App\Models\Department;
 use App\Models\Feedback;
 use Illuminate\Http\RedirectResponse;
@@ -51,7 +53,44 @@ class AdminController extends Controller
         return redirect()->route('home');
     }
 
+    /**
+     * What the panel opens on.
+     *
+     * A librarian arriving wants to know the shape of the collection and what
+     * is missing from it, not the list of departments — which is what this
+     * used to be. The gaps are links: each one goes to the books it counted.
+     */
     public function index(): View
+    {
+        return view('admin.dashboard', [
+            'counts' => [
+                'books' => Book::count(),
+                'categories' => Category::count(),
+                'departments' => Department::count(),
+                'feedback' => Feedback::count(),
+            ],
+            'gaps' => [
+                'author' => Book::whereNull('author')->count(),
+                'year' => Book::whereNull('year')->count(),
+                'language' => Book::whereNull('language')->count(),
+                'category' => Book::whereNull('category_id')->count(),
+                'link' => Book::whereNull('url')->whereNull('file_path')->count(),
+            ],
+            'languages' => Book::selectRaw('language, count(*) as total')
+                ->whereNotNull('language')
+                ->groupBy('language')
+                ->orderByDesc('total')
+                ->pluck('total', 'language'),
+            'busiest' => Category::withCount('books')
+                ->orderByDesc('books_count')
+                ->limit(5)
+                ->get(),
+            'recentActivity' => Activity::with('user')->latest()->limit(6)->get(),
+            'recentFeedback' => Feedback::latest()->limit(3)->get(),
+        ]);
+    }
+
+    public function departments(): View
     {
         return view('admin.departments.index', [
             'departments' => Department::orderBy('sort_order')->paginate(10),
@@ -74,7 +113,7 @@ class AdminController extends Controller
         Activity::record('department.created', $department->translation('en', 'title'));
         CachePage::flush();
 
-        return redirect()->route('admin.index')->with('status', __('admin.flash.department_created'));
+        return redirect()->route('admin.departments')->with('status', __('admin.flash.department_created'));
     }
 
     public function edit(Department $department): View
@@ -93,7 +132,7 @@ class AdminController extends Controller
         Activity::record('department.updated', $department->translation('en', 'title'));
         CachePage::flush();
 
-        return redirect()->route('admin.index')->with('status', __('admin.flash.department_updated'));
+        return redirect()->route('admin.departments')->with('status', __('admin.flash.department_updated'));
     }
 
     public function destroy(Department $department): RedirectResponse
@@ -102,7 +141,7 @@ class AdminController extends Controller
         $department->delete();
         CachePage::flush();
 
-        return redirect()->route('admin.index')->with('status', __('admin.flash.department_deleted'));
+        return redirect()->route('admin.departments')->with('status', __('admin.flash.department_deleted'));
     }
 
     private function validated(Request $request): array

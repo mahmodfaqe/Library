@@ -14,17 +14,69 @@ use Illuminate\View\View;
 
 class AdminBookController extends Controller
 {
+    /**
+     * Columns a librarian may sort by, and the direction each defaults to.
+     *
+     * An allowlist rather than whatever arrives in the query string: the value
+     * goes into an ORDER BY.
+     *
+     * @var array<string, string>
+     */
+    private const SORTABLE = [
+        'title' => 'asc',
+        'author' => 'asc',
+        'year' => 'desc',
+        'language' => 'asc',
+        'created_at' => 'desc',
+    ];
+
+    /**
+     * What can be missing, and how to ask the database for it.
+     *
+     * @var array<string, string>
+     */
+    private const MISSING = [
+        'author' => 'author',
+        'year' => 'year',
+        'language' => 'language',
+        'category' => 'category_id',
+    ];
+
     public function index(Request $request): View
     {
         $search = $this->textQuery($request, 'q');
+        $missing = $this->textQuery($request, 'missing');
+        $language = $this->textQuery($request, 'language');
+        $category = $this->textQuery($request, 'category');
+
+        $sort = $this->textQuery($request, 'sort');
+        $sort = array_key_exists($sort, self::SORTABLE) ? $sort : 'title';
+        $direction = $this->textQuery($request, 'dir') === 'desc' ? 'desc' : 'asc';
 
         return view('admin.books.index', [
             'books' => Book::with(['department', 'category'])
                 ->matching($search)
-                ->orderBy('title')
+                ->when($language, fn ($q) => $q->where('language', $language))
+                ->when($category, fn ($q) => $q->where('category_id', $category))
+                ->when($missing === 'link',
+                    fn ($q) => $q->whereNull('url')->whereNull('file_path'))
+                ->when(isset(self::MISSING[$missing]),
+                    fn ($q) => $q->whereNull(self::MISSING[$missing]))
+                ->orderBy($sort, $direction)
                 ->paginate(20)
                 ->withQueryString(),
             'search' => $search,
+            'missing' => $missing,
+            'language' => $language,
+            'category' => $category,
+            'sort' => $sort,
+            'direction' => $direction,
+            'sortable' => array_keys(self::SORTABLE),
+            'categories' => Category::orderBy('sort_order')->orderBy('name')->get(),
+            'languages' => Book::whereNotNull('language')
+                ->distinct()
+                ->orderBy('language')
+                ->pluck('language'),
         ]);
     }
 
