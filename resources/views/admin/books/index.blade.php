@@ -80,7 +80,7 @@
                                 </a>
                             </th>
                         @endforeach
-                        <th>{{ __('admin.books.table.department') }}</th>
+                        <th>{{ __('admin.books.table.category') }}</th>
                         <th>{{ __('admin.books.table.actions') }}</th>
                     </tr>
                 </thead>
@@ -90,7 +90,8 @@
                             <td dir="auto">{{ $book->title }}</td>
                             <td dir="auto">{{ $book->author ?: '—' }}</td>
                             <td><bdi>{{ $book->year ?: '—' }}</bdi></td>
-                            <td dir="auto">{{ $book->department?->translation('ku-sorani', 'title') ?: '—' }}</td>
+                            <td dir="auto">{{ $book->language ?: '—' }}</td>
+                            <td dir="auto">{{ $book->category?->localName() ?: '—' }}</td>
                             <td class="actions">
                                 <a href="{{ route('admin.books.edit', $book) }}" class="btn btn-secondary btn-sm">{{ __('admin.actions.edit') }}</a>
                                 <form method="POST" action="{{ route('admin.books.destroy', $book) }}" style="display:inline;"

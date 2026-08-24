@@ -112,7 +112,7 @@ class AdminDepartmentTest extends TestCase
     {
         Department::create($this->payload());
 
-        $this->get('/admin')
+        $this->get('/admin/departments')
             ->assertOk()
             ->assertSee('Title ku-sorani')
             ->assertSee('Title en');
