@@ -107,6 +107,60 @@ class AdminBookController extends Controller
         ]);
     }
 
+    /**
+     * Save the author and year typed straight into the list.
+     *
+     * The collection arrived from Drive folder names, so more than a thousand
+     * books have neither. Opening a form, saving and coming back for each one
+     * is a day's work; typing down a column is an afternoon's. Only those two
+     * fields can be set this way — everything else still goes through the
+     * form, where it can be validated properly and recorded.
+     */
+    public function quickUpdate(Request $request): RedirectResponse
+    {
+        $rows = $request->validate([
+            'books' => ['array', 'max:100'],
+            'books.*.author' => ['nullable', 'string', 'max:190'],
+            'books.*.year' => ['nullable', 'integer', 'min:1400', 'max:'.((int) date('Y') + 1)],
+        ])['books'] ?? [];
+
+        $changed = 0;
+
+        foreach (Book::findMany(array_keys($rows)) as $book) {
+            $fields = [
+                'author' => $this->blankToNull($rows[$book->id]['author'] ?? null),
+                'year' => $this->blankToNull($rows[$book->id]['year'] ?? null),
+            ];
+
+            // Only touch what actually differs, so the activity log records
+            // edits rather than every row that happened to be on screen.
+            $fields = array_filter(
+                $fields,
+                fn ($value, $key) => $value !== $book->{$key},
+                ARRAY_FILTER_USE_BOTH
+            );
+
+            if ($fields === []) {
+                continue;
+            }
+
+            $book->update($fields);
+            Activity::record('book.updated', $book->title);
+            $changed++;
+        }
+
+        if ($changed > 0) {
+            CachePage::flush();
+        }
+
+        return back()->with('status', __('admin.books.quick_saved', ['count' => $changed]));
+    }
+
+    private function blankToNull(mixed $value): mixed
+    {
+        return is_string($value) && trim($value) === '' ? null : $value;
+    }
+
     public function update(Request $request, Book $book): RedirectResponse
     {
         $book->update($this->validated($request, $book));

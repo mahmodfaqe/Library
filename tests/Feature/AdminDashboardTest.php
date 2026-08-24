@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Activity;
 use App\Models\Book;
 use App\Models\Category;
 use App\Models\User;
@@ -148,6 +149,103 @@ class AdminDashboardTest extends TestCase
         // list back out to the whole catalogue.
         $this->assertStringContainsString('missing=author', $html);
         $this->assertStringContainsString('sort=year', $html);
+    }
+
+    public function test_the_author_and_year_can_be_typed_into_the_list(): void
+    {
+        $a = Book::create(['title' => 'One', 'url' => 'https://x.test/1']);
+        $b = Book::create(['title' => 'Two', 'url' => 'https://x.test/2']);
+
+        $this->actingAs($this->administrator())
+            ->from('/admin/books')
+            ->put('/admin/books/quick', ['books' => [
+                $a->id => ['author' => 'Bruce Alberts', 'year' => '2015'],
+                $b->id => ['author' => 'Jane Doe', 'year' => ''],
+            ]])
+            ->assertRedirect('/admin/books');
+
+        $this->assertSame('Bruce Alberts', $a->refresh()->author);
+        $this->assertSame(2015, $a->year);
+        $this->assertSame('Jane Doe', $b->refresh()->author);
+        $this->assertNull($b->year);
+    }
+
+    public function test_clearing_a_field_in_the_list_empties_it(): void
+    {
+        $book = Book::create([
+            'title' => 'One',
+            'author' => 'Wrong Name',
+            'year' => 1999,
+            'url' => 'https://x.test/1',
+        ]);
+
+        $this->actingAs($this->administrator())
+            ->put('/admin/books/quick', ['books' => [
+                $book->id => ['author' => '  ', 'year' => ''],
+            ]]);
+
+        $book->refresh();
+
+        $this->assertNull($book->author);
+        $this->assertNull($book->year);
+    }
+
+    public function test_only_the_rows_that_changed_are_recorded(): void
+    {
+        $untouched = Book::create(['title' => 'Same', 'author' => 'Keep', 'url' => 'https://x.test/1']);
+        $edited = Book::create(['title' => 'Changed', 'url' => 'https://x.test/2']);
+
+        $this->actingAs($this->administrator())
+            ->put('/admin/books/quick', ['books' => [
+                $untouched->id => ['author' => 'Keep', 'year' => ''],
+                $edited->id => ['author' => 'New', 'year' => ''],
+            ]]);
+
+        // Every row on the page is submitted, but the log is for edits.
+        $this->assertSame(1, Activity::where('action', 'book.updated')->count());
+    }
+
+    public function test_a_year_the_column_cannot_hold_is_refused(): void
+    {
+        $book = Book::create(['title' => 'One', 'url' => 'https://x.test/1']);
+
+        $this->actingAs($this->administrator())
+            ->from('/admin/books')
+            ->put('/admin/books/quick', ['books' => [
+                $book->id => ['author' => '', 'year' => '3500'],
+            ]])
+            ->assertSessionHasErrors();
+
+        $this->assertNull($book->refresh()->year);
+    }
+
+    public function test_the_list_editor_cannot_reach_other_fields(): void
+    {
+        $book = Book::create(['title' => 'Real title', 'url' => 'https://x.test/1']);
+
+        $this->actingAs($this->administrator())
+            ->put('/admin/books/quick', ['books' => [
+                $book->id => ['author' => 'Somebody', 'title' => 'Rewritten', 'url' => 'https://evil.test'],
+            ]]);
+
+        $book->refresh();
+
+        // Only author and year are editable here; the rest goes through the
+        // form, where it is validated and recorded properly.
+        $this->assertSame('Real title', $book->title);
+        $this->assertSame('https://x.test/1', $book->url);
+        $this->assertSame('Somebody', $book->author);
+    }
+
+    public function test_a_visitor_cannot_edit_the_list(): void
+    {
+        $book = Book::create(['title' => 'One', 'url' => 'https://x.test/1']);
+
+        $this->put('/admin/books/quick', ['books' => [
+            $book->id => ['author' => 'Intruder'],
+        ]])->assertRedirect(route('admin.login'));
+
+        $this->assertNull($book->refresh()->author);
     }
 
     public function test_a_member_of_staff_does_not_see_the_activity_log(): void

@@ -58,6 +58,15 @@
         @if ($books->isEmpty())
             <p class="empty">{{ __('admin.books.empty') }}</p>
         @else
+            {{-- The author and year columns are editable in place. More than a
+                 thousand books arrived from Drive with neither, and opening a
+                 form for each one is a day's work. Saving is one button for
+                 the whole page, so it works with no script at all; the script
+                 below only adds a nudge before leaving with unsaved edits. --}}
+            <form method="POST" action="{{ route('admin.books.quick') }}" id="quick-edit">
+                @csrf
+                @method('PUT')
+
             <div class="table-scroll">
             <table>
                 <thead>
@@ -88,8 +97,19 @@
                     @foreach ($books as $book)
                         <tr>
                             <td dir="auto">{{ $book->title }}</td>
-                            <td dir="auto">{{ $book->author ?: '—' }}</td>
-                            <td><bdi>{{ $book->year ?: '—' }}</bdi></td>
+                            <td>
+                                <input class="cell" type="text" dir="auto" maxlength="190"
+                                       name="books[{{ $book->id }}][author]"
+                                       value="{{ $book->author }}"
+                                       aria-label="{{ __('admin.books.table.author') }}">
+                            </td>
+                            <td>
+                                <input class="cell cell-narrow" type="number" dir="ltr" inputmode="numeric"
+                                       min="1400" max="{{ (int) date('Y') + 1 }}"
+                                       name="books[{{ $book->id }}][year]"
+                                       value="{{ $book->year }}"
+                                       aria-label="{{ __('admin.books.table.year') }}">
+                            </td>
                             <td dir="auto">{{ $book->language ?: '—' }}</td>
                             <td dir="auto">{{ $book->category?->localName() ?: '—' }}</td>
                             <td class="actions">
@@ -107,9 +127,53 @@
             </table>
             </div>
 
+            <div class="quick-bar">
+                <button type="submit" class="btn btn-primary">{{ __('admin.books.quick_save') }}</button>
+                <span class="quick-hint">{{ __('admin.books.quick_hint') }}</span>
+            </div>
+            </form>
+
             @if ($books->hasPages())
                 @include('admin.partials.pagination', ['paginator' => $books])
             @endif
         @endif
     </div>
 @endsection
+
+@push('scripts')
+<script>
+(function () {
+    var form = document.getElementById('quick-edit');
+    if (!form) return;
+
+    var bar = form.querySelector('.quick-bar');
+    var dirty = false;
+
+    // Mark the row so it is obvious which lines will be written, and keep the
+    // save button in view once there is something to save.
+    form.addEventListener('input', function (e) {
+        if (!e.target.classList.contains('cell')) return;
+        e.target.closest('tr').classList.add('is-edited');
+        dirty = true;
+        bar.classList.add('is-active');
+    });
+
+    // Enter in a cell saves rather than doing nothing, which is what a
+    // spreadsheet would do.
+    form.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && e.target.classList.contains('cell')) {
+            e.preventDefault();
+            form.requestSubmit();
+        }
+    });
+
+    form.addEventListener('submit', function () { dirty = false; });
+
+    window.addEventListener('beforeunload', function (e) {
+        if (!dirty) return;
+        e.preventDefault();
+        e.returnValue = '';
+    });
+})();
+</script>
+@endpush

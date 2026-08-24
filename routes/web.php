@@ -93,6 +93,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('categories/{category}', [AdminCategoryController::class, 'destroy'])->name('categories.destroy');
 
         Route::get('books', [AdminBookController::class, 'index'])->name('books');
+        Route::put('books/quick', [AdminBookController::class, 'quickUpdate'])->name('books.quick');
         Route::get('books/create', [AdminBookController::class, 'create'])->name('books.create');
         Route::post('books', [AdminBookController::class, 'store'])->name('books.store');
         Route::get('books/{book}/edit', [AdminBookController::class, 'edit'])->name('books.edit');
