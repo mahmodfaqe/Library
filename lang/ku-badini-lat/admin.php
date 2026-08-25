@@ -73,6 +73,13 @@ return [
             'staff' => 'Karmend',
         ],
         'table' => [
+            'publisher' => 'Belavker',
+            'isbn' => 'ISBN',
+            'edition' => 'Çap',
+            'pages' => 'Hejmara rûpelan',
+            'abstract' => 'Kurtebêj',
+            'keywords' => 'Peyvên sereke',
+            'keywords_hint' => 'Bi bêhnok ji hev cuda bike',
             'name' => 'Nav',
             'email' => 'E-name',
             'role' => 'Rol',

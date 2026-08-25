@@ -13,6 +13,12 @@ return [
         'all' => 'Hemî encaman bibîne',
     ],
     'book' => [
+        'publisher' => 'Belavker',
+        'isbn' => 'ISBN',
+        'edition' => 'Çap',
+        'pages' => 'Hejmara rûpelan',
+        'abstract' => 'Kurtebêj',
+        'keywords' => 'Peyvên sereke',
         'details' => 'Kîtekît',
         'author' => 'Nivîser',
         'year' => 'Sala çapê',

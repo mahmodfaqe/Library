@@ -974,6 +974,54 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
 }
 .book-unavailable { color: var(--ink-faint); font-size: 0.92rem; }
 
+/* ── What the book is about ──────────────────────────────────────────── */
+.book-about {
+    margin-top: 2rem;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: clamp(1.1rem, 3vw, 1.6rem);
+    box-shadow: var(--shadow-sm);
+}
+.book-about h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.6rem;
+}
+.book-abstract {
+    color: var(--ink-soft);
+    line-height: 1.9;
+    font-size: 0.95rem;
+    overflow-wrap: break-word;
+}
+
+/* Each keyword searches the catalogue for itself, which is how a reader
+   follows a subject from one book to the next. */
+.book-keywords {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 1.1rem;
+    padding: 0;
+}
+.book-keywords a {
+    display: inline-block;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    background: var(--brand-wash);
+    color: var(--brand-deep);
+    text-decoration: none;
+    font-size: 0.82rem;
+    transition: background 0.18s var(--ease);
+}
+.book-keywords a:hover { background: rgba(102, 126, 234, 0.18); }
+
+@media (pointer: coarse) {
+    .book-keywords a { min-height: 38px; display: inline-flex; align-items: center; }
+}
+
 /* ── Citations ───────────────────────────────────────────────────────── */
 .cite-box {
     margin-top: 2rem;

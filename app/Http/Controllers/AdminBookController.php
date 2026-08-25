@@ -191,6 +191,16 @@ class AdminBookController extends Controller
             'author' => ['nullable', 'string', 'max:190'],
             'year' => ['nullable', 'integer', 'min:1400', 'max:'.((int) date('Y') + 1)],
             'language' => ['nullable', 'string', 'max:40'],
+
+            // The rest of a catalogue record: what a bibliography asks for
+            // beyond a title.
+            'publisher' => ['nullable', 'string', 'max:190'],
+            'isbn' => ['nullable', 'string', 'max:20'],
+            'edition' => ['nullable', 'string', 'max:60'],
+            'pages' => ['nullable', 'integer', 'min:1', 'max:65535'],
+            'abstract' => ['nullable', 'string', 'max:4000'],
+            'keywords' => ['nullable', 'string', 'max:500'],
+
             'department_id' => ['nullable', 'exists:departments,id'],
             'category_id' => ['nullable', 'exists:categories,id'],
             // A book needs somewhere to be read: an uploaded file or a link.
@@ -203,6 +213,17 @@ class AdminBookController extends Controller
         ], [
             'file.required' => __('admin.books.file_or_url_required'),
         ]);
+
+        // An ISBN is one number however it was written: 978-0-8153-4432-2 and
+        // 9780815344322 are the same book.
+        if (filled($data['isbn'] ?? null)) {
+            $data['isbn'] = preg_replace('/[^0-9Xx]/', '', $data['isbn']);
+        }
+
+        // Typed in by a person, so it is theirs and not a lookup's.
+        if (array_intersect_key($data, array_flip(['publisher', 'isbn', 'edition', 'pages', 'abstract', 'keywords']))) {
+            $data['metadata_source'] = 'librarian';
+        }
 
         if ($file = $request->file('file')) {
             // Replacing a file removes the old one rather than leaving it

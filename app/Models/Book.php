@@ -9,7 +9,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['title', 'author', 'year', 'language', 'department_id', 'category_id', 'drive_file_id', 'url', 'cover_url', 'file_path', 'file_size'])]
+#[Fillable([
+    'title', 'author', 'year', 'language', 'department_id', 'category_id',
+    'drive_file_id', 'url', 'cover_url', 'file_path', 'file_size',
+    'publisher', 'isbn', 'edition', 'pages', 'abstract', 'keywords',
+    'metadata_source', 'metadata_checked_at',
+])]
 class Book extends Model
 {
     /**
@@ -17,6 +22,57 @@ class Book extends Model
      * while ranking; not a column.
      */
     public float $relevance = 0;
+
+    protected function casts(): array
+    {
+        return [
+            'year' => 'integer',
+            'pages' => 'integer',
+            'metadata_checked_at' => 'datetime',
+        ];
+    }
+
+    /**
+     * An ISBN as a reader would write it back down, hyphens and all, from the
+     * bare digits the catalogue stores.
+     */
+    public function isbnForDisplay(): ?string
+    {
+        if (! $this->isbn) {
+            return null;
+        }
+
+        // The grouping is registrant-specific and needs a table to get exactly
+        // right; this is the shape a reader recognises and can look up.
+        if (strlen($this->isbn) === 13) {
+            return implode('-', [
+                substr($this->isbn, 0, 3),
+                substr($this->isbn, 3, 1),
+                substr($this->isbn, 4, 4),
+                substr($this->isbn, 8, 4),
+                substr($this->isbn, 12, 1),
+            ]);
+        }
+
+        return $this->isbn;
+    }
+
+    /**
+     * The keywords as a list, however they were typed: a librarian may use a
+     * comma, an Arabic comma, or a semicolon.
+     *
+     * @return list<string>
+     */
+    public function keywordList(): array
+    {
+        if (! $this->keywords) {
+            return [];
+        }
+
+        $parts = preg_split('/[,،;؛]+/u', $this->keywords) ?: [];
+
+        return array_values(array_filter(array_map('trim', $parts), fn ($word) => $word !== ''));
+    }
 
     public function department(): BelongsTo
     {

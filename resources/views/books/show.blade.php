@@ -28,10 +28,24 @@
             'datePublished' => $book->year ? (string) $book->year : null,
             'inLanguage' => BookLanguage::locale($book->language) ?? $book->language,
             'genre' => $book->category?->localName(),
+            'isbn' => $book->isbn,
+            'numberOfPages' => $book->pages,
+            'bookEdition' => $book->edition,
+            'abstract' => $book->abstract,
+            'keywords' => $book->keywords,
             'url' => Locale::bookUrl($book->id),
             'image' => $book->coverUrl(),
             'isAccessibleForFree' => true,
-            'publisher' => [
+            // Whoever printed the book, where the catalogue knows; the library
+            // only stands in when it does not.
+            'publisher' => $book->publisher
+                ? ['@type' => 'Organization', 'name' => $book->publisher]
+                : [
+                    '@type' => 'CollegeOrUniversity',
+                    'name' => __('messages.university_name', [], BookLanguage::citationLocale($book->language)),
+                ],
+            // The library is where a reader gets it, whoever printed it.
+            'provider' => [
                 '@type' => 'CollegeOrUniversity',
                 'name' => __('messages.university_name', [], BookLanguage::citationLocale($book->language)),
             ],
@@ -60,9 +74,11 @@
     $link = Locale::bookUrl($book->id, $cited);
 
     $name = '<bdi>'.e($book->author ?: $university).'</bdi>';
-    $work = '<bdi><i>'.e($book->title).'</i></bdi>';
+    $work = '<bdi><i>'.e($book->title).'</i></bdi>'
+        .($book->edition ? ' (<bdi>'.e($book->edition).'</bdi>)' : '');
     $where = '<bdi>'.e($link).'</bdi>';
-    $by = $book->author ? '<bdi>'.e($university).'</bdi>' : null;
+    $issuer = $book->publisher ?: $university;
+    $by = ($book->author || $book->publisher) ? '<bdi>'.e($issuer).'</bdi>' : null;
     // "n.d." already ends in a stop; Chicago puts one after the date.
     $dated = str_ends_with($year, '.') ? $year : $year.'.';
 
@@ -107,7 +123,11 @@
 
             <dl class="book-facts">
                 @foreach ([
+                    'publisher' => $book->publisher,
                     'year' => $book->year,
+                    'edition' => $book->edition,
+                    'pages' => $book->pages,
+                    'isbn' => $book->isbnForDisplay(),
                     'language' => BookLanguage::name($book->language),
                     'subject' => $book->category?->localName(),
                     'size' => $book->humanFileSize(),
@@ -135,6 +155,27 @@
             @endif
         </div>
     </article>
+
+    @if ($book->abstract || $book->keywordList())
+        <section class="book-about" aria-labelledby="about-heading">
+            @if ($book->abstract)
+                <h2 id="about-heading">{{ __('books.book.abstract') }}</h2>
+                <p class="book-abstract" dir="auto">{{ $book->abstract }}</p>
+            @endif
+
+            @if ($book->keywordList())
+                {{-- Each one searches the catalogue for itself: the way a
+                     reader follows a subject from one book to the next. --}}
+                <ul class="book-keywords" aria-label="{{ __('books.book.keywords') }}">
+                    @foreach ($book->keywordList() as $keyword)
+                        <li>
+                            <a href="{{ Locale::booksUrl() }}?q={{ urlencode($keyword) }}" dir="auto">{{ $keyword }}</a>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
+        </section>
+    @endif
 
     {{-- The point of a page per book: something a reader can put in a
          bibliography. --}}

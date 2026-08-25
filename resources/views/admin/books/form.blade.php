@@ -16,7 +16,9 @@
                 @method('PUT')
             @endif
 
-            <div class="field">
+            <div class="field-grid">
+
+            <div class="field field-wide">
                 <label for="title">{{ __('admin.books.table.title') }}</label>
                 <input type="text" id="title" name="title" required maxlength="255" dir="auto"
                        value="{{ old('title', $book->title) }}">
@@ -41,6 +43,44 @@
             </div>
 
             <div class="field">
+                <label for="publisher">{{ __('admin.books.table.publisher') }}</label>
+                <input type="text" id="publisher" name="publisher" maxlength="190" dir="auto"
+                       value="{{ old('publisher', $book->publisher) }}">
+            </div>
+
+            <div class="field">
+                <label for="isbn">{{ __('admin.books.table.isbn') }}</label>
+                <input type="text" id="isbn" name="isbn" maxlength="20" dir="ltr"
+                       inputmode="numeric" placeholder="978-0-8153-4432-2"
+                       value="{{ old('isbn', $book->isbnForDisplay()) }}">
+            </div>
+
+            <div class="field">
+                <label for="edition">{{ __('admin.books.table.edition') }}</label>
+                <input type="text" id="edition" name="edition" maxlength="60" dir="auto"
+                       value="{{ old('edition', $book->edition) }}">
+            </div>
+
+            <div class="field">
+                <label for="pages">{{ __('admin.books.table.pages') }}</label>
+                <input type="number" id="pages" name="pages" dir="ltr" min="1" max="65535"
+                       value="{{ old('pages', $book->pages) }}">
+            </div>
+
+            <div class="field">
+                <label for="keywords">{{ __('admin.books.table.keywords') }}</label>
+                <input type="text" id="keywords" name="keywords" maxlength="500" dir="auto"
+                       value="{{ old('keywords', $book->keywords) }}">
+                <div class="hint">{{ __('admin.books.table.keywords_hint') }}</div>
+            </div>
+
+            <div class="field field-wide">
+                <label for="abstract">{{ __('admin.books.table.abstract') }}</label>
+                <textarea id="abstract" name="abstract" rows="5" maxlength="4000"
+                          dir="auto">{{ old('abstract', $book->abstract) }}</textarea>
+            </div>
+
+            <div class="field">
                 <label for="category_id">{{ __('admin.books.table.category') }}</label>
                 <select id="category_id" name="category_id">
                     <option value="">{{ __('admin.books.no_department') }}</option>
@@ -62,6 +102,8 @@
                         </option>
                     @endforeach
                 </select>
+            </div>
+
             </div>
 
             <div class="field">

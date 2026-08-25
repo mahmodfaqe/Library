@@ -70,6 +70,13 @@ return [
         'last_admin' => 'You cannot delete the only administrator.',
         'roles' => ['admin' => 'Administrator', 'staff' => 'Staff'],
         'table' => [
+            'publisher' => 'Publisher',
+            'isbn' => 'ISBN',
+            'edition' => 'Edition',
+            'pages' => 'Pages',
+            'abstract' => 'Abstract',
+            'keywords' => 'Keywords',
+            'keywords_hint' => 'Separate them with commas',
             'name' => 'Name', 'email' => 'Email', 'role' => 'Role',
             'last_login' => 'Last sign-in', 'actions' => 'Actions',
         ],

@@ -13,6 +13,12 @@ return [
         'all' => 'See all results',
     ],
     'book' => [
+        'publisher' => 'Publisher',
+        'isbn' => 'ISBN',
+        'edition' => 'Edition',
+        'pages' => 'Pages',
+        'abstract' => 'Abstract',
+        'keywords' => 'Keywords',
         'details' => 'Details',
         'author' => 'Author',
         'year' => 'Published',

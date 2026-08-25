@@ -73,6 +73,13 @@ return [
             'staff' => 'کارمەند',
         ],
         'table' => [
+            'publisher' => 'بەلاڤکەر',
+            'isbn' => 'ISBN',
+            'edition' => 'چاپ',
+            'pages' => 'ژمارا رویپەلان',
+            'abstract' => 'کورتەبێژی',
+            'keywords' => 'پەیڤێن سەرەکی',
+            'keywords_hint' => 'ب کۆمایێ جودا بکە',
             'name' => 'ناڤ',
             'email' => 'ئیمەیل',
             'role' => 'ڕۆل',

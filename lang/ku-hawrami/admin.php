@@ -73,6 +73,13 @@ return [
             'staff' => 'کارمەند',
         ],
         'table' => [
+            'publisher' => 'بڵاوکەرەوە',
+            'isbn' => 'ISBN',
+            'edition' => 'چاپ',
+            'pages' => 'ژمارەی لاپەڕەی',
+            'abstract' => 'پوختە',
+            'keywords' => 'وشە کلیلییەکێ',
+            'keywords_hint' => 'وە کۆمای جیا کەرە',
             'name' => 'نام',
             'email' => 'ئیمەیل',
             'role' => 'ڕۆڵ',

@@ -70,6 +70,13 @@ return [
         'last_admin' => 'نمی‌توانید تنها مدیر را حذف کنید.',
         'roles' => ['admin' => 'مدیر', 'staff' => 'کارمند'],
         'table' => [
+            'publisher' => 'ناشر',
+            'isbn' => 'ISBN',
+            'edition' => 'ویرایش',
+            'pages' => 'تعداد صفحات',
+            'abstract' => 'چکیده',
+            'keywords' => 'کلیدواژه‌ها',
+            'keywords_hint' => 'با کاما از هم جدا کنید',
             'name' => 'نام', 'email' => 'ایمیل', 'role' => 'نقش',
             'last_login' => 'آخرین ورود', 'actions' => 'عملیات',
         ],

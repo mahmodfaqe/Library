@@ -294,6 +294,20 @@ tbody tr:last-child td { border-bottom: none; }
 .alert-bad span { background: var(--bad); }
 
 /* ── Forms ──────────────────────────────────────────────────────────── */
+
+/* A catalogue record is a dozen short fields. In one column it is a page of
+   scrolling; in two it is a form a librarian can see the whole of. */
+.field-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 0 1.25rem;
+}
+.field-grid .field-wide { grid-column: 1 / -1; }
+
+@media (max-width: 640px) {
+    .field-grid { grid-template-columns: 1fr; }
+}
+
 .field { margin-bottom: 1.15rem; }
 .field label {
     display: block;

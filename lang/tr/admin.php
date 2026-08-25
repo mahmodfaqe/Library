@@ -70,6 +70,13 @@ return [
         'last_admin' => 'Tek yöneticiyi silemezsiniz.',
         'roles' => ['admin' => 'Yönetici', 'staff' => 'Personel'],
         'table' => [
+            'publisher' => 'Yayınevi',
+            'isbn' => 'ISBN',
+            'edition' => 'Baskı',
+            'pages' => 'Sayfa sayısı',
+            'abstract' => 'Özet',
+            'keywords' => 'Anahtar kelimeler',
+            'keywords_hint' => 'Virgülle ayırın',
             'name' => 'Ad', 'email' => 'E-posta', 'role' => 'Rol',
             'last_login' => 'Son giriş', 'actions' => 'İşlemler',
         ],

@@ -13,6 +13,12 @@ return [
         'all' => 'Tüm sonuçları gör',
     ],
     'book' => [
+        'publisher' => 'Yayınevi',
+        'isbn' => 'ISBN',
+        'edition' => 'Baskı',
+        'pages' => 'Sayfa sayısı',
+        'abstract' => 'Özet',
+        'keywords' => 'Anahtar kelimeler',
         'details' => 'Ayrıntılar',
         'author' => 'Yazar',
         'year' => 'Yayın yılı',

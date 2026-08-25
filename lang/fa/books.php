@@ -13,6 +13,12 @@ return [
         'all' => 'دیدن همهٔ نتایج',
     ],
     'book' => [
+        'publisher' => 'ناشر',
+        'isbn' => 'ISBN',
+        'edition' => 'ویرایش',
+        'pages' => 'تعداد صفحات',
+        'abstract' => 'چکیده',
+        'keywords' => 'کلیدواژه‌ها',
         'details' => 'جزئیات',
         'author' => 'نویسنده',
         'year' => 'سال انتشار',

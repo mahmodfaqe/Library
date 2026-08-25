@@ -70,6 +70,13 @@ return [
         'last_admin' => 'لا يمكنك حذف المدير الوحيد.',
         'roles' => ['admin' => 'مدير', 'staff' => 'موظف'],
         'table' => [
+            'publisher' => 'الناشر',
+            'isbn' => 'ISBN',
+            'edition' => 'الطبعة',
+            'pages' => 'عدد الصفحات',
+            'abstract' => 'الملخص',
+            'keywords' => 'الكلمات المفتاحية',
+            'keywords_hint' => 'افصل بينها بفواصل',
             'name' => 'الاسم', 'email' => 'البريد', 'role' => 'الدور',
             'last_login' => 'آخر دخول', 'actions' => 'الإجراءات',
         ],
