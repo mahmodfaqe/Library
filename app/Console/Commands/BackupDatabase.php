@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Support\BackupCipher;
 use App\Support\Telegram;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -35,6 +36,8 @@ class BackupDatabase extends Command
 
             return self::FAILURE;
         }
+
+        $target = $this->lock($target);
 
         $this->info('Wrote '.basename($target).' ('.number_format(filesize($target) / 1024, 1).' KB)');
 
@@ -96,6 +99,27 @@ class BackupDatabase extends Command
         }
 
         return $target;
+    }
+
+    /**
+     * Lock the dump, if a key is set, so that a copy of it may leave the
+     * server. It holds staff accounts and visitors' messages.
+     */
+    private function lock(string $target): string
+    {
+        $key = BackupCipher::key();
+
+        if ($key === null) {
+            $this->warn('BACKUP_KEY is not set: this backup is readable by anyone who has the file.');
+
+            return $target;
+        }
+
+        $sealed = $target.'.enc';
+        file_put_contents($sealed, BackupCipher::encrypt((string) file_get_contents($target), $key));
+        File::delete($target);
+
+        return $sealed;
     }
 
     /**
