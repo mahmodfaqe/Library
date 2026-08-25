@@ -177,34 +177,47 @@
 @push('scripts')
 <script>
 (function () {
-    // The clipboard API needs a secure context; where it is missing the text
-    // is still on the page to select by hand.
+    // The clipboard API needs a secure context and a focused window, and it
+    // refuses without either; the old selection trick still works there, and
+    // if even that fails the text is on the page to select by hand.
+    function fallback(text) {
+        var field = document.createElement('textarea');
+        field.value = text;
+        field.setAttribute('readonly', '');
+        field.style.cssText = 'position:fixed;top:-1000px';
+        document.body.appendChild(field);
+        field.select();
+
+        var copied = false;
+        try { copied = document.execCommand('copy'); } catch (e) {}
+        field.remove();
+
+        return copied;
+    }
+
     document.querySelectorAll('.cite-copy').forEach(function (button) {
+        var label = button.textContent;
+
+        function done() {
+            button.textContent = button.dataset.done;
+            button.classList.add('is-done');
+            setTimeout(function () {
+                button.textContent = label;
+                button.classList.remove('is-done');
+            }, 1600);
+        }
+
         button.addEventListener('click', function () {
             var text = button.dataset.copy;
-            var done = function () {
-                var was = button.textContent;
-                button.textContent = button.dataset.done;
-                button.classList.add('is-done');
-                setTimeout(function () {
-                    button.textContent = was;
-                    button.classList.remove('is-done');
-                }, 1600);
-            };
 
             if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(text).then(done, function () {});
+                navigator.clipboard.writeText(text).then(done, function () {
+                    if (fallback(text)) { done(); }
+                });
                 return;
             }
 
-            var field = document.createElement('textarea');
-            field.value = text;
-            field.setAttribute('readonly', '');
-            field.style.cssText = 'position:fixed;top:-1000px';
-            document.body.appendChild(field);
-            field.select();
-            try { document.execCommand('copy'); done(); } catch (e) {}
-            field.remove();
+            if (fallback(text)) { done(); }
         });
     });
 })();
