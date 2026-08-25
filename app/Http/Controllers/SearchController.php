@@ -54,8 +54,9 @@ class SearchController extends Controller
                 'year' => $book->year,
                 'language' => $book->language,
                 'subject' => $book->category?->localName(),
-                'url' => $book->readUrl(),
-                'download' => $book->hasFile(),
+                // The page, not the file: a suggestion goes where a card
+                // goes, and the file is one button further on.
+                'url' => Locale::bookUrl($book->id),
                 'cover' => $book->coverUrl(),
             ]);
 

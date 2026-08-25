@@ -41,19 +41,23 @@
 @section('content')
 @php
     // Written the way a reader would cite it, from what the catalogue knows.
-    $author = $book->author ?: __('messages.university_name');
+    // Where no author is recorded the library stands in as one, and the
+    // publisher is then left out rather than naming the same body twice.
+    $university = __('messages.university_name');
     $year = $book->year ?: 'n.d.';
-    $publisher = '<bdi>'.e(__('messages.university_name')).'</bdi>';
     $link = Locale::bookUrl($book->id);
 
-    $name = '<bdi>'.e($author).'</bdi>';
+    $name = '<bdi>'.e($book->author ?: $university).'</bdi>';
     $work = '<bdi><i>'.e($book->title).'</i></bdi>';
     $where = '<bdi>'.e($link).'</bdi>';
+    $by = $book->author ? '<bdi>'.e($university).'</bdi>' : null;
+    // "n.d." already ends in a stop; Chicago puts one after the date.
+    $dated = str_ends_with($year, '.') ? $year : $year.'.';
 
     $citations = [
-        'APA' => "{$name} ({$year}). {$work}. {$publisher}. {$where}",
-        'MLA' => "{$name}. {$work}. {$publisher}, {$year}, {$where}.",
-        'Chicago' => "{$name}. {$work}. {$publisher}, {$year}. {$where}.",
+        'APA' => "{$name} ({$year}). {$work}. ".($by ? "{$by}. " : '')."{$where}",
+        'MLA' => "{$name}. {$work}. ".($by ? "{$by}, " : '')."{$year}, {$where}.",
+        'Chicago' => "{$name}. {$work}. ".($by ? "{$by}, " : '')."{$dated} {$where}.",
     ];
 @endphp
 

@@ -47,8 +47,12 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-# A new release must not serve HTML rendered by the previous one.
+# A new release must not serve HTML rendered by the previous one, nor answers
+# derived from it: the sitemap is held for twelve hours and search suggestions
+# for ten minutes, so without this a release can take half a day to show.
+# Sessions and queued jobs have their own tables and are untouched.
 rm -f storage/framework/pagecache/*.html 2>/dev/null || true
+php artisan cache:clear
 
 echo "Library ready."
 

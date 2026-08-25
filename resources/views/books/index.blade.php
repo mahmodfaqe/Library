@@ -268,8 +268,7 @@
             data.books.forEach(function (b) {
                 var facts = [b.year, b.language, b.subject].filter(Boolean)
                     .map(function (f) { return '<bdi>' + escapeHtml(f) + '</bdi>'; }).join(' · ');
-                html += '<a class="suggest-item" role="option" href="' + escapeHtml(b.url || '#') + '"'
-                     +  (b.url && !b.download ? ' target="_blank" rel="noopener"' : '') + '>'
+                html += '<a class="suggest-item" role="option" href="' + escapeHtml(b.url) + '">'
                      +  '<span class="suggest-cover">' + (b.cover
                             ? '<img src="' + escapeHtml(b.cover) + '" alt="" loading="lazy" referrerpolicy="no-referrer">'
                             : '\u{1F4D8}') + '</span>'

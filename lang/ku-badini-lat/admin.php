@@ -42,6 +42,7 @@ return [
     ],
     'actions' => [
         'edit' => 'Destkarî',
+        'view' => 'Dîtina rûpelê',
         'delete' => 'Jêbirin',
         'back' => 'Zivirîn',
         'cancel' => 'Paşvexûn',

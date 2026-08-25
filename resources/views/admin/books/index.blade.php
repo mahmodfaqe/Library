@@ -1,3 +1,4 @@
+@use('App\Support\Locale')
 @extends('admin.layout')
 
 @section('title', __('admin.books.title'))
@@ -138,6 +139,10 @@
                             <td dir="auto">{{ $book->category?->localName() ?: '—' }}</td>
                             <td class="actions">
                                 <a href="{{ route('admin.books.edit', $book) }}" class="btn btn-secondary btn-sm">{{ __('admin.actions.edit') }}</a>
+                                {{-- The reader's side of the same book, so a
+                                     correction can be checked where it shows. --}}
+                                <a href="{{ Locale::bookUrl($book->id) }}" target="_blank" rel="noopener"
+                                   class="btn btn-secondary btn-sm">{{ __('admin.actions.view') }}</a>
                                 <form method="POST" action="{{ route('admin.books.destroy', $book) }}" style="display:inline;"
                                       onsubmit="return confirm(@js(__('admin.books.confirm_delete')));">
                                     @csrf

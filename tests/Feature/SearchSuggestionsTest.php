@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Book;
 use App\Models\Category;
 use App\Models\User;
+use App\Support\Locale;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -202,6 +203,19 @@ class SearchSuggestionsTest extends TestCase
         $this->getJson('/search/suggest?q=molecular')->assertJsonCount(0, 'books');
         $this->getJson('/search/suggest?q=cell')
             ->assertJsonPath('books.0.title', 'Cell Biology');
+    }
+
+    public function test_a_suggestion_leads_to_the_book_page(): void
+    {
+        $book = $this->book(['title' => 'Molecular Biology of the Cell']);
+
+        // The same destination as a card in the catalogue: the book's page,
+        // where the citation and the details are.
+        $this->getJson('/search/suggest?q=molecular')
+            ->assertJsonPath('books.0.url', Locale::bookUrl($book->id));
+
+        $this->getJson('/en/search/suggest?q=molecular')
+            ->assertJsonPath('books.0.url', Locale::bookUrl($book->id, 'en'));
     }
 
     private function administrator(): User

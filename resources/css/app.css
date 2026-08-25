@@ -742,6 +742,7 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
     }
     .lang-chip { min-height: 40px; }
     .suggest-item { min-height: 52px; }
+    .cite-copy { min-height: 44px; padding-inline: 1.1rem; }
 }
 
 /* ── Phones ──────────────────────────────────────────────────────────────
@@ -1037,9 +1038,27 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
 }
 
 @media (max-width: 640px) {
-    .book-hero { grid-template-columns: 1fr; }
-    .book-hero-cover { max-width: 9rem; }
-    .cite-row { grid-template-columns: 1fr; gap: 0.4rem; }
-    .cite-style { justify-self: start; }
-    .cite-copy { justify-self: start; }
+    /* One column, and the cover centred over the title rather than stranded
+       at one edge with the width of the screen empty beside it. Centring
+       stops the grid stretching it, so the width is given outright. */
+    .book-hero { grid-template-columns: 1fr; gap: 1.2rem; }
+    .book-hero-cover { width: 8rem; justify-self: center; }
+    .book-hero-body h1 { text-align: center; }
+    .book-byline { text-align: center; }
+    .book-open,
+    .book-unavailable { display: block; width: fit-content; margin-inline: auto; }
+
+    /* The label and the button share the top line, the citation runs the full
+       width beneath: three columns of it on a phone is unreadable. */
+    .cite-row {
+        grid-template-columns: auto 1fr auto;
+        grid-template-areas:
+            "style . copy"
+            "text  text text";
+        gap: 0.3rem 0.5rem;
+        align-items: center;
+    }
+    .cite-style { grid-area: style; justify-self: start; }
+    .cite-copy { grid-area: copy; justify-self: end; }
+    .cite-text { grid-area: text; }
 }

@@ -61,6 +61,9 @@ Route::view('{locale}/privacy', 'pages.privacy')
     ->name('privacy.localised');
 
 Route::get('sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+Route::get('sitemap-{locale}.xml', [SitemapController::class, 'locale'])
+    ->whereIn('locale', Locale::SUPPORTED)
+    ->name('sitemap.locale');
 
 // The old query-string switcher, kept so existing links keep working.
 Route::get('language', function (Request $request) {

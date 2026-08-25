@@ -42,6 +42,7 @@ return [
     ],
     'actions' => [
         'edit' => 'Düzenle',
+        'view' => 'Sayfayı gör',
         'delete' => 'Sil',
         'back' => 'Geri',
         'cancel' => 'Vazgeç',

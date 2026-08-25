@@ -42,6 +42,7 @@ return [
     ],
     'actions' => [
         'edit' => 'Edit',
+        'view' => 'View page',
         'delete' => 'Delete',
         'back' => 'Back',
         'cancel' => 'Cancel',

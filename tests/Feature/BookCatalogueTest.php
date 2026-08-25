@@ -346,6 +346,22 @@ class BookCatalogueTest extends TestCase
         $this->assertDatabaseCount('books', 0);
     }
 
+    public function test_staff_can_open_the_page_a_reader_sees(): void
+    {
+        $staff = User::create([
+            'name' => 'Library Staff', 'email' => 'staff@uor.edu.krd',
+            'password' => 'correct-horse-battery-staple', 'role' => User::ROLE_STAFF,
+        ]);
+        $book = $this->book();
+
+        // A correction is worth checking where it shows, so the list links to
+        // the reader's side of each book as well as to the edit form.
+        $this->actingAs($staff)->get('/admin/books')
+            ->assertOk()
+            ->assertSee(Locale::bookUrl($book->id), false)
+            ->assertSee(__('admin.actions.view'));
+    }
+
     public function test_a_guest_cannot_manage_books(): void
     {
         $this->get('/admin/books')->assertRedirect(route('admin.login'));

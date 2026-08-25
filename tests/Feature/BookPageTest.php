@@ -97,11 +97,34 @@ class BookPageTest extends TestCase
     {
         $book = $this->book(['author' => null, 'year' => null]);
 
-        $this->get("/books/{$book->id}")
-            ->assertOk()
-            // The library stands in as the author, and an unknown date is
-            // written the way a bibliography writes one.
-            ->assertSee('n.d.');
+        $html = $this->get("/books/{$book->id}")->assertOk()->getContent();
+
+        // The library stands in as the author, and an unknown date is written
+        // the way a bibliography writes one.
+        $this->assertStringContainsString('n.d.', $html);
+
+        // But it is named once, not as author and publisher both.
+        $apa = $this->citation($html, 'APA');
+        $this->assertSame(1, substr_count($apa, __('messages.university_name')), $apa);
+
+        // And no style ends the date with two full stops.
+        foreach (['APA', 'MLA', 'Chicago'] as $style) {
+            $this->assertStringNotContainsString('..', $this->citation($html, $style));
+        }
+    }
+
+    /**
+     * The text of one citation, tags stripped, as a reader would read it.
+     */
+    private function citation(string $html, string $style): string
+    {
+        preg_match(
+            '/<span class="cite-style">'.$style.'<\/span>\s*<p class="cite-text"[^>]*>(.*?)<\/p>/s',
+            $html,
+            $found
+        );
+
+        return strip_tags($found[1] ?? '');
     }
 
     public function test_a_title_cannot_inject_markup_into_the_citation(): void
@@ -182,29 +205,55 @@ class BookPageTest extends TestCase
             ->assertDontSee('href=""', false);
     }
 
+    public function test_the_sitemap_index_names_one_file_per_language(): void
+    {
+        $index = $this->get('/sitemap.xml')->assertOk()->getContent();
+
+        $this->assertStringContainsString('<sitemapindex', $index);
+
+        foreach (Locale::SUPPORTED as $locale) {
+            $this->assertStringContainsString(url('sitemap-'.$locale.'.xml'), $index);
+        }
+    }
+
     public function test_the_sitemap_lists_every_book(): void
     {
         $a = $this->book();
         $b = $this->book(['title' => 'Second']);
 
-        $xml = $this->get('/sitemap.xml')->assertOk()->getContent();
-
         // Without these a search engine sees one catalogue page and none of
         // the books inside it.
-        foreach ([$a, $b] as $book) {
-            foreach (Locale::SUPPORTED as $locale) {
+        foreach (Locale::SUPPORTED as $locale) {
+            $xml = $this->get('/sitemap-'.$locale.'.xml')->assertOk()->getContent();
+
+            foreach ([$a, $b] as $book) {
                 $this->assertStringContainsString(Locale::bookUrl($book->id, $locale), $xml);
             }
+
+            // And each entry offers the reader's own language as an
+            // alternate, with a fallback for anyone who reads none of them.
+            $this->assertStringContainsString(
+                'hreflang="'.Locale::languageTag('en').'"',
+                $xml
+            );
+            $this->assertStringContainsString('hreflang="x-default"', $xml);
         }
+    }
+
+    public function test_a_language_the_library_does_not_speak_has_no_sitemap(): void
+    {
+        $this->get('/sitemap-de.xml')->assertNotFound();
     }
 
     public function test_the_sitemap_is_not_rebuilt_for_every_crawler(): void
     {
         $this->book();
 
-        $first = $this->get('/sitemap.xml')->assertOk()->getContent();
-        $second = $this->get('/sitemap.xml')->assertOk()->getContent();
+        foreach (['/sitemap.xml', '/sitemap-en.xml'] as $address) {
+            $first = $this->get($address)->assertOk()->getContent();
+            $second = $this->get($address)->assertOk()->getContent();
 
-        $this->assertSame($first, $second);
+            $this->assertSame($first, $second);
+        }
     }
 }

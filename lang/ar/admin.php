@@ -42,6 +42,7 @@ return [
     ],
     'actions' => [
         'edit' => 'تعديل',
+        'view' => 'عرض الصفحة',
         'delete' => 'حذف',
         'back' => 'رجوع',
         'cancel' => 'إلغاء',
