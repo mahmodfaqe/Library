@@ -158,6 +158,15 @@
                     </div>
                 </div>
 
+                @if ($thesis->zenodo_url)
+                    {{-- Shown, not editable: the deposit happened and cannot
+                         be undone, so there is nothing here to change. --}}
+                    <p class="hint">
+                        {{ __('admin.theses.deposited', ['date' => $thesis->deposited_at?->toDateString() ?? '—']) }}
+                        <a href="{{ $thesis->zenodo_url }}" target="_blank" rel="noopener">{{ $thesis->doi }}</a>
+                    </p>
+                @endif
+
                 @if ($thesis->approved_at)
                     <p class="hint">
                         {{ __('admin.theses.approved_by', [

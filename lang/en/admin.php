@@ -129,6 +129,7 @@ return [
         'embargo_hint' => 'Until this date the file is not served, but the record stays open.',
         'embargo_until' => 'Embargoed until :date',
         'approved_by' => 'Approved by :name on :date',
+        'deposited' => 'Deposited with Zenodo on :date:',
         'title_en_hint' => 'Without an English title the thesis cannot be found from outside.',
         'abstract_en_hint' => 'Most universities require an English abstract.',
         'file_hint' => 'The file may live on Drive — put its link below instead.',

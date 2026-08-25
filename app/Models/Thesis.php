@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'abstract', 'abstract_en', 'keywords', 'doi',
     'url', 'drive_file_id', 'file_path', 'file_size',
     'status', 'embargo_until', 'license',
+    'zenodo_id', 'zenodo_url', 'deposited_at',
 ])]
 class Thesis extends Model
 {
@@ -57,6 +58,7 @@ class Thesis extends Model
             'defended_on' => 'date',
             'embargo_until' => 'date',
             'approved_at' => 'datetime',
+            'deposited_at' => 'datetime',
         ];
     }
 

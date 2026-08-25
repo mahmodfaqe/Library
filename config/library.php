@@ -45,6 +45,23 @@ return [
     'backup_key' => env('BACKUP_KEY', ''),
 
     /*
+     * Zenodo, run by CERN, mints a real DataCite DOI for nothing. It is how
+     * the university can give a thesis a permanent identifier before it can
+     * afford a registration agency of its own.
+     *
+     * Two tokens, deliberately. The sandbox is a full copy of Zenodo where
+     * nothing is permanent, and it is what every first attempt should use —
+     * because on the live site a published record can never be deleted.
+     *
+     * Make them at zenodo.org/account/settings/applications/tokens/new,
+     * with the deposit:write and deposit:actions scopes.
+     */
+    'zenodo' => [
+        'token' => env('ZENODO_TOKEN', ''),
+        'sandbox_token' => env('ZENODO_SANDBOX_TOKEN', ''),
+    ],
+
+    /*
      * Hosts allowed to serve book covers, for the Content-Security-Policy.
      * Drive answers a thumbnail request from drive.google.com by redirecting
      * to googleusercontent, so both have to be listed.

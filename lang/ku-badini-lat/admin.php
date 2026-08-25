@@ -138,6 +138,7 @@ return [
         'embargo_hint' => 'Heta vê rojê pel nayê dan, lê tomar vekirî dimîne.',
         'embargo_until' => 'Ragirtî heta :date',
         'approved_by' => 'Ji aliyê :name ve li :date hat pesendkirin',
+        'deposited' => 'Li :date li Zenodo hat danîn:',
         'title_en_hint' => 'Bê navnîşana îngilîzî, name ji derve nayê dîtin.',
         'abstract_en_hint' => 'Piraniya zanîngehan kurtebêja îngilîzî dixwazin.',
         'file_hint' => 'Pel dikare li ser Drive be — girêdana wê li jêr datîne.',

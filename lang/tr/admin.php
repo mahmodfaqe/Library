@@ -129,6 +129,7 @@ return [
         'embargo_hint' => 'Bu tarihe kadar dosya sunulmaz, ancak kayıt açık kalır.',
         'embargo_until' => ':date tarihine kadar ambargolu',
         'approved_by' => ':name tarafından :date tarihinde onaylandı',
+        'deposited' => 'Zenodo\'ya :date tarihinde yatırıldı:',
         'title_en_hint' => 'İngilizce başlık olmadan tez dışarıdan bulunamaz.',
         'abstract_en_hint' => 'Çoğu üniversite İngilizce özet ister.',
         'file_hint' => 'Dosya Drive üzerinde olabilir — bağlantısını aşağıya koyun.',
