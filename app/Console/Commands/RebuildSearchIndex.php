@@ -22,7 +22,9 @@ class RebuildSearchIndex extends Command
                 // Written directly: this is a derived column, and touching
                 // timestamps on a reindex would be misleading.
                 Book::whereKey($book->id)->update([
-                    'search_text' => ArabicText::fold($book->title.' '.$book->author),
+                    'search_text' => ArabicText::fold(implode(' ', array_filter([
+                        $book->title, $book->author, $book->publisher, $book->keywords,
+                    ]))),
                 ]);
                 $bar->advance();
             }

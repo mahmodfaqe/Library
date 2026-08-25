@@ -160,12 +160,28 @@ class Book extends Model
     }
 
     /**
+     * Everything a search should look through, folded into one column.
+     *
+     * Keywords and the publisher are in here because a reader looking for
+     * "mycology" or "Garland Science" is looking for a book, and the title is
+     * often the only thing that does not say so. The abstract is not: a
+     * paragraph of prose per book would swamp the ranking, matching every
+     * common word in the collection.
+     *
+     * @return list<string|null>
+     */
+    private function searchable(): array
+    {
+        return [$this->title, $this->author, $this->publisher, $this->keywords];
+    }
+
+    /**
      * Keep the folded copy in step with whatever the record now says.
      */
     protected static function booted(): void
     {
         static::saving(function (self $book) {
-            $book->search_text = ArabicText::fold($book->title.' '.$book->author);
+            $book->search_text = ArabicText::fold(implode(' ', array_filter($book->searchable())));
         });
     }
 
