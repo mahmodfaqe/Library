@@ -248,6 +248,40 @@ class AdminDashboardTest extends TestCase
         $this->assertNull($book->refresh()->author);
     }
 
+    public function test_the_cover_in_the_list_opens_the_book(): void
+    {
+        $biology = Category::create(['name' => 'Biology', 'icon' => '🧬', 'sort_order' => 1]);
+        Book::create([
+            'title' => 'Openable',
+            'drive_file_id' => 'abc123',
+            'url' => 'https://drive.test/abc123',
+            'category_id' => $biology->id,
+        ]);
+
+        $html = $this->actingAs($this->administrator())
+            ->get('/admin/books')
+            ->assertOk()
+            ->getContent();
+
+        $this->assertStringContainsString('<a class="row-cover"', $html);
+        $this->assertStringContainsString('https://drive.test/abc123', $html);
+        // Drive renders the first page, so the cover is there for free.
+        $this->assertStringContainsString('drive.google.com/thumbnail?id=abc123', $html);
+    }
+
+    public function test_a_book_with_nowhere_to_go_has_a_plain_cover(): void
+    {
+        Book::create(['title' => 'Nothing to open', 'url' => null, 'file_path' => null]);
+
+        $html = $this->actingAs($this->administrator())
+            ->get('/admin/books')
+            ->assertOk()
+            ->getContent();
+
+        $this->assertStringContainsString('<span class="row-cover"', $html);
+        $this->assertStringNotContainsString('<a class="row-cover"', $html);
+    }
+
     public function test_a_member_of_staff_does_not_see_the_activity_log(): void
     {
         $staff = User::create([

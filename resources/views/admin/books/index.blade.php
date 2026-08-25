@@ -98,14 +98,26 @@
                         <tr>
                             <td>
                                 <div class="row-book">
-                                    <span class="row-cover">
+                                    {{-- The cover opens the book itself, so a
+                                         librarian can check what they are
+                                         cataloguing without leaving the list.
+                                         Skipped by the keyboard: the row's own
+                                         edit button is the way through it. --}}
+                                    <{{ $book->readUrl() ? 'a' : 'span' }} class="row-cover"
+                                        @if ($book->readUrl())
+                                            href="{{ $book->readUrl() }}"
+                                            target="_blank" rel="noopener"
+                                            tabindex="-1" aria-hidden="true"
+                                            title="{{ $book->hasFile() ? __('admin.books.file') : __('admin.books.table.url') }}"
+                                        @endif>
                                         @if ($book->coverUrl())
                                             <img src="{{ $book->coverUrl() }}" alt="" loading="lazy"
                                                  decoding="async" referrerpolicy="no-referrer"
                                                  onerror="this.closest('.row-cover').classList.add('is-blank')">
                                         @endif
                                         <span aria-hidden="true">{{ $book->category?->icon ?: '📘' }}</span>
-                                    </span>
+                                    </{{ $book->readUrl() ? 'a' : 'span' }}>
+
                                     <span class="row-title" dir="auto">{{ $book->title }}</span>
                                 </div>
                             </td>
