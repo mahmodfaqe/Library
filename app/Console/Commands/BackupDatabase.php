@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Support\Telegram;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -28,7 +29,9 @@ class BackupDatabase extends Command
         };
 
         if ($target === null) {
-            $this->error("No backup strategy for the [{$driver}] driver.");
+            // A backup that fails quietly is the reason people discover they
+            // have none on the day they need one.
+            $this->reportFailure("No backup strategy for the [{$driver}] driver.");
 
             return self::FAILURE;
         }
@@ -48,7 +51,7 @@ class BackupDatabase extends Command
         $source = config('database.connections.sqlite.database');
 
         if (! is_string($source) || ! is_file($source)) {
-            $this->error('The SQLite database was not found.');
+            $this->reportFailure('The SQLite database was not found.');
 
             return null;
         }
@@ -86,13 +89,24 @@ class BackupDatabase extends Command
         $process->run();
 
         if (! $process->isSuccessful()) {
-            $this->error(trim($process->getErrorOutput()) ?: 'mariadb-dump failed.');
+            $this->reportFailure(trim($process->getErrorOutput()) ?: 'mariadb-dump failed.');
             @unlink($target);
 
             return null;
         }
 
         return $target;
+    }
+
+    /**
+     * Say it on the console and on the phone both: nobody is reading the
+     * scheduler's output at half past two in the morning.
+     */
+    private function reportFailure(string $reason): void
+    {
+        $this->error($reason);
+
+        Telegram::send("❌ The library's backup did not run.\n".config('app.url')."\n\n".$reason);
     }
 
     private function prune(string $dir, int $keep): void

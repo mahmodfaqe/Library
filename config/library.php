@@ -34,6 +34,17 @@ return [
     'drive_service_account' => env('LIBRARY_DRIVE_SERVICE_ACCOUNT', ''),
 
     /*
+     * The passphrase database backups are encrypted with before any copy of
+     * them leaves the server. Keep it in a password manager, never on the
+     * server: a key beside the thing it protects protects nothing, and a key
+     * lost with the server takes every backup with it.
+     *
+     * Left empty, backups are written in the clear — which is only safe while
+     * they never go anywhere.
+     */
+    'backup_key' => env('BACKUP_KEY', ''),
+
+    /*
      * Hosts allowed to serve book covers, for the Content-Security-Policy.
      * Drive answers a thumbnail request from drive.google.com by redirecting
      * to googleusercontent, so both have to be listed.

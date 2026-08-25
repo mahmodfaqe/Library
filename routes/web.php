@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\HealthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SitemapController;
@@ -59,6 +60,11 @@ Route::view('privacy', 'pages.privacy')->name('privacy');
 Route::view('{locale}/privacy', 'pages.privacy')
     ->whereIn('locale', Locale::SUPPORTED)
     ->name('privacy.localised');
+
+// What an outside monitor asks. /up says the application is running, which is
+// what Docker restarts on; this says the service is well, which is what a
+// person needs to be told about.
+Route::get('health', HealthController::class)->name('health');
 
 Route::get('sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 Route::get('sitemap-{locale}.xml', [SitemapController::class, 'locale'])
