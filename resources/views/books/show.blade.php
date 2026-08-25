@@ -13,10 +13,11 @@
     {{-- So a search engine, and anything reading the page for a citation,
          knows this is one book rather than a page that mentions one.
 
-         It is built inside @php, because Blade would otherwise compile the
-         "@context" key as one of its own directives and drop it, and the
-         angle brackets are escaped because a title is staff-entered text: a
-         "</script>" inside one would end this block early. --}}
+         It is built in a plain PHP block, because in a Blade expression the
+         "@context" key would be compiled as one of Blade's own directives and
+         lost; and the angle brackets are escaped because a title is
+         staff-entered text, so a closing script tag inside one would
+         otherwise end this block early. --}}
     @php
         $schema = array_filter([
             '@context' => 'https://schema.org',

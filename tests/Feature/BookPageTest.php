@@ -135,8 +135,16 @@ class BookPageTest extends TestCase
 
         $html = $this->get("/books/{$book->id}")->assertOk()->getContent();
 
-        $this->assertStringContainsString('"@type":"Book"', $html);
-        $this->assertStringContainsString('"datePublished":"2015"', $html);
+        preg_match('/<script type="application\/ld\+json">(.*?)<\/script>/s', $html, $found);
+        $schema = json_decode($found[1] ?? '', true);
+
+        // Without @context the block is not structured data at all, only a
+        // shape that looks like it.
+        $this->assertSame('https://schema.org', $schema['@context'] ?? null);
+        $this->assertSame('Book', $schema['@type'] ?? null);
+        $this->assertSame('2015', $schema['datePublished'] ?? null);
+        $this->assertSame('Molecular Biology of the Cell', $schema['name'] ?? null);
+        $this->assertSame(Locale::bookUrl($book->id), $schema['url'] ?? null);
     }
 
     public function test_the_catalogue_links_to_the_page_not_the_file(): void
