@@ -28,6 +28,15 @@ Route::get('{locale}/books', [BookController::class, 'index'])
 Route::get('books/{book}/download', [BookController::class, 'download'])
     ->name('books.download');
 
+// Every book has its own address, in every language. It is keyed by id so it
+// survives a corrected title — a reader who cites it must be able to come back
+// to it years later.
+Route::get('books/{book}', [BookController::class, 'show'])->name('books.show');
+Route::get('{locale}/books/{book}', [BookController::class, 'show'])
+    ->whereIn('locale', Locale::SUPPORTED)
+    ->whereNumber('book')
+    ->name('books.show.localised');
+
 // Suggestions for the catalogue's search box, answered as the visitor types.
 // Throttled because it runs on every keystroke.
 Route::get('search/suggest', [SearchController::class, 'suggest'])

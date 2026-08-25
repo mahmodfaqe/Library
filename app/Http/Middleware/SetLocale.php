@@ -45,6 +45,11 @@ class SetLocale
         if (Locale::supports($fromUrl)) {
             App::setLocale($fromUrl);
 
+            // The prefix is an address, not an argument: it is read here, from
+            // the path, so a controller behind /{locale}/books/{book} is handed
+            // the book and nothing else.
+            $request->route()?->forgetParameter('locale');
+
             if ($request->hasSession()) {
                 $request->session()->put('locale', $fromUrl);
             }

@@ -144,7 +144,7 @@ class BookCatalogueTest extends TestCase
         // book cards themselves.
         $html = $this->get("/books?category={$biology->id}")->assertOk()->getContent();
 
-        $this->assertStringContainsString('dir="auto">Molecular Biology (2nd ed.)</h3>', $html);
+        $this->assertStringContainsString('dir="auto">Molecular Biology (2nd ed.)</a>', $html);
         $this->assertStringContainsString('dir="auto">Jane Doe</p>', $html);
         // Year and language share a line, so each is isolated.
         $this->assertStringContainsString('<bdi>2019</bdi>', $html);
@@ -223,29 +223,33 @@ class BookCatalogueTest extends TestCase
     public function test_the_cover_opens_the_book(): void
     {
         $biology = Category::create(['name' => 'بایۆلۆجی', 'icon' => '🧬', 'sort_order' => 1]);
-        $this->book(['drive_file_id' => 'abc123', 'url' => 'https://drive.test/abc', 'category_id' => $biology->id]);
+        $book = $this->book(['drive_file_id' => 'abc123', 'url' => 'https://drive.test/abc', 'category_id' => $biology->id]);
 
         $html = $this->get("/books?category={$biology->id}")->assertOk()->getContent();
 
-        // The cover is a link to the same place as the button under it.
+        // The cover leads to the book's page, where the citation and the
+        // details are — not straight out to the file.
         $this->assertMatchesRegularExpression(
-            '/<a class="book-cover"\s+href="https:\/\/drive\.test\/abc"/',
+            '/<a class="book-cover"\s+href="'.preg_quote(Locale::bookUrl($book->id), '/').'"/',
             $html
         );
         // And it is skipped by the keyboard and by screen readers, because the
-        // button already offers the same link once.
+        // title already offers the same link once.
         $this->assertStringContainsString('aria-hidden="true" tabindex="-1"', $html);
     }
 
-    public function test_a_book_with_nowhere_to_go_has_no_cover_link(): void
+    public function test_a_book_with_nowhere_to_go_still_has_a_page(): void
     {
         $biology = Category::create(['name' => 'بایۆلۆجی', 'sort_order' => 1]);
-        $this->book(['url' => null, 'file_path' => null, 'category_id' => $biology->id]);
+        $book = $this->book(['url' => null, 'file_path' => null, 'category_id' => $biology->id]);
 
         $html = $this->get("/books?category={$biology->id}")->assertOk()->getContent();
 
-        $this->assertStringContainsString('<div class="book-cover"', $html);
-        $this->assertStringNotContainsString('<a class="book-cover"', $html);
+        // The file is missing, not the book: the card still leads to its page,
+        // which is where the absence is explained.
+        $this->assertStringContainsString(Locale::bookUrl($book->id), $html);
+        // What it must not do is offer a button that goes nowhere.
+        $this->assertStringNotContainsString('section-btn inline-block', $html);
     }
 
     public function test_a_wildcard_is_not_a_wildcard(): void

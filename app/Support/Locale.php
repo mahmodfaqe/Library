@@ -166,6 +166,20 @@ class Locale
     }
 
     /**
+     * A book's own page, in a given language.
+     *
+     * Keyed by id rather than by title: the address has to survive a
+     * librarian correcting the title, because it is what a reader cites.
+     */
+    public static function bookUrl(int|string $book, ?string $locale = null): string
+    {
+        $locale ??= App::getLocale();
+        $path = 'books/'.$book;
+
+        return $locale === self::DEFAULT ? url($path) : url($locale.'/'.$path);
+    }
+
+    /**
      * The search suggestion endpoint for a locale.
      *
      * It needs a prefix like every other page: the subject names it returns
@@ -193,6 +207,10 @@ class Locale
         $route = (string) Request::route()?->getName();
 
         return match (true) {
+            str_starts_with($route, 'books.show') => self::bookUrl(
+                Request::route()?->parameter('book')?->id ?? 0,
+                $locale
+            ),
             str_starts_with($route, 'books') => self::booksUrl($locale),
             str_starts_with($route, 'privacy') => self::privacyUrl($locale),
             default => self::url($locale),

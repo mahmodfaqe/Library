@@ -128,29 +128,28 @@
             @endif
 
             <article class="book-card bg-white/85 backdrop-blur-md border border-white/70 rounded-[16px] flex flex-col">
-                {{-- The cover opens the book, like the button below it. It is
-                     hidden from the keyboard and from screen readers on
-                     purpose: the button is the same link, and announcing each
-                     book twice would only get in the way. --}}
+                {{-- The cover leads to the book's own page, like the title
+                     beneath it. It is hidden from the keyboard and from screen
+                     readers on purpose: the title is the same link, and
+                     announcing each book twice would only get in the way. --}}
                 @php $cover = $book->coverUrl(); @endphp
 
-                <{{ $book->readUrl() ? 'a' : 'div' }} class="book-cover"
-                    @if ($book->readUrl())
-                        href="{{ $book->readUrl() }}"
-                        @unless ($book->hasFile()) target="_blank" rel="noopener" @endunless
-                        aria-hidden="true" tabindex="-1"
-                    @endif>
+                <a class="book-cover" href="{{ Locale::bookUrl($book->id) }}"
+                   aria-hidden="true" tabindex="-1">
                     @if ($cover)
                         <img src="{{ $cover }}" alt="" loading="lazy" decoding="async"
                              referrerpolicy="no-referrer" onerror="this.closest('.book-cover').classList.add('is-blank')">
                     @endif
                     {{-- Shown when there is no cover, and when one fails to load. --}}
                     <span class="book-cover-fallback" aria-hidden="true">{{ $book->category?->icon ?: '📘' }}</span>
-                </{{ $book->readUrl() ? 'a' : 'div' }}>
+                </a>
 
                 <div class="book-body">
                     <div>
-                        <h3 class="book-title font-bold text-[#2d2d3a] mb-1" dir="auto">{{ $book->title }}</h3>
+                        <h3 class="book-title font-bold text-[#2d2d3a] mb-1">
+                            <a href="{{ Locale::bookUrl($book->id) }}"
+                               class="no-underline text-inherit hover:underline" dir="auto">{{ $book->title }}</a>
+                        </h3>
                         @if ($book->author)
                             <p class="text-[#6b6b80] mb-1" style="font-size:0.88rem;" dir="auto">{{ $book->author }}</p>
                         @endif

@@ -67,6 +67,31 @@ class BookController extends Controller
     }
 
     /**
+     * One book's own page.
+     *
+     * This is the address a reader cites, links to and comes back to, and the
+     * only page a search engine can index a single book from — the catalogue
+     * itself is one page holding a thousand of them.
+     */
+    public function show(Book $book): View
+    {
+        return view('books.show', [
+            'book' => $book->load('category'),
+
+            // A reader who has found one book on a subject usually wants the
+            // shelf it came from, not the catalogue as a whole.
+            'related' => $book->category_id
+                ? Book::with('category')
+                    ->where('category_id', $book->category_id)
+                    ->whereKeyNot($book->getKey())
+                    ->inRandomOrder()
+                    ->limit(4)
+                    ->get()
+                : collect(),
+        ]);
+    }
+
+    /**
      * Stream a locally held PDF.
      *
      * Files sit outside public/ so every download goes through here, which is
