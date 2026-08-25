@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Http\Middleware\SetLocale;
 use App\Support\Locale;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
@@ -57,6 +58,86 @@ class TranslationFilesTest extends TestCase
 
             $this->assertSame($reference, $paths, "messages.php for $locale does not match ku-sorani");
         }
+    }
+
+    /**
+     * Every key the code asks for must answer, in every language.
+     *
+     * The other tests here compare the languages against one another, so a key
+     * that is missing from all eight equally passes them all — and the page
+     * then shows the reader the key itself, "admin.books.table.publisher".
+     * This one reads the code instead, which is the only way to catch that.
+     */
+    public function test_every_key_the_code_asks_for_exists(): void
+    {
+        $missing = [];
+
+        foreach ($this->keysUsedInCode() as $key => $where) {
+            foreach (Locale::SUPPORTED as $locale) {
+                // The third argument turns off the fallback. Without it a key
+                // present only in Kurdish answers for all eight, and the
+                // English page quietly shows Kurdish.
+                if (! Lang::has($key, $locale, false)) {
+                    $missing[] = "{$key} (used in {$where}) is missing from {$locale}";
+                }
+            }
+        }
+
+        $this->assertSame([], $missing, implode("\n", array_slice($missing, 0, 20)));
+    }
+
+    /**
+     * Every literal translation key in the project, and one place it is used.
+     *
+     * Keys built at run time — __('books.languages.'.$locale) — cannot be read
+     * this way and are left to the tests that compare the files.
+     *
+     * @return array<string, string>
+     */
+    private function keysUsedInCode(): array
+    {
+        $files = array_merge(
+            $this->phpFilesIn(resource_path('views')),
+            $this->phpFilesIn(app_path()),
+            $this->phpFilesIn(base_path('routes')),
+        );
+
+        $keys = [];
+
+        foreach ($files as $file) {
+            $code = (string) file_get_contents($file);
+
+            preg_match_all("/(?:__|trans_choice)\(\s*'([a-z][a-zA-Z0-9_.]*)'/", $code, $found);
+
+            foreach ($found[1] as $key) {
+                // A trailing dot means the key was completed at run time.
+                if (str_ends_with($key, '.') || ! str_contains($key, '.')) {
+                    continue;
+                }
+
+                $keys[$key] ??= str_replace(base_path().'/', '', $file);
+            }
+        }
+
+        return $keys;
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function phpFilesIn(string $directory): array
+    {
+        $files = [];
+
+        $walk = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($directory));
+
+        foreach ($walk as $file) {
+            if ($file->isFile() && $file->getExtension() === 'php') {
+                $files[] = $file->getPathname();
+            }
+        }
+
+        return $files;
     }
 
     public function test_no_translation_carries_markup(): void

@@ -104,21 +104,25 @@
                                          librarian can check what they are
                                          cataloguing without leaving the list.
                                          Skipped by the keyboard: the row's own
-                                         edit button is the way through it. --}}
-                                    <{{ $book->readUrl() ? 'a' : 'span' }} class="row-cover"
-                                        @if ($book->readUrl())
-                                            href="{{ $book->readUrl() }}"
-                                            target="_blank" rel="noopener"
-                                            tabindex="-1" aria-hidden="true"
-                                            title="{{ $book->hasFile() ? __('admin.books.file') : __('admin.books.table.url') }}"
-                                        @endif>
-                                        @if ($book->coverUrl())
-                                            <img src="{{ $book->coverUrl() }}" alt="" loading="lazy"
-                                                 decoding="async" referrerpolicy="no-referrer"
-                                                 onerror="this.closest('.row-cover').classList.add('is-blank')">
-                                        @endif
-                                        <span aria-hidden="true">{{ $book->category?->icon ?: '📘' }}</span>
-                                    </{{ $book->readUrl() ? 'a' : 'span' }}>
+                                         edit button is the way through it.
+
+                                         Written as two whole elements rather
+                                         than one with a tag name decided at
+                                         run time: the latter reads as broken
+                                         HTML to everything that is not Blade,
+                                         the editor's own checks included. --}}
+                                    @if ($book->readUrl())
+                                        <a class="row-cover" href="{{ $book->readUrl() }}"
+                                           target="_blank" rel="noopener"
+                                           tabindex="-1" aria-hidden="true"
+                                           title="{{ $book->hasFile() ? __('admin.books.file') : __('admin.books.table.url') }}">
+                                            @include('admin.books.partials.cover', ['book' => $book])
+                                        </a>
+                                    @else
+                                        <span class="row-cover">
+                                            @include('admin.books.partials.cover', ['book' => $book])
+                                        </span>
+                                    @endif
 
                                     <span class="row-title" dir="auto">{{ $book->title }}</span>
                                 </div>

@@ -27,6 +27,7 @@ return [
         'size' => 'Boyut',
         'unknown' => 'Bilinmiyor',
         'cite' => 'Bu kitabı kaynak göster',
+        'cite_download' => 'Kaynak yöneticisi için:',
         'cite_hint' => 'Bu kitabı şöyle kaynak gösterin:',
         'copy' => 'Kopyala',
         'copied' => 'Kopyalandı',

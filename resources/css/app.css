@@ -70,7 +70,7 @@ body { font-family: 'Rabar', sans-serif; }
 
 /* Scroll progress bar */
 #scrollProgress {
-    position: fixed; top: 0; inset-inline-start: 0; width: 0%;
+    position: fixed; top: 0; inset-inline-start: 0; width: 0;
     height: 3px;
     background: linear-gradient(90deg, #ff6b6b, #667eea, #764ba2, #ff6b6b);
     background-size: 200% 100%;
@@ -1037,6 +1037,34 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
     color: var(--ink);
 }
 .cite-hint { color: var(--ink-faint); font-size: 0.86rem; margin: 0.2rem 0 1rem; }
+
+/* The file downloads, above the three styles a reader might copy by hand. */
+.cite-managers {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    color: var(--ink-faint);
+}
+.cite-file {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--brand-deep);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: border-color 0.18s var(--ease), background 0.18s var(--ease);
+}
+.cite-file:hover { border-color: var(--brand); background: var(--brand-wash); }
+
+@media (pointer: coarse) {
+    .cite-file { min-height: 40px; display: inline-flex; align-items: center; }
+}
 
 .cite-row {
     display: grid;

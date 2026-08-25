@@ -146,7 +146,7 @@
                    aria-hidden="true" tabindex="-1">
                     @if ($cover)
                         <img src="{{ $cover }}" alt="" loading="lazy" decoding="async"
-                             referrerpolicy="no-referrer" onerror="this.closest('.book-cover').classList.add('is-blank')">
+                             referrerpolicy="no-referrer">
                     @endif
                     {{-- Shown when there is no cover, and when one fails to load. --}}
                     <span class="book-cover-fallback" aria-hidden="true">{{ $book->category?->icon ?: '📘' }}</span>

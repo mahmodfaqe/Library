@@ -13,6 +13,36 @@
     <title>@yield('title', __('admin.title')) — {{ __('admin.suffix') }}</title>
     <link rel="preload" href="{{ asset('fonts/Rabar_015.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="{{ Asset::versioned('admin.css') }}">
+    {{-- In the head, not at the foot: an image can fail before the end of the
+         document is parsed, and a listener registered afterwards would never
+         hear it. The sweep afterwards catches any that failed even earlier. --}}
+    <script>
+    (function(){
+        function blank(image) {
+            var frame = image.closest('.book-cover, .suggest-cover, .row-cover');
+
+            if (frame) frame.classList.add('is-blank');
+        }
+
+        // The error event does not bubble, so this listens in the capture
+        // phase: one listener for every cover on the page, including the ones
+        // the search suggestions build later, which had no fallback at all.
+        //
+        // It replaces an onerror attribute on each image. Inline handlers are
+        // what oblige the Content-Security-Policy to allow inline script, and
+        // the fewer of them there are, the closer that header can be tightened.
+        document.addEventListener('error', function (event) {
+            if (event.target && event.target.tagName === 'IMG') blank(event.target);
+        }, true);
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.book-cover img, .suggest-cover img, .row-cover img')
+                .forEach(function (image) {
+                    if (image.complete && image.naturalWidth === 0) blank(image);
+                });
+        });
+    })();
+    </script>
 </head>
 <body>
 

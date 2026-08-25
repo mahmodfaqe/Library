@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Category;
+use App\Support\Citation;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -97,6 +99,22 @@ class BookController extends Controller
      * Files sit outside public/ so every download goes through here, which is
      * what makes the counter possible and leaves room to restrict access later.
      */
+    /**
+     * The book as a file a reference manager can swallow.
+     *
+     * Half of academic reading lives in Zotero or Mendeley, and a library that
+     * cannot hand those a file makes every reader retype what it already knows.
+     */
+    public function cite(Book $book, string $format): Response
+    {
+        abort_unless(in_array($format, Citation::FORMATS, true), 404);
+
+        return response(Citation::write($book, $format), 200, [
+            'Content-Type' => Citation::contentType($format).'; charset=utf-8',
+            'Content-Disposition' => 'attachment; filename="'.Citation::filename($book, $format).'"',
+        ]);
+    }
+
     public function download(Book $book): StreamedResponse
     {
         abort_unless($book->hasFile() && Storage::disk('books')->exists($book->file_path), 404);

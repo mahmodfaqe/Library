@@ -1,4 +1,5 @@
 @use('App\Support\BookLanguage')
+@use('App\Support\Citation')
 @use('App\Support\Locale')
 @extends('layouts.base')
 
@@ -54,6 +55,39 @@
     <script type="application/ld+json">
     {!! json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) !!}
     </script>
+
+    {{-- The Highwire Press tags. Zotero's browser button reads these to file a
+         book without the reader typing anything, and Google Scholar requires
+         them before it will index a repository at all. --}}
+    <meta name="citation_title" content="{{ $book->title }}">
+    @foreach (Citation::authors($book) as $author)
+        <meta name="citation_author" content="{{ $author }}">
+    @endforeach
+    @if ($book->year)
+        <meta name="citation_publication_date" content="{{ $book->year }}">
+    @endif
+    @php $issuedBy = $book->publisher ?: __('messages.university_name', [], BookLanguage::citationLocale($book->language)); @endphp
+    <meta name="citation_publisher" content="{{ $issuedBy }}">
+    @if ($book->isbn)
+        <meta name="citation_isbn" content="{{ $book->isbn }}">
+    @endif
+    @if ($book->pages)
+        <meta name="citation_firstpage" content="1">
+        <meta name="citation_lastpage" content="{{ $book->pages }}">
+    @endif
+    @if ($book->language)
+        <meta name="citation_language" content="{{ BookLanguage::locale($book->language) ?? $book->language }}">
+    @endif
+    @foreach ($book->keywordList() as $keyword)
+        <meta name="citation_keywords" content="{{ $keyword }}">
+    @endforeach
+    <meta name="citation_abstract_html_url" content="{{ Locale::bookUrl($book->id) }}">
+    @if ($book->hasFile())
+        {{-- Only for a book the library serves itself. A Drive link is a page
+             about a file, not the file, and naming it here would tell Scholar
+             something untrue. --}}
+        <meta name="citation_pdf_url" content="{{ route('books.download', $book) }}">
+    @endif
 @endpush
 
 @section('content')
@@ -107,8 +141,7 @@
             <div class="book-cover">
                 @if ($book->coverUrl())
                     <img src="{{ $book->coverUrl() }}" alt="" loading="eager" decoding="async"
-                         referrerpolicy="no-referrer"
-                         onerror="this.closest('.book-cover').classList.add('is-blank')">
+                         referrerpolicy="no-referrer">
                 @endif
                 <span class="book-cover-fallback" aria-hidden="true">{{ $book->category?->icon ?: '📘' }}</span>
             </div>
@@ -183,6 +216,14 @@
         <h2 id="cite-heading">{{ __('books.book.cite') }}</h2>
         <p class="cite-hint">{{ __('books.book.cite_hint') }}</p>
 
+        {{-- For the readers who keep their reading in software rather than in
+             a document. --}}
+        <p class="cite-managers">
+            <span>{{ __('books.book.cite_download') }}</span>
+            <a href="{{ route('books.cite', [$book, 'bib']) }}" class="cite-file">BibTeX</a>
+            <a href="{{ route('books.cite', [$book, 'ris']) }}" class="cite-file">RIS</a>
+        </p>
+
         @foreach ($citations as $style => $text)
             <div class="cite-row">
                 <span class="cite-style">{{ $style }}</span>
@@ -206,8 +247,7 @@
                         <a class="book-cover" href="{{ Locale::bookUrl($other->id) }}" aria-hidden="true" tabindex="-1">
                             @if ($other->coverUrl())
                                 <img src="{{ $other->coverUrl() }}" alt="" loading="lazy" decoding="async"
-                                     referrerpolicy="no-referrer"
-                                     onerror="this.closest('.book-cover').classList.add('is-blank')">
+                                     referrerpolicy="no-referrer">
                             @endif
                             <span class="book-cover-fallback" aria-hidden="true">{{ $other->category?->icon ?: '📘' }}</span>
                         </a>

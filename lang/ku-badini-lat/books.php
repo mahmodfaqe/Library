@@ -27,6 +27,7 @@ return [
         'size' => 'Qeware',
         'unknown' => 'Nezanî',
         'cite' => 'Serçavenivîsîn',
+        'cite_download' => 'Ji bo rêveberê çavkaniyan:',
         'cite_hint' => 'Vê pirtûkê bi vî rengî binivîse:',
         'copy' => 'Kopî',
         'copied' => 'Hate kopîkirin',

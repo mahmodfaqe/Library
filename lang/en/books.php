@@ -27,6 +27,7 @@ return [
         'size' => 'Size',
         'unknown' => 'Unknown',
         'cite' => 'Cite this book',
+        'cite_download' => 'For a reference manager:',
         'cite_hint' => 'Reference this book as:',
         'copy' => 'Copy',
         'copied' => 'Copied',

@@ -51,6 +51,36 @@
 
     @vite(['resources/css/app.css'])
     @stack('head')
+    {{-- In the head, not at the foot: an image can fail before the end of the
+         document is parsed, and a listener registered afterwards would never
+         hear it. The sweep afterwards catches any that failed even earlier. --}}
+    <script>
+    (function(){
+        function blank(image) {
+            var frame = image.closest('.book-cover, .suggest-cover, .row-cover');
+
+            if (frame) frame.classList.add('is-blank');
+        }
+
+        // The error event does not bubble, so this listens in the capture
+        // phase: one listener for every cover on the page, including the ones
+        // the search suggestions build later, which had no fallback at all.
+        //
+        // It replaces an onerror attribute on each image. Inline handlers are
+        // what oblige the Content-Security-Policy to allow inline script, and
+        // the fewer of them there are, the closer that header can be tightened.
+        document.addEventListener('error', function (event) {
+            if (event.target && event.target.tagName === 'IMG') blank(event.target);
+        }, true);
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.book-cover img, .suggest-cover img, .row-cover img')
+                .forEach(function (image) {
+                    if (image.complete && image.naturalWidth === 0) blank(image);
+                });
+        });
+    })();
+    </script>
 </head>
 <body class="bg-[#f8f9ff] text-[#2d2d3a] overflow-x-hidden" dir="{{ Locale::dir() }}">
 
@@ -95,8 +125,7 @@
                 <div class="relative" id="kuGroup">
                     <button id="kuMainBtn" type="button"
                             class="{{ str_starts_with(app()->getLocale(), 'ku') ? 'active ' : '' }}lang-btn flex items-center gap-1"
-                            aria-haspopup="true" aria-expanded="false"
-                            onclick="toggleKuDropdown()">
+                            aria-haspopup="true" aria-expanded="false">
                         کوردی <span class="text-[0.5rem] transition-transform duration-300" id="kuArrow">▼</span>
                     </button>
                     <div class="ku-dropdown" id="kuDropdown">
@@ -182,7 +211,11 @@
                 <span style="font-size: 1rem;">👁</span>
                 <div class="flex items-center gap-3 no-underline rounded-full border border-white/20 px-4 py-1.5"
                      style="background:rgba(255,255,255,0.12); font-size: 1rem; color:rgba(255,255,255,0.85);">
-                    <img src="{{ rtrim(config('library.analytics.host'), '/') }}/counter/TOTAL.svg"
+                    {{-- Built whole rather than pieced together in the
+                         attribute: it is an address on the analytics host, not
+                         a file in this project. --}}
+                    @php $counter = rtrim(config('library.analytics.host'), '/').'/counter/TOTAL.svg'; @endphp
+                    <img src="{{ $counter }}"
                          alt="{{ __('messages.visitors_label') }}"
                          class="h-[40px] w-auto align-middle"
                          loading="lazy" decoding="async">
@@ -201,6 +234,7 @@
 </button>
 
 <script>
+
 // Footer years
 (function(){
     var y = new Date().getFullYear();
@@ -221,6 +255,14 @@
 })();
 
 // Kurdish dialect dropdown
+// Bound here rather than with an onclick attribute: inline handlers are what
+// oblige the Content-Security-Policy to allow inline script.
+document.addEventListener('DOMContentLoaded', function () {
+    var button = document.getElementById('kuMainBtn');
+
+    if (button) button.addEventListener('click', toggleKuDropdown);
+});
+
 function toggleKuDropdown(){
     var btn=document.getElementById('kuMainBtn');
     var dd=document.getElementById('kuDropdown');
