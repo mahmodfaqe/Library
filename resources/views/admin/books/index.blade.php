@@ -1,3 +1,4 @@
+@use('App\Support\BookLanguage')
 @use('App\Support\Locale')
 @extends('admin.layout')
 
@@ -135,7 +136,10 @@
                                        value="{{ $book->year }}"
                                        aria-label="{{ __('admin.books.table.year') }}">
                             </td>
-                            <td dir="auto">{{ $book->language ?: '—' }}</td>
+                            {{-- Named as the staff member reads, like the
+                                 subject beside it; the edit form is where the
+                                 stored word itself is changed. --}}
+                            <td dir="auto">{{ BookLanguage::name($book->language) ?: '—' }}</td>
                             <td dir="auto">{{ $book->category?->localName() ?: '—' }}</td>
                             <td class="actions">
                                 <a href="{{ route('admin.books.edit', $book) }}" class="btn btn-secondary btn-sm">{{ __('admin.actions.edit') }}</a>

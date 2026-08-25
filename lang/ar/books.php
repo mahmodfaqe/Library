@@ -37,6 +37,15 @@ return [
     'search_placeholder' => 'العنوان أو المؤلف…',
     'language_label' => 'اللغة',
     'all_languages' => 'كل اللغات',
+
+    // The language a book is written in, named in the reader's own.
+    'languages' => [
+        'ku-sorani' => 'الكردية',
+        'ar' => 'العربية',
+        'en' => 'الإنجليزية',
+        'fa' => 'الفارسية',
+        'tr' => 'التركية',
+    ],
     'search' => 'ابحث',
     'download' => 'تنزيل',
     'open' => 'فتح',

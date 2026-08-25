@@ -37,6 +37,15 @@ return [
     'search_placeholder' => 'Başlık veya yazar…',
     'language_label' => 'Dil',
     'all_languages' => 'Tüm diller',
+
+    // The language a book is written in, named in the reader's own.
+    'languages' => [
+        'ku-sorani' => 'Kürtçe',
+        'ar' => 'Arapça',
+        'en' => 'İngilizce',
+        'fa' => 'Farsça',
+        'tr' => 'Türkçe',
+    ],
     'search' => 'Ara',
     'download' => 'İndir',
     'open' => 'Aç',

@@ -37,6 +37,15 @@ return [
     'search_placeholder' => 'Sernav an nivîskar…',
     'language_label' => 'Ziman',
     'all_languages' => 'Hemû ziman',
+
+    // The language a book is written in, named in the reader's own.
+    'languages' => [
+        'ku-sorani' => 'Kurdî',
+        'ar' => 'Erebî',
+        'en' => 'Îngilîzî',
+        'fa' => 'Farisî',
+        'tr' => 'Tirkî',
+    ],
     'search' => 'Bigere',
     'download' => 'Daxe',
     'open' => 'Veke',

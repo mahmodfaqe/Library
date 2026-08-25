@@ -2,6 +2,8 @@
 
 namespace App\Support;
 
+use Illuminate\Support\Facades\App;
+
 class BookLanguage
 {
     /**
@@ -42,6 +44,69 @@ class BookLanguage
      * @var list<string>
      */
     public const ORDER = ['کوردی', 'English', 'عەرەبی', 'فارسی', 'Türkçe'];
+
+    /**
+     * The locale each canonical language belongs to: which of the site's own
+     * languages a book written in it is written in.
+     */
+    private const LOCALES = [
+        'کوردی' => 'ku-sorani',
+        'عەرەبی' => 'ar',
+        'English' => 'en',
+        'فارسی' => 'fa',
+        'Türkçe' => 'tr',
+    ];
+
+    /**
+     * Which of the site's locales a book's language is, or null when the
+     * catalogue holds a language the site does not speak.
+     */
+    public static function locale(?string $language): ?string
+    {
+        if ($language === null || trim($language) === '') {
+            return null;
+        }
+
+        // Stored values are canonical, but a librarian may have typed one in
+        // by hand, so an unfamiliar spelling is folded the same way a folder
+        // name is.
+        $canonical = self::LOCALES[$language] ?? null;
+
+        if ($canonical !== null) {
+            return $canonical;
+        }
+
+        $matched = self::fromFolder($language);
+
+        return $matched === null ? null : (self::LOCALES[$matched] ?? null);
+    }
+
+    /**
+     * The name of a book's language, written in the reader's own language.
+     *
+     * A shelf headed کوردی tells a reader of the English pages nothing, so the
+     * stored word is translated wherever it is shown. A language the site has
+     * no word for is left as it was typed.
+     */
+    public static function name(?string $language, ?string $in = null): ?string
+    {
+        $locale = self::locale($language);
+
+        return $locale === null ? $language : __('books.languages.'.$locale, [], $in);
+    }
+
+    /**
+     * The locale a citation for this book should be written in: the book's own
+     * language where the site speaks it, and otherwise the reader's.
+     *
+     * A citation is copied into a bibliography, and an English book belongs in
+     * an English one under "University of Raparin", whichever language the
+     * reader happened to be browsing the catalogue in.
+     */
+    public static function citationLocale(?string $language): string
+    {
+        return self::locale($language) ?? App::getLocale();
+    }
 
     /**
      * Where a language sits in the shelving order. Unlisted languages sort

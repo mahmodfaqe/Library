@@ -1,3 +1,4 @@
+@use('App\Support\BookLanguage')
 @use('App\Support\Locale')
 @extends('layouts.base')
 
@@ -25,12 +26,15 @@
             'name' => $book->title,
             'author' => $book->author ? ['@type' => 'Person', 'name' => $book->author] : null,
             'datePublished' => $book->year ? (string) $book->year : null,
-            'inLanguage' => $book->language,
+            'inLanguage' => BookLanguage::locale($book->language) ?? $book->language,
             'genre' => $book->category?->localName(),
             'url' => Locale::bookUrl($book->id),
             'image' => $book->coverUrl(),
             'isAccessibleForFree' => true,
-            'publisher' => ['@type' => 'CollegeOrUniversity', 'name' => __('messages.university_name')],
+            'publisher' => [
+                '@type' => 'CollegeOrUniversity',
+                'name' => __('messages.university_name', [], BookLanguage::citationLocale($book->language)),
+            ],
         ]);
     @endphp
     <script type="application/ld+json">
@@ -43,9 +47,17 @@
     // Written the way a reader would cite it, from what the catalogue knows.
     // Where no author is recorded the library stands in as one, and the
     // publisher is then left out rather than naming the same body twice.
-    $university = __('messages.university_name');
+    //
+    // The university is named in the language of the book, not of the page: a
+    // citation is copied into a bibliography, and an English book belongs in
+    // an English one under "University of Raparin" however the reader was
+    // browsing when they took it.
+    $cited = BookLanguage::citationLocale($book->language);
+    $university = __('messages.university_name', [], $cited);
     $year = $book->year ?: 'n.d.';
-    $link = Locale::bookUrl($book->id);
+    // The address in the book's own language too, so one citation of a book is
+    // the same citation wherever it was copied from.
+    $link = Locale::bookUrl($book->id, $cited);
 
     $name = '<bdi>'.e($book->author ?: $university).'</bdi>';
     $work = '<bdi><i>'.e($book->title).'</i></bdi>';
@@ -96,7 +108,7 @@
             <dl class="book-facts">
                 @foreach ([
                     'year' => $book->year,
-                    'language' => $book->language,
+                    'language' => BookLanguage::name($book->language),
                     'subject' => $book->category?->localName(),
                     'size' => $book->humanFileSize(),
                 ] as $key => $value)

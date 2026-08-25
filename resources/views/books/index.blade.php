@@ -1,3 +1,4 @@
+@use('App\Support\BookLanguage')
 @use('App\Support\Locale')
 @extends('layouts.base')
 
@@ -81,7 +82,7 @@
             @foreach ($languages as $name => $total)
                 <a href="{{ url()->current() }}?{{ http_build_query($base + ['language' => $name]) }}"
                    class="lang-chip{{ $language === $name ? ' is-active' : '' }}">
-                    <bdi>{{ $name }}</bdi> <span class="lang-count">{{ $total }}</span>
+                    <bdi>{{ BookLanguage::name($name) }}</bdi> <span class="lang-count">{{ $total }}</span>
                 </a>
             @endforeach
         </nav>
@@ -111,15 +112,22 @@
             {{-- Books arrive shelved by language, so a heading goes in
                  wherever the shelf changes. When the visitor has already
                  picked one language there is only ever one shelf, and the
-                 chips above already say which. --}}
-            @php $shelf = $book->language ?: __('books.other_language'); @endphp
+                 chips above already say which.
+
+                 The shelf is grouped by what the catalogue stores and headed
+                 by what the reader reads: two spellings of one language must
+                 not split a shelf in two. --}}
+            @php
+                $shelf = $book->language ?: '';
+                $shelfName = BookLanguage::name($book->language) ?: __('books.other_language');
+            @endphp
 
             @if ($language === null && (! isset($currentShelf) || $currentShelf !== $shelf))
                 @unless ($loop->first)
                     </div>
                 @endunless
                 <h2 class="language-shelf" dir="auto">
-                    <bdi>{{ $shelf }}</bdi>
+                    <bdi>{{ $shelfName }}</bdi>
                 </h2>
                 <div class="book-grid">
                 @php $currentShelf = $shelf; @endphp
@@ -157,7 +165,7 @@
                             @foreach (collect([
                                 $book->year,
                                 // Redundant once the shelf heading says it.
-                                $language === null ? null : $book->language,
+                                $language === null ? null : BookLanguage::name($book->language),
                                 $selected ? null : $book->category?->localName(),
                             ])->filter() as $fact)
                                 <bdi>{{ $fact }}</bdi>@unless ($loop->last) <span class="opacity-60">·</span> @endunless

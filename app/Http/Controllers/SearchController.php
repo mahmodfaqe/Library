@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\BookLanguage;
 use App\Support\BookSearch;
 use App\Support\Locale;
 use Illuminate\Http\JsonResponse;
@@ -52,7 +53,7 @@ class SearchController extends Controller
                 'title' => $book->title,
                 'author' => $book->author,
                 'year' => $book->year,
-                'language' => $book->language,
+                'language' => BookLanguage::name($book->language),
                 'subject' => $book->category?->localName(),
                 // The page, not the file: a suggestion goes where a card
                 // goes, and the file is one button further on.

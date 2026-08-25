@@ -6,6 +6,7 @@ use App\Models\Book;
 use App\Models\Category;
 use App\Models\Department;
 use App\Models\User;
+use App\Support\BookLanguage;
 use App\Support\Locale;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -146,9 +147,10 @@ class BookCatalogueTest extends TestCase
 
         $this->assertStringContainsString('dir="auto">Molecular Biology (2nd ed.)</a>', $html);
         $this->assertStringContainsString('dir="auto">Jane Doe</p>', $html);
-        // Year and language share a line, so each is isolated.
+        // Year and language share a line, so each is isolated. The language
+        // is named as the reader of this page would name it.
         $this->assertStringContainsString('<bdi>2019</bdi>', $html);
-        $this->assertStringContainsString('<bdi>English</bdi>', $html);
+        $this->assertStringContainsString('<bdi>'.BookLanguage::name('English', 'ku-sorani').'</bdi>', $html);
     }
 
     public function test_the_page_carries_the_direction_of_its_language(): void
@@ -178,10 +180,23 @@ class BookCatalogueTest extends TestCase
         $this->assertLessThan(strpos($html, 'Zoology'), strpos($html, 'ژیناسی'));
         $this->assertLessThan(strpos($html, 'علم النبات'), strpos($html, 'Zoology'));
 
-        // And each shelf is announced.
-        foreach (['کوردی', 'English', 'عەرەبی'] as $shelf) {
-            $this->assertStringContainsString('<bdi>'.$shelf.'</bdi>', $html);
+        // And each shelf is announced, in the language of the page rather
+        // than the one the catalogue stores it under.
+        foreach (['کوردی', 'English', 'عەرەبی'] as $stored) {
+            $this->assertStringContainsString(
+                '<bdi>'.BookLanguage::name($stored, 'ku-sorani').'</bdi>',
+                $html
+            );
         }
+
+        $english = $this->get("/en/books?category={$biology->id}")->assertOk()->getContent();
+
+        foreach (['Kurdish', 'English', 'Arabic'] as $shelf) {
+            $this->assertStringContainsString('<bdi>'.$shelf.'</bdi>', $english);
+        }
+
+        // A reader of the English pages is not shown کوردی as a heading.
+        $this->assertStringNotContainsString('<bdi>کوردی</bdi>', $english);
     }
 
     public function test_one_language_needs_no_shelf_headings(): void

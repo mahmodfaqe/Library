@@ -103,9 +103,14 @@ class BookPageTest extends TestCase
         // the way a bibliography writes one.
         $this->assertStringContainsString('n.d.', $html);
 
-        // But it is named once, not as author and publisher both.
+        // But it is named once, not as author and publisher both — and in the
+        // language of the book, which is the bibliography it will be pasted
+        // into, not the language of the page it was read on.
         $apa = $this->citation($html, 'APA');
-        $this->assertSame(1, substr_count($apa, __('messages.university_name')), $apa);
+        $english = __('messages.university_name', [], 'en');
+
+        $this->assertSame(1, substr_count($apa, $english), $apa);
+        $this->assertStringNotContainsString(__('messages.university_name'), $apa);
 
         // And no style ends the date with two full stops.
         foreach (['APA', 'MLA', 'Chicago'] as $style) {
@@ -150,6 +155,44 @@ class BookPageTest extends TestCase
         // Byline, citations — but not a details row repeating the byline
         // directly above it.
         $this->assertStringNotContainsString('>'.__('books.book.author').'<', $html);
+    }
+
+    public function test_a_citation_is_written_in_the_language_of_the_book(): void
+    {
+        // A reader browsing in Kurdish who cites an English book is pasting it
+        // into an English bibliography; "زانکۆی ڕاپەڕین" in the middle of one
+        // is not something they can hand in.
+        $english = $this->book(['author' => null, 'language' => 'English']);
+        $kurdish = $this->book(['author' => null, 'language' => 'کوردی', 'title' => 'ژیناسی']);
+
+        $onEnglish = $this->citation(
+            $this->get("/books/{$english->id}")->assertOk()->getContent(),
+            'APA'
+        );
+        $onKurdish = $this->citation(
+            $this->get("/books/{$kurdish->id}")->assertOk()->getContent(),
+            'APA'
+        );
+
+        // Both read on the Kurdish pages, each naming the university its own way.
+        $this->assertStringContainsString(__('messages.university_name', [], 'en'), $onEnglish);
+        $this->assertStringContainsString(__('messages.university_name', [], 'ku-sorani'), $onKurdish);
+
+        // And the book's language does not change with the page it is read on.
+        $fromTurkish = $this->citation(
+            $this->get("/tr/books/{$english->id}")->assertOk()->getContent(),
+            'APA'
+        );
+
+        $this->assertSame($onEnglish, $fromTurkish);
+    }
+
+    public function test_a_language_the_library_has_no_word_for_is_left_alone(): void
+    {
+        $book = $this->book(['language' => 'Deutsch']);
+
+        // Better the word the librarian typed than a wrong guess at it.
+        $this->get("/books/{$book->id}")->assertOk()->assertSee('Deutsch');
     }
 
     public function test_it_describes_itself_as_a_book_to_a_search_engine(): void

@@ -37,6 +37,15 @@ return [
     'search_placeholder' => 'ناڤنیشان یان نڤیسەر…',
     'language_label' => 'زمان',
     'all_languages' => 'هەمی زمانان',
+
+    // The language a book is written in, named in the reader's own.
+    'languages' => [
+        'ku-sorani' => 'کوردی',
+        'ar' => 'عەرەبی',
+        'en' => 'ئینگلیزی',
+        'fa' => 'فارسی',
+        'tr' => 'تورکی',
+    ],
     'search' => 'بگەڕە',
     'download' => 'داگرتن',
     'open' => 'ڤەکرن',

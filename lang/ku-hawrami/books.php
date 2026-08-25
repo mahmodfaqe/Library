@@ -37,6 +37,15 @@ return [
     'search_placeholder' => 'ناونیشان یان نویسەر…',
     'language_label' => 'زوان',
     'all_languages' => 'هەمی زوانەکا',
+
+    // The language a book is written in, named in the reader's own.
+    'languages' => [
+        'ku-sorani' => 'کوردی',
+        'ar' => 'عەرەبی',
+        'en' => 'ئینگلیزی',
+        'fa' => 'فارسی',
+        'tr' => 'تورکی',
+    ],
     'search' => 'بگێڵە',
     'download' => 'داگرتەی',
     'open' => 'کەردەوە',

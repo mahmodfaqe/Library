@@ -37,6 +37,15 @@ return [
     'search_placeholder' => 'Title or author…',
     'language_label' => 'Language',
     'all_languages' => 'All languages',
+
+    // The language a book is written in, named in the reader's own.
+    'languages' => [
+        'ku-sorani' => 'Kurdish',
+        'ar' => 'Arabic',
+        'en' => 'English',
+        'fa' => 'Persian',
+        'tr' => 'Turkish',
+    ],
     'search' => 'Search',
     'download' => 'Download',
     'open' => 'Open',
