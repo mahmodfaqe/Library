@@ -221,6 +221,54 @@ class ZenodoDepositTest extends TestCase
         });
     }
 
+    public function test_the_file_is_sent_as_raw_bytes(): void
+    {
+        // Zenodo's bucket API refuses application/pdf outright. The fakes
+        // here would have accepted anything; the sandbox would not, and did
+        // not — this is the shape it actually wants.
+        $this->zenodoAnswers();
+        $this->thesis();
+
+        $this->artisan('theses:deposit --confirm')->assertSuccessful();
+
+        Http::assertSent(function (Request $request) {
+            if (! str_contains($request->url(), 'abc-bucket')) {
+                return false;
+            }
+
+            $this->assertSame(
+                'application/octet-stream',
+                $request->header('Content-Type')[0] ?? null
+            );
+
+            return true;
+        });
+    }
+
+    public function test_a_draft_that_fails_is_thrown_away(): void
+    {
+        // A deposit is four calls. A failure in any of the last three leaves
+        // an unpublished draft holding a copy of the file, in the account,
+        // for good.
+        Http::fake([
+            '*/deposit/depositions' => Http::response([
+                'id' => 555,
+                'links' => ['bucket' => 'https://sandbox.zenodo.org/api/files/abc-bucket'],
+            ]),
+            '*/files/abc-bucket/*' => Http::response(['message' => 'nope'], 415),
+            '*/deposit/depositions/555' => Http::response([], 204),
+        ]);
+
+        $this->thesis();
+
+        $this->artisan('theses:deposit --confirm')
+            ->expectsOutputToContain('failed')
+            ->assertSuccessful();
+
+        Http::assertSent(fn (Request $request) => $request->method() === 'DELETE'
+            && str_contains($request->url(), 'depositions/555'));
+    }
+
     public function test_a_failure_leaves_the_thesis_alone(): void
     {
         Http::fake(['*' => Http::response(['message' => 'Bad request'], 400)]);

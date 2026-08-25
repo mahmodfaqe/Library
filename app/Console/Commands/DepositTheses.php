@@ -135,6 +135,7 @@ class DepositTheses extends Command
         }
 
         $file = null;
+        $draft = null;
 
         try {
             $file = $this->fetchFile($thesis);
@@ -163,6 +164,11 @@ class DepositTheses extends Command
 
             return true;
         } catch (\Throwable $e) {
+            // Do not leave a half-made draft behind in the account.
+            if ($draft !== null) {
+                $zenodo->discard($draft['id']);
+            }
+
             $this->line("  <error>failed</error>   {$name} — ".$e->getMessage());
 
             return false;

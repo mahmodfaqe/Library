@@ -123,8 +123,10 @@ class Zenodo
         }
 
         try {
+            // Zenodo's bucket API takes the raw bytes and nothing else: it
+            // refuses application/pdf outright.
             $response = $this->request()
-                ->withBody($handle, 'application/pdf')
+                ->withBody($handle, 'application/octet-stream')
                 ->put($bucket.'/'.rawurlencode($filename));
 
             $this->check($response, 'could not upload the file');
@@ -132,6 +134,23 @@ class Zenodo
             if (is_resource($handle)) {
                 fclose($handle);
             }
+        }
+    }
+
+    /**
+     * Throw away a draft that was never published.
+     *
+     * A deposit is four calls, and a failure in any of the last three leaves
+     * an unpublished draft sitting in the account. They are invisible to the
+     * public but they pile up, and each one holds a copy of the file.
+     */
+    public function discard(int $id): void
+    {
+        try {
+            $this->request()->delete($this->base().'/deposit/depositions/'.$id);
+        } catch (\Throwable $e) {
+            // A failed cleanup is not worth reporting over the failure that
+            // caused it.
         }
     }
 
