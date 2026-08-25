@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Thesis;
 use App\Support\Locale;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
@@ -92,10 +93,11 @@ class SitemapController extends Controller
 
         $default = $locale === Locale::DEFAULT;
 
-        // The home page and the catalogue.
+        // The home page, the catalogue, and the repository.
         $pages = [
             ['url' => fn (string $l) => Locale::url($l), 'priority' => $default ? '1.0' : '0.8'],
             ['url' => fn (string $l) => Locale::booksUrl($l), 'priority' => $default ? '0.9' : '0.8'],
+            ['url' => fn (string $l) => Locale::thesesUrl($l), 'priority' => $default ? '0.9' : '0.8'],
         ];
 
         foreach ($pages as $page) {
@@ -121,6 +123,23 @@ class SitemapController extends Controller
                     $url->addChild('priority', $default ? '0.7' : '0.6');
 
                     $this->addAlternates($url, fn (string $l) => Locale::bookUrl($book->id, $l));
+                }
+            });
+
+        // The university's own work, which is the part of the site a search
+        // engine has most reason to index: nothing else on the web holds it.
+        Thesis::published()
+            ->select(['id', 'updated_at'])
+            ->orderBy('id')
+            ->chunk(500, function ($theses) use ($xml, $locale, $default) {
+                foreach ($theses as $thesis) {
+                    $url = $xml->addChild('url');
+                    $url->addChild('loc', htmlspecialchars(Locale::thesisUrl($thesis->id, $locale)));
+                    $url->addChild('lastmod', $thesis->updated_at?->toDateString() ?? '');
+                    $url->addChild('changefreq', 'yearly');
+                    $url->addChild('priority', $default ? '0.8' : '0.7');
+
+                    $this->addAlternates($url, fn (string $l) => Locale::thesisUrl($thesis->id, $l));
                 }
             });
 

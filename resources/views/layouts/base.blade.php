@@ -198,6 +198,8 @@
         <p style="font-size:clamp(0.85rem,2vw,0.95rem);">
             <a href="{{ Locale::booksUrl() }}" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">{{ __('books.title') }}</a>
             <span class="opacity-40 mx-2">·</span>
+            <a href="{{ Locale::thesesUrl() }}" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">{{ __('theses.title') }}</a>
+            <span class="opacity-40 mx-2">·</span>
             <a href="{{ Locale::privacyUrl() }}" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">{{ __('privacy.title') }}</a>
             @if (config('library.qr_url'))
                 <span class="opacity-40 mx-2">·</span>

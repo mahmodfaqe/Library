@@ -974,6 +974,126 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
 }
 .book-unavailable { color: var(--ink-faint); font-size: 0.92rem; }
 
+/* ── The repository ──────────────────────────────────────────────────── */
+.repo-title {
+    font-size: clamp(1.5rem, 4vw, 2.1rem);
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1.4;
+}
+.repo-subtitle { color: var(--ink-soft); margin: 0.35rem 0 1.6rem; }
+
+.repo-filters {
+    display: grid;
+    grid-template-columns: minmax(12rem, 2fr) repeat(3, minmax(7rem, 1fr)) auto;
+    gap: 0.6rem;
+    margin-bottom: 1.4rem;
+}
+.repo-filters input,
+.repo-filters select {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    font: inherit;
+    font-size: 0.92rem;
+    color: var(--ink);
+}
+.repo-filters input:focus,
+.repo-filters select:focus { outline: 2px solid var(--brand); outline-offset: 1px; }
+.repo-go { border: none; cursor: pointer; padding-inline: 1.4rem; }
+.repo-count { color: var(--ink-soft); font-size: 0.92rem; margin-bottom: 1rem; }
+
+/* A thesis has no cover, so the degree does the work of one: it is the first
+   thing a reader sorts by. */
+.thesis-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0 1rem;
+    align-items: start;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.3rem;
+    margin-bottom: 0.7rem;
+    box-shadow: var(--shadow-sm);
+}
+.thesis-degree,
+.thesis-degree-large {
+    display: inline-block;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    background: var(--brand-wash);
+    color: var(--brand-deep);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+.thesis-body { min-width: 0; }
+.thesis-title { font-size: 1.02rem; font-weight: 700; line-height: 1.6; }
+.thesis-title a { color: var(--ink); text-decoration: none; }
+.thesis-title a:hover { text-decoration: underline; }
+.thesis-people { color: var(--ink-soft); font-size: 0.88rem; margin-top: 0.25rem; }
+.thesis-facts { color: var(--ink-faint); font-size: 0.8rem; margin-top: 0.3rem; }
+.thesis-embargo {
+    display: inline-block;
+    margin-inline-start: 0.5rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    background: rgba(245, 158, 11, 0.14);
+    color: #92400e;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.thesis-hero {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.2rem, 4vw, 2rem);
+    box-shadow: var(--shadow-md);
+}
+.thesis-hero h1 {
+    font-size: clamp(1.3rem, 3.6vw, 1.9rem);
+    font-weight: 800;
+    line-height: 1.5;
+    color: var(--ink);
+    margin-top: 0.7rem;
+    overflow-wrap: break-word;
+}
+.thesis-alt-title {
+    color: var(--ink-soft);
+    font-size: 0.98rem;
+    margin-top: 0.4rem;
+    line-height: 1.6;
+}
+
+/* An embargo withholds the file, never the record — so this explains itself
+   rather than simply refusing. */
+.embargo-notice {
+    background: rgba(245, 158, 11, 0.09);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    border-radius: var(--radius);
+    padding: 1rem 1.2rem;
+    color: #78350f;
+}
+.embargo-notice strong { display: block; margin-bottom: 0.3rem; }
+.embargo-notice p { font-size: 0.9rem; line-height: 1.7; }
+.embargo-why { opacity: 0.8; font-size: 0.85rem; margin-top: 0.3rem; }
+
+@media (max-width: 720px) {
+    .repo-filters { grid-template-columns: 1fr 1fr; }
+    .repo-search { grid-column: 1 / -1; }
+    .repo-go { grid-column: 1 / -1; }
+}
+
+@media (max-width: 640px) {
+    .thesis-card { grid-template-columns: 1fr; gap: 0.5rem; }
+    .thesis-degree { justify-self: start; }
+}
+
 /* ── What the book is about ──────────────────────────────────────────── */
 .book-about {
     margin-top: 2rem;

@@ -66,6 +66,7 @@
                 ['admin.departments', 'admin.nav.departments', '🏛'],
                 ['admin.categories', 'admin.nav.categories', '🗂'],
                 ['admin.books', 'admin.nav.books', '📚'],
+                ['admin.theses', 'admin.nav.theses', '🎓'],
                 ['admin.feedback', 'admin.nav.feedback', '💬'],
             ];
 

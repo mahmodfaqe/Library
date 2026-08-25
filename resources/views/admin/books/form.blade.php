@@ -32,7 +32,7 @@
 
             <div class="field">
                 <label for="year">{{ __('admin.books.table.year') }}</label>
-                <input type="number" id="year" name="year" dir="ltr" min="1400" max="{{ date('Y') + 1 }}"
+                <input type="number" id="year" name="year" dir="ltr" min="1400" max="{{ (int) date('Y') + 1 }}"
                        value="{{ old('year', $book->year) }}">
             </div>
 

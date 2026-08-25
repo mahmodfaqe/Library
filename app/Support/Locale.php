@@ -186,6 +186,26 @@ class Locale
      * and the links it builds are both in whatever language it is asked in,
      * and an unprefixed address is always Sorani.
      */
+    /**
+     * The repository of the university's own work, and one thesis inside it.
+     * Keyed by id for the same reason a book is: a reader cites it, and the
+     * address has to still be there in ten years.
+     */
+    public static function thesesUrl(?string $locale = null): string
+    {
+        $locale ??= App::getLocale();
+
+        return $locale === self::DEFAULT ? url('theses') : url($locale.'/theses');
+    }
+
+    public static function thesisUrl(int|string $thesis, ?string $locale = null): string
+    {
+        $locale ??= App::getLocale();
+        $path = 'theses/'.$thesis;
+
+        return $locale === self::DEFAULT ? url($path) : url($locale.'/'.$path);
+    }
+
     public static function suggestUrl(?string $locale = null): string
     {
         $locale ??= App::getLocale();
@@ -207,6 +227,11 @@ class Locale
         $route = (string) Request::route()?->getName();
 
         return match (true) {
+            str_starts_with($route, 'theses.show') => self::thesisUrl(
+                Request::route()?->parameter('thesis')?->id ?? 0,
+                $locale
+            ),
+            str_starts_with($route, 'theses') => self::thesesUrl($locale),
             str_starts_with($route, 'books.show') => self::bookUrl(
                 Request::route()?->parameter('book')?->id ?? 0,
                 $locale

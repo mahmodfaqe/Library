@@ -3,12 +3,15 @@
 use App\Http\Controllers\AdminBookController;
 use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminThesisController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OaiController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\ThesisController;
 use App\Http\Controllers\UserController;
 use App\Support\Citation;
 use App\Support\Locale;
@@ -44,6 +47,32 @@ Route::get('{locale}/books/{book}', [BookController::class, 'show'])
     ->whereNumber('book')
     ->name('books.show.localised');
 
+// ── The repository ───────────────────────────────────────────────────────
+//
+// The university's own work: theses written, examined and published here. A
+// separate address from the catalogue because it is a different collection,
+// with a different relationship to the university.
+Route::get('theses', [ThesisController::class, 'index'])->name('theses');
+Route::get('{locale}/theses', [ThesisController::class, 'index'])
+    ->whereIn('locale', Locale::SUPPORTED)
+    ->name('theses.localised');
+
+Route::get('theses/{thesis}/download', [ThesisController::class, 'download'])
+    ->name('theses.download');
+
+Route::get('theses/{thesis}/cite.{format}', [ThesisController::class, 'cite'])
+    ->whereIn('format', Citation::FORMATS)
+    ->whereNumber('thesis')
+    ->name('theses.cite');
+
+Route::get('theses/{thesis}', [ThesisController::class, 'show'])
+    ->whereNumber('thesis')
+    ->name('theses.show');
+Route::get('{locale}/theses/{thesis}', [ThesisController::class, 'show'])
+    ->whereIn('locale', Locale::SUPPORTED)
+    ->whereNumber('thesis')
+    ->name('theses.show.localised');
+
 // Suggestions for the catalogue's search box, answered as the visitor types.
 // Throttled because it runs on every keystroke.
 Route::get('search/suggest', [SearchController::class, 'suggest'])
@@ -70,6 +99,10 @@ Route::view('{locale}/privacy', 'pages.privacy')
 // What an outside monitor asks. /up says the application is running, which is
 // what Docker restarts on; this says the service is well, which is what a
 // person needs to be told about.
+// How the world's aggregators — BASE, CORE, OpenAIRE — read the repository.
+// They do not crawl pages; they ask this, in this exact shape.
+Route::get('oai', OaiController::class)->name('oai');
+
 Route::get('health', HealthController::class)->name('health');
 
 Route::get('sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
@@ -123,6 +156,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('books/{book}/edit', [AdminBookController::class, 'edit'])->name('books.edit');
         Route::put('books/{book}', [AdminBookController::class, 'update'])->name('books.update');
         Route::delete('books/{book}', [AdminBookController::class, 'destroy'])->name('books.destroy');
+
+        // The university's own work, which is submitted and approved rather
+        // than simply catalogued.
+        Route::get('theses', [AdminThesisController::class, 'index'])->name('theses');
+        Route::get('theses/create', [AdminThesisController::class, 'create'])->name('theses.create');
+        Route::post('theses', [AdminThesisController::class, 'store'])->name('theses.store');
+        Route::get('theses/{thesis}/edit', [AdminThesisController::class, 'edit'])->name('theses.edit');
+        Route::put('theses/{thesis}', [AdminThesisController::class, 'update'])->name('theses.update');
+        Route::delete('theses/{thesis}', [AdminThesisController::class, 'destroy'])->name('theses.destroy');
 
         Route::get('feedback', [AdminController::class, 'feedback'])->name('feedback');
         Route::delete('feedback/{feedback}', [AdminController::class, 'destroyFeedback'])->name('feedback.destroy');

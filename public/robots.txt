@@ -2,4 +2,7 @@ User-agent: *
 Disallow: /admin
 Allow: /
 
+# The repository is harvested here, not crawled:
+# https://dormitory-uor.online/oai?verb=Identify
+
 Sitemap: https://dormitory-uor.online/sitemap.xml

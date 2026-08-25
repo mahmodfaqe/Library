@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use App\Models\Book;
+use App\Models\Thesis;
 use Illuminate\Support\Str;
 
 class Citation
@@ -64,6 +65,125 @@ class Citation
         $key = preg_replace('/[^\p{L}\p{N}]+/u', '', $key) ?? '';
 
         return $key !== '' ? $key : 'book'.$book->id;
+    }
+
+    // ── A thesis, which is a different kind of thing ────────────────────
+
+    /**
+     * A thesis is not a book, and the formats know it: BibTeX has entry types
+     * for a master's and a doctoral thesis, RIS has THES. A reference manager
+     * told "book" prints the wrong thing in the bibliography.
+     */
+    public static function writeThesis(Thesis $thesis, string $format): string
+    {
+        return $format === 'ris' ? self::thesisRis($thesis) : self::thesisBibtex($thesis);
+    }
+
+    public static function thesisFilename(Thesis $thesis, string $format): string
+    {
+        $stem = Str::of($thesis->title)->limit(60, '')->slug();
+
+        return ($stem->isEmpty() ? 'thesis-'.$thesis->id : (string) $stem).'.'.$format;
+    }
+
+    /**
+     * The BibTeX entry type for a degree. A bachelor's thesis has no type of
+     * its own, so it takes the master's type with the degree spelled out in
+     * the type field, which is what the manuals recommend.
+     */
+    private static function entryType(Thesis $thesis): string
+    {
+        return $thesis->degree === 'phd' ? 'phdthesis' : 'mastersthesis';
+    }
+
+    private static function thesisBibtex(Thesis $thesis): string
+    {
+        $fields = array_filter([
+            'author' => $thesis->author,
+            'title' => $thesis->title,
+            'school' => __('messages.university_name', [], 'en'),
+            'year' => $thesis->year,
+            'type' => __('theses.degrees.'.$thesis->degree, [], 'en'),
+            'address' => 'Rania, Kurdistan Region, Iraq',
+            'doi' => $thesis->doi,
+            'pages' => $thesis->pages,
+            'language' => $thesis->language,
+            'keywords' => $thesis->keywords,
+            'abstract' => $thesis->abstract_en ?: $thesis->abstract,
+            'url' => $thesis->permanentUrl(),
+        ], fn ($value) => filled($value));
+
+        $lines = ['@'.self::entryType($thesis).'{'.self::thesisKey($thesis).','];
+
+        foreach ($fields as $name => $value) {
+            $lines[] = '  '.str_pad($name, 10).' = {'.self::escapeBibtex((string) $value).'},';
+        }
+
+        $lines[] = '}';
+
+        return implode("\n", $lines)."\n";
+    }
+
+    private static function thesisRis(Thesis $thesis): string
+    {
+        $lines = [['TY', 'THES']];
+
+        foreach (self::splitNames($thesis->author) as $author) {
+            $lines[] = ['AU', $author];
+        }
+
+        // The supervisor is a secondary author in RIS, which is how reference
+        // managers show "supervised by".
+        foreach (array_filter([$thesis->supervisor, $thesis->co_supervisor]) as $supervisor) {
+            $lines[] = ['A2', $supervisor];
+        }
+
+        foreach ([
+            ['TI', $thesis->title],
+            ['PY', $thesis->year],
+            ['PB', __('messages.university_name', [], 'en')],
+            ['M3', __('theses.degrees.'.$thesis->degree, [], 'en')],
+            ['CY', 'Rania, Kurdistan Region, Iraq'],
+            ['DO', $thesis->doi],
+            ['SP', $thesis->pages],
+            ['LA', $thesis->language],
+            ['AB', $thesis->abstract_en ?: $thesis->abstract],
+            ['UR', $thesis->permanentUrl()],
+        ] as [$tag, $value]) {
+            if (filled($value)) {
+                $lines[] = [$tag, (string) $value];
+            }
+        }
+
+        foreach ($thesis->keywordList() as $keyword) {
+            $lines[] = ['KW', $keyword];
+        }
+
+        $lines[] = ['ER', ''];
+
+        return implode("\r\n", array_map(
+            fn ($line) => $line[0].'  - '.self::oneLine($line[1]),
+            $lines
+        ))."\r\n";
+    }
+
+    private static function thesisKey(Thesis $thesis): string
+    {
+        $words = preg_split('/\s+/u', trim($thesis->author)) ?: [];
+        $surname = (string) end($words);
+
+        $word = '';
+
+        foreach (preg_split('/\s+/u', $thesis->title) ?: [] as $candidate) {
+            if (mb_strlen($candidate) > 3) {
+                $word = $candidate;
+                break;
+            }
+        }
+
+        $key = preg_replace('/[^\p{L}\p{N}]+/u', '', mb_strtolower($surname.$thesis->year.$word)) ?? '';
+
+        return $key !== '' ? $key : 'thesis'.$thesis->id;
     }
 
     private static function bibtex(Book $book): string
@@ -139,14 +259,24 @@ class Citation
      */
     public static function authors(Book $book): array
     {
-        if (! $book->author) {
+        return self::splitNames($book->author);
+    }
+
+    /**
+     * One field holding names, as the list of people it means.
+     *
+     * @return list<string>
+     */
+    public static function splitNames(?string $written): array
+    {
+        if (! $written) {
             return [];
         }
 
         // "Alberts, Johnson, Lewis" is three people; "Deacon, J. W." is one.
         // A part of two letters or fewer with a full stop is an initial, so
         // the comma before it did not separate two names.
-        $parts = array_map('trim', explode(',', $book->author));
+        $parts = array_map('trim', explode(',', $written));
         $names = [];
 
         foreach ($parts as $part) {
