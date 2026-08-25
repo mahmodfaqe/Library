@@ -136,6 +136,7 @@ return [
         'table' => [
             'publisher' => 'Yayınevi',
             'isbn' => 'ISBN',
+            'doi' => 'DOI',
             'edition' => 'Baskı',
             'pages' => 'Sayfa sayısı',
             'abstract' => 'Özet',

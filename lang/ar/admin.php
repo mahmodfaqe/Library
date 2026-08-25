@@ -136,6 +136,7 @@ return [
         'table' => [
             'publisher' => 'الناشر',
             'isbn' => 'ISBN',
+            'doi' => 'DOI',
             'edition' => 'الطبعة',
             'pages' => 'عدد الصفحات',
             'abstract' => 'الملخص',

@@ -145,6 +145,7 @@ return [
         'table' => [
             'publisher' => 'بەلاڤکەر',
             'isbn' => 'ISBN',
+            'doi' => 'DOI',
             'edition' => 'چاپ',
             'pages' => 'ژمارا رویپەلان',
             'abstract' => 'کورتەبێژی',

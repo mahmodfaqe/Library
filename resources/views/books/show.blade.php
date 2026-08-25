@@ -30,6 +30,7 @@
             'inLanguage' => BookLanguage::locale($book->language) ?? $book->language,
             'genre' => $book->category?->localName(),
             'isbn' => $book->isbn,
+            'sameAs' => $book->doiUrl(),
             'numberOfPages' => $book->pages,
             'bookEdition' => $book->edition,
             'abstract' => $book->abstract,
@@ -71,6 +72,9 @@
     @if ($book->isbn)
         <meta name="citation_isbn" content="{{ $book->isbn }}">
     @endif
+    @if ($book->doi)
+        <meta name="citation_doi" content="{{ $book->doi }}">
+    @endif
     @if ($book->pages)
         <meta name="citation_firstpage" content="1">
         <meta name="citation_lastpage" content="{{ $book->pages }}">
@@ -103,9 +107,13 @@
     $cited = BookLanguage::citationLocale($book->language);
     $university = __('messages.university_name', [], $cited);
     $year = $book->year ?: 'n.d.';
-    // The address in the book's own language too, so one citation of a book is
-    // the same citation wherever it was copied from.
-    $link = Locale::bookUrl($book->id, $cited);
+    // Where a DOI exists it is the address that is cited: it is the one the
+    // publisher guarantees, and every style asks for it in preference to a
+    // link to whichever library the reader happened to use.
+    //
+    // Otherwise the book's own page, in the book's language, so that one
+    // citation of a book is the same citation wherever it was copied from.
+    $link = $book->doiUrl() ?: Locale::bookUrl($book->id, $cited);
 
     $name = '<bdi>'.e($book->author ?: $university).'</bdi>';
     $work = '<bdi><i>'.e($book->title).'</i></bdi>'
@@ -161,6 +169,7 @@
                     'edition' => $book->edition,
                     'pages' => $book->pages,
                     'isbn' => $book->isbnForDisplay(),
+                    'doi' => $book->doi,
                     'language' => BookLanguage::name($book->language),
                     'subject' => $book->category?->localName(),
                     'size' => $book->humanFileSize(),
@@ -168,7 +177,16 @@
                     @if ($value)
                         <div>
                             <dt>{{ __("books.book.$key") }}</dt>
-                            <dd dir="auto">{{ $value }}</dd>
+                            <dd dir="auto">
+                                @if ($key === 'doi')
+                                    {{-- A DOI is only useful as a link: doi.org
+                                         keeps it pointing at wherever the
+                                         publisher has moved the book since. --}}
+                                    <a href="{{ $book->doiUrl() }}" target="_blank" rel="noopener" dir="ltr">{{ $value }}</a>
+                                @else
+                                    {{ $value }}
+                                @endif
+                            </dd>
                         </div>
                     @endif
                 @endforeach

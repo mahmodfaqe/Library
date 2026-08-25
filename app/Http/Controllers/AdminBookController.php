@@ -196,6 +196,9 @@ class AdminBookController extends Controller
             // beyond a title.
             'publisher' => ['nullable', 'string', 'max:190'],
             'isbn' => ['nullable', 'string', 'max:20'],
+            // Only the shape: 10.xxxx/anything. Whether it resolves is
+            // doi.org's business, not a form's.
+            'doi' => ['nullable', 'string', 'max:255', 'regex:#^(https?://(dx\.)?doi\.org/)?10\.\d{4,9}/\S+$#i'],
             'edition' => ['nullable', 'string', 'max:60'],
             'pages' => ['nullable', 'integer', 'min:1', 'max:65535'],
             'abstract' => ['nullable', 'string', 'max:4000'],
@@ -220,8 +223,14 @@ class AdminBookController extends Controller
             $data['isbn'] = preg_replace('/[^0-9Xx]/', '', $data['isbn']);
         }
 
+        // A DOI is written many ways — bare, as a URL, with a dx. prefix. One
+        // book, one identifier: keep the bare form and build the link from it.
+        if (filled($data['doi'] ?? null)) {
+            $data['doi'] = preg_replace('#^https?://(dx\.)?doi\.org/#i', '', trim($data['doi']));
+        }
+
         // Typed in by a person, so it is theirs and not a lookup's.
-        if (array_intersect_key($data, array_flip(['publisher', 'isbn', 'edition', 'pages', 'abstract', 'keywords']))) {
+        if (array_intersect_key($data, array_flip(['publisher', 'isbn', 'doi', 'edition', 'pages', 'abstract', 'keywords']))) {
             $data['metadata_source'] = 'librarian';
         }
 

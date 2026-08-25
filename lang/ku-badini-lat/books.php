@@ -15,6 +15,7 @@ return [
     'book' => [
         'publisher' => 'Belavker',
         'isbn' => 'ISBN',
+        'doi' => 'DOI',
         'edition' => 'Çap',
         'pages' => 'Hejmara rûpelan',
         'abstract' => 'Kurtebêj',

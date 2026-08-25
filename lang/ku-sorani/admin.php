@@ -136,6 +136,7 @@ return [
         'table' => [
             'publisher' => 'بڵاوکەرەوە',
             'isbn' => 'ISBN',
+            'doi' => 'DOI',
             'edition' => 'چاپ',
             'pages' => 'ژمارەی لاپەڕە',
             'abstract' => 'پوختە',

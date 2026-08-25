@@ -22,6 +22,20 @@ class BookRecordTest extends TestCase
         ], $attributes));
     }
 
+    /**
+     * The text of one citation, tags stripped, as a reader would read it.
+     */
+    private function citation(string $html, string $style): string
+    {
+        preg_match(
+            '/<span class="cite-style">'.$style.'<\/span>\s*<p class="cite-text"[^>]*>(.*?)<\/p>/s',
+            $html,
+            $found
+        );
+
+        return strip_tags($found[1] ?? '');
+    }
+
     private function librarian(): User
     {
         return User::create([
@@ -198,6 +212,94 @@ class BookRecordTest extends TestCase
         // The publisher is whoever printed it; the library is the provider.
         $this->assertSame('Blackwell', $schema['publisher']['name'] ?? null);
         $this->assertStringContainsString('Raparin', $schema['provider']['name'] ?? '');
+    }
+
+    // ── The identifier the publisher gave it ────────────────────────────
+
+    public function test_a_doi_is_stored_bare_however_it_was_typed(): void
+    {
+        $book = $this->book();
+        $librarian = $this->librarian();
+
+        foreach ([
+            'https://doi.org/10.1002/9781118685068',
+            'http://dx.doi.org/10.1002/9781118685068',
+            '10.1002/9781118685068',
+        ] as $written) {
+            $this->actingAs($librarian)
+                ->put("/admin/books/{$book->id}", [
+                    'title' => $book->title,
+                    'url' => $book->url,
+                    'doi' => $written,
+                ])
+                ->assertRedirect();
+
+            // One book, one identifier, whichever way a librarian wrote it.
+            $this->assertSame('10.1002/9781118685068', $book->fresh()->doi);
+        }
+    }
+
+    public function test_something_that_is_not_a_doi_is_refused(): void
+    {
+        $book = $this->book();
+
+        $this->actingAs($this->librarian())
+            ->from("/admin/books/{$book->id}/edit")
+            ->put("/admin/books/{$book->id}", [
+                'title' => $book->title,
+                'url' => $book->url,
+                'doi' => 'see the back cover',
+            ])
+            ->assertSessionHasErrors('doi');
+    }
+
+    public function test_a_citation_prefers_the_doi_to_a_link_to_us(): void
+    {
+        // Every style asks for the DOI where there is one: it is the address
+        // the publisher guarantees, not a link to whichever library the reader
+        // happened to use.
+        $book = $this->book(['author' => 'J. W. Deacon', 'year' => 2006, 'doi' => '10.1002/9781118685068']);
+
+        $apa = $this->citation(
+            $this->get("/en/books/{$book->id}")->assertOk()->getContent(),
+            'APA'
+        );
+
+        $this->assertStringContainsString('https://doi.org/10.1002/9781118685068', $apa);
+        $this->assertStringNotContainsString('/en/books/'.$book->id, $apa);
+    }
+
+    public function test_without_a_doi_the_citation_points_here(): void
+    {
+        $book = $this->book(['author' => 'J. W. Deacon', 'year' => 2006]);
+
+        $apa = $this->citation(
+            $this->get("/en/books/{$book->id}")->assertOk()->getContent(),
+            'APA'
+        );
+
+        $this->assertStringContainsString('/en/books/'.$book->id, $apa);
+    }
+
+    public function test_the_doi_is_a_link_a_reader_can_follow(): void
+    {
+        $book = $this->book(['doi' => '10.1002/9781118685068']);
+
+        $this->get("/en/books/{$book->id}")
+            ->assertOk()
+            ->assertSee('https://doi.org/10.1002/9781118685068', false)
+            ->assertSee('name="citation_doi" content="10.1002/9781118685068"', false);
+    }
+
+    public function test_the_exports_carry_the_doi(): void
+    {
+        $book = $this->book(['author' => 'J. W. Deacon', 'doi' => '10.1002/9781118685068']);
+
+        $bib = $this->get("/books/{$book->id}/cite.bib")->assertOk()->getContent();
+        $ris = $this->get("/books/{$book->id}/cite.ris")->assertOk()->getContent();
+
+        $this->assertStringContainsString('doi        = {10.1002/9781118685068},', $bib);
+        $this->assertStringContainsString("DO  - 10.1002/9781118685068\r\n", $ris);
     }
 
     // ── Handing a book to a reference manager ───────────────────────────

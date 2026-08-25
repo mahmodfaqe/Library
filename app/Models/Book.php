@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable([
     'title', 'author', 'year', 'language', 'department_id', 'category_id',
     'drive_file_id', 'url', 'cover_url', 'file_path', 'file_size',
-    'publisher', 'isbn', 'edition', 'pages', 'abstract', 'keywords',
+    'publisher', 'isbn', 'doi', 'edition', 'pages', 'abstract', 'keywords',
     'metadata_source', 'metadata_checked_at',
 ])]
 class Book extends Model
@@ -55,6 +55,17 @@ class Book extends Model
         }
 
         return $this->isbn;
+    }
+
+    /**
+     * The address a DOI resolves to, which is how one is cited and followed.
+     *
+     * A DOI is only useful as a link: doi.org keeps it pointing at wherever
+     * the publisher has moved the book to since.
+     */
+    public function doiUrl(): ?string
+    {
+        return $this->doi ? 'https://doi.org/'.$this->doi : null;
     }
 
     /**

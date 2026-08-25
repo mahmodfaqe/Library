@@ -15,6 +15,7 @@ return [
     'book' => [
         'publisher' => 'Publisher',
         'isbn' => 'ISBN',
+        'doi' => 'DOI',
         'edition' => 'Edition',
         'pages' => 'Pages',
         'abstract' => 'Abstract',

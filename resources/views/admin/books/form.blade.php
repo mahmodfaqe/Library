@@ -56,6 +56,13 @@
             </div>
 
             <div class="field">
+                <label for="doi">{{ __('admin.books.table.doi') }}</label>
+                <input type="text" id="doi" name="doi" maxlength="255" dir="ltr"
+                       placeholder="10.1002/9781118685068"
+                       value="{{ old('doi', $book->doi) }}">
+            </div>
+
+            <div class="field">
                 <label for="edition">{{ __('admin.books.table.edition') }}</label>
                 <input type="text" id="edition" name="edition" maxlength="60" dir="auto"
                        value="{{ old('edition', $book->edition) }}">
