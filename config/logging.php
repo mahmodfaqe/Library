@@ -52,9 +52,21 @@ return [
 
     'channels' => [
 
+        /*
+         * Daily, not single.
+         *
+         * A single channel writes one file that grows for as long as the
+         * server runs. This one has been running for months at debug level,
+         * and a log that never stops growing eventually fills the disk — and
+         * this server carries another project that would go down with it.
+         *
+         * The default is here rather than only in .env because .env is
+         * rebuilt on every deploy, and a safeguard that depends on somebody
+         * remembering to set a variable is not a safeguard.
+         */
         'stack' => [
             'driver' => 'stack',
-            'channels' => explode(',', (string) env('LOG_STACK', 'single')),
+            'channels' => explode(',', (string) env('LOG_STACK', 'daily')),
             'ignore_exceptions' => false,
         ],
 
