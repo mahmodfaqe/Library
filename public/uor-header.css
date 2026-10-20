@@ -41,7 +41,8 @@ html:not(.js) .mainbar::before { background: var(--hdr-solid); }
 [id] { scroll-margin-top: 130px; }
 
 .topbar { background: var(--hdr-bg); border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
-.topbar__inner { height: var(--hdr-top); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+/* Less the rule beneath it, so the whole row is --hdr-top and slides fully away. */
+.topbar__inner { height: calc(var(--hdr-top) - 1px); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .quicklinks { display: flex; align-items: center; justify-content: space-evenly; flex: 1 1 auto; gap: 8px 24px; min-width: 0; }
 .topbar a, .lang summary, .search-toggle { color: var(--hdr-top-link); text-decoration: none; font-size: 15px; font-weight: 500; }
 .topbar a:hover, .lang summary:hover, .search-toggle:hover { color: #fff; }
