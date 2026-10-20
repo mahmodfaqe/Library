@@ -75,6 +75,12 @@ html:not(.js) .mainbar::before { background: var(--hdr-solid); }
 .mainnav__item > a { display: inline-flex; align-items: center; height: 100%; padding: 0 6px; color: var(--hdr-link); text-decoration: none; font-size: 16px; font-weight: 500; white-space: nowrap; }
 .mainnav__item > a:hover, .mainnav__item > a[aria-current="page"] { color: var(--hdr-gold); }
 [dir="ltr"] .mainnav__item > a { font-size: 14.4px; text-transform: uppercase; letter-spacing: 0.5px; }
+/* The panel's menu is eight items, twice the site's; in capitals, and in the
+   longer languages, they would not fit either side of the emblem. Measured
+   in all eight languages down to 1101px, where the phone menu takes over. */
+.site-header--dense .mainnav { grid-template-columns: minmax(0, 1fr) 160px minmax(0, 1fr); }
+.site-header--dense .mainnav__item > a,
+[dir="ltr"] .site-header--dense .mainnav__item > a { padding: 0 4px; font-size: 14.5px; text-transform: none; letter-spacing: 0; }
 
 .emblem { position: absolute; top: 18px; left: 50%; z-index: 2; display: block; width: 147px; height: 150px; transform: translateX(-50%); transform-origin: 50% 0; transition: transform 0.3s ease, top 0.3s ease; }
 .emblem img { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35)); }

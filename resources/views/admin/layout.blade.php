@@ -83,7 +83,8 @@
 {{-- The panel has no localised address, so the language is a choice the
      staff member makes here rather than something the URL says. --}}
 <x-uor-header :home="route('admin.index')" :title="__('admin.heading')" :subtitle="__('admin.suffix')"
-              :nav="$nav" :language-url="fn (string $code) => route('admin.language', $code)">
+              :nav="$nav" :language-url="fn (string $code) => route('admin.language', $code)"
+              :quicklinks-label="__('admin.nav.account')" dense>
     <x-slot:quicklinks>
         <a href="{{ Locale::url() }}">{{ __('admin.back_home') }}</a>
         @auth
