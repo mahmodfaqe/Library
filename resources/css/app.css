@@ -168,15 +168,6 @@ body[dir="ltr"] :is(.section-btn, .search-submit, .error-home, .book-open) { fon
 transition: background-image 1.5s ease-in-out;
 }
 
-/* Hero mesh spans */
-.mesh-blob {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(60px);
-    animation: meshFloat 12s ease-in-out infinite;
-    opacity: 0.35;
-}
-
 /* Scroll-to-top */
 #scrollTopBtn {
     position: fixed;
@@ -714,8 +705,10 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
    than the glyphs. */
 @media (pointer: coarse) {
     /* Text links are 19px of glyphs; a finger needs the whole line. Every
-       link a visitor is meant to press gets the room, wherever it sits. */
-    nav[aria-label] a,
+       link a visitor is meant to press gets the room, wherever it sits.
+       Scoped to main: the header's links are sized already, and this rule
+       outranks theirs and would undo their layout. */
+    main nav[aria-label] a,
     .error-link,
     .search-clear,
     footer a,

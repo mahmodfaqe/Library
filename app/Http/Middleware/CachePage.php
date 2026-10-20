@@ -113,6 +113,9 @@ class CachePage
             // an edit there has to invalidate the cached copy as well.
             resource_path('views/layouts/base.blade.php'),
             lang_path(App::getLocale().'/messages.php'),
+            // The header borrows its search and privacy labels from these.
+            lang_path(App::getLocale().'/books.php'),
+            lang_path(App::getLocale().'/privacy.php'),
             public_path('build/manifest.json'),
         ];
 
