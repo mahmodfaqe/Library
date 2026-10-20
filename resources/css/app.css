@@ -85,7 +85,7 @@ html { font-size: 16px; scroll-behavior: smooth; }
 
 body { font-family: var(--font-rtl); }
 body[dir="ltr"] { font-family: var(--font-ltr); }
-body[dir="ltr"] :is(.section-btn, .search-submit, .error-home) { font-family: var(--font-accent); }
+body[dir="ltr"] :is(.section-btn, .search-submit, .error-home, .book-open) { font-family: var(--font-accent); }
 
 /* Scroll progress bar */
 #scrollProgress {
@@ -982,7 +982,7 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
     background: var(--brand);
     color: #fff;
     text-decoration: none;
-    border-radius: 9999px;
+    border-radius: 5px;
     padding: 0.75rem 1.9rem;
     font-weight: 700;
     font-size: 0.95rem;
