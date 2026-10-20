@@ -50,7 +50,8 @@ html[dir="ltr"] body { font-family: 'Heebo', 'Rabar', system-ui, sans-serif; }
     position: fixed;
     top: -3rem;
     inset-inline-start: 1rem;
-    z-index: 100;
+    /* Above the fixed header, or it would surface behind it. */
+    z-index: 2000;
     background: var(--brand-deep);
     color: #fff;
     padding: 0.6rem 1.1rem;
