@@ -129,7 +129,10 @@ body:not(.has-hero) .mainbar::before { background: var(--hdr-solid); }
     .menu-toggle__bars::before, .menu-toggle__bars::after { content: ""; position: absolute; left: 0; }
     .menu-toggle__bars::before { top: -9px; }
     .menu-toggle__bars::after { top: 9px; }
+    /* Room at the top for the emblem hanging over the menu; once scrolled the
+       emblem sits inside the bar and the room is not needed. */
     .mobile-nav { display: block; background: var(--hdr-solid); padding: 72px 0 12px; }
+    .is-scrolled .mobile-nav { padding-top: 12px; }
     .js .mobile-nav { position: absolute; top: 100%; left: 0; right: 0; max-height: calc(100vh - 120px); overflow-y: auto; }
     .js .mobile-nav:not(.is-open) { display: none; }
     .mobile-nav ul { margin: 0; padding: 0; list-style: none; }
