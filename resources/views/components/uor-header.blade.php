@@ -32,14 +32,16 @@
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
                 </summary>
                 <ul class="lang__menu">
+                    {{-- Each name keeps its own script and direction inside its
+                         span, while the list itself lines up with the page. --}}
                     @foreach (Locale::KURDISH as $dialect => [$label, $native, $font])
-                        <li><a href="{{ $languageUrl($dialect) }}" dir="{{ Locale::dir($dialect) }}" style="font-family:{{ $font }};"
-                               @if (app()->getLocale() === $dialect) aria-current="true" @endif>{{ $label }}<em dir="auto">{{ $native }}</em></a></li>
+                        <li><a href="{{ $languageUrl($dialect) }}" hreflang="{{ Locale::languageTag($dialect) }}"
+                               @if (app()->getLocale() === $dialect) aria-current="true" @endif><span lang="{{ Locale::languageTag($dialect) }}" dir="{{ Locale::dir($dialect) }}" style="font-family:{{ $font }};">{{ $label }}</span><em dir="auto">{{ $native }}</em></a></li>
                     @endforeach
                     <li class="lang__rule" role="separator"></li>
                     @foreach (Locale::OTHERS as $code => $label)
-                        <li><a href="{{ $languageUrl($code) }}" dir="{{ Locale::dir($code) }}"
-                               @if (app()->getLocale() === $code) aria-current="true" @endif>{{ $label }}</a></li>
+                        <li><a href="{{ $languageUrl($code) }}" hreflang="{{ Locale::languageTag($code) }}"
+                               @if (app()->getLocale() === $code) aria-current="true" @endif><span lang="{{ Locale::languageTag($code) }}" dir="{{ Locale::dir($code) }}">{{ $label }}</span></a></li>
                     @endforeach
                 </ul>
             </details>

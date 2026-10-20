@@ -51,7 +51,7 @@ html:not(.js) .mainbar::before { background: var(--hdr-solid); }
 .lang summary { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; cursor: pointer; list-style: none; }
 .lang summary::-webkit-details-marker { display: none; }
 .lang__menu { position: absolute; top: 100%; inset-inline-start: 0; z-index: 1100; min-width: 190px; margin: 0; padding: 6px 0; list-style: none; background: var(--hdr-solid); border-radius: 8px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
-.lang__menu a { display: flex; flex-direction: column; justify-content: center; min-height: 44px; padding: 0.3rem 16px; }
+.lang__menu a { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; min-height: 44px; padding: 0.3rem 16px; }
 .lang__menu a em { font-style: normal; font-size: 0.72em; opacity: 0.6; }
 .lang__menu a[aria-current] { color: var(--hdr-gold); }
 .lang__rule { height: 1px; margin: 6px 12px; background: rgba(255, 255, 255, 0.14); }
@@ -104,11 +104,13 @@ body:not(.has-hero) .mainbar::before { background: var(--hdr-solid); }
 .site-header.is-scrolled { transform: translateY(calc(-1 * var(--hdr-top))); }
 .is-scrolled .mainbar, .is-scrolled .mainbar::before { background: var(--hdr-solid); }
 
-/* Phones and tablets, from the same 991px as the university's site. The
-   point of the V stays at 15% in either reading direction, as it does there. */
+/* Phones and tablets, from the same 991px as the university's site. */
 @media (max-width: 991px) {
     :root { --hdr-top: 40px; }
-    .site-header { --v-apex: 15%; }
+    /* The point of the V sits under the emblem's centre (13px in, 100px
+       wide), on whichever side the language puts it. */
+    .site-header { --v-apex: 63px; }
+    [dir="rtl"] .site-header { --v-apex: calc(100% - 63px); }
     .quicklinks .quicklinks__extra, .mainnav { display: none; }
     .emblem { top: 33px; left: auto; inset-inline-start: 13px; width: 100px; height: 102px; transform: none; transform-origin: left top; }
     [dir="rtl"] .emblem { transform-origin: right top; }
