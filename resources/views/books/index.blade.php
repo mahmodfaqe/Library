@@ -59,7 +59,7 @@
                  aria-label="{{ __('books.suggest.books') }}" hidden></div>
         </div>
 
-        <button type="submit" class="section-btn search-submit font-semibold text-white rounded-full cursor-pointer">
+        <button type="submit" class="section-btn search-submit font-semibold text-white rounded-[5px] cursor-pointer">
             {{ __('books.search') }}
         </button>
 
@@ -175,8 +175,8 @@
                     @if ($book->readUrl())
                         <a href="{{ $book->readUrl() }}"
                            @unless ($book->hasFile()) target="_blank" rel="noopener" @endunless
-                           class="section-btn inline-block font-semibold text-white rounded-full no-underline text-center"
-                           style="background:linear-gradient(135deg,#790404 0%,#4f0202 100%); padding:0.55rem 1.2rem; font-size:0.86rem;">
+                           class="section-btn inline-block font-semibold text-white rounded-[5px] no-underline text-center"
+                           style="background:#790404; padding:0.55rem 1.2rem; font-size:0.86rem;">
                             {{ $book->hasFile() ? __('books.download') : __('books.open') }}
                             @if ($book->humanFileSize())
                                 <bdi style="opacity:0.75; font-size:0.85em;">({{ $book->humanFileSize() }})</bdi>

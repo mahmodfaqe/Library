@@ -11,9 +11,8 @@
     @endif
     <link rel="preload" href="{{ asset('fonts/Rabar_015.woff2') }}" as="font" type="font/woff2" crossorigin>
 
-    {{-- Lora and Kanit are the university's own two faces, taken from
-         uor.edu.krd. Neither carries Arabic script, so Rabar follows them in
-         every stack and picks up the Kurdish and Arabic glyphs they lack. --}}
+    {{-- Heebo and Lora, the faces uor.edu.krd sets its Latin pages in.
+         Neither carries Arabic script, so Rabar follows them in every stack. --}}
     <link rel="stylesheet" href="{{ Asset::versioned('fonts/uor.css') }}">
 
     <style>
@@ -88,15 +87,15 @@
     })();
     </script>
 </head>
-<body class="bg-[#faf7f2] text-[#1a1f2c] overflow-x-hidden" dir="{{ Locale::dir() }}">
+<body class="bg-[#f0f0f0] text-[#1a1f2c] overflow-x-hidden" dir="{{ Locale::dir() }}">
 
 <a class="skip-link" href="#main">{{ __('messages.skip_to_content') }}</a>
 
 <div id="scrollProgress"></div>
 
 <!-- ══════════ HEADER ══════════ -->
-<header id="site-header" class="sticky top-0 z-[1000] backdrop-blur-md transition-shadow duration-300"
-        style="background: linear-gradient(135deg, #790404 0%, #4f0202 100%); box-shadow: 0 4px 24px rgba(121,4,4,0.25);">
+<header id="site-header" class="sticky top-0 z-[1000] transition-shadow duration-300"
+        style="background: #393736; border-bottom: 3px solid #790404; box-shadow: 0 4px 24px rgba(26,25,25,0.25);">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-3">
         <div class="flex items-center gap-2 sm:gap-4 flex-nowrap">
 
@@ -192,14 +191,13 @@
 </main>
 
 <!-- ══════════ FOOTER ══════════ -->
-<footer class="text-center" style="background: linear-gradient(135deg, #1e1e2e 0%, #2d2b4e 100%); color: rgba(255,255,255,0.82); padding: clamp(1.5rem,4vw,2.2rem) 0;">
-    <div class="max-w-[1200px] mx-auto px-4">
+<footer class="text-center" style="background: #393736; color: rgba(255,255,255,0.82); border-top: 3px solid #790404;">
+    <div class="max-w-[1200px] mx-auto px-4" style="padding-block: clamp(1.5rem,4vw,2.2rem);">
         @php
             $year = '<span class="'.Locale::yearClass().'"></span>';
             $uorLink = '<a href="'.e(config('library.university_url')).'" target="_blank" rel="noopener" style="color:#cbb58b; text-decoration:underline; text-underline-offset:3px;">'
                 .e(__('messages.footer.uor_link_label')).'</a>';
         @endphp
-        <p style="font-size:clamp(0.85rem,2vw,0.95rem);">{{ RichText::make(__('messages.footer.copyright'), ['year' => $year]) }}</p>
         <p style="font-size:clamp(0.85rem,2vw,0.95rem);">{{ RichText::make(__('messages.footer.uor_line'), ['link' => $uorLink]) }}</p>
         <p style="font-size:clamp(0.85rem,2vw,0.95rem);">
             <a href="{{ Locale::booksUrl() }}" style="color:#cbb58b; text-decoration:underline; text-underline-offset:3px;">{{ __('books.title') }}</a>
@@ -210,7 +208,7 @@
             @if (config('library.qr_url'))
                 <span class="opacity-40 mx-2">·</span>
                 <a href="{{ config('library.qr_url') }}" target="_blank" rel="noopener"
-                   style="color:gold; text-shadow:0 0 8px rgba(255,215,0,0.5);">{{ __('messages.qr_label') }}</a>
+                   style="color:#cbb58b; text-decoration:underline; text-underline-offset:3px;">{{ __('messages.qr_label') }}</a>
             @endif
         </p>
 
@@ -231,6 +229,9 @@
                 </div>
             </div>
         @endif
+    </div>
+    <div style="background: rgba(26,25,25,0.9); padding-block: 0.9rem;">
+        <p class="max-w-[1200px] mx-auto px-4" style="font-size:clamp(0.8rem,1.9vw,0.9rem); color: rgba(255,255,255,0.7);">{{ RichText::make(__('messages.footer.copyright'), ['year' => $year]) }}</p>
     </div>
 </footer>
 
@@ -257,8 +258,8 @@
     if(!hdr) return;
     window.addEventListener('scroll',function(){
         hdr.style.boxShadow = window.scrollY>40
-            ? '0 6px 36px rgba(60,40,100,0.28)'
-            : '0 4px 24px rgba(121,4,4,0.25)';
+            ? '0 6px 36px rgba(26,25,25,0.4)'
+            : '0 4px 24px rgba(26,25,25,0.25)';
     },{passive:true});
 })();
 

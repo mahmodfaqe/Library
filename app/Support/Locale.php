@@ -38,7 +38,7 @@ class Locale
     public const KURDISH = [
         'ku-sorani' => ['سۆرانی', 'Soranî', 'Rabar,sans-serif'],
         'ku-badini' => ['بادینی', 'Kurmancî (عەرەبی)', 'Rabar,sans-serif'],
-        'ku-badini-lat' => ['Badînî', 'Kurmancî (Latînî)', 'sans-serif'],
+        'ku-badini-lat' => ['Badînî', 'Kurmancî (Latînî)', 'Heebo,sans-serif'],
         'ku-hawrami' => ['هەورامی', 'Hewramî', 'Rabar,sans-serif'],
     ];
 
