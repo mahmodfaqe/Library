@@ -230,6 +230,12 @@ transition: background-image 1.5s ease-in-out;
 
 /* Keyboard nav */
 .keyboard-nav *:focus { outline: 2px solid #790404; outline-offset: 3px; }
+/* The brand red is as dark as the header and footer behind it, so a red
+   ring there cannot be seen; on those dark bands the ring is gold. */
+.site-header :focus-visible,
+footer :focus-visible,
+.keyboard-nav .site-header *:focus,
+.keyboard-nav footer *:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 @media (prefers-reduced-motion: reduce) {
     *, ::before, ::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
@@ -771,13 +777,24 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
     --hdr-v: 40px;
     --v-apex: 50%;
     --header-space: calc(var(--hdr-top) + var(--hdr-main) + var(--hdr-v));
+    /* How far the hero starts below the top: under the overlaid header with
+       script, only below the hanging V without it. */
+    --hero-offset: var(--hdr-v);
 }
+.js { --hero-offset: var(--header-space); }
 
 .hdr-container { width: 100%; max-width: 1240px; margin-inline: auto; padding-inline: 24px; }
 
-.site-header { position: absolute; top: 0; inset-inline: 0; z-index: 1000; transition: transform 0.3s ease; }
-.js .site-header { position: fixed; }
-body:not(.has-hero) #main { padding-top: calc(var(--header-space) + 1rem); }
+/* Without script the phone menu is simply shown open, and an overlay that
+   tall would sit on the page; so the header is overlaid only when script has
+   arrived to fold the menu away, and otherwise takes its own room. */
+.site-header { position: relative; z-index: 1000; transition: transform 0.3s ease; }
+.js .site-header { position: fixed; top: 0; inset-inline: 0; }
+.js body:not(.has-hero) #main { padding-top: calc(var(--header-space) + 1rem); }
+html:not(.js) body:not(.has-hero) #main { padding-top: calc(var(--hdr-v) + 1rem); }
+html:not(.js) .topbar,
+html:not(.js) .mainbar,
+html:not(.js) .mainbar::before { background: var(--hdr-solid); }
 [id] { scroll-margin-top: 130px; }
 
 .topbar { background: var(--hdr-bg); border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
@@ -875,6 +892,17 @@ body:not(.has-hero) .mainbar::before { background: var(--hdr-solid); }
 
 @media (prefers-reduced-motion: reduce) {
     .site-header, .mainbar, .mainbar::before, .emblem { transition: none; }
+}
+
+/* On paper the header prints once, at the top, rather than fixed over the
+   start of every page; the controls that only work on screen are left out. */
+@media print {
+    .js .site-header { position: relative; transform: none; }
+    .js body:not(.has-hero) #main { padding-top: calc(var(--hdr-v) + 1rem); }
+    .js { --hero-offset: var(--hdr-v); }
+    .topbar, .menu-toggle, .mobile-nav, #scrollTopBtn, #scrollProgress { display: none !important; }
+    .mainbar, .mainbar::before { background: var(--hdr-solid); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .mainbar::after { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 
 /* ── One book's page ─────────────────────────────────────────────────────
