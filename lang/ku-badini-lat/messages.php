@@ -47,6 +47,13 @@ return [
         'uor_link_label' => 'Malpera Zanîngeha Raperîn',
     ],
     'skip_to_content' => 'Bazde bo naverokê',
+    'nav' => [
+        'home' => 'Serekî',
+        'books' => 'Pirtûk',
+        'theses' => 'Nameyên zanistî',
+        'feedback' => 'Rexne û pêşniyar',
+        'menu' => 'Lîste',
+    ],
     'visitors_label' => 'Serdankar',
     'scroll_top' => 'Vegere jor',
 ];

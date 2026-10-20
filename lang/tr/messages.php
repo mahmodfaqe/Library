@@ -47,6 +47,13 @@ return [
         'uor_link_label' => 'Raparin Üniversitesi Web Sitesi',
     ],
     'skip_to_content' => 'İçeriğe geç',
+    'nav' => [
+        'home' => 'Ana sayfa',
+        'books' => 'Kitaplar',
+        'theses' => 'Tezler',
+        'feedback' => 'Öneriler',
+        'menu' => 'Menü',
+    ],
     'visitors_label' => 'Ziyaretçi',
     'scroll_top' => 'Başa dön',
 ];

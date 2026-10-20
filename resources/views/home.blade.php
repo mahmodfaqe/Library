@@ -3,10 +3,12 @@
 @use('App\Support\RichText')
 @extends('layouts.base')
 
+@section('body_class', 'has-hero')
+
 @section('content')
 <!-- ══════════ HERO ══════════ -->
 <section id="hero-section" class="relative overflow-hidden flex items-center text-white text-center transition-[background-image,opacity] duration-1000 ease-in-out"
-         style="background-image: url('{{ asset('file/image1.webp') }}'); background-size: cover; background-position: center; background-repeat: no-repeat; padding: clamp(6rem,14vw,11rem) 0 clamp(5rem,10vw,9rem); min-height: clamp(420px,65vh,680px);">
+         style="background-image: url('{{ asset('file/image1.webp') }}'); background-size: cover; background-position: center; background-repeat: no-repeat; padding: calc(var(--header-space) + clamp(2rem,5vw,4rem)) 0 clamp(5rem,10vw,9rem); min-height: clamp(520px,80vh,780px);">
 
     <div class="absolute inset-0 z-0" style="background: rgba(26,25,25,0.55);"></div>
 

@@ -47,6 +47,13 @@ return [
         'uor_link_label' => 'University of Raparin Website',
     ],
     'skip_to_content' => 'Skip to content',
+    'nav' => [
+        'home' => 'Home',
+        'books' => 'Books',
+        'theses' => 'Theses',
+        'feedback' => 'Feedback',
+        'menu' => 'Menu',
+    ],
     'visitors_label' => 'Visitors',
     'scroll_top' => 'Back to top',
 ];

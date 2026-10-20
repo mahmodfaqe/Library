@@ -210,38 +210,6 @@ transition: background-image 1.5s ease-in-out;
 }
 #scrollTopBtn:active { transform: translateY(0) scale(0.95); }
 
-/* KU Dropdown */
-.ku-dropdown {
-    display: none;
-    position: fixed;
-    background: rgba(57, 55, 54, 0.98);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 12px;
-    overflow: hidden;
-    z-index: 9999;
-    box-shadow: 0 16px 48px rgba(0,0,0,0.35);
-    min-width: clamp(110px,28vw,155px);
-    transform-origin: top right;
-}
-[dir="ltr"] .ku-dropdown {
-    transform-origin: top left;
-}
-.ku-dropdown.open {
-    display: block;
-    animation: dropdownOpen 0.22s var(--ease-spring) forwards;
-}
-
-/* Logo hover */
-.logo-link:hover .uor-logo {
-    transform: scale(1.12) rotate(4deg);
-    filter: drop-shadow(0 0 10px rgba(255,255,255,0.55));
-}
-.logo-link:hover .logo-title-el  { color: var(--accent); }
-.logo-link:hover .logo-sub-el { color: rgba(203, 181, 139, 0.85); }
-.uor-logo { transition: transform 0.45s var(--ease), filter 0.45s var(--ease); }
-.logo-title-el, .logo-sub-el { transition: color 0.35s ease; }
-
 /* section-btn shimmer
    The overlay is absolutely positioned, so the button must establish the
    containing block itself. Without this it anchors to the viewport instead,
@@ -793,131 +761,119 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
     .subject-card { padding: 1rem; }
 }
 
-@media (max-width: 560px) {
-    .logo-title { font-size: 0.8rem; }
-    .logo-subtitle { display: none; }
+/* ── Header ──────────────────────────────────────────────────────────────
+   After the University of Raparin's own site, by way of GWRC-Web: two
+   translucent rows over the page, the menu split around a hanging emblem,
+   and a red V beneath. The header is fixed, so every page but the home page
+   (whose hero sits underneath it) is pushed down by its height. */
+:root {
+    --hdr-bg: rgba(57, 55, 54, 0.6);
+    --hdr-solid: rgb(57, 55, 54);
+    --hdr-red: #790404;
+    --hdr-gold: #cbb58b;
+    --hdr-link: #f2f2f2;
+    --hdr-top-link: #dad8d8;
+    --hdr-top: 50px;
+    --hdr-main: 75px;
+    --hdr-v: 40px;
+    --v-apex: 50%;
+    --header-space: calc(var(--hdr-top) + var(--hdr-main) + var(--hdr-v));
 }
 
-/* ── The language switcher, twice ─────────────────────────────────────────
-   Five controls beside a logo fit a laptop and do not fit a phone. Rather
-   than shrinking them until they are unreadable or letting them wrap into a
-   second row, the phone gets one button that opens the whole list. */
-.lang-wide {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    flex-wrap: nowrap;
+.hdr-container { width: 100%; max-width: 1240px; margin-inline: auto; padding-inline: 24px; }
+
+.site-header { position: absolute; top: 0; inset-inline: 0; z-index: 1000; transition: transform 0.3s ease; }
+.js .site-header { position: fixed; }
+body:not(.has-hero) #main { padding-top: calc(var(--header-space) + 1rem); }
+[id] { scroll-margin-top: 130px; }
+
+.topbar { background: var(--hdr-bg); border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
+.topbar__inner { height: var(--hdr-top); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.quicklinks { display: flex; align-items: center; justify-content: space-evenly; flex: 1 1 auto; gap: 8px 24px; min-width: 0; }
+.topbar a, .lang summary, .search-toggle { color: var(--hdr-top-link); text-decoration: none; font-size: 15px; font-weight: 500; }
+.topbar a:hover, .lang summary:hover, .search-toggle:hover { color: #fff; }
+.quicklinks a { display: inline-flex; align-items: center; min-height: 44px; white-space: nowrap; }
+.lang { position: relative; flex: 0 0 auto; }
+.lang summary { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; cursor: pointer; list-style: none; }
+.lang summary::-webkit-details-marker { display: none; }
+.lang__menu { position: absolute; top: 100%; inset-inline-start: 0; z-index: 1100; min-width: 190px; margin: 0; padding: 6px 0; list-style: none; background: var(--hdr-solid); border-radius: 8px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
+.lang__menu a { display: flex; flex-direction: column; justify-content: center; min-height: 44px; padding: 0.3rem 16px; }
+.lang__menu a em { font-style: normal; font-size: 0.72em; opacity: 0.6; }
+.lang__menu a[aria-current] { color: var(--hdr-gold); }
+.lang__rule { height: 1px; margin: 6px 12px; background: rgba(255, 255, 255, 0.14); }
+.search-toggle { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; }
+.site-search { background: var(--hdr-solid); }
+.site-search__inner { display: flex; gap: 12px; padding-block: 12px; }
+.site-search input { flex: 1 1 auto; min-width: 0; min-height: 48px; padding: 0 16px; border: 0; border-radius: 8px; font: inherit; color: var(--ink); background: #fff; text-align: start; }
+.hdr-gold-btn { min-height: 48px; padding: 0 22px; border: 0; border-radius: 5px; background: var(--hdr-gold); color: #1a1a1a; font: inherit; font-weight: 600; cursor: pointer; }
+.hdr-gold-btn:hover { background: #e0cda6; }
+
+.mainbar { position: relative; background: var(--hdr-bg); transition: background-color 0.3s ease; }
+.mainbar::before, .mainbar::after { content: ""; position: absolute; top: 100%; left: 0; right: 0; height: var(--hdr-v); pointer-events: none; }
+.mainbar::before { background: var(--hdr-bg); clip-path: polygon(var(--v-apex) 0, 100% 0, 100% 5%, var(--v-apex) 100%, 0 5%, 0 0); transition: background-color 0.3s ease; }
+.mainbar::after { background: var(--hdr-red); clip-path: polygon(var(--v-apex) 70%, 100% 0, 100% 5%, var(--v-apex) 100%, 0 5%, 0 0); }
+.mainbar__inner { position: relative; height: var(--hdr-main); }
+
+.mainnav { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 190px minmax(0, 1fr); }
+.mainnav__group { display: flex; align-items: center; justify-content: space-evenly; margin: 0; padding: 0; list-style: none; }
+.mainnav__group + .mainnav__group { grid-column: 3; }
+.mainnav__item { position: relative; height: 100%; display: flex; align-items: center; }
+.mainnav__item > a { display: inline-flex; align-items: center; height: 100%; padding: 0 6px; color: var(--hdr-link); text-decoration: none; font-size: 16px; font-weight: 500; white-space: nowrap; }
+.mainnav__item > a:hover, .mainnav__item > a[aria-current="page"] { color: var(--hdr-gold); }
+[dir="ltr"] .mainnav__item > a { font-size: 14.4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.emblem { position: absolute; top: 18px; left: 50%; z-index: 2; display: block; width: 147px; height: 150px; transform: translateX(-50%); transform-origin: 50% 0; transition: transform 0.3s ease, top 0.3s ease; }
+.emblem img { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35)); }
+.mainbar__name { display: none; }
+.menu-toggle { display: none; }
+.mobile-nav { display: none; }
+
+/* Pages without a hero would show the grey page through the translucent
+   rows, so there the header is solid from the start. */
+body:not(.has-hero) .topbar,
+body:not(.has-hero) .mainbar,
+body:not(.has-hero) .mainbar::before { background: var(--hdr-solid); }
+
+/* Scrolled: the top row slides away, the main row turns solid, the emblem shrinks. */
+.site-header.is-scrolled { transform: translateY(calc(-1 * var(--hdr-top))); }
+.is-scrolled .mainbar, .is-scrolled .mainbar::before { background: var(--hdr-solid); }
+.is-scrolled .emblem { top: 4px; transform: translateX(-50%) scale(0.62); }
+
+@media (max-width: 1100px) {
+    :root { --hdr-top: 40px; }
+    :root[dir="ltr"] { --v-apex: 15%; }
+    :root[dir="rtl"] { --v-apex: 85%; }
+    .quicklinks .quicklinks__extra, .mainnav { display: none; }
+    .emblem { top: 33px; left: auto; inset-inline-start: 14px; width: 100px; height: 102px; transform: none; transform-origin: left top; }
+    [dir="rtl"] .emblem { transform-origin: right top; }
+    .is-scrolled .emblem { top: 4px; transform: scale(0.62); }
+    .mainbar__name { position: absolute; top: 50%; inset-inline-start: 130px; inset-inline-end: 64px; display: flex; flex-direction: column; transform: translateY(-50%); color: #fff; font-size: 19px; font-weight: 700; line-height: 1.35; }
+    .mainbar__name > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .mainbar__name-gold { color: var(--hdr-gold); font-weight: 500; }
+    .js .menu-toggle { position: absolute; top: 50%; inset-inline-end: 12px; display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; padding: 0; border: 0; background: none; color: #fff; cursor: pointer; transform: translateY(-50%); }
+    .menu-toggle__bars, .menu-toggle__bars::before, .menu-toggle__bars::after { display: block; width: 30px; height: 3px; border-radius: 2px; background: currentColor; }
+    .menu-toggle__bars { position: relative; }
+    .menu-toggle__bars::before, .menu-toggle__bars::after { content: ""; position: absolute; left: 0; }
+    .menu-toggle__bars::before { top: -9px; }
+    .menu-toggle__bars::after { top: 9px; }
+    .mobile-nav { display: block; background: var(--hdr-solid); padding: 72px 0 12px; }
+    .js .mobile-nav { position: absolute; top: 100%; left: 0; right: 0; max-height: calc(100vh - 120px); overflow-y: auto; }
+    .js .mobile-nav:not(.is-open) { display: none; }
+    .mobile-nav ul { margin: 0; padding: 0; list-style: none; }
+    .mobile-nav a { display: flex; align-items: center; min-height: 48px; padding: 0 24px; border-top: 1px solid rgba(255, 255, 255, 0.08); color: var(--hdr-link); text-decoration: none; }
+    .mobile-nav a[aria-current="page"], .mobile-nav a:hover { color: var(--hdr-gold); }
 }
 
-.lang-btn,
-#kuMainBtn {
-    padding: 0.35rem 0.6rem;
-    border-radius: 5px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.15);
-    color: #fff;
-    white-space: nowrap;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: clamp(0.52rem, 1.4vw, 0.8rem);
-    min-height: 30px;
-    display: inline-flex;
-    align-items: center;
-    transition: background 0.2s var(--ease), border-color 0.2s var(--ease),
-                transform 0.2s var(--ease);
-}
-.lang-btn:hover,
-#kuMainBtn:hover {
-    background: rgba(255, 255, 255, 0.26);
-    border-color: rgba(255, 255, 255, 0.45);
-    transform: translateY(-1px);
-}
-.lang-btn.active,
-#kuMainBtn.active { background: rgba(255, 255, 255, 0.3); font-weight: 600; }
-
-.ku-dialect-btn {
-    padding: clamp(0.38rem, 1.2vw, 0.55rem) clamp(0.6rem, 2vw, 1rem);
-    font-size: clamp(0.58rem, 1.4vw, 0.8rem);
-    min-height: 36px;
-    background: transparent;
-    border: 0;
-    cursor: pointer;
-}
-.ku-dialect-btn:hover { background: rgba(255, 255, 255, 0.15); }
-.ku-dialect-btn.active { background: rgba(255, 255, 255, 0.2); }
-
-/* The phone's switcher. <details> rather than script: it opens with no
-   JavaScript, closes on Escape by itself, and is reachable from a keyboard. */
-.lang-menu { display: none; position: relative; }
-.lang-menu summary {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.45rem 0.7rem;
-    min-height: 40px;
-    border-radius: 9px;
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    background: rgba(255, 255, 255, 0.16);
-    color: #fff;
-    font-size: 0.82rem;
-    cursor: pointer;
-    list-style: none;
-    user-select: none;
-    white-space: nowrap;
-}
-.lang-menu summary::-webkit-details-marker { display: none; }
-.lang-menu[open] summary { background: rgba(255, 255, 255, 0.28); }
-
-.lang-menu-list {
-    position: absolute;
-    z-index: 1200;
-    top: calc(100% + 0.5rem);
-    inset-inline-end: 0;
-    min-width: 12rem;
-    display: flex;
-    flex-direction: column;
-    padding: 0.35rem;
-    border-radius: 14px;
-    background: rgba(57, 55, 54, 0.98);
-    backdrop-filter: blur(18px);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    box-shadow: 0 18px 48px rgba(26, 25, 25, 0.45);
-    animation: langIn 0.16s var(--ease);
-}
-@keyframes langIn {
-    from { opacity: 0; transform: translateY(-6px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-.lang-menu-list a {
-    padding: 0.6rem 0.75rem;
-    min-height: 44px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border-radius: 9px;
-    color: rgba(255, 255, 255, 0.86);
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: background 0.16s var(--ease);
-}
-.lang-menu-list a em {
-    font-style: normal;
-    font-size: 0.72em;
-    opacity: 0.6;
-    margin-top: 1px;
-}
-.lang-menu-list a:hover { background: rgba(255, 255, 255, 0.14); color: #fff; }
-.lang-menu-list a.is-active { background: rgba(255, 255, 255, 0.22); color: #fff; font-weight: 600; }
-.lang-menu-list hr {
-    border: 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
-    margin: 0.3rem 0.4rem;
+@media (max-width: 520px) {
+    .hdr-container { padding-inline: 16px; }
+    .quicklinks { justify-content: flex-start; gap: 8px 14px; }
+    .topbar a, .lang summary { font-size: 14px; }
+    .emblem { width: 84px; height: 86px; inset-inline-start: 10px; }
+    .mainbar__name { inset-inline-start: 104px; font-size: 15px; }
 }
 
-/* One or the other, never both. */
-@media (max-width: 720px) {
-    .lang-wide { display: none; }
-    .lang-menu { display: block; }
+@media (prefers-reduced-motion: reduce) {
+    .site-header, .mainbar, .mainbar::before, .emblem { transition: none; }
 }
 
 /* ── One book's page ─────────────────────────────────────────────────────
