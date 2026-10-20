@@ -40,19 +40,6 @@
                 @foreach (__('messages.intro.paragraphs') as $paragraph)
                     <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">{{ $paragraph }}</p>
                 @endforeach
-
-                <!-- Prepared by -->
-                <div class="rounded-[10px] p-6 border border-[rgba(255,107,107,0.15)] reveal" style="background:rgba(255,107,107,0.07);">
-                    <h3 class="text-[#ff6b6b] mb-4 font-bold" style="font-size:clamp(1.1rem,3vw,1.4rem);">{{ __('messages.intro.prepared_heading') }}</h3>
-                    <div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(min(220px,100%),1fr));">
-                        @foreach (__('messages.intro.people') as $person)
-                            <div class="text-center p-5 bg-white rounded-xl shadow-xs transition-[transform,box-shadow,background,border-color,color] duration-300 hover:-translate-y-1 hover:shadow-md">
-                                <h4 class="text-[#2d2d3a] mb-2 font-bold">{{ $person['name'] }}</h4>
-                                <p class="text-[#6b6b80]">{{ $person['role'] }}</p>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
             </div>
         </div>
 

@@ -21,12 +21,6 @@ return [
             'An e-library is more than just a digital collection, it demonstrates the relationship between science and technology. It encourages critical thinking and continuous learning, while helping students and researchers stay up-to-date on modern scientific developments.',
             'Our mission is to build a supportive academic space where information is freely available, ideas are developed, and future scientists are empowered to discover, innovate, and contribute to the advancement of science and society.',
         ],
-        'prepared_heading' => 'Prepared by:',
-        'people' => [
-            [
-                'name' => 'NYAR QADR RASUL',
-                'role' => 'Biology Department Student - Organization of the library',
-            ],
             [
                 'name' => 'MAHMOOD KHDIR FAQE RASUL',
                 'role' => 'Biology Department Student - Web Developer',

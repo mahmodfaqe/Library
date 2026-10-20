@@ -21,12 +21,6 @@ return [
             'E-kütüphane, sadece dijital bir koleksiyon olmaktan öte, bilim ve teknoloji arasındaki ilişkiyi gösterir. Eleştirel düşünmeyi ve sürekli öğrenmeyi teşvik ederken, öğrencilerin ve araştırmacıların modern bilimsel gelişmelerden haberdar olmalarına yardımcı olur.',
             'Misyonumuz, bilginin özgürce erişilebildiği, fikirlerin geliştirildiği ve geleceğin bilim insanlarının keşfetme, yenilik yapma ve bilimin ve toplumun ilerlemesine katkıda bulunma konusunda güçlendirildiği destekleyici bir akademik alan oluşturmaktır.',
         ],
-        'prepared_heading' => 'Hazırlayanlar:',
-        'people' => [
-            [
-                'name' => 'NYAR QADR RASUL',
-                'role' => 'Biyoloji Bölümü Öğrencisi - Kütüphane organizasyonu',
-            ],
             [
                 'name' => 'MAHMOOD KHDIR FAQE RASUL',
                 'role' => 'Biyoloji Bölümü Öğrencisi - Web Geliştirici',
