@@ -462,6 +462,9 @@ tbody tr:last-child td { border-bottom: none; }
         flex: 0 0 auto;
         position: static;
         height: auto;
+        /* Across the top here, so the red rule runs beneath it, not beside it. */
+        border-inline-end: 0;
+        border-bottom: 3px solid var(--brand);
         display: grid;
         grid-template-areas: 'brand who lang' 'nav nav nav';
         grid-template-columns: 1fr auto auto;

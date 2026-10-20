@@ -85,7 +85,7 @@ html { font-size: 16px; scroll-behavior: smooth; }
 
 body { font-family: var(--font-rtl); }
 body[dir="ltr"] { font-family: var(--font-ltr); }
-body[dir="ltr"] :is(.section-btn, .search-submit, .error-home, .book-open) { font-family: var(--font-accent); }
+body[dir="ltr"] :is(.section-btn, .search-submit, .error-home, .book-open, .repo-go) { font-family: var(--font-accent); }
 
 /* Scroll progress bar */
 #scrollProgress {
@@ -863,6 +863,14 @@ body:not(.has-hero) .mainbar::before { background: var(--hdr-solid); }
     .topbar a, .lang summary { font-size: 14px; }
     .emblem { width: 84px; height: 86px; inset-inline-start: 10px; }
     .mainbar__name { inset-inline-start: 104px; font-size: 15px; }
+    /* On the narrowest phones a long university name would push the search
+       icon off the row; it gives way with an ellipsis instead. */
+    .quicklinks { overflow: hidden; }
+    .quicklinks a { display: block; min-width: 0; line-height: 44px; overflow: hidden; text-overflow: ellipsis; }
+}
+
+@media (max-width: 360px) {
+    .mainbar__name { font-size: 13.5px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -966,7 +974,7 @@ body:not(.has-hero) .mainbar::before { background: var(--hdr-solid); }
 }
 .repo-filters input:focus,
 .repo-filters select:focus { outline: 2px solid var(--brand); outline-offset: 1px; }
-.repo-go { border: none; cursor: pointer; padding-inline: 1.4rem; }
+.repo-go { border: none; cursor: pointer; padding-inline: 1.4rem; background: var(--brand); color: #fff; border-radius: 5px; font: inherit; font-weight: 600; }
 .repo-count { color: var(--ink-soft); font-size: 0.92rem; margin-bottom: 1rem; }
 
 /* A thesis has no cover, so the degree does the work of one: it is the first
