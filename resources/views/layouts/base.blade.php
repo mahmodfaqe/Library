@@ -30,7 +30,7 @@
     <title>@yield('title', __('messages.site_title'))</title>
     <meta name="description" content="@yield('description', __('messages.meta_description'))">
     <meta name="robots" content="index, follow">
-    <meta name="theme-color" content="#790404">
+    <meta name="theme-color" content="#393736">
 
     <link rel="icon" href="{{ Asset::versioned('uor-icon.ico') }}" sizes="16x16 32x32 48x48">
     <link rel="icon" type="image/png" href="{{ Asset::versioned('uor-icon-96.png') }}" sizes="96x96">
