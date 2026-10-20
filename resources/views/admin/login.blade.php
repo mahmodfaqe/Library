@@ -6,12 +6,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <meta name="theme-color" content="#4c3f8f">
+    <meta name="theme-color" content="#4f0202">
     <link rel="icon" href="{{ Asset::versioned('uor-icon.ico') }}" sizes="16x16 32x32 48x48">
     <link rel="icon" type="image/png" href="{{ Asset::versioned('uor-icon-96.png') }}" sizes="96x96">
     <link rel="apple-touch-icon" href="{{ Asset::versioned('uor-apple-icon.png') }}">
     <title>{{ __('admin.login.title') }}</title>
     <link rel="preload" href="{{ asset('fonts/Rabar_015.woff2') }}" as="font" type="font/woff2" crossorigin>
+
+    {{-- The university's own two faces; Rabar follows them for Kurdish. --}}
+    <link rel="stylesheet" href="{{ Asset::versioned('fonts/uor.css') }}">
     {{-- The same stylesheet as the panel itself, so the two cannot drift. --}}
     <link rel="stylesheet" href="{{ Asset::versioned('admin.css') }}">
 </head>

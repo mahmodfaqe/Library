@@ -37,9 +37,9 @@
                        value="{{ old('drive_url', $department->drive_url ?? '') }}">
             </div>
 
-            <hr style="border:none; border-top:1px solid #eef0f8; margin:1.4rem 0;">
+            <hr style="border:none; border-top:1px solid #efeae1; margin:1.4rem 0;">
 
-            <h3 style="margin-bottom:1rem; color:#4a4a5c; font-size:1rem;">{{ __('admin.departments.fields.translations_heading') }}</h3>
+            <h3 style="margin-bottom:1rem; color:#393736; font-size:1rem;">{{ __('admin.departments.fields.translations_heading') }}</h3>
 
             @php
                 $oldTranslations = old('translations', $department->translations ?? []);
@@ -51,7 +51,7 @@
                     $t = $oldTranslations[$lang] ?? [];
                 @endphp
                 <div class="lang-block">
-                    <h3>{{ $locale['label'] }} <small style="color:#8a8aa0;">({{ $lang }})</small></h3>
+                    <h3>{{ $locale['label'] }} <small style="color:#8a8785;">({{ $lang }})</small></h3>
                     <div class="field">
                         <label for="t-{{ $lang }}-title">{{ __('admin.departments.fields.name') }}</label>
                         <input type="text" id="t-{{ $lang }}-title" name="translations[{{ $lang }}][title]"

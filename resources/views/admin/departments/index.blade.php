@@ -31,7 +31,7 @@
                             <td>{{ $department->translation('ku-sorani', 'title') }}</td>
                             <td>{{ $department->translation('en', 'title') }}</td>
                             <td style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-                                <a href="{{ $department->drive_url }}" target="_blank" rel="noopener" style="color:#667eea;">{{ $department->drive_url }}</a>
+                                <a href="{{ $department->drive_url }}" target="_blank" rel="noopener" style="color:#790404;">{{ $department->drive_url }}</a>
                             </td>
                             <td class="actions">
                                 <a href="{{ route('admin.departments.edit', $department) }}" class="btn btn-secondary btn-sm">{{ __('admin.actions.edit') }}</a>

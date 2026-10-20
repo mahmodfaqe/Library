@@ -12,29 +12,43 @@
    easings, no two cards alike — which is what made the surface feel uneven
    however carefully any one piece was drawn. */
 :root {
-    --ink: #2d2d3a;
-    --ink-soft: #6b6b80;
-    --ink-faint: #9aa0b8;
-    --line: #e8eaf6;
-    --brand: #667eea;
-    --brand-deep: #764ba2;
-    --brand-wash: rgba(102, 126, 234, 0.09);
+    /* The University of Raparin's own palette, taken from uor.edu.krd so the
+       library reads as part of the university rather than beside it.
+       Primary #790404, accent #cbb58b, secondary #1a1f2c. */
+    --ink: #1a1f2c;
+    --ink-soft: #52504e;
+    --ink-faint: #8a8785;
+    --line: #e2ded7;
+    --brand: #790404;
+    --brand-deep: #4f0202;
+    --brand-wash: rgba(121, 4, 4, 0.07);
+    --accent: #cbb58b;
+    --accent-wash: rgba(203, 181, 139, 0.16);
+    --page: #f0f0f0;
 
     /* Layered, low-opacity shadows read as depth; a single dark one reads as
-       a border that has come loose. */
-    --shadow-sm: 0 1px 2px rgba(44, 43, 61, 0.05), 0 2px 8px rgba(102, 126, 234, 0.06);
-    --shadow-md: 0 4px 12px rgba(44, 43, 61, 0.06), 0 12px 32px rgba(102, 126, 234, 0.10);
-    --shadow-lg: 0 8px 20px rgba(44, 43, 61, 0.07), 0 24px 60px rgba(102, 126, 234, 0.14);
+       a border that has come loose. Cast in the brand's own hue, not blue. */
+    --shadow-sm: 0 1px 2px rgba(26, 31, 44, 0.05), 0 2px 8px rgba(121, 4, 4, 0.05);
+    --shadow-md: 0 4px 12px rgba(26, 31, 44, 0.06), 0 12px 32px rgba(121, 4, 4, 0.08);
+    --shadow-lg: 0 8px 20px rgba(26, 31, 44, 0.08), 0 24px 60px rgba(121, 4, 4, 0.12);
 
-    --radius-sm: 10px;
-    --radius: 14px;
-    --radius-lg: 18px;
+    /* The university rounds to 1rem; these keep the same proportions. */
+    --radius-sm: 0.667rem;
+    --radius: 1rem;
+    --radius-lg: 1.5rem;
+
+    /* Latin from the university's own faces, Kurdish and Arabic from Rabar:
+       Lora and Kanit carry no Arabic script, so the Latin face is named first
+       and Rabar picks up every glyph it lacks. */
+    --font-heading: 'Lora', 'Rabar', Georgia, serif;
+    --font-body: 'Kanit', 'Rabar', system-ui, sans-serif;
 
     --ease: cubic-bezier(0.4, 0, 0.2, 1);
     --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
     --quick: 0.18s;
     --calm: 0.28s;
 }
+
 
 /* Nothing on the page should snap. Anything that moves, moves on the same
    curve at one of two speeds. */
@@ -72,7 +86,7 @@ body { font-family: 'Rabar', sans-serif; }
 #scrollProgress {
     position: fixed; top: 0; inset-inline-start: 0; width: 0;
     height: 3px;
-    background: linear-gradient(90deg, #ff6b6b, #667eea, #764ba2, #ff6b6b);
+    background: linear-gradient(90deg, #cbb58b, #790404, #4f0202, #cbb58b);
     background-size: 200% 100%;
     z-index: 2000;
     transition: width 0.1s linear;
@@ -89,7 +103,7 @@ body { font-family: 'Rabar', sans-serif; }
     position: absolute;
     top: 0; inset-inline: 0;
     height: 4px;
-    background: linear-gradient(90deg, #667eea, #ff6b6b, #764ba2);
+    background: linear-gradient(90deg, #790404, #cbb58b, #4f0202);
     background-size: 200% 100%;
     animation: shimmerBar 3s linear infinite;
     pointer-events: none;
@@ -104,7 +118,7 @@ body { font-family: 'Rabar', sans-serif; }
     position: absolute;
     top: 0; inset-inline: 0;
     height: 3px;
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    background: linear-gradient(90deg, #790404, #4f0202);
     transform: scaleX(0);
     /* transform-origin has no logical keyword, so mirror it explicitly. */
     transform-origin: left;
@@ -123,7 +137,7 @@ body { font-family: 'Rabar', sans-serif; }
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: radial-gradient(circle at 50% 0%, rgba(102,126,234,0.08), transparent 70%);
+    background: radial-gradient(circle at 50% 0%, rgba(121,4,4,0.08), transparent 70%);
     opacity: 0;
     transition: opacity 0.4s ease;
     pointer-events: none;
@@ -166,14 +180,14 @@ transition: background-image 1.5s ease-in-out;
     width: clamp(44px,6vw,54px);
     height: clamp(44px,6vw,54px);
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #790404 0%, #4f0202 100%);
     color: white;
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 6px 24px rgba(102,126,234,0.45);
+    box-shadow: 0 6px 24px rgba(121,4,4,0.45);
     z-index: 990;
     opacity: 0;
     transform: translateY(20px) scale(0.85);
@@ -187,7 +201,7 @@ transition: background-image 1.5s ease-in-out;
 }
 #scrollTopBtn:hover {
     transform: translateY(-5px) scale(1.1);
-    box-shadow: 0 14px 36px rgba(102,126,234,0.58);
+    box-shadow: 0 14px 36px rgba(121,4,4,0.58);
 }
 #scrollTopBtn:active { transform: translateY(0) scale(0.95); }
 
@@ -231,10 +245,10 @@ transition: background-image 1.5s ease-in-out;
 .section-btn {
     position: relative;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.28);
+    box-shadow: 0 2px 8px rgba(121, 4, 4, 0.28);
     transition: transform var(--quick) var(--ease), box-shadow var(--calm) var(--ease);
 }
-.section-btn:hover { box-shadow: 0 4px 16px rgba(102, 126, 234, 0.40); }
+.section-btn:hover { box-shadow: 0 4px 16px rgba(121, 4, 4, 0.40); }
 .section-btn:active { transform: translateY(1px); }
 .section-btn::before {
     content: '';
@@ -251,7 +265,7 @@ transition: background-image 1.5s ease-in-out;
 .social-link:hover { transform: translateY(-4px) scale(1.15); filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
 
 /* Keyboard nav */
-.keyboard-nav *:focus { outline: 2px solid #667eea; outline-offset: 3px; }
+.keyboard-nav *:focus { outline: 2px solid #790404; outline-offset: 3px; }
 
 @media (prefers-reduced-motion: reduce) {
     *, ::before, ::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
@@ -267,7 +281,7 @@ transition: background-image 1.5s ease-in-out;
     padding: 0.6rem 1.1rem;
     border-radius: 0 0 10px 10px;
     background: #fff;
-    color: #2d2d3a;
+    color: #1a1f2c;
     font-weight: 600;
     text-decoration: none;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
@@ -276,7 +290,7 @@ transition: background-image 1.5s ease-in-out;
 .skip-link:focus { top: 0; }
 
 :where(a, button, input, textarea, [tabindex]):focus-visible {
-    outline: 3px solid #ff6b6b;
+    outline: 3px solid #cbb58b;
     outline-offset: 2px;
 }
 
@@ -288,7 +302,7 @@ transition: background-image 1.5s ease-in-out;
 .subject-card:hover {
     transform: translateY(-3px);
     box-shadow: var(--shadow-md);
-    border-color: rgba(102, 126, 234, 0.35);
+    border-color: rgba(121, 4, 4, 0.35);
 }
 .subject-card:active { transform: translateY(-1px); }
 
@@ -305,16 +319,16 @@ transition: background-image 1.5s ease-in-out;
     gap: 0.45rem;
     padding: 0.42rem 0.95rem;
     border-radius: 9999px;
-    border: 1px solid #d5d9ee;
+    border: 1px solid #d8d2c8;
     background: rgba(255, 255, 255, 0.75);
-    color: #4a4a5c;
+    color: #393736;
     font-size: 0.88rem;
     text-decoration: none;
     transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
 }
 .lang-chip:hover { border-color: #a5b4fc; transform: translateY(-1px); }
 .lang-chip.is-active {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #790404 0%, #4f0202 100%);
     border-color: transparent;
     color: #fff;
 }
@@ -338,7 +352,7 @@ transition: background-image 1.5s ease-in-out;
 .book-card:hover {
     transform: translateY(-3px);
     box-shadow: var(--shadow-md);
-    border-color: rgba(102, 126, 234, 0.35);
+    border-color: rgba(121, 4, 4, 0.35);
 }
 .book-title {
     font-size: 1.02rem;
@@ -371,19 +385,19 @@ transition: background-image 1.5s ease-in-out;
     border-radius: 11px;
     border: 1px solid #dfe3f5;
     background: #fff;
-    color: #4a4a5c;
+    color: #393736;
     font-size: 0.92rem;
     text-decoration: none;
     transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 .pagination a:hover {
-    border-color: #667eea;
-    color: #667eea;
+    border-color: #790404;
+    color: #790404;
     transform: translateY(-1px);
     box-shadow: var(--shadow-sm);
 }
 .pagination .current {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #790404 0%, #4f0202 100%);
     border-color: transparent;
     color: #fff;
     font-weight: 700;
@@ -393,13 +407,13 @@ transition: background-image 1.5s ease-in-out;
 .pagination span:not(.current) {
     border-color: transparent;
     background: transparent;
-    color: #b5b5c8;
+    color: #b8b3ad;
     min-width: auto;
 }
 .pagination-summary {
     margin-top: 0.8rem;
     text-align: center;
-    color: #8a8aa0;
+    color: #8a8785;
     font-size: 0.85rem;
 }
 
@@ -413,14 +427,14 @@ transition: background-image 1.5s ease-in-out;
     margin: 2.2rem 0 1rem;
     font-size: clamp(1.05rem, 2.8vw, 1.3rem);
     font-weight: 700;
-    color: #4a4a5c;
+    color: #393736;
 }
 .language-shelf:first-of-type { margin-top: 0; }
 .language-shelf::after {
     content: '';
     flex: 1;
     height: 1px;
-    background: linear-gradient(to var(--shelf-fade, right), #d5d9ee, transparent);
+    background: linear-gradient(to var(--shelf-fade, right), #d8d2c8, transparent);
 }
 [dir="rtl"] .language-shelf { --shelf-fade: left; }
 
@@ -461,10 +475,10 @@ a.book-cover::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(102, 126, 234, 0);
+    background: rgba(121, 4, 4, 0);
     transition: background 0.25s ease;
 }
-a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
+a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 .book-cover-fallback {
     font-size: clamp(2rem, 6vw, 2.8rem);
     opacity: 0.45;
@@ -498,7 +512,7 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
 }
 .search-input-wrap input {
     width: 100%;
-    border: 1px solid #d5d9ee;
+    border: 1px solid #d8d2c8;
     border-radius: 14px;
     background: #fff;
     padding: 0.85rem 1rem;
@@ -510,8 +524,8 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
 }
 .search-input-wrap input:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.14);
+    border-color: #790404;
+    box-shadow: 0 0 0 4px rgba(121, 4, 4, 0.14);
 }
 .search-icon {
     position: absolute;
@@ -526,8 +540,8 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
     inset-inline-end: 0.95rem;
     width: 16px;
     height: 16px;
-    border: 2px solid rgba(102, 126, 234, 0.25);
-    border-top-color: #667eea;
+    border: 2px solid rgba(121, 4, 4, 0.25);
+    border-top-color: #790404;
     border-radius: 50%;
     opacity: 0;
     transition: opacity 0.2s ease;
@@ -539,7 +553,7 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .search-submit {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #790404 0%, #4f0202 100%);
     padding: 0.85rem 1.9rem;
     font-size: 0.95rem;
     border: none;
@@ -587,7 +601,7 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
 }
 .suggest-item:hover,
 .suggest-item.is-active {
-    background: rgba(102, 126, 234, 0.10);
+    background: rgba(121, 4, 4, 0.10);
 }
 .suggest-cover {
     flex: 0 0 auto;
@@ -607,12 +621,12 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
     font-weight: 600;
     font-size: 0.92rem;
     line-height: 1.45;
-    color: #2d2d3a;
+    color: #1a1f2c;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.suggest-author { font-size: 0.8rem; color: #6b6b80; }
+.suggest-author { font-size: 0.8rem; color: #52504e; }
 .suggest-facts  { font-size: 0.75rem; color: #9aa0c0; }
 .suggest-title mark {
     background: rgba(255, 214, 0, 0.35);
@@ -624,8 +638,8 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
 .suggest-count {
     flex: 0 0 auto;
     font-size: 0.75rem;
-    color: #6b6b80;
-    background: rgba(102, 126, 234, 0.10);
+    color: #52504e;
+    background: rgba(121, 4, 4, 0.10);
     border-radius: 9999px;
     padding: 0.1rem 0.55rem;
     font-variant-numeric: tabular-nums;
@@ -633,7 +647,7 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
 .suggest-empty {
     padding: 1.2rem 0.75rem;
     text-align: center;
-    color: #8a8aa0;
+    color: #8a8785;
     font-size: 0.9rem;
 }
 .suggest-all {
@@ -642,16 +656,16 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
     margin-top: 0.3rem;
     padding: 0.6rem;
     border: none;
-    border-top: 1px solid #eef0f8;
+    border-top: 1px solid #efeae1;
     background: none;
-    color: #667eea;
+    color: #790404;
     font: inherit;
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
     border-radius: 0 0 12px 12px;
 }
-.suggest-all:hover { background: rgba(102, 126, 234, 0.08); }
+.suggest-all:hover { background: rgba(121, 4, 4, 0.08); }
 
 @media (prefers-reduced-motion: reduce) {
     .search-suggestions { animation: none; }
@@ -670,7 +684,7 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
     font-weight: 800;
     line-height: 1;
     letter-spacing: -0.03em;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #790404 0%, #4f0202 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -680,11 +694,11 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
     margin-top: 0.5rem;
     font-size: clamp(1.4rem, 5vw, 2rem);
     font-weight: 700;
-    color: #2d2d3a;
+    color: #1a1f2c;
 }
 .error-body {
     margin-top: 0.9rem;
-    color: #6b6b80;
+    color: #52504e;
     line-height: 1.9;
     font-size: clamp(0.95rem, 2.5vw, 1.05rem);
 }
@@ -697,7 +711,7 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
     flex-wrap: wrap;
 }
 .error-home {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #790404 0%, #4f0202 100%);
     color: #fff;
     text-decoration: none;
     border-radius: 9999px;
@@ -705,7 +719,7 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
     font-weight: 600;
     font-size: 0.95rem;
 }
-.error-link { color: #667eea; text-decoration: none; font-size: 0.95rem; }
+.error-link { color: #790404; text-decoration: none; font-size: 0.95rem; }
 .error-link:hover { text-decoration: underline; }
 
 
@@ -1136,7 +1150,7 @@ a.book-cover:hover::after { background: rgba(102, 126, 234, 0.12); }
     font-size: 0.82rem;
     transition: background 0.18s var(--ease);
 }
-.book-keywords a:hover { background: rgba(102, 126, 234, 0.18); }
+.book-keywords a:hover { background: rgba(121, 4, 4, 0.18); }
 
 @media (pointer: coarse) {
     .book-keywords a { min-height: 38px; display: inline-flex; align-items: center; }

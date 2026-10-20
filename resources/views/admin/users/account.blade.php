@@ -5,7 +5,7 @@
 @section('content')
     <div class="card">
         <h2 style="font-size:1.15rem; margin-bottom:0.3rem;">{{ __('admin.account.heading') }}</h2>
-        <p style="color:#6b6b80; font-size:0.88rem; margin-bottom:1.2rem;">{{ __('admin.account.blurb') }}</p>
+        <p style="color:#52504e; font-size:0.88rem; margin-bottom:1.2rem;">{{ __('admin.account.blurb') }}</p>
 
         <form method="POST" action="{{ route('admin.account.update') }}">
             @csrf

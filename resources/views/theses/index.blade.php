@@ -8,9 +8,9 @@
 <div class="book-page">
 
     <nav class="mb-4 flex items-center gap-2 flex-wrap" style="font-size:0.9rem;" aria-label="{{ __('theses.breadcrumb') }}">
-        <a href="{{ Locale::url() }}" class="text-[#667eea] no-underline hover:underline">{{ __('messages.library_name') }}</a>
-        <span class="text-[#b5b5c8]">/</span>
-        <span class="text-[#6b6b80]">{{ __('theses.title') }}</span>
+        <a href="{{ Locale::url() }}" class="text-[#790404] no-underline hover:underline">{{ __('messages.library_name') }}</a>
+        <span class="text-[#b8b3ad]">/</span>
+        <span class="text-[#52504e]">{{ __('theses.title') }}</span>
     </nav>
 
     <h1 class="repo-title" dir="auto">{{ __('theses.title') }}</h1>
@@ -92,7 +92,7 @@
             </div>
         </article>
     @empty
-        <p class="text-center text-[#6b6b80]" style="padding:3rem 0;">{{ __('theses.empty') }}</p>
+        <p class="text-center text-[#52504e]" style="padding:3rem 0;">{{ __('theses.empty') }}</p>
     @endforelse
 
     @include('partials.pagination', ['paginator' => $theses])

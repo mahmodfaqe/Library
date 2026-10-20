@@ -25,7 +25,7 @@
                         <td dir="auto">{{ $user->name }}</td>
                         <td dir="ltr">{{ $user->email }}</td>
                         <td>{{ __("admin.users.roles.{$user->role}") }}</td>
-                        <td style="white-space:nowrap; font-size:0.82rem; color:#6b6b80;">
+                        <td style="white-space:nowrap; font-size:0.82rem; color:#52504e;">
                             {{ $user->last_login_at?->format('Y-m-d H:i') ?? '—' }}
                         </td>
                         <td class="actions">
@@ -37,7 +37,7 @@
                                     <button type="submit" class="btn btn-danger btn-sm">{{ __('admin.actions.delete') }}</button>
                                 </form>
                             @else
-                                <span style="color:#8a8aa0; font-size:0.85rem;">{{ __('admin.users.you') }}</span>
+                                <span style="color:#8a8785; font-size:0.85rem;">{{ __('admin.users.you') }}</span>
                             @endif
                         </td>
                     </tr>

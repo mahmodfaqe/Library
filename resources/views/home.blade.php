@@ -12,7 +12,7 @@
 
     <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
         <span class="mesh-blob" style="width:45vw;height:45vw;background:rgba(255,255,255,0.15);top:-10%;left:-8%;animation-delay:0s;"></span>
-        <span class="mesh-blob" style="width:35vw;height:35vw;background:rgba(255,107,107,0.2);top:20%;right:-5%;animation-delay:-4s;"></span>
+        <span class="mesh-blob" style="width:35vw;height:35vw;background:rgba(203,181,139,0.2);top:20%;right:-5%;animation-delay:-4s;"></span>
         <span class="mesh-blob" style="width:30vw;height:30vw;background:rgba(255,255,255,0.1);bottom:-10%;left:30%;animation-delay:-8s;"></span>
     </div>
 
@@ -32,13 +32,13 @@
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
 
         <div class="text-center max-w-[900px] mx-auto">
-            <h2 class="font-bold text-[#2d2d3a] mb-8" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.intro.heading') }}</h2>
+            <h2 class="font-bold text-[#1a1f2c] mb-8" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.intro.heading') }}</h2>
 
             <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal"
-                 style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
+                 style="background: linear-gradient(145deg, #faf7f2 0%, #efeae1 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(121,4,4,0.15);">
 
                 @foreach (__('messages.intro.paragraphs') as $paragraph)
-                    <p class="text-[#6b6b80] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">{{ $paragraph }}</p>
+                    <p class="text-[#52504e] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">{{ $paragraph }}</p>
                 @endforeach
             </div>
         </div>
@@ -51,15 +51,15 @@
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-[900px] mx-auto">
 
-            <h2 class="font-bold text-[#2d2d3a] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.history.heading') }}</h2>
+            <h2 class="font-bold text-[#1a1f2c] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.history.heading') }}</h2>
 
             <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal"
-                 style="background: linear-gradient(145deg, #f5f7ff 0%, #eef0f8 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(102,126,234,0.15);">
+                 style="background: linear-gradient(145deg, #faf7f2 0%, #efeae1 100%); padding: clamp(1.5rem,5vw,3rem); box-shadow: 0 8px 32px rgba(121,4,4,0.15);">
                 @php
                     $openingDate = '<strong>'.e(__('messages.history.opening_date')).'</strong>';
                 @endphp
                 @foreach (__('messages.history.paragraphs') as $paragraph)
-                    <p class="text-[#6b6b80] leading-[1.9] {{ $loop->last ? '' : 'mb-4' }} text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">{{ RichText::make($paragraph, ['date' => $openingDate]) }}</p>
+                    <p class="text-[#52504e] leading-[1.9] {{ $loop->last ? '' : 'mb-4' }} text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">{{ RichText::make($paragraph, ['date' => $openingDate]) }}</p>
                 @endforeach
             </div>
 
@@ -73,29 +73,29 @@
         <div class="text-center" style="margin-top:1.4rem;">
             <a href="{{ Locale::booksUrl() }}"
                class="section-btn inline-block font-semibold text-white rounded-full no-underline text-center transition-[transform,box-shadow,background,border-color,color] duration-300 hover:-translate-y-1"
-               style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:clamp(0.6rem,2.2vw,0.85rem) clamp(1.5rem,4vw,2.2rem); font-size:clamp(0.88rem,2.2vw,1rem); box-shadow:0 4px 14px rgba(102,126,234,0.28);">
+               style="background:linear-gradient(135deg,#790404 0%,#4f0202 100%); padding:clamp(0.6rem,2.2vw,0.85rem) clamp(1.5rem,4vw,2.2rem); font-size:clamp(0.88rem,2.2vw,1rem); box-shadow:0 4px 14px rgba(121,4,4,0.28);">
                 {{ __('books.title') }}
             </a>
         </div>
 
         <!-- Department cards (DB-driven) -->
         <div id="dept-{{ app()->getLocale() }}" style="direction:{{ Locale::dir() }};">
-            <h2 class="text-center font-bold text-[#2d2d3a] mb-10" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.dept_heading') }}</h2>
+            <h2 class="text-center font-bold text-[#1a1f2c] mb-10" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.dept_heading') }}</h2>
             <div class="grid gap-5" style="grid-template-columns: repeat(auto-fit, minmax(260px,1fr));">
                 @forelse ($subjects as $subject)
                 <a href="{{ Locale::booksUrl() }}?category={{ $subject->id }}"
                    class="section-card card-top-bar card-glow relative flex flex-col justify-between bg-white/85 backdrop-blur-md border border-white/70 rounded-[18px] text-center no-underline transition-[transform,box-shadow,background,border-color,color] duration-300 hover:-translate-y-3 reveal"
-                   style="padding:clamp(1.3rem,3.5vw,1.9rem); min-height:190px; box-shadow:0 4px 16px rgba(102,126,234,0.10);">
+                   style="padding:clamp(1.3rem,3.5vw,1.9rem); min-height:190px; box-shadow:0 4px 16px rgba(121,4,4,0.10);">
                     <div>
                         <span class="block text-5xl mb-3 transition-transform duration-300">{{ $subject->icon }}</span>
-                        <h3 class="font-bold text-[#2d2d3a] mb-2" style="font-size:clamp(1rem,2.6vw,1.2rem); line-height:1.6;" dir="auto">{{ $subject->localName() }}</h3>
+                        <h3 class="font-bold text-[#1a1f2c] mb-2" style="font-size:clamp(1rem,2.6vw,1.2rem); line-height:1.6;" dir="auto">{{ $subject->localName() }}</h3>
                     </div>
-                    <span class="text-[#6b6b80]" style="font-size:clamp(0.82rem,2vw,0.92rem);">
+                    <span class="text-[#52504e]" style="font-size:clamp(0.82rem,2vw,0.92rem);">
                         {{ trans_choice('books.results', $subject->books_count, ['count' => $subject->books_count]) }}
                     </span>
                 </a>
                 @empty
-                <p class="text-center text-[#6b6b80]">{{ __('messages.no_departments') }}</p>
+                <p class="text-center text-[#52504e]">{{ __('messages.no_departments') }}</p>
                 @endforelse
             </div>
         </div>
@@ -115,33 +115,33 @@
                 {{ __('messages.feedback.error') }}
             </div>
         @endif
-        <div class="rounded-[22px] bg-white/85 backdrop-blur-md border border-white/70 text-center" style="box-shadow:0 10px 40px rgba(102,126,234,0.14); padding: clamp(1.8rem,5vw,3rem);">
-            <h2 class="font-bold text-[#2d2d3a] mb-3" style="font-size:clamp(1.5rem,4vw,2rem);">
+        <div class="rounded-[22px] bg-white/85 backdrop-blur-md border border-white/70 text-center" style="box-shadow:0 10px 40px rgba(121,4,4,0.14); padding: clamp(1.8rem,5vw,3rem);">
+            <h2 class="font-bold text-[#1a1f2c] mb-3" style="font-size:clamp(1.5rem,4vw,2rem);">
                     {{ __('messages.feedback.title') }}
             </h2>
-            <p class="text-[#6b6b80] mb-6" style="font-size:clamp(0.9rem,2.2vw,1rem); line-height:1.7;">
+            <p class="text-[#52504e] mb-6" style="font-size:clamp(0.9rem,2.2vw,1rem); line-height:1.7;">
                     {{ __('messages.feedback.subtitle') }}
                 <br>
-                <a href="{{ route('privacy') }}" style="color:#667eea; text-decoration:underline; text-underline-offset:3px; font-size:0.88em;">{{ __('privacy.title') }}</a>
+                <a href="{{ route('privacy') }}" style="color:#790404; text-decoration:underline; text-underline-offset:3px; font-size:0.88em;">{{ __('privacy.title') }}</a>
             </p>
             <form method="POST" action="{{ route('feedback.store') }}" style="text-align:start;">
                 @csrf
                 <div class="mb-4 text-start">
-                    <label for="fb-name" class="block font-semibold mb-1 text-[#4a4a5c]" style="font-size:0.9rem;">
+                    <label for="fb-name" class="block font-semibold mb-1 text-[#393736]" style="font-size:0.9rem;">
                         {{ __('messages.feedback.name_label') }}
                     </label>
                     <input type="text" id="fb-name" name="name" maxlength="120" dir="auto" value="{{ old('name') }}"
-                           class="w-full rounded-[12px] px-4 py-3" style="border:1px solid #d5d9ee; font-size:0.95rem; font-family:inherit; text-align:start;">
+                           class="w-full rounded-[12px] px-4 py-3" style="border:1px solid #d8d2c8; font-size:0.95rem; font-family:inherit; text-align:start;">
                 </div>
                 <div class="mb-5 text-start">
-                    <label for="fb-msg" class="block font-semibold mb-1 text-[#4a4a5c]" style="font-size:0.9rem;">
+                    <label for="fb-msg" class="block font-semibold mb-1 text-[#393736]" style="font-size:0.9rem;">
                         {{ __('messages.feedback.message_label') }}
                     </label>
                     <textarea id="fb-msg" name="message" rows="4" maxlength="2000" required dir="auto"
-                              class="w-full rounded-[12px] px-4 py-3" style="border:1px solid #d5d9ee; font-size:0.95rem; font-family:inherit; text-align:start;">{{ old('message') }}</textarea>
+                              class="w-full rounded-[12px] px-4 py-3" style="border:1px solid #d8d2c8; font-size:0.95rem; font-family:inherit; text-align:start;">{{ old('message') }}</textarea>
                 </div>
                 <div style="text-align:center;">
-                    <button type="submit" class="section-btn relative inline-block font-semibold text-white rounded-full no-underline text-center transition-[transform,box-shadow,background,border-color,color] duration-300 hover:-translate-y-1 font-[inherit] cursor-pointer" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:clamp(0.65rem,2.2vw,0.9rem) clamp(1.6rem,4vw,2.4rem); font-size:clamp(0.9rem,2.2vw,1rem); box-shadow:0 4px 14px rgba(102,126,234,0.28); border:none;">
+                    <button type="submit" class="section-btn relative inline-block font-semibold text-white rounded-full no-underline text-center transition-[transform,box-shadow,background,border-color,color] duration-300 hover:-translate-y-1 font-[inherit] cursor-pointer" style="background:linear-gradient(135deg,#790404 0%,#4f0202 100%); padding:clamp(0.65rem,2.2vw,0.9rem) clamp(1.6rem,4vw,2.4rem); font-size:clamp(0.9rem,2.2vw,1rem); box-shadow:0 4px 14px rgba(121,4,4,0.28); border:none;">
                         {{ __('messages.feedback.send') }}
                     </button>
                 </div>

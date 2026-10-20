@@ -94,13 +94,13 @@
 <div class="book-page">
 
     <nav class="mb-4 flex items-center gap-2 flex-wrap" style="font-size:0.9rem;" aria-label="{{ __('theses.breadcrumb') }}">
-        <a href="{{ Locale::url() }}" class="text-[#667eea] no-underline hover:underline">{{ __('messages.library_name') }}</a>
-        <span class="text-[#b5b5c8]">/</span>
-        <a href="{{ Locale::thesesUrl() }}" class="text-[#667eea] no-underline hover:underline">{{ __('theses.title') }}</a>
+        <a href="{{ Locale::url() }}" class="text-[#790404] no-underline hover:underline">{{ __('messages.library_name') }}</a>
+        <span class="text-[#b8b3ad]">/</span>
+        <a href="{{ Locale::thesesUrl() }}" class="text-[#790404] no-underline hover:underline">{{ __('theses.title') }}</a>
         @if ($thesis->department)
-            <span class="text-[#b5b5c8]">/</span>
+            <span class="text-[#b8b3ad]">/</span>
             <a href="{{ Locale::thesesUrl() }}?department={{ $thesis->department_id }}"
-               class="text-[#667eea] no-underline hover:underline" dir="auto">{{ $thesis->department->translation(app()->getLocale(), 'title') }}</a>
+               class="text-[#790404] no-underline hover:underline" dir="auto">{{ $thesis->department->translation(app()->getLocale(), 'title') }}</a>
         @endif
     </nav>
 

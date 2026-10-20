@@ -28,10 +28,10 @@
                        value="{{ old('icon', $category->icon) }}">
             </div>
 
-            <hr style="border:none; border-top:1px solid #eef0f8; margin:1.4rem 0;">
+            <hr style="border:none; border-top:1px solid #efeae1; margin:1.4rem 0;">
 
-            <h3 style="margin-bottom:0.4rem; color:#4a4a5c; font-size:1rem;">{{ __('admin.categories.names_heading') }}</h3>
-            <p style="color:#6b6b80; font-size:0.85rem; margin-bottom:1rem;">{{ __('admin.categories.names_hint') }}</p>
+            <h3 style="margin-bottom:0.4rem; color:#393736; font-size:1rem;">{{ __('admin.categories.names_heading') }}</h3>
+            <p style="color:#52504e; font-size:0.85rem; margin-bottom:1rem;">{{ __('admin.categories.names_hint') }}</p>
 
             @foreach (config('departments.locales') as $locale)
                 @php $lang = $locale['lang']; @endphp

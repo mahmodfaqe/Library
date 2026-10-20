@@ -25,7 +25,7 @@
                             <td>{{ $item->id }}</td>
                             <td dir="auto">{{ $item->name ?: '—' }}</td>
                             <td style="max-width:420px; white-space:pre-wrap; line-height:1.6;" dir="auto">{{ $item->message }}</td>
-                            <td style="white-space:nowrap; font-size:0.82rem; color:#6b6b80;" dir="ltr">{{ $item->created_at->format('Y-m-d H:i') }}</td>
+                            <td style="white-space:nowrap; font-size:0.82rem; color:#52504e;" dir="ltr">{{ $item->created_at->format('Y-m-d H:i') }}</td>
                             <td class="actions">
                                 <form method="POST" action="{{ route('admin.feedback.destroy', $item) }}" style="display:inline;"
                                       onsubmit="return confirm(@js(__('admin.feedback.confirm_delete')));">

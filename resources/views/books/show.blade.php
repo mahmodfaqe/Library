@@ -134,13 +134,13 @@
 <div class="book-page">
 
     <nav class="mb-4 flex items-center gap-2 flex-wrap" style="font-size:0.9rem;" aria-label="{{ __('books.breadcrumb') }}">
-        <a href="{{ Locale::url() }}" class="text-[#667eea] no-underline hover:underline">{{ __('messages.library_name') }}</a>
-        <span class="text-[#b5b5c8]">/</span>
-        <a href="{{ Locale::booksUrl() }}" class="text-[#667eea] no-underline hover:underline">{{ __('books.title') }}</a>
+        <a href="{{ Locale::url() }}" class="text-[#790404] no-underline hover:underline">{{ __('messages.library_name') }}</a>
+        <span class="text-[#b8b3ad]">/</span>
+        <a href="{{ Locale::booksUrl() }}" class="text-[#790404] no-underline hover:underline">{{ __('books.title') }}</a>
         @if ($book->category)
-            <span class="text-[#b5b5c8]">/</span>
+            <span class="text-[#b8b3ad]">/</span>
             <a href="{{ Locale::booksUrl() }}?category={{ $book->category->id }}"
-               class="text-[#667eea] no-underline hover:underline" dir="auto">{{ $book->category->localName() }}</a>
+               class="text-[#790404] no-underline hover:underline" dir="auto">{{ $book->category->localName() }}</a>
         @endif
     </nav>
 
@@ -272,11 +272,11 @@
 
                         <div class="book-body">
                             <div>
-                                <h3 class="book-title font-bold text-[#2d2d3a] mb-1">
+                                <h3 class="book-title font-bold text-[#1a1f2c] mb-1">
                                     <a href="{{ Locale::bookUrl($other->id) }}" class="no-underline text-inherit hover:underline" dir="auto">{{ $other->title }}</a>
                                 </h3>
                                 @if ($other->author)
-                                    <p class="text-[#6b6b80] mb-1" style="font-size:0.88rem;" dir="auto">{{ $other->author }}</p>
+                                    <p class="text-[#52504e] mb-1" style="font-size:0.88rem;" dir="auto">{{ $other->author }}</p>
                                 @endif
                             </div>
                         </div>

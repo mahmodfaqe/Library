@@ -9,25 +9,25 @@
 <div class="max-w-[1200px] mx-auto px-4" style="padding: clamp(2rem,5vw,3.5rem) 1rem;">
 
     <nav class="mb-4 flex items-center gap-2 flex-wrap" style="font-size:0.9rem;" aria-label="{{ __('books.breadcrumb') }}">
-        <a href="{{ Locale::url() }}" class="text-[#667eea] no-underline hover:underline">{{ __('messages.library_name') }}</a>
-        <span class="text-[#b5b5c8]">/</span>
+        <a href="{{ Locale::url() }}" class="text-[#790404] no-underline hover:underline">{{ __('messages.library_name') }}</a>
+        <span class="text-[#b8b3ad]">/</span>
         @if ($selected)
-            <a href="{{ Locale::booksUrl() }}" class="text-[#667eea] no-underline hover:underline">{{ __('books.title') }}</a>
-            <span class="text-[#b5b5c8]">/</span>
-            <span class="text-[#6b6b80]" dir="auto">{{ $selected->localName() }}</span>
+            <a href="{{ Locale::booksUrl() }}" class="text-[#790404] no-underline hover:underline">{{ __('books.title') }}</a>
+            <span class="text-[#b8b3ad]">/</span>
+            <span class="text-[#52504e]" dir="auto">{{ $selected->localName() }}</span>
         @else
-            <span class="text-[#6b6b80]">{{ __('books.title') }}</span>
+            <span class="text-[#52504e]">{{ __('books.title') }}</span>
         @endif
     </nav>
 
     @if ($selected)
-        <a href="{{ Locale::booksUrl() }}" class="inline-block text-[#667eea] no-underline mb-3 hover:underline" style="font-size:0.92rem;">
+        <a href="{{ Locale::booksUrl() }}" class="inline-block text-[#790404] no-underline mb-3 hover:underline" style="font-size:0.92rem;">
             <span aria-hidden="true">{{ Locale::isLtr() ? '←' : '→' }}</span> {{ __('books.back_to_subjects') }}
         </a>
-        <h1 class="font-bold text-[#2d2d3a] mb-3" style="font-size:clamp(1.6rem,4.5vw,2.2rem);" dir="auto">{{ $selected->localName() }}</h1>
+        <h1 class="font-bold text-[#1a1f2c] mb-3" style="font-size:clamp(1.6rem,4.5vw,2.2rem);" dir="auto">{{ $selected->localName() }}</h1>
     @else
-        <h1 class="font-bold text-[#2d2d3a] mb-3" style="font-size:clamp(1.6rem,4.5vw,2.2rem);">{{ __('books.title') }}</h1>
-        <p class="text-[#6b6b80] mb-8" style="font-size:clamp(0.95rem,2.4vw,1.08rem);">{{ __('books.intro') }}</p>
+        <h1 class="font-bold text-[#1a1f2c] mb-3" style="font-size:clamp(1.6rem,4.5vw,2.2rem);">{{ __('books.title') }}</h1>
+        <p class="text-[#52504e] mb-8" style="font-size:clamp(0.95rem,2.4vw,1.08rem);">{{ __('books.intro') }}</p>
     @endif
 
     {{-- The form still submits and the catalogue still renders without any of
@@ -39,7 +39,7 @@
         @endif
 
         <div class="search-field">
-            <label for="q" class="block font-semibold mb-1 text-[#4a4a5c]" style="font-size:0.86rem;">{{ __('books.search_label') }}</label>
+            <label for="q" class="block font-semibold mb-1 text-[#393736]" style="font-size:0.86rem;">{{ __('books.search_label') }}</label>
 
             <div class="search-input-wrap">
                 <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -64,7 +64,7 @@
         </button>
 
         @if ($search !== null || $selected)
-            <a href="{{ Locale::booksUrl() }}" class="search-clear text-[#6b6b80] no-underline hover:underline">
+            <a href="{{ Locale::booksUrl() }}" class="search-clear text-[#52504e] no-underline hover:underline">
                 {{ __('books.clear') }}
             </a>
         @endif
@@ -89,7 +89,7 @@
     @endif
 
     @if (! $browsing && $books->total() > 0)
-        <p class="text-[#6b6b80] mb-5" style="font-size:0.92rem;" aria-live="polite">
+        <p class="text-[#52504e] mb-5" style="font-size:0.92rem;" aria-live="polite">
             {{ trans_choice('books.results', $books->total(), ['count' => $books->total()]) }}
         </p>
     @endif
@@ -99,9 +99,9 @@
             @foreach ($categories as $shelf)
                 <a href="{{ url()->current() }}?category={{ $shelf->id }}"
                    class="subject-card bg-white/85 backdrop-blur-md border border-white/70 rounded-[16px] no-underline flex flex-col justify-between"
-                   style="padding:1.3rem; box-shadow:0 4px 16px rgba(102,126,234,0.10);">
-                    <span class="font-bold text-[#2d2d3a]" style="font-size:1.02rem; line-height:1.6;" dir="auto">{{ $shelf->localName() }}</span>
-                    <span class="text-[#6b6b80]" style="font-size:0.85rem; margin-top:0.6rem;">
+                   style="padding:1.3rem; box-shadow:0 4px 16px rgba(121,4,4,0.10);">
+                    <span class="font-bold text-[#1a1f2c]" style="font-size:1.02rem; line-height:1.6;" dir="auto">{{ $shelf->localName() }}</span>
+                    <span class="text-[#52504e]" style="font-size:0.85rem; margin-top:0.6rem;">
                         {{ trans_choice('books.results', $shelf->books_count, ['count' => $shelf->books_count]) }}
                     </span>
                 </a>
@@ -154,14 +154,14 @@
 
                 <div class="book-body">
                     <div>
-                        <h3 class="book-title font-bold text-[#2d2d3a] mb-1">
+                        <h3 class="book-title font-bold text-[#1a1f2c] mb-1">
                             <a href="{{ Locale::bookUrl($book->id) }}"
                                class="no-underline text-inherit hover:underline" dir="auto">{{ $book->title }}</a>
                         </h3>
                         @if ($book->author)
-                            <p class="text-[#6b6b80] mb-1" style="font-size:0.88rem;" dir="auto">{{ $book->author }}</p>
+                            <p class="text-[#52504e] mb-1" style="font-size:0.88rem;" dir="auto">{{ $book->author }}</p>
                         @endif
-                        <p class="text-[#8a8aa0] mb-3" style="font-size:0.8rem;">
+                        <p class="text-[#8a8785] mb-3" style="font-size:0.8rem;">
                             @foreach (collect([
                                 $book->year,
                                 // Redundant once the shelf heading says it.
@@ -176,7 +176,7 @@
                         <a href="{{ $book->readUrl() }}"
                            @unless ($book->hasFile()) target="_blank" rel="noopener" @endunless
                            class="section-btn inline-block font-semibold text-white rounded-full no-underline text-center"
-                           style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:0.55rem 1.2rem; font-size:0.86rem;">
+                           style="background:linear-gradient(135deg,#790404 0%,#4f0202 100%); padding:0.55rem 1.2rem; font-size:0.86rem;">
                             {{ $book->hasFile() ? __('books.download') : __('books.open') }}
                             @if ($book->humanFileSize())
                                 <bdi style="opacity:0.75; font-size:0.85em;">({{ $book->humanFileSize() }})</bdi>
@@ -190,7 +190,7 @@
                 </div>
             @endif
         @empty
-            <p class="text-center text-[#6b6b80]" style="padding:3rem 0;">{{ __('books.empty') }}</p>
+            <p class="text-center text-[#52504e]" style="padding:3rem 0;">{{ __('books.empty') }}</p>
         @endforelse
     @endif
 

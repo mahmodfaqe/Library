@@ -10,6 +10,12 @@
         <link rel="dns-prefetch" href="{{ config('library.analytics.host') }}">
     @endif
     <link rel="preload" href="{{ asset('fonts/Rabar_015.woff2') }}" as="font" type="font/woff2" crossorigin>
+
+    {{-- Lora and Kanit are the university's own two faces, taken from
+         uor.edu.krd. Neither carries Arabic script, so Rabar follows them in
+         every stack and picks up the Kurdish and Arabic glyphs they lack. --}}
+    <link rel="stylesheet" href="{{ Asset::versioned('fonts/uor.css') }}">
+
     <style>
         @font-face {
             font-family: 'Rabar';
@@ -25,7 +31,7 @@
     <title>@yield('title', __('messages.site_title'))</title>
     <meta name="description" content="@yield('description', __('messages.meta_description'))">
     <meta name="robots" content="index, follow">
-    <meta name="theme-color" content="#667eea">
+    <meta name="theme-color" content="#790404">
 
     <link rel="icon" href="{{ Asset::versioned('uor-icon.ico') }}" sizes="16x16 32x32 48x48">
     <link rel="icon" type="image/png" href="{{ Asset::versioned('uor-icon-96.png') }}" sizes="96x96">
@@ -82,7 +88,7 @@
     })();
     </script>
 </head>
-<body class="bg-[#f8f9ff] text-[#2d2d3a] overflow-x-hidden" dir="{{ Locale::dir() }}">
+<body class="bg-[#faf7f2] text-[#1a1f2c] overflow-x-hidden" dir="{{ Locale::dir() }}">
 
 <a class="skip-link" href="#main">{{ __('messages.skip_to_content') }}</a>
 
@@ -90,7 +96,7 @@
 
 <!-- ══════════ HEADER ══════════ -->
 <header id="site-header" class="sticky top-0 z-[1000] backdrop-blur-md transition-shadow duration-300"
-        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); box-shadow: 0 4px 24px rgba(102,126,234,0.25);">
+        style="background: linear-gradient(135deg, #790404 0%, #4f0202 100%); box-shadow: 0 4px 24px rgba(121,4,4,0.25);">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-2 sm:py-3">
         <div class="flex items-center gap-2 sm:gap-4 flex-nowrap">
 
@@ -190,17 +196,17 @@
     <div class="max-w-[1200px] mx-auto px-4">
         @php
             $year = '<span class="'.Locale::yearClass().'"></span>';
-            $uorLink = '<a href="'.e(config('library.university_url')).'" target="_blank" rel="noopener" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">'
+            $uorLink = '<a href="'.e(config('library.university_url')).'" target="_blank" rel="noopener" style="color:#cbb58b; text-decoration:underline; text-underline-offset:3px;">'
                 .e(__('messages.footer.uor_link_label')).'</a>';
         @endphp
         <p style="font-size:clamp(0.85rem,2vw,0.95rem);">{{ RichText::make(__('messages.footer.copyright'), ['year' => $year]) }}</p>
         <p style="font-size:clamp(0.85rem,2vw,0.95rem);">{{ RichText::make(__('messages.footer.uor_line'), ['link' => $uorLink]) }}</p>
         <p style="font-size:clamp(0.85rem,2vw,0.95rem);">
-            <a href="{{ Locale::booksUrl() }}" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">{{ __('books.title') }}</a>
+            <a href="{{ Locale::booksUrl() }}" style="color:#cbb58b; text-decoration:underline; text-underline-offset:3px;">{{ __('books.title') }}</a>
             <span class="opacity-40 mx-2">·</span>
-            <a href="{{ Locale::thesesUrl() }}" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">{{ __('theses.title') }}</a>
+            <a href="{{ Locale::thesesUrl() }}" style="color:#cbb58b; text-decoration:underline; text-underline-offset:3px;">{{ __('theses.title') }}</a>
             <span class="opacity-40 mx-2">·</span>
-            <a href="{{ Locale::privacyUrl() }}" style="color:#9bb1ff; text-decoration:underline; text-underline-offset:3px;">{{ __('privacy.title') }}</a>
+            <a href="{{ Locale::privacyUrl() }}" style="color:#cbb58b; text-decoration:underline; text-underline-offset:3px;">{{ __('privacy.title') }}</a>
             @if (config('library.qr_url'))
                 <span class="opacity-40 mx-2">·</span>
                 <a href="{{ config('library.qr_url') }}" target="_blank" rel="noopener"
@@ -252,7 +258,7 @@
     window.addEventListener('scroll',function(){
         hdr.style.boxShadow = window.scrollY>40
             ? '0 6px 36px rgba(60,40,100,0.28)'
-            : '0 4px 24px rgba(102,126,234,0.25)';
+            : '0 4px 24px rgba(121,4,4,0.25)';
     },{passive:true});
 })();
 

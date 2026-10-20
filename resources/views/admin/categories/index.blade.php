@@ -30,7 +30,7 @@
                             <td>{{ $category->sort_order }}</td>
                             <td><span class="icon-preview">{{ $category->icon }}</span></td>
                             <td dir="auto">{{ $category->name }}</td>
-                            <td style="font-size:0.85rem; color:#6b6b80;">
+                            <td style="font-size:0.85rem; color:#52504e;">
                                 {{ count($category->translations ?? []) }} / {{ count(\App\Support\Locale::SUPPORTED) - 1 }}
                             </td>
                             <td>{{ $category->books_count }}</td>
