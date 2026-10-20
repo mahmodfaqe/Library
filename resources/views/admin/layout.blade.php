@@ -16,10 +16,15 @@
     {{-- The university's Latin faces, Heebo and Lora; Rabar follows them for Kurdish. --}}
     <link rel="stylesheet" href="{{ Asset::versioned('fonts/uor.css') }}">
     <link rel="stylesheet" href="{{ Asset::versioned('admin.css') }}">
+    <link rel="stylesheet" href="{{ Asset::versioned('uor-header.css') }}">
+    <script src="{{ Asset::versioned('uor-header.js') }}" defer></script>
     {{-- In the head, not at the foot: an image can fail before the end of the
          document is parsed, and a listener registered afterwards would never
          hear it. The sweep afterwards catches any that failed even earlier. --}}
     <script>
+    // Lets the header's script-only behaviour switch itself on.
+    document.documentElement.classList.add('js');
+
     (function(){
         function blank(image) {
             var frame = image.closest('.book-cover, .suggest-cover, .row-cover');
@@ -51,112 +56,79 @@
 
 <a class="skip-link" href="#main">{{ __('messages.skip_to_content') }}</a>
 
-{{-- The panel is a sidebar on a desk and a top bar on a phone; one list of
-     links either way, so there is nothing to keep in step. --}}
-<div class="shell">
-    <aside class="sidebar">
-        <div class="brand">
-            <img src="{{ asset('file/uor-logo.webp') }}" alt="" width="512" height="523">
-            <div>
-                <strong>{{ __('admin.heading') }}</strong>
-                <span>{{ __('admin.suffix') }}</span>
-            </div>
+{{-- The same header as the public site, so the panel reads as part of the
+     university too. Its menu is the panel's own sections; the top row holds
+     the way back to the site, the account and signing out. --}}
+@php
+    $links = [
+        ['admin.index', 'admin.nav.overview'],
+        ['admin.departments', 'admin.nav.departments'],
+        ['admin.categories', 'admin.nav.categories'],
+        ['admin.books', 'admin.nav.books'],
+        ['admin.theses', 'admin.nav.theses'],
+        ['admin.feedback', 'admin.nav.feedback'],
+    ];
+
+    if (auth()->check() && auth()->user()->isAdmin()) {
+        $links[] = ['admin.users', 'admin.nav.users'];
+        $links[] = ['admin.activity', 'admin.nav.activity'];
+    }
+
+    $nav = array_map(fn (array $link) => [
+        'url' => route($link[0]),
+        'label' => __($link[1]),
+        'active' => request()->routeIs($link[0]) || request()->routeIs($link[0].'.*'),
+    ], $links);
+@endphp
+{{-- The panel has no localised address, so the language is a choice the
+     staff member makes here rather than something the URL says. --}}
+<x-uor-header :home="route('admin.index')" :title="__('admin.heading')" :subtitle="__('admin.suffix')"
+              :nav="$nav" :language-url="fn (string $code) => route('admin.language', $code)">
+    <x-slot:quicklinks>
+        <a href="{{ Locale::url() }}">{{ __('admin.back_home') }}</a>
+        @auth
+            <a class="quicklinks__extra" href="{{ route('admin.account') }}" dir="auto"
+               @if (request()->routeIs('admin.account')) aria-current="page" @endif>{{ auth()->user()->name }}</a>
+        @endauth
+    </x-slot>
+
+    <x-slot:end>
+        @auth
+            <form method="POST" action="{{ route('admin.logout') }}" class="hdr-signout">
+                @csrf
+                <button type="submit">{{ __('admin.nav.sign_out') }}</button>
+            </form>
+        @endauth
+    </x-slot>
+
+    <x-slot:mobileExtra>
+        @auth
+            <li><a href="{{ route('admin.account') }}" @if (request()->routeIs('admin.account')) aria-current="page" @endif>{{ __('admin.nav.account') }}</a></li>
+        @endauth
+    </x-slot>
+</x-uor-header>
+
+<main class="content" id="main">
+    @if (session('status'))
+        <div class="alert alert-good" role="status">
+            <span aria-hidden="true">✓</span>
+            <p>{{ session('status') }}</p>
         </div>
+    @endif
 
-        @php
-            $links = [
-                ['admin.index', 'admin.nav.overview', '📊'],
-                ['admin.departments', 'admin.nav.departments', '🏛'],
-                ['admin.categories', 'admin.nav.categories', '🗂'],
-                ['admin.books', 'admin.nav.books', '📚'],
-                ['admin.theses', 'admin.nav.theses', '🎓'],
-                ['admin.feedback', 'admin.nav.feedback', '💬'],
-            ];
-
-            if (auth()->check() && auth()->user()->isAdmin()) {
-                $links[] = ['admin.users', 'admin.nav.users', '👤'];
-                $links[] = ['admin.activity', 'admin.nav.activity', '📋'];
-            }
-        @endphp
-
-        <nav class="nav" aria-label="{{ __('admin.heading') }}">
-            @foreach ($links as [$route, $label, $icon])
-                @php $active = request()->routeIs($route) || request()->routeIs($route.'.*'); @endphp
-                <a href="{{ route($route) }}" class="nav-link{{ $active ? ' is-active' : '' }}"
-                   @if ($active) aria-current="page" @endif>
-                    <span class="nav-icon" aria-hidden="true">{{ $icon }}</span>
-                    <span>{{ __($label) }}</span>
-                </a>
-            @endforeach
-        </nav>
-
-        {{-- The panel has no localised address, so the language is a choice
-             the staff member makes here rather than something the URL says.
-             The same five controls as the public header. --}}
-        <div class="lang-switch">
-            <details class="lang-ku">
-                <summary>
-                    <span>کوردی</span>
-                    <span class="caret" aria-hidden="true">▾</span>
-                </summary>
-                <div class="lang-ku-list">
-                    @foreach ([
-                        'ku-sorani' => 'سۆرانی',
-                        'ku-badini' => 'بادینی',
-                        'ku-badini-lat' => 'Badînî',
-                        'ku-hawrami' => 'هەورامی',
-                    ] as $dialect => $label)
-                        <a href="{{ route('admin.language', $dialect) }}"
-                           dir="{{ Locale::dir($dialect) }}"
-                           class="{{ app()->getLocale() === $dialect ? 'is-active' : '' }}">{{ $label }}</a>
-                    @endforeach
-                </div>
-            </details>
-
-            @foreach (['en' => 'EN', 'ar' => 'ع', 'fa' => 'فا', 'tr' => 'TR'] as $code => $label)
-                <a href="{{ route('admin.language', $code) }}"
-                   class="lang-pill{{ app()->getLocale() === $code ? ' is-active' : '' }}"
-                   title="{{ $code }}">{{ $label }}</a>
-            @endforeach
+    @if ($errors->any())
+        <div class="alert alert-bad" role="alert">
+            <span aria-hidden="true">!</span>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
+    @endif
 
-        <div class="sidebar-foot">
-            @auth
-                <a href="{{ route('admin.account') }}" class="who">
-                    <span class="avatar" aria-hidden="true">{{ mb_substr(auth()->user()->name, 0, 1) }}</span>
-                    <span class="who-name" dir="auto">{{ auth()->user()->name }}</span>
-                </a>
-                <form method="POST" action="{{ route('admin.logout') }}">
-                    @csrf
-                    <button type="submit" class="sign-out">{{ __('admin.nav.sign_out') }}</button>
-                </form>
-            @endauth
-            <a href="{{ Locale::url() }}" class="back-site">{{ __('admin.back_home') }}</a>
-        </div>
-    </aside>
-
-    <main class="content" id="main">
-        @if (session('status'))
-            <div class="alert alert-good" role="status">
-                <span aria-hidden="true">✓</span>
-                <p>{{ session('status') }}</p>
-            </div>
-        @endif
-
-        @if ($errors->any())
-            <div class="alert alert-bad" role="alert">
-                <span aria-hidden="true">!</span>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        @yield('content')
-    </main>
-</div>
+    @yield('content')
+</main>
 
 @stack('scripts')
 

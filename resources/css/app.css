@@ -230,11 +230,9 @@ transition: background-image 1.5s ease-in-out;
 
 /* Keyboard nav */
 .keyboard-nav *:focus { outline: 2px solid #790404; outline-offset: 3px; }
-/* The brand red is as dark as the header and footer behind it, so a red
-   ring there cannot be seen; on those dark bands the ring is gold. */
-.site-header :focus-visible,
+/* The brand red is as dark as the footer behind it, so a red ring there
+   cannot be seen; on that dark band the ring is gold, as in the header. */
 footer :focus-visible,
-.keyboard-nav .site-header *:focus,
 .keyboard-nav footer *:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -758,151 +756,6 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 
     /* Subjects read better two-up than one enormous card each. */
     .subject-card { padding: 1rem; }
-}
-
-/* ── Header ──────────────────────────────────────────────────────────────
-   After the University of Raparin's own site, by way of GWRC-Web: two
-   translucent rows over the page, the menu split around a hanging emblem,
-   and a red V beneath. The header is fixed, so every page but the home page
-   (whose hero sits underneath it) is pushed down by its height. */
-:root {
-    --hdr-bg: rgba(57, 55, 54, 0.6);
-    --hdr-solid: rgb(57, 55, 54);
-    --hdr-red: #790404;
-    --hdr-gold: #cbb58b;
-    --hdr-link: #f2f2f2;
-    --hdr-top-link: #dad8d8;
-    --hdr-top: 50px;
-    --hdr-main: 75px;
-    --hdr-v: 40px;
-    --v-apex: 50%;
-    --header-space: calc(var(--hdr-top) + var(--hdr-main) + var(--hdr-v));
-    /* How far the hero starts below the top: under the overlaid header with
-       script, only below the hanging V without it. */
-    --hero-offset: var(--hdr-v);
-}
-.js { --hero-offset: var(--header-space); }
-
-.hdr-container { width: 100%; max-width: 1240px; margin-inline: auto; padding-inline: 24px; }
-
-/* Without script the phone menu is simply shown open, and an overlay that
-   tall would sit on the page; so the header is overlaid only when script has
-   arrived to fold the menu away, and otherwise takes its own room. */
-.site-header { position: relative; z-index: 1000; transition: transform 0.3s ease; }
-.js .site-header { position: fixed; top: 0; inset-inline: 0; }
-.js body:not(.has-hero) #main { padding-top: calc(var(--header-space) + 1rem); }
-html:not(.js) body:not(.has-hero) #main { padding-top: calc(var(--hdr-v) + 1rem); }
-html:not(.js) .topbar,
-html:not(.js) .mainbar,
-html:not(.js) .mainbar::before { background: var(--hdr-solid); }
-[id] { scroll-margin-top: 130px; }
-
-.topbar { background: var(--hdr-bg); border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
-.topbar__inner { height: var(--hdr-top); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.quicklinks { display: flex; align-items: center; justify-content: space-evenly; flex: 1 1 auto; gap: 8px 24px; min-width: 0; }
-.topbar a, .lang summary, .search-toggle { color: var(--hdr-top-link); text-decoration: none; font-size: 15px; font-weight: 500; }
-.topbar a:hover, .lang summary:hover, .search-toggle:hover { color: #fff; }
-.quicklinks a { display: inline-flex; align-items: center; min-height: 44px; white-space: nowrap; }
-.lang { position: relative; flex: 0 0 auto; }
-.lang summary { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; cursor: pointer; list-style: none; }
-.lang summary::-webkit-details-marker { display: none; }
-.lang__menu { position: absolute; top: 100%; inset-inline-start: 0; z-index: 1100; min-width: 190px; margin: 0; padding: 6px 0; list-style: none; background: var(--hdr-solid); border-radius: 8px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
-.lang__menu a { display: flex; flex-direction: column; justify-content: center; min-height: 44px; padding: 0.3rem 16px; }
-.lang__menu a em { font-style: normal; font-size: 0.72em; opacity: 0.6; }
-.lang__menu a[aria-current] { color: var(--hdr-gold); }
-.lang__rule { height: 1px; margin: 6px 12px; background: rgba(255, 255, 255, 0.14); }
-.search-toggle { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; }
-.site-search { background: var(--hdr-solid); }
-.site-search__inner { display: flex; gap: 12px; padding-block: 12px; }
-.site-search input { flex: 1 1 auto; min-width: 0; min-height: 48px; padding: 0 16px; border: 0; border-radius: 8px; font: inherit; color: var(--ink); background: #fff; text-align: start; }
-.hdr-gold-btn { min-height: 48px; padding: 0 22px; border: 0; border-radius: 5px; background: var(--hdr-gold); color: #1a1a1a; font: inherit; font-weight: 600; cursor: pointer; }
-.hdr-gold-btn:hover { background: #e0cda6; }
-
-.mainbar { position: relative; background: var(--hdr-bg); transition: background-color 0.3s ease; }
-.mainbar::before, .mainbar::after { content: ""; position: absolute; top: 100%; left: 0; right: 0; height: var(--hdr-v); pointer-events: none; }
-.mainbar::before { background: var(--hdr-bg); clip-path: polygon(var(--v-apex) 0, 100% 0, 100% 5%, var(--v-apex) 100%, 0 5%, 0 0); transition: background-color 0.3s ease; }
-.mainbar::after { background: var(--hdr-red); clip-path: polygon(var(--v-apex) 70%, 100% 0, 100% 5%, var(--v-apex) 100%, 0 5%, 0 0); }
-.mainbar__inner { position: relative; height: var(--hdr-main); }
-
-.mainnav { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 190px minmax(0, 1fr); }
-.mainnav__group { display: flex; align-items: center; justify-content: space-evenly; margin: 0; padding: 0; list-style: none; }
-.mainnav__group + .mainnav__group { grid-column: 3; }
-.mainnav__item { position: relative; height: 100%; display: flex; align-items: center; }
-.mainnav__item > a { display: inline-flex; align-items: center; height: 100%; padding: 0 6px; color: var(--hdr-link); text-decoration: none; font-size: 16px; font-weight: 500; white-space: nowrap; }
-.mainnav__item > a:hover, .mainnav__item > a[aria-current="page"] { color: var(--hdr-gold); }
-[dir="ltr"] .mainnav__item > a { font-size: 14.4px; text-transform: uppercase; letter-spacing: 0.5px; }
-
-.emblem { position: absolute; top: 18px; left: 50%; z-index: 2; display: block; width: 147px; height: 150px; transform: translateX(-50%); transform-origin: 50% 0; transition: transform 0.3s ease, top 0.3s ease; }
-.emblem img { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35)); }
-.mainbar__name { display: none; }
-.menu-toggle { display: none; }
-.mobile-nav { display: none; }
-
-/* Pages without a hero would show the grey page through the translucent
-   rows, so there the header is solid from the start. */
-body:not(.has-hero) .topbar,
-body:not(.has-hero) .mainbar,
-body:not(.has-hero) .mainbar::before { background: var(--hdr-solid); }
-
-/* Scrolled: the top row slides away, the main row turns solid, the emblem shrinks. */
-.site-header.is-scrolled { transform: translateY(calc(-1 * var(--hdr-top))); }
-.is-scrolled .mainbar, .is-scrolled .mainbar::before { background: var(--hdr-solid); }
-.is-scrolled .emblem { top: 4px; transform: translateX(-50%) scale(0.62); }
-
-@media (max-width: 1100px) {
-    :root { --hdr-top: 40px; }
-    :root[dir="ltr"] { --v-apex: 15%; }
-    :root[dir="rtl"] { --v-apex: 85%; }
-    .quicklinks .quicklinks__extra, .mainnav { display: none; }
-    .emblem { top: 33px; left: auto; inset-inline-start: 14px; width: 100px; height: 102px; transform: none; transform-origin: left top; }
-    [dir="rtl"] .emblem { transform-origin: right top; }
-    .is-scrolled .emblem { top: 4px; transform: scale(0.62); }
-    .mainbar__name { position: absolute; top: 50%; inset-inline-start: 130px; inset-inline-end: 64px; display: flex; flex-direction: column; transform: translateY(-50%); color: #fff; font-size: 19px; font-weight: 700; line-height: 1.35; }
-    .mainbar__name > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .mainbar__name-gold { color: var(--hdr-gold); font-weight: 500; }
-    .js .menu-toggle { position: absolute; top: 50%; inset-inline-end: 12px; display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; padding: 0; border: 0; background: none; color: #fff; cursor: pointer; transform: translateY(-50%); }
-    .menu-toggle__bars, .menu-toggle__bars::before, .menu-toggle__bars::after { display: block; width: 30px; height: 3px; border-radius: 2px; background: currentColor; }
-    .menu-toggle__bars { position: relative; }
-    .menu-toggle__bars::before, .menu-toggle__bars::after { content: ""; position: absolute; left: 0; }
-    .menu-toggle__bars::before { top: -9px; }
-    .menu-toggle__bars::after { top: 9px; }
-    .mobile-nav { display: block; background: var(--hdr-solid); padding: 72px 0 12px; }
-    .js .mobile-nav { position: absolute; top: 100%; left: 0; right: 0; max-height: calc(100vh - 120px); overflow-y: auto; }
-    .js .mobile-nav:not(.is-open) { display: none; }
-    .mobile-nav ul { margin: 0; padding: 0; list-style: none; }
-    .mobile-nav a { display: flex; align-items: center; min-height: 48px; padding: 0 24px; border-top: 1px solid rgba(255, 255, 255, 0.08); color: var(--hdr-link); text-decoration: none; }
-    .mobile-nav a[aria-current="page"], .mobile-nav a:hover { color: var(--hdr-gold); }
-}
-
-@media (max-width: 520px) {
-    .hdr-container { padding-inline: 16px; }
-    .quicklinks { justify-content: flex-start; gap: 8px 14px; }
-    .topbar a, .lang summary { font-size: 14px; }
-    .emblem { width: 84px; height: 86px; inset-inline-start: 10px; }
-    .mainbar__name { inset-inline-start: 104px; font-size: 15px; }
-    /* On the narrowest phones a long university name would push the search
-       icon off the row; it gives way with an ellipsis instead. */
-    .quicklinks { overflow: hidden; }
-    .quicklinks a { display: block; min-width: 0; line-height: 44px; overflow: hidden; text-overflow: ellipsis; }
-}
-
-@media (max-width: 360px) {
-    .mainbar__name { font-size: 13.5px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .site-header, .mainbar, .mainbar::before, .emblem { transition: none; }
-}
-
-/* On paper the header prints once, at the top, rather than fixed over the
-   start of every page; the controls that only work on screen are left out. */
-@media print {
-    .js .site-header { position: relative; transform: none; }
-    .js body:not(.has-hero) #main { padding-top: calc(var(--hdr-v) + 1rem); }
-    .js { --hero-offset: var(--hdr-v); }
-    .topbar, .menu-toggle, .mobile-nav, #scrollTopBtn, #scrollProgress { display: none !important; }
-    .mainbar, .mainbar::before { background: var(--hdr-solid); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .mainbar::after { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 
 /* ── One book's page ─────────────────────────────────────────────────────

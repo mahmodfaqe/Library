@@ -112,6 +112,10 @@ class CachePage
             // The header, footer and <head> now live in the shared layout, so
             // an edit there has to invalidate the cached copy as well.
             resource_path('views/layouts/base.blade.php'),
+            resource_path('views/components/uor-header.blade.php'),
+            // Linked with ?v=, so a cached page must not keep the old stamp.
+            public_path('uor-header.css'),
+            public_path('uor-header.js'),
             lang_path(App::getLocale().'/messages.php'),
             // The header borrows its search and privacy labels from these.
             lang_path(App::getLocale().'/books.php'),

@@ -55,6 +55,8 @@
     <meta name="twitter:description" content="@yield('description', __('messages.meta_description'))">
 
     @vite(['resources/css/app.css'])
+    <link rel="stylesheet" href="{{ Asset::versioned('uor-header.css') }}">
+    <script src="{{ Asset::versioned('uor-header.js') }}" defer></script>
     @stack('head')
     {{-- In the head, not at the foot: an image can fail before the end of the
          document is parsed, and a listener registered afterwards would never
@@ -97,11 +99,6 @@
 <div id="scrollProgress"></div>
 
 <!-- ══════════ HEADER ══════════ -->
-{{-- After the University of Raparin's own site, by way of GWRC-Web: two
-     translucent rows over the page, the menu split around the hanging
-     emblem, and a red V beneath. Without script it still works: the language
-     list is a <details>, the search icon is a link to the catalogue and the
-     phone menu is simply shown. --}}
 @php
     $nav = [
         ['url' => Locale::url(), 'label' => __('messages.nav.home'), 'active' => request()->routeIs('home', 'home.localised')],
@@ -110,46 +107,26 @@
         ['url' => Locale::url().'#feedback', 'label' => __('messages.nav.feedback'), 'active' => false],
     ];
 @endphp
-<header class="site-header" id="site-header">
-    <div class="topbar">
-        <div class="hdr-container topbar__inner">
-            <details class="lang">
-                <summary>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                        <circle cx="12" cy="12" r="9"></circle>
-                        <path d="M3 12h18M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18"></path>
-                    </svg>
-                    <span class="sr-only">{{ __('messages.language') }}: </span><span>{{ Locale::shortLabel() }}</span>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
-                </summary>
-                <ul class="lang__menu">
-                    @foreach (Locale::KURDISH as $dialect => [$label, $native, $font])
-                        <li><a href="{{ Locale::switchUrl($dialect) }}" dir="{{ Locale::dir($dialect) }}" style="font-family:{{ $font }};"
-                               @if (app()->getLocale() === $dialect) aria-current="true" @endif>{{ $label }}<em dir="auto">{{ $native }}</em></a></li>
-                    @endforeach
-                    <li class="lang__rule" role="separator"></li>
-                    @foreach (Locale::OTHERS as $code => $label)
-                        <li><a href="{{ Locale::switchUrl($code) }}" dir="{{ Locale::dir($code) }}"
-                               @if (app()->getLocale() === $code) aria-current="true" @endif>{{ $label }}</a></li>
-                    @endforeach
-                </ul>
-            </details>
+<x-uor-header :home="Locale::url()" :title="__('messages.university_name')" :subtitle="__('messages.library_name')"
+              :nav="$nav" :language-url="fn (string $code) => Locale::switchUrl($code)">
+    <x-slot:quicklinks>
+        <a href="{{ config('library.university_url') }}" target="_blank" rel="noopener">{{ __('messages.university_name') }}</a>
+        <a class="quicklinks__extra" href="{{ Locale::privacyUrl() }}">{{ __('privacy.title') }}</a>
+        @if (config('library.qr_url'))
+            <a class="quicklinks__extra" href="{{ config('library.qr_url') }}" target="_blank" rel="noopener">{{ __('messages.qr_label') }}</a>
+        @endif
+    </x-slot>
 
-            <nav class="quicklinks" aria-label="{{ __('messages.university_name') }}">
-                <a href="{{ config('library.university_url') }}" target="_blank" rel="noopener">{{ __('messages.university_name') }}</a>
-                <a class="quicklinks__extra" href="{{ Locale::privacyUrl() }}">{{ __('privacy.title') }}</a>
-                @if (config('library.qr_url'))
-                    <a class="quicklinks__extra" href="{{ config('library.qr_url') }}" target="_blank" rel="noopener">{{ __('messages.qr_label') }}</a>
-                @endif
-            </nav>
+    <x-slot:end>
+        <a class="search-toggle" href="{{ Locale::booksUrl() }}" aria-controls="site-search" aria-expanded="false">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path>
+            </svg>
+            <span class="sr-only">{{ __('books.search_label') }}</span>
+        </a>
+    </x-slot>
 
-            <a class="search-toggle" href="{{ Locale::booksUrl() }}" aria-controls="site-search" aria-expanded="false">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path>
-                </svg>
-                <span class="sr-only">{{ __('books.search_label') }}</span>
-            </a>
-        </div>
+    <x-slot:search>
         <form class="site-search" id="site-search" action="{{ Locale::booksUrl() }}" method="get" role="search" hidden>
             <div class="hdr-container site-search__inner">
                 <label class="sr-only" for="site-search-q">{{ __('books.search_label') }}</label>
@@ -157,38 +134,12 @@
                 <button class="hdr-gold-btn" type="submit">{{ __('books.search') }}</button>
             </div>
         </form>
-    </div>
+    </x-slot>
 
-    <div class="mainbar">
-        <div class="hdr-container mainbar__inner">
-            <a class="emblem" href="{{ Locale::url() }}">
-                <img src="{{ asset('file/uor-logo.webp') }}" alt="" width="512" height="523" fetchpriority="high" decoding="async">
-                <span class="sr-only">{{ __('messages.university_name') }} — {{ __('messages.library_name') }}</span>
-            </a>
-            <span class="mainbar__name" aria-hidden="true"><span>{{ __('messages.university_name') }}</span><span class="mainbar__name-gold">{{ __('messages.library_name') }}</span></span>
-            <nav class="mainnav" aria-label="{{ __('messages.nav.menu') }}">
-                @foreach (array_chunk($nav, 2) as $group)
-                    <ul class="mainnav__group">
-                        @foreach ($group as $item)
-                            <li class="mainnav__item"><a href="{{ $item['url'] }}" @if ($item['active']) aria-current="page" @endif>{{ $item['label'] }}</a></li>
-                        @endforeach
-                    </ul>
-                @endforeach
-            </nav>
-            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" hidden>
-                <span class="menu-toggle__bars" aria-hidden="true"></span><span class="sr-only">{{ __('messages.nav.menu') }}</span>
-            </button>
-        </div>
-        <nav class="mobile-nav" id="mobile-nav" aria-label="{{ __('messages.nav.menu') }}">
-            <ul>
-                @foreach ($nav as $item)
-                    <li><a href="{{ $item['url'] }}" @if ($item['active']) aria-current="page" @endif>{{ $item['label'] }}</a></li>
-                @endforeach
-                <li><a href="{{ Locale::privacyUrl() }}">{{ __('privacy.title') }}</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
+    <x-slot:mobileExtra>
+        <li><a href="{{ Locale::privacyUrl() }}">{{ __('privacy.title') }}</a></li>
+    </x-slot>
+</x-uor-header>
 
 <main id="main">
 @yield('content')
@@ -254,65 +205,6 @@
     function toAr(n){ return String(n).replace(/\d/g,function(d){ return '٠١٢٣٤٥٦٧٨٩'[d]; }); }
     document.querySelectorAll('.footer-year-en').forEach(function(el){ el.textContent=y; });
     document.querySelectorAll('.footer-year-ar').forEach(function(el){ el.textContent=toAr(y); });
-})();
-
-// Header: phone menu, search row, language list, and the scrolled state.
-(function(){
-    var header = document.getElementById('site-header');
-    if (!header) return;
-
-    var menuToggle = header.querySelector('.menu-toggle');
-    var mobileNav = document.getElementById('mobile-nav');
-    if (menuToggle && mobileNav) {
-        menuToggle.hidden = false;
-        menuToggle.addEventListener('click', function () {
-            var open = mobileNav.classList.toggle('is-open');
-            menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-        });
-        // A link to a section of the same page (#feedback) does not leave
-        // the page, so the menu has to close itself or it covers what was asked for.
-        mobileNav.addEventListener('click', function (event) {
-            if (event.target.closest('a')) closeMenu();
-        });
-    }
-    function closeMenu() {
-        if (!mobileNav || !mobileNav.classList.contains('is-open')) return false;
-        mobileNav.classList.remove('is-open');
-        menuToggle.setAttribute('aria-expanded', 'false');
-        return true;
-    }
-
-    var searchToggle = header.querySelector('.search-toggle');
-    var searchForm = document.getElementById('site-search');
-    if (searchToggle && searchForm) {
-        searchToggle.addEventListener('click', function (event) {
-            event.preventDefault();
-            var opening = searchForm.hidden;
-            searchForm.hidden = !opening;
-            searchToggle.setAttribute('aria-expanded', opening ? 'true' : 'false');
-            if (opening) searchForm.querySelector('input').focus();
-        });
-    }
-
-    var language = header.querySelector('.lang');
-    document.addEventListener('click', function (event) {
-        if (language && language.open && !language.contains(event.target)) language.open = false;
-    });
-    document.addEventListener('keydown', function (event) {
-        if (event.key !== 'Escape') return;
-        if (language) language.open = false;
-        if (closeMenu()) menuToggle.focus();
-        if (searchForm && !searchForm.hidden) {
-            searchForm.hidden = true;
-            searchToggle.setAttribute('aria-expanded', 'false');
-            searchToggle.focus();
-        }
-    });
-
-    // Past the first screenful the top row slides away and the main row turns solid.
-    function onScroll() { header.classList.toggle('is-scrolled', window.scrollY > 60); }
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
 })();
 
 // Scroll reveal
