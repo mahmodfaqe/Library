@@ -63,8 +63,8 @@ html:not(.js) .mainbar::before { background: var(--hdr-solid); }
 
 .mainbar { position: relative; background: var(--hdr-bg); transition: background-color 0.3s ease; }
 .mainbar::before, .mainbar::after { content: ""; position: absolute; top: 100%; left: 0; right: 0; height: var(--hdr-v); pointer-events: none; }
-.mainbar::before { background: var(--hdr-bg); clip-path: polygon(var(--v-apex) 0, 100% 0, 100% 5%, var(--v-apex) 100%, 0 5%, 0 0); transition: background-color 0.3s ease; }
-.mainbar::after { background: var(--hdr-red); clip-path: polygon(var(--v-apex) 70%, 100% 0, 100% 5%, var(--v-apex) 100%, 0 5%, 0 0); }
+.mainbar::before { background: var(--hdr-bg); clip-path: polygon(var(--v-apex) 0, 100% 0, 100% 5%, var(--v-apex) 100%, 0 5%, 0 0); transition: background-color 0.3s ease, clip-path 0.3s ease; }
+.mainbar::after { background: var(--hdr-red); clip-path: polygon(var(--v-apex) 70%, 100% 0, 100% 5%, var(--v-apex) 100%, 0 5%, 0 0); transition: clip-path 0.3s ease; }
 .mainbar__inner { position: relative; height: var(--hdr-main); }
 
 .mainnav { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 190px minmax(0, 1fr); }
@@ -99,11 +99,17 @@ body:not(.has-hero) .mainbar::before { background: var(--hdr-solid); }
 .is-scrolled .emblem { top: 4px; transform: translateX(-50%) scale(0.62); }
 
 @media (max-width: 1100px) {
-    :root { --hdr-top: 40px; }
-    :root[dir="ltr"] { --v-apex: 15%; }
-    :root[dir="rtl"] { --v-apex: 85%; }
+    :root { --hdr-top: 40px; --emblem-inset: 14px; --emblem-w: 100px; --emblem-h: 102px; }
+    /* The emblem sits a fixed distance from the edge, so the point of the V is
+       measured from the same edge rather than as a share of the width, which
+       would only meet the emblem at one screen size. Scrolled, the emblem
+       shrinks towards its outer corner and the point follows its centre. */
+    .site-header { --v-mid: calc(var(--emblem-inset) + var(--emblem-w) / 2); }
+    .site-header.is-scrolled { --v-mid: calc(var(--emblem-inset) + var(--emblem-w) * 0.62 / 2); }
+    [dir="ltr"] .site-header { --v-apex: var(--v-mid); }
+    [dir="rtl"] .site-header { --v-apex: calc(100% - var(--v-mid)); }
     .quicklinks .quicklinks__extra, .mainnav { display: none; }
-    .emblem { top: 33px; left: auto; inset-inline-start: 14px; width: 100px; height: 102px; transform: none; transform-origin: left top; }
+    .emblem { top: 33px; left: auto; inset-inline-start: var(--emblem-inset); width: var(--emblem-w); height: var(--emblem-h); transform: none; transform-origin: left top; }
     [dir="rtl"] .emblem { transform-origin: right top; }
     .is-scrolled .emblem { top: 4px; transform: scale(0.62); }
     .mainbar__name { position: absolute; top: 50%; inset-inline-start: 130px; inset-inline-end: 64px; display: flex; flex-direction: column; transform: translateY(-50%); color: #fff; font-size: 19px; font-weight: 700; line-height: 1.35; }
@@ -127,7 +133,7 @@ body:not(.has-hero) .mainbar::before { background: var(--hdr-solid); }
     .hdr-container { padding-inline: 16px; }
     .quicklinks { justify-content: flex-start; gap: 8px 14px; }
     .topbar a, .lang summary { font-size: 14px; }
-    .emblem { width: 84px; height: 86px; inset-inline-start: 10px; }
+    :root { --emblem-inset: 10px; --emblem-w: 84px; --emblem-h: 86px; }
     .mainbar__name { inset-inline-start: 104px; font-size: 15px; }
     /* On the narrowest phones a long university name would push the search
        icon off the row; it gives way with an ellipsis instead. */
@@ -140,7 +146,7 @@ body:not(.has-hero) .mainbar::before { background: var(--hdr-solid); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .site-header, .mainbar, .mainbar::before, .emblem { transition: none; }
+    .site-header, .mainbar, .mainbar::before, .mainbar::after, .emblem { transition: none; }
 }
 
 /* On paper the header prints once, at the top, rather than fixed over the
