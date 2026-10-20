@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Support\HealthChecks;
 use App\Support\Telegram;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
@@ -23,12 +24,18 @@ class HealthTest extends TestCase
             'services.telegram.token' => 'test-token',
             'services.telegram.chat' => '12345',
         ]);
+
+        // Otherwise these assert something about whichever machine is running
+        // them rather than about the check.
+        HealthChecks::assumeDiskUsed(40);
     }
 
     protected function tearDown(): void
     {
         File::deleteDirectory(storage_path('backups'));
         @unlink(storage_path('app/health-state.json'));
+
+        HealthChecks::assumeDiskUsed(null);
 
         parent::tearDown();
     }
@@ -52,6 +59,19 @@ class HealthTest extends TestCase
             ->assertJsonPath('status', 'ok')
             ->assertJsonPath('checks.database.ok', true)
             ->assertJsonPath('checks.backup.ok', true);
+    }
+
+    public function test_a_disk_that_is_filling_up_fails_the_check(): void
+    {
+        // The library shares a disk with another project, and a full one takes
+        // both down.
+        $this->backupTakenHoursAgo(1);
+        HealthChecks::assumeDiskUsed(92);
+
+        $this->get('/health')
+            ->assertStatus(503)
+            ->assertJsonPath('checks.disk.ok', false)
+            ->assertJsonPath('checks.disk.detail', '92% used');
     }
 
     public function test_a_backup_that_stopped_running_fails_the_check(): void

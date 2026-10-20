@@ -21,11 +21,6 @@ return [
             'Pirtûkxaneya elektronîk ji berhevokeke dîjîtal bêtir e, ew têkiliya di navbera zanist û teknolojiyê de nîşan dide. Ew ramana rexnegir û fêrbûna berdewam teşwîq dike, di heman demê de alîkariya xwendekar û lêkolîneran dike ku li ser pêşkeftinên zanistî yên nûjen agahdar bimînin.',
             'Erka me avakirina qadeke akademîk a piştgir e ku tê de agahî bi azadî peyda bibin, raman werin pêşxistin, û zanyarên pêşerojê werin hêzdar kirin ku kifş bikin, nûjeniyê bikin û beşdarî pêşveçûna zanist û civakê bibin.',
         ],
-            [
-                'name' => 'MEHMÛD XIDIR FAQÊ RASÛL',
-                'role' => 'Xwendekarê Beşê Biyolojiyê - Pêşxistinkarê malperê',
-            ],
-        ],
     ],
     'history' => [
         'heading' => '📚 Dîroka Pirtûkxaneya Koleja Zanistê',

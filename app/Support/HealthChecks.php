@@ -72,21 +72,46 @@ class HealthChecks
         }
     }
 
+    /**
+     * A reading for the disk check to use instead of the real one.
+     *
+     * Production never sets it. The tests do, because otherwise what they
+     * assert depends on how full the machine running them happens to be — and
+     * on macOS, where this is written, disk_free_space and disk_total_space
+     * describe the whole APFS container rather than one volume, so together
+     * they read 94% on a disk that df calls 29%.
+     */
+    private static ?int $assumedDiskUsed = null;
+
+    public static function assumeDiskUsed(?int $percent): void
+    {
+        self::$assumedDiskUsed = $percent;
+    }
+
     private static function disk(): array
     {
-        $free = @disk_free_space(base_path());
-        $total = @disk_total_space(base_path());
+        $used = self::$assumedDiskUsed ?? self::measureDisk();
 
-        if ($free === false || $total === false || $total <= 0) {
+        if ($used === null) {
             return ['ok' => true, 'detail' => 'unknown'];
         }
-
-        $used = (int) round(($total - $free) / $total * 100);
 
         return [
             'ok' => $used < self::DISK_PERCENT,
             'detail' => $used.'% used',
         ];
+    }
+
+    private static function measureDisk(): ?int
+    {
+        $free = @disk_free_space(base_path());
+        $total = @disk_total_space(base_path());
+
+        if ($free === false || $total === false || $total <= 0) {
+            return null;
+        }
+
+        return (int) round(($total - $free) / $total * 100);
     }
 
     private static function backup(): array
