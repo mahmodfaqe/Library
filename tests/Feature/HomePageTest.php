@@ -134,7 +134,7 @@ class HomePageTest extends TestCase
 
     public function test_the_home_page_sends_visitors_to_the_catalogue(): void
     {
-        // The raw Drive folder buttons were replaced by the catalogue, which
+        // Visitors go to the catalogue rather than the raw Drive folders: it
         // is searchable and does not expose the storage account.
         config([
             'library.drive.main' => 'https://drive.example.test/main',
@@ -194,7 +194,7 @@ class HomePageTest extends TestCase
 
     public function test_the_page_loads_its_stylesheet_from_the_build(): void
     {
-        // The Tailwind CDN used to compile the stylesheet in the browser.
+        // The stylesheet is built ahead of time, not compiled in the browser.
         $this->get('/')
             ->assertSee('/build/assets/', false)
             ->assertDontSee('cdn.tailwindcss.com', false);

@@ -2,8 +2,8 @@
    The library's administration panel.
 
    Plain CSS, served as its own file: the panel does not load the public
-   site's Tailwind build, and inlining this in the layout meant every page
-   carried it again and nothing could cache it.
+   site's Tailwind build, and a file of its own is cached once rather than
+   carried again by every page.
    ───────────────────────────────────────────────────────────────────────── */
 
 @font-face {

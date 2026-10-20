@@ -3,14 +3,11 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
-/* ══════════ Site styles ══════════
-   Everything below was previously an inline <style> block in home.blade.php,
-   served alongside the Tailwind CDN build. It is compiled by Vite now. */
+/* ══════════ Site styles ══════════ */
 
 /* One set of shadows, curves and timings for the whole site, matching the
-   administration panel. They were scattered before — thirteen shadows, six
-   easings, no two cards alike — which is what made the surface feel uneven
-   however carefully any one piece was drawn. */
+   administration panel. Cards that each pick their own shadow and easing make
+   the surface feel uneven however carefully any one of them is drawn. */
 :root {
     /* The University of Raparin's own palette, taken from uor.edu.krd so the
        library reads as part of the university rather than beside it.
@@ -60,8 +57,8 @@ a, button, input, textarea, select,
     transition-timing-function: var(--ease);
 }
 
-/* A visible, consistent focus ring: the outline the browser draws is
-   invisible against the purple, and several elements had removed it outright. */
+/* A visible, consistent focus ring: the outline the browser draws is hard
+   to see against the brand colour, and some elements remove it outright. */
 :where(a, button, input, textarea, select, [tabindex]):focus-visible {
     outline: 2px solid var(--brand);
     outline-offset: 2px;
@@ -205,7 +202,7 @@ transition: background-image 1.5s ease-in-out;
    The overlay is absolutely positioned, so the button must establish the
    containing block itself. Without this it anchors to the viewport instead,
    stretches the full page width and swallows clicks meant for anything
-   beside it — which is how it once covered the catalogue's search box. */
+   beside it, the catalogue's search box included. */
 .section-btn {
     position: relative;
     overflow: hidden;

@@ -162,10 +162,9 @@ class ImportBooksFromDrive extends Command
             // but leaves title, author and year alone, since a librarian may
             // have corrected those by hand.
             //
-            // The dry-run check belongs here, not further down: it used to sit
-            // below this block, so a run asked to write nothing quietly
-            // rewrote the subject and language of every book already in the
-            // catalogue.
+            // The dry-run check belongs here, not further down: below this
+            // block, a run asked to write nothing would quietly rewrite the
+            // subject and language of every book already in the catalogue.
             if (! $this->option('dry-run')) {
                 $existing->update(array_filter([
                     'category_id' => $category?->id,

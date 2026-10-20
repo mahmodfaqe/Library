@@ -280,7 +280,7 @@ class TranslationFilesTest extends TestCase
 
     public function test_arabic_script_locales_do_not_trail_off_into_latin(): void
     {
-        // ku-badini once ended a sentence in Kurmanji Latin mid-paragraph.
+        // A sentence must not slip into Kurmanji Latin mid-paragraph.
         $allowed = ['QR', 'code', 'BioNova', 'uor', 'edu', 'krd', 'Title', 'Description', 'Button'];
 
         foreach (['ku-sorani', 'ku-badini', 'ku-hawrami', 'ar', 'fa'] as $locale) {

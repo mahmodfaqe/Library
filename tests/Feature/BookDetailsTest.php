@@ -232,13 +232,12 @@ class BookDetailsTest extends TestCase
         $this->artisan('books:extract-details')->assertSuccessful();
 
         // The server is nearly full and also hosts an unrelated site, so books
-        // are read in memory and dropped rather than written down. An earlier
-        // version saved each one to a temp file first — and, because
-        // tempnam() creates the file it names, left an empty one behind for
-        // every book on top of that.
+        // are read in memory and dropped rather than written down. A temp file
+        // per book would also leave an empty one behind, since tempnam()
+        // creates the file it names.
         //
         // The HTTP client's own transient streams are not this command's
-        // doing, so the check is for the files it used to leave.
+        // doing, so the check is for files named the way this command would.
         $this->assertSame([], glob(sys_get_temp_dir().'/book-*') ?: []);
     }
 }

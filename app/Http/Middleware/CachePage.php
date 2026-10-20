@@ -109,8 +109,8 @@ class CachePage
     {
         $sources = [
             resource_path('views/home.blade.php'),
-            // The header, footer and <head> now live in the shared layout, so
-            // an edit there has to invalidate the cached copy as well.
+            // The header, footer and <head> live in the shared layout, so an
+            // edit there has to invalidate the cached copy as well.
             resource_path('views/layouts/base.blade.php'),
             resource_path('views/components/uor-header.blade.php'),
             // Linked with ?v=, so a cached page must not keep the old stamp.

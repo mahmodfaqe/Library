@@ -293,8 +293,8 @@
 <script>
 (function () {
     // The clipboard API needs a secure context and a focused window, and it
-    // refuses without either; the old selection trick still works there, and
-    // if even that fails the text is on the page to select by hand.
+    // refuses without either; selecting a textarea and copying still works
+    // there, and if even that fails the text is on the page to select by hand.
     function fallback(text) {
         var field = document.createElement('textarea');
         field.value = text;

@@ -39,8 +39,8 @@ class PageCacheTest extends TestCase
     public function test_a_cached_page_is_never_served_to_a_different_host(): void
     {
         // The page is full of absolute URLs — stylesheet, fonts, icons,
-        // canonical, hreflang. A copy warmed on one host once leaked all of
-        // them to visitors arriving on another.
+        // canonical, hreflang. A copy warmed on one host must not hand them to
+        // visitors arriving on another.
         $this->get('http://127.0.0.1/en')->assertOk();
 
         $html = $this->get('http://localhost/en')->assertOk()->getContent();
@@ -80,8 +80,8 @@ class PageCacheTest extends TestCase
     {
         $this->get('/en');
 
-        // The old middleware bypassed the cache for anyone carrying a cookie,
-        // which meant every visitor past their first request re-rendered.
+        // Carrying a cookie is not enough to bypass the cache, or every visitor
+        // past their first request would be re-rendered.
         $this->withSession(['some_other_key' => 'value'])
             ->get('/en')
             ->assertHeader('X-Page-Cache', 'HIT');

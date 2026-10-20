@@ -57,8 +57,8 @@ class AdminController extends Controller
      * What the panel opens on.
      *
      * A librarian arriving wants to know the shape of the collection and what
-     * is missing from it, not the list of departments — which is what this
-     * used to be. The gaps are links: each one goes to the books it counted.
+     * is missing from it, not the list of departments. The gaps are links:
+     * each one goes to the books it counted.
      */
     public function index(): View
     {

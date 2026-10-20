@@ -5,9 +5,8 @@
    ───────────────────────────────────────────────────────────────────────── */
 
 /* ── Header ──────────────────────────────────────────────────────────────
-   After the University of Raparin's own site, by way of GWRC-Web: two
-   translucent rows over the page, the menu split around a hanging emblem,
-   and a red V beneath. The header is fixed, so every page but the home page
+   As on the University of Raparin's own site: two translucent rows over the
+   page, the menu split around a hanging emblem, and a red V beneath. The header is fixed, so every page but the home page
    (whose hero sits underneath it) is pushed down by its height. */
 :root {
     --hdr-bg: rgba(57, 55, 54, 0.6);

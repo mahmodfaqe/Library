@@ -74,11 +74,12 @@
 
         // The error event does not bubble, so this listens in the capture
         // phase: one listener for every cover on the page, including the ones
-        // the search suggestions build later, which had no fallback at all.
+        // the search suggestions build later.
         //
-        // It replaces an onerror attribute on each image. Inline handlers are
-        // what oblige the Content-Security-Policy to allow inline script, and
-        // the fewer of them there are, the closer that header can be tightened.
+        // One listener rather than an onerror attribute on each image. Inline
+        // handlers are what oblige the Content-Security-Policy to allow inline
+        // script, and the fewer of them there are, the closer that header can
+        // be tightened.
         document.addEventListener('error', function (event) {
             if (event.target && event.target.tagName === 'IMG') blank(event.target);
         }, true);

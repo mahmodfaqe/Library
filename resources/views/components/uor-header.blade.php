@@ -15,9 +15,8 @@
     // What the links in the top row are, for a screen reader.
     'quicklinksLabel' => null,
 ])
-{{-- After the University of Raparin's own site, by way of GWRC-Web: two
-     translucent rows over the page, the menu split around the hanging
-     emblem, and a red V beneath. Without script it still works: the language
+{{-- As on the University of Raparin's own site: two translucent rows over
+     the page, the menu split around the hanging emblem, and a red V beneath. Without script it still works: the language
      list is a <details>, the search icon is a link and the phone menu is
      simply shown. Styled by public/uor-header.css, driven by uor-header.js. --}}
 <header @class(['site-header', 'site-header--dense' => $dense]) id="site-header">
