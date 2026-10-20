@@ -256,7 +256,10 @@ push (`.github/workflows/ci.yml`).
 | `app/Http/Middleware/CachePage.php` | Home-page cache, keyed by locale, host and source stamp |
 | `app/Http/Middleware/SecurityHeaders.php` | CSP and the rest, driven by `config/library.php` |
 | `config/library.php` | Every third-party URL the site depends on |
-| `resources/css/app.css` | All site styling; compiled by Vite with Tailwind |
+| `resources/css/app.css` | Public site styling; compiled by Vite with Tailwind |
+| `resources/views/components/uor-header.blade.php` | The university header, shared by the site and `/admin` |
+| `public/uor-header.css`, `public/uor-header.js` | Its styles and behaviour, plain files so `/admin` can load them |
+| `public/admin.css` | The rest of the admin panel's styling |
 
 ---
 

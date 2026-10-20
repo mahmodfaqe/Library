@@ -110,8 +110,8 @@ Route::get('sitemap-{locale}.xml', [SitemapController::class, 'locale'])
     ->whereIn('locale', Locale::SUPPORTED)
     ->name('sitemap.locale');
 
-// Switching language by query string (/language?locale=en), for links that
-// carry it rather than a locale prefix.
+// /language?locale=en: a permanent redirect to the home page in that language,
+// for links that carry the query string rather than a locale prefix.
 Route::get('language', function (Request $request) {
     $locale = $request->query('locale');
 

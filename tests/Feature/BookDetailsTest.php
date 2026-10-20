@@ -237,7 +237,7 @@ class BookDetailsTest extends TestCase
         // creates the file it names.
         //
         // The HTTP client's own transient streams are not this command's
-        // doing, so the check is for files named the way this command would.
+        // doing, so the check is for the book- prefix such a file would carry.
         $this->assertSame([], glob(sys_get_temp_dir().'/book-*') ?: []);
     }
 }
