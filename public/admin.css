@@ -15,12 +15,14 @@
 }
 
 :root {
-    --ink: #2c2b3d;
+    --ink: #1a1f2c;
     --ink-soft: #52504e;
     --ink-faint: #8a8785;
     --line: #e2ded7;
     --paper: #ffffff;
-    --ground: #f5f6fc;
+    --ground: #f0f0f0;
+    --neutral: #393736;
+    --neutral-deep: #1a1919;
     --brand: #790404;
     --brand-deep: #4f0202;
     --brand-wash: rgba(121, 4, 4, 0.09);
@@ -41,6 +43,8 @@ body {
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
 }
+/* Latin-script pages take the university's Latin face, as uor.edu.krd does. */
+html[dir="ltr"] body { font-family: 'Heebo', 'Rabar', system-ui, sans-serif; }
 
 .skip-link {
     position: fixed;
@@ -65,7 +69,8 @@ body {
     flex-direction: column;
     gap: 1.5rem;
     padding: 1.4rem 1rem;
-    background: linear-gradient(165deg, #5b4d9e 0%, #4f0202 55%, #443a80 100%);
+    background: var(--neutral);
+    border-inline-end: 3px solid var(--brand);
     color: rgba(255, 255, 255, 0.85);
     position: sticky;
     top: 0;
@@ -203,7 +208,7 @@ body {
 }
 .btn:active { transform: translateY(1px); }
 .btn-primary {
-    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-deep) 100%);
+    background: var(--brand);
     color: #fff;
     box-shadow: 0 2px 8px rgba(121, 4, 4, 0.30);
 }
@@ -213,7 +218,7 @@ body {
     color: var(--ink);
     border-color: var(--line);
 }
-.btn-secondary:hover { border-color: #c9cef0; background: #fbfbfe; }
+.btn-secondary:hover { border-color: #cfc9bf; background: #faf9f8; }
 .btn-danger { background: var(--bad); color: #fff; }
 .btn-danger:hover { background: #e11d48; }
 .btn-sm { padding: 0.38rem 0.8rem; font-size: 0.8rem; border-radius: 8px; }
@@ -237,7 +242,7 @@ th, td {
 thead th {
     position: sticky;
     top: 0;
-    background: #fafbff;
+    background: #faf9f8;
     color: var(--ink-soft);
     font-weight: 600;
     font-size: 0.76rem;
@@ -348,7 +353,7 @@ tbody tr:last-child td { border-bottom: none; }
     border-radius: 12px;
     padding: 1.1rem 1.2rem;
     margin-bottom: 1rem;
-    background: #fafbff;
+    background: #faf9f8;
 }
 .lang-block h3 {
     font-size: 0.9rem;
@@ -383,7 +388,7 @@ tbody tr:last-child td { border-bottom: none; }
 }
 .pagination a:hover { border-color: var(--brand); color: var(--brand); }
 .pagination .current {
-    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-deep) 100%);
+    background: var(--brand);
     border-color: transparent;
     color: #fff;
     font-weight: 700;
@@ -401,7 +406,7 @@ tbody tr:last-child td { border-bottom: none; }
     display: grid;
     place-items: center;
     padding: 1.5rem;
-    background: linear-gradient(160deg, #5b4d9e 0%, #4f0202 50%, #3f3577 100%);
+    background: var(--neutral);
 }
 .login-card {
     width: 100%;
@@ -409,7 +414,7 @@ tbody tr:last-child td { border-bottom: none; }
     background: var(--paper);
     border-radius: 18px;
     padding: clamp(1.6rem, 5vw, 2.3rem);
-    box-shadow: 0 24px 60px rgba(30, 25, 70, 0.35);
+    box-shadow: 0 24px 60px rgba(26, 25, 25, 0.35);
 }
 .login-card .brand {
     border: none;
@@ -583,9 +588,9 @@ tbody tr:last-child td { border-bottom: none; }
     flex-direction: column;
     padding: 0.3rem;
     border-radius: 10px;
-    background: #3f3577;
+    background: var(--neutral);
     border: 1px solid rgba(255, 255, 255, 0.16);
-    box-shadow: 0 12px 32px rgba(20, 15, 50, 0.45);
+    box-shadow: 0 12px 32px rgba(26, 25, 25, 0.45);
 }
 .lang-ku-list a {
     padding: 0.42rem 0.6rem;
@@ -698,7 +703,7 @@ tbody tr:last-child td { border-bottom: none; }
     background: linear-gradient(90deg, #fb7185, #f43f5e);
     min-width: 2px;
 }
-.gap-bar-good span { background: linear-gradient(90deg, var(--brand), var(--brand-deep)); }
+.gap-bar-good span { background: var(--brand); }
 .gap-count {
     font-size: 0.85rem;
     font-weight: 700;
@@ -791,7 +796,7 @@ tbody tr:last-child td { border-bottom: none; }
                 box-shadow 0.16s var(--ease);
 }
 .cell::placeholder { color: var(--ink-faint); }
-.cell:hover { border-color: var(--line); background: #fbfbff; }
+.cell:hover { border-color: var(--line); background: #faf9f8; }
 .cell:focus {
     outline: none;
     border-color: var(--brand);
@@ -849,7 +854,7 @@ tbody tr.is-edited:hover { background: rgba(251, 191, 36, 0.16); }
     height: 45px;
     border-radius: 5px;
     overflow: hidden;
-    background: linear-gradient(145deg, #eef0fb, #e3e7f7);
+    background: #ebe9e6;
     display: grid;
     place-items: center;
     font-size: 1rem;
