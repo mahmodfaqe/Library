@@ -63,8 +63,8 @@ html:not(.js) .mainbar::before { background: var(--hdr-solid); }
 
 .mainbar { position: relative; background: var(--hdr-bg); transition: background-color 0.3s ease; }
 .mainbar::before, .mainbar::after { content: ""; position: absolute; top: 100%; left: 0; right: 0; height: var(--hdr-v); pointer-events: none; }
-.mainbar::before { background: var(--hdr-bg); clip-path: polygon(var(--v-apex) 0, 100% 0, 100% 5%, var(--v-apex) 100%, 0 5%, 0 0); transition: background-color 0.3s ease, clip-path 0.3s ease; }
-.mainbar::after { background: var(--hdr-red); clip-path: polygon(var(--v-apex) 70%, 100% 0, 100% 5%, var(--v-apex) 100%, 0 5%, 0 0); transition: clip-path 0.3s ease; }
+.mainbar::before { background: var(--hdr-bg); clip-path: polygon(var(--v-apex) 0, 100% 0, 100% 5%, var(--v-apex) 100%, 0 5%, 0 0); transition: background-color 0.3s ease, height 0.3s ease; }
+.mainbar::after { background: var(--hdr-red); clip-path: polygon(var(--v-apex) 70%, 100% 0, 100% 5%, var(--v-apex) 100%, 0 5%, 0 0); transition: top 0.3s ease, height 0.3s ease, clip-path 0.3s ease; }
 .mainbar__inner { position: relative; height: var(--hdr-main); }
 
 .mainnav { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 190px minmax(0, 1fr); }
@@ -76,11 +76,15 @@ html:not(.js) .mainbar::before { background: var(--hdr-solid); }
 [dir="ltr"] .mainnav__item > a { font-size: 14.4px; text-transform: uppercase; letter-spacing: 0.5px; }
 /* The panel's menu is eight items, twice the site's; in capitals, and in the
    longer languages, they would not fit either side of the emblem. Set this
-   way they fit in all eight languages down to 1101px, where the phone menu
+   way they fit in all eight languages down to 992px, where the phone menu
    takes over. */
 .site-header--dense .mainnav { grid-template-columns: minmax(0, 1fr) 160px minmax(0, 1fr); }
 .site-header--dense .mainnav__item > a,
 [dir="ltr"] .site-header--dense .mainnav__item > a { padding: 0 4px; font-size: 14.5px; text-transform: none; letter-spacing: 0; }
+@media (max-width: 1100px) {
+    .site-header--dense .mainnav__item > a,
+    [dir="ltr"] .site-header--dense .mainnav__item > a { padding: 0 2px; font-size: 13.5px; }
+}
 
 .emblem { position: absolute; top: 18px; left: 50%; z-index: 2; display: block; width: 147px; height: 150px; transform: translateX(-50%); transform-origin: 50% 0; transition: transform 0.3s ease, top 0.3s ease; }
 .emblem img { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35)); }
@@ -94,26 +98,26 @@ body:not(.has-hero) .topbar,
 body:not(.has-hero) .mainbar,
 body:not(.has-hero) .mainbar::before { background: var(--hdr-solid); }
 
-/* Scrolled: the top row slides away, the main row turns solid, the emblem shrinks. */
+/* Scrolled: the top row slides away and the main row turns solid. On a wide
+   screen the emblem and the V stay as they are. */
 .site-header.is-scrolled { transform: translateY(calc(-1 * var(--hdr-top))); }
 .is-scrolled .mainbar, .is-scrolled .mainbar::before { background: var(--hdr-solid); }
-.is-scrolled .emblem { top: 4px; transform: translateX(-50%) scale(0.62); }
 
-@media (max-width: 1100px) {
-    :root { --hdr-top: 40px; --emblem-inset: 14px; --emblem-w: 100px; --emblem-h: 102px; }
-    /* The emblem sits a fixed distance from the edge, so the point of the V is
-       measured from the same edge rather than as a share of the width, which
-       would only meet the emblem at one screen size. Scrolled, the emblem
-       shrinks towards its outer corner and the point follows its centre. */
-    .site-header { --v-mid: calc(var(--emblem-inset) + var(--emblem-w) / 2); }
-    .site-header.is-scrolled { --v-mid: calc(var(--emblem-inset) + var(--emblem-w) * 0.62 / 2); }
-    [dir="ltr"] .site-header { --v-apex: var(--v-mid); }
-    [dir="rtl"] .site-header { --v-apex: calc(100% - var(--v-mid)); }
+/* Phones and tablets, from the same 991px as the university's site. The
+   point of the V stays at 15% in either reading direction, as it does there. */
+@media (max-width: 991px) {
+    :root { --hdr-top: 40px; }
+    .site-header { --v-apex: 15%; }
     .quicklinks .quicklinks__extra, .mainnav { display: none; }
-    .emblem { top: 33px; left: auto; inset-inline-start: var(--emblem-inset); width: var(--emblem-w); height: var(--emblem-h); transform: none; transform-origin: left top; }
+    .emblem { top: 33px; left: auto; inset-inline-start: 13px; width: 100px; height: 102px; transform: none; transform-origin: left top; }
     [dir="rtl"] .emblem { transform-origin: right top; }
-    .is-scrolled .emblem { top: 4px; transform: scale(0.62); }
-    .mainbar__name { position: absolute; top: 50%; inset-inline-start: 130px; inset-inline-end: 64px; display: flex; flex-direction: column; transform: translateY(-50%); color: #fff; font-size: 19px; font-weight: 700; line-height: 1.35; }
+    .mainbar__name { position: absolute; top: 50%; inset-inline-start: 126px; inset-inline-end: 64px; display: flex; flex-direction: column; transform: translateY(-50%); color: #fff; font-size: 19px; font-weight: 700; line-height: 1.35; transition: inset-inline-start 0.3s ease; }
+    /* Scrolled, the emblem shrinks into the bar with the name beside it, and
+       the V flattens into a red rule along the bar's foot. */
+    .is-scrolled .emblem { top: 8px; transform: scale(0.6); }
+    .is-scrolled .mainbar__name { inset-inline-start: 86px; }
+    .is-scrolled .mainbar::before { height: 0; }
+    .is-scrolled .mainbar::after { top: calc(100% - 3px); height: 3px; clip-path: polygon(100% 100%, 100% 0, 0 100%, 100% 0, 0 0, 0 100%); }
     .mainbar__name > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .mainbar__name-gold { color: var(--hdr-gold); font-weight: 500; }
     .js .menu-toggle { position: absolute; top: 50%; inset-inline-end: 12px; display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; padding: 0; border: 0; background: none; color: #fff; cursor: pointer; transform: translateY(-50%); }
@@ -134,8 +138,7 @@ body:not(.has-hero) .mainbar::before { background: var(--hdr-solid); }
     .hdr-container { padding-inline: 16px; }
     .quicklinks { justify-content: flex-start; gap: 8px 14px; }
     .topbar a, .lang summary { font-size: 14px; }
-    :root { --emblem-inset: 10px; --emblem-w: 84px; --emblem-h: 86px; }
-    .mainbar__name { inset-inline-start: 104px; font-size: 15px; }
+    .mainbar__name { font-size: 15px; }
     /* On the narrowest phones a long university name would push the search
        icon off the row; it gives way with an ellipsis instead. */
     .quicklinks { overflow: hidden; }
