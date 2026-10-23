@@ -34,10 +34,10 @@
 
 <!-- ══════════ INTRO SECTION ══════════ -->
 <section class="bg-white" style="padding: clamp(3rem,8vw,6rem) 0;">
-    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
 
         <div class="text-center max-w-[900px] mx-auto">
-            <h2 class="font-bold text-[#1a1f2c] mb-8" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.intro.heading') }}</h2>
+            <h2 class=" text-[#1a1f2c] mb-8" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.intro.heading') }}</h2>
 
             <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal"
                  style="background: #f0f0f0; padding: clamp(1.5rem,5vw,3rem); box-shadow: none;">
@@ -53,10 +53,10 @@
     
 <!-- ══════════ HISTORY SECTION ══════════ -->
 <section class="bg-white" style="padding: clamp(3rem,8vw,6rem) 0;">
-    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-[900px] mx-auto">
 
-            <h2 class="font-bold text-[#1a1f2c] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.history.heading') }}</h2>
+            <h2 class=" text-[#1a1f2c] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.history.heading') }}</h2>
 
             <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal"
                  style="background: #f0f0f0; padding: clamp(1.5rem,5vw,3rem); box-shadow: none;">
@@ -73,7 +73,7 @@
 </section>
 <!-- ══════════ LIBRARY 2 + DEPARTMENTS ══════════ -->
 <section style="padding: clamp(1rem,4vw,3rem) 0; background: #f0f0f0;">
-    <div class="max-w-[1200px] mx-auto px-6 sm:px-8 lg:px-10">
+    <div class="max-w-[1280px] mx-auto px-6 sm:px-8 lg:px-10">
 
         <div class="text-center" style="margin-top:1.4rem;">
             <a href="{{ Locale::booksUrl() }}"
@@ -85,7 +85,7 @@
 
         <!-- Department cards (DB-driven) -->
         <div id="dept-{{ app()->getLocale() }}" style="direction:{{ Locale::dir() }};">
-            <h2 class="text-center font-bold text-[#1a1f2c] mb-10" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.dept_heading') }}</h2>
+            <h2 class="text-center text-[#1a1f2c] mb-10" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.dept_heading') }}</h2>
             <div class="grid gap-5" style="grid-template-columns: repeat(auto-fit, minmax(260px,1fr));">
                 @forelse ($subjects as $subject)
                 <a href="{{ Locale::booksUrl() }}?category={{ $subject->id }}"
@@ -93,7 +93,7 @@
                    style="padding:clamp(1.3rem,3.5vw,1.9rem); min-height:190px; box-shadow:0 4px 16px rgba(26,25,25,0.06);">
                     <div>
                         <span class="block text-5xl mb-3 transition-transform duration-300">{{ $subject->icon }}</span>
-                        <h3 class="font-bold text-[#1a1f2c] mb-2" style="font-size:clamp(1rem,2.6vw,1.2rem); line-height:1.6;" dir="auto">{{ $subject->localName() }}</h3>
+                        <h3 class=" text-[#1a1f2c] mb-2" style="font-size:clamp(1rem,2.6vw,1.2rem); line-height:1.6;" dir="auto">{{ $subject->localName() }}</h3>
                     </div>
                     <span class="text-[#52504e]" style="font-size:clamp(0.82rem,2vw,0.92rem);">
                         {{ trans_choice('books.results', $subject->books_count, ['count' => $subject->books_count]) }}
@@ -121,7 +121,7 @@
             </div>
         @endif
         <div class="rounded-[1rem] bg-white border border-[#e2ded7] text-center" style="box-shadow:0 4px 16px rgba(26,25,25,0.06); padding: clamp(1.8rem,5vw,3rem);">
-            <h2 class="font-bold text-[#1a1f2c] mb-3" style="font-size:clamp(1.5rem,4vw,2rem);">
+            <h2 class=" text-[#1a1f2c] mb-3" style="font-size:clamp(1.5rem,4vw,2rem);">
                     {{ __('messages.feedback.title') }}
             </h2>
             <p class="text-[#52504e] mb-6" style="font-size:clamp(0.9rem,2.2vw,1rem); line-height:1.7;">

@@ -30,7 +30,7 @@
 }
 .js { --hero-offset: var(--header-space); }
 
-.hdr-container { width: 100%; max-width: 1240px; margin-inline: auto; padding-inline: 24px; }
+.hdr-container { width: 100%; max-width: 1280px; margin-inline: auto; padding-inline: 24px; }
 
 /* Without script the phone menu is simply shown open, and an overlay that
    tall would sit on the page; so the header is overlaid only when script has

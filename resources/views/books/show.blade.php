@@ -272,7 +272,7 @@
 
                         <div class="book-body">
                             <div>
-                                <h3 class="book-title font-bold text-[#1a1f2c] mb-1">
+                                <h3 class="book-title text-[#1a1f2c] mb-1">
                                     <a href="{{ Locale::bookUrl($other->id) }}" class="no-underline text-inherit hover:underline" dir="auto">{{ $other->title }}</a>
                                 </h3>
                                 @if ($other->author)

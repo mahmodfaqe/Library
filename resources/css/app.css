@@ -80,6 +80,17 @@ html { font-size: 16px; scroll-behavior: smooth; }
 @media (max-width: 480px)  { html { font-size: 14px; } }
 @media (min-width: 1200px) { html { font-size: 18px; } }
 
+/* Type exactly as uor.edu.krd sets it. Their whole theme is four rules:
+
+       body            { font-family: "Heebo" }
+       h1 … h6         { font-family: "Heebo"; font-weight: 400 }
+       .brxe-container { width: 1280px }
+       html[lang=ckb]  { font-family: "Rabar 015" }
+
+   The headings are the part that reads as theirs: Heebo at 400, never bold.
+   A heavier weight is what made this look like a different institution. */
+:is(h1, h2, h3, h4, h5, h6) { font-weight: 400; }
+
 body { font-family: var(--font-rtl); }
 body[dir="ltr"] { font-family: var(--font-ltr); }
 body[dir="ltr"] :is(.section-btn, .search-submit, .error-home, .book-open, .repo-go) { font-family: var(--font-accent); }
@@ -873,7 +884,7 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 
 .hero__title {
     font-size: clamp(2rem, 6.2vw, 3.6rem);
-    font-weight: 700;
+    font-weight: 400;
     line-height: 1.35;
     margin-bottom: 1.1rem;
     text-wrap: balance;

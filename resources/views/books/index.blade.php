@@ -6,7 +6,7 @@
 @section('description', __('books.intro'))
 
 @section('content')
-<div class="max-w-[1200px] mx-auto px-4" style="padding: clamp(2rem,5vw,3.5rem) 1rem;">
+<div class="max-w-[1280px] mx-auto px-4" style="padding: clamp(2rem,5vw,3.5rem) 1rem;">
 
     <nav class="mb-4 flex items-center gap-2 flex-wrap" style="font-size:0.9rem;" aria-label="{{ __('books.breadcrumb') }}">
         <a href="{{ Locale::url() }}" class="text-[#790404] no-underline hover:underline">{{ __('messages.library_name') }}</a>
@@ -24,9 +24,9 @@
         <a href="{{ Locale::booksUrl() }}" class="inline-block text-[#790404] no-underline mb-3 hover:underline" style="font-size:0.92rem;">
             <span aria-hidden="true">{{ Locale::isLtr() ? '←' : '→' }}</span> {{ __('books.back_to_subjects') }}
         </a>
-        <h1 class="font-bold text-[#1a1f2c] mb-3" style="font-size:clamp(1.6rem,4.5vw,2.2rem);" dir="auto">{{ $selected->localName() }}</h1>
+        <h1 class=" text-[#1a1f2c] mb-3" style="font-size:clamp(1.6rem,4.5vw,2.2rem);" dir="auto">{{ $selected->localName() }}</h1>
     @else
-        <h1 class="font-bold text-[#1a1f2c] mb-3" style="font-size:clamp(1.6rem,4.5vw,2.2rem);">{{ __('books.title') }}</h1>
+        <h1 class=" text-[#1a1f2c] mb-3" style="font-size:clamp(1.6rem,4.5vw,2.2rem);">{{ __('books.title') }}</h1>
         <p class="text-[#52504e] mb-8" style="font-size:clamp(0.95rem,2.4vw,1.08rem);">{{ __('books.intro') }}</p>
     @endif
 
@@ -154,7 +154,7 @@
 
                 <div class="book-body">
                     <div>
-                        <h3 class="book-title font-bold text-[#1a1f2c] mb-1">
+                        <h3 class="book-title text-[#1a1f2c] mb-1">
                             <a href="{{ Locale::bookUrl($book->id) }}"
                                class="no-underline text-inherit hover:underline" dir="auto">{{ $book->title }}</a>
                         </h3>

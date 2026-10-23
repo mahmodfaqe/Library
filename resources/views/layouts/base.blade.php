@@ -148,7 +148,7 @@
 
 <!-- ══════════ FOOTER ══════════ -->
 <footer class="text-center" style="background: #393736; color: rgba(255,255,255,0.82); border-top: 3px solid #790404;">
-    <div class="max-w-[1200px] mx-auto px-4" style="padding-block: clamp(1.5rem,4vw,2.2rem);">
+    <div class="max-w-[1280px] mx-auto px-4" style="padding-block: clamp(1.5rem,4vw,2.2rem);">
         @php
             $year = '<span class="'.Locale::yearClass().'"></span>';
             $uorLink = '<a href="'.e(config('library.university_url')).'" target="_blank" rel="noopener" style="color:#cbb58b; text-decoration:underline; text-underline-offset:3px;">'
@@ -187,7 +187,7 @@
         @endif
     </div>
     <div style="background: rgba(26,25,25,0.9); padding-block: 0.9rem;">
-        <p class="max-w-[1200px] mx-auto px-4" style="font-size:clamp(0.8rem,1.9vw,0.9rem); color: rgba(255,255,255,0.7);">{{ RichText::make(__('messages.footer.copyright'), ['year' => $year]) }}</p>
+        <p class="max-w-[1280px] mx-auto px-4" style="font-size:clamp(0.8rem,1.9vw,0.9rem); color: rgba(255,255,255,0.7);">{{ RichText::make(__('messages.footer.copyright'), ['year' => $year]) }}</p>
     </div>
 </footer>
 
