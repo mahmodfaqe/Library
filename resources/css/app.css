@@ -27,14 +27,18 @@
 
     /* Layered, low-opacity shadows read as depth; a single dark one reads as
        a border that has come loose. Cast in the brand's own hue, not blue. */
-    --shadow-sm: 0 1px 2px rgba(26, 31, 44, 0.05), 0 2px 8px rgba(121, 4, 4, 0.05);
-    --shadow-md: 0 4px 12px rgba(26, 31, 44, 0.06), 0 12px 32px rgba(121, 4, 4, 0.08);
-    --shadow-lg: 0 8px 20px rgba(26, 31, 44, 0.08), 0 24px 60px rgba(121, 4, 4, 0.12);
+    /* The university's own cards carry no shadow at all: flat white on the
+       grey band, told apart by the band rather than by depth. Measured on
+       uor.edu.krd, where .data-fact-card computes to box-shadow: none. */
+    --shadow-sm: none;
+    --shadow-md: none;
+    --shadow-lg: none;
 
     /* The university rounds to 1rem; these keep the same proportions. */
-    --radius-sm: 0.667rem;
-    --radius: 1rem;
-    --radius-lg: 1.5rem;
+    /* 15px is what their cards round to. */
+    --radius-sm: 10px;
+    --radius: 15px;
+    --radius-lg: 15px;
 
     /* Type as uor.edu.krd sets it: Rabar 015 for every Arabic-script page,
        Heebo for Latin ones and Lora for their buttons. Rabar follows the
@@ -90,6 +94,22 @@ html { font-size: 16px; scroll-behavior: smooth; }
    The headings are the part that reads as theirs: Heebo at 400, never bold.
    A heavier weight is what made this look like a different institution. */
 :is(h1, h2, h3, h4, h5, h6) { font-weight: 400; }
+
+/* The rest of their page rhythm, measured rather than guessed:
+
+       section            padding: 83.5px 25px; alternating #fff / #f0f0f0
+       h2                 letter-spacing: 1px; text-align: start
+       body paragraphs    text-align: justify
+
+   The bands are what separate one section from the next on their site, which
+   is why the cards inside need no shadow of their own. */
+:is(h2, h3) { letter-spacing: 1px; }
+
+.band {
+    padding-block: clamp(3rem, 8vw, 83.5px);
+}
+.band--grey { background: var(--page); }
+.band--white { background: #fff; }
 
 body { font-family: var(--font-rtl); }
 body[dir="ltr"] { font-family: var(--font-ltr); }

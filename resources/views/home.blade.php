@@ -33,7 +33,7 @@
 </section>
 
 <!-- ══════════ INTRO SECTION ══════════ -->
-<section class="bg-white" style="padding: clamp(3rem,8vw,6rem) 0;">
+<section class="band band--white">
     <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
 
         <div class="text-center max-w-[900px] mx-auto">
@@ -52,7 +52,7 @@
 </section>
     
 <!-- ══════════ HISTORY SECTION ══════════ -->
-<section class="bg-white" style="padding: clamp(3rem,8vw,6rem) 0;">
+<section class="band band--grey">
     <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-[900px] mx-auto">
 
@@ -72,7 +72,7 @@
     </div>
 </section>
 <!-- ══════════ LIBRARY 2 + DEPARTMENTS ══════════ -->
-<section style="padding: clamp(1rem,4vw,3rem) 0; background: #f0f0f0;">
+<section class="band band--white" style="padding-block: clamp(1rem,4vw,3rem);">
     <div class="max-w-[1280px] mx-auto px-6 sm:px-8 lg:px-10">
 
         <div class="text-center" style="margin-top:1.4rem;">
@@ -108,7 +108,7 @@
 </section>
 
 <!-- ══════════ FEEDBACK & SUGGESTIONS ══════════ -->
-<section id="feedback" style="padding: clamp(3rem,8vw,6rem) 0; background: #f0f0f0;">
+<section id="feedback" class="band band--grey">
     <div class="max-w-[760px] mx-auto px-4 sm:px-6">
         @if (session('feedback_sent'))
             <div class="mb-6 rounded-[14px] px-5 py-4 text-center font-semibold" style="background:#d1fae5; color:#065f46; font-size:clamp(0.9rem,2vw,1rem);">
