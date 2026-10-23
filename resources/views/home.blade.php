@@ -7,17 +7,26 @@
 
 @section('content')
 <!-- ══════════ HERO ══════════ -->
-<section id="hero-section" class="relative overflow-hidden flex items-center text-white text-center transition-[background-image,opacity] duration-1000 ease-in-out"
+<section id="hero-section" class="hero relative overflow-hidden flex items-center text-white transition-[background-image,opacity] duration-1000 ease-in-out"
          style="background-image: url('{{ asset('file/image1.webp') }}'); background-size: cover; background-position: center; background-repeat: no-repeat; padding: calc(var(--hero-offset) + clamp(2rem,5vw,4rem)) 0 clamp(5rem,10vw,9rem); min-height: clamp(520px,80vh,780px);">
 
-    <div class="absolute inset-0 z-0" style="background: rgba(26,25,25,0.55);"></div>
+    <div class="hero__wash absolute inset-0 z-0"></div>
 
-    <div class="container mx-auto relative z-20 px-4">
-        <div class="max-w-4xl mx-auto">
+    {{-- Laid out as the university lays out its own: the name on a short
+         ruled line, the headline beneath it, and everything ranged to the
+         reading edge rather than centred. --}}
+    <div class="hdr-container relative z-20">
+        <div class="hero__body">
 
-            <p class="opacity-80 tracking-widest mb-2" style="font-size:clamp(1rem,3vw,1.3rem);">{{ __('messages.hero.welcome') }}</p>
-            <h1 class="font-bold mb-6 leading-tight" style="font-size:clamp(2.5rem,8vw,4.5rem);">{{ __('messages.hero.title') }}</h1>
-            <p class="mb-8 opacity-95 mx-auto max-w-3xl" style="font-size:clamp(0.95rem,2.5vw,1.25rem);">{{ __('messages.hero.subtitle') }}</p>
+            <p class="hero__eyebrow">{{ __('messages.university_name') }}</p>
+            <p class="hero__welcome">{{ __('messages.hero.welcome') }}</p>
+            <h1 class="hero__title">{{ __('messages.hero.title') }}</h1>
+            <p class="hero__lede">{{ __('messages.hero.subtitle') }}</p>
+
+            <a class="hero__cta" href="{{ Locale::booksUrl() }}">
+                <span class="hero__cta-arrow" aria-hidden="true">&rarr;</span>
+                {{ __('books.title') }}
+            </a>
 
         </div>
     </div>

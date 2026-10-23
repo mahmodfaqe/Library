@@ -14,7 +14,11 @@
     --hdr-red: #790404;
     --hdr-gold: #cbb58b;
     --hdr-link: #f2f2f2;
-    --hdr-top-link: #dad8d8;
+    /* The university's own top row is a white band over the hero, not a dark
+       one: the utility links read as dark text on white, and only the menu
+       row beneath is translucent. */
+    --hdr-top-bg: rgba(255, 255, 255, 0.94);
+    --hdr-top-link: #393736;
     --hdr-top: 50px;
     --hdr-main: 75px;
     --hdr-v: 40px;
@@ -35,23 +39,24 @@
 .js .site-header { position: fixed; top: 0; inset-inline: 0; }
 .js body:not(.has-hero) #main { padding-top: calc(var(--header-space) + 1rem); }
 html:not(.js) body:not(.has-hero) #main { padding-top: calc(var(--hdr-v) + 1rem); }
-html:not(.js) .topbar,
 html:not(.js) .mainbar,
 html:not(.js) .mainbar::before { background: var(--hdr-solid); }
+html:not(.js) .topbar { background: #fff; }
 [id] { scroll-margin-top: 130px; }
 
-.topbar { background: var(--hdr-bg); border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
+.topbar { background: var(--hdr-top-bg); border-bottom: 1px solid rgba(0, 0, 0, 0.08); }
 /* Less the rule beneath it, so the whole row is --hdr-top and slides fully away. */
 .topbar__inner { height: calc(var(--hdr-top) - 1px); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .quicklinks { display: flex; align-items: center; justify-content: space-evenly; flex: 1 1 auto; gap: 8px 24px; min-width: 0; }
 .topbar a, .lang summary, .search-toggle { color: var(--hdr-top-link); text-decoration: none; font-size: 15px; font-weight: 500; }
-.topbar a:hover, .lang summary:hover, .search-toggle:hover { color: #fff; }
+.topbar a:hover, .lang summary:hover, .search-toggle:hover { color: var(--hdr-red); }
 .quicklinks a { display: inline-flex; align-items: center; min-height: 44px; white-space: nowrap; }
 .lang { position: relative; flex: 0 0 auto; }
 .lang summary { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; cursor: pointer; list-style: none; }
 .lang summary::-webkit-details-marker { display: none; }
 .lang__menu { position: absolute; top: 100%; inset-inline-start: 0; z-index: 1100; min-width: 190px; margin: 0; padding: 6px 0; list-style: none; background: var(--hdr-solid); border-radius: 8px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
-.lang__menu a { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; min-height: 44px; padding: 0.3rem 16px; }
+.lang__menu a { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; min-height: 44px; padding: 0.3rem 16px; color: var(--hdr-link); }
+.lang__menu a:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
 .lang__menu a em { font-style: normal; font-size: 0.72em; opacity: 0.6; }
 .lang__menu a[aria-current] { color: var(--hdr-gold); }
 .lang__rule { height: 1px; margin: 6px 12px; background: rgba(255, 255, 255, 0.14); }
@@ -95,9 +100,9 @@ html:not(.js) .mainbar::before { background: var(--hdr-solid); }
 
 /* Pages without a hero would show the grey page through the translucent
    rows, so there the header is solid from the start. */
-body:not(.has-hero) .topbar,
 body:not(.has-hero) .mainbar,
 body:not(.has-hero) .mainbar::before { background: var(--hdr-solid); }
+body:not(.has-hero) .topbar { background: #fff; }
 
 /* Scrolled: the top row slides away and the main row turns solid. On a wide
    screen the emblem and the V stay as they are. */

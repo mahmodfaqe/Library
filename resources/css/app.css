@@ -824,6 +824,92 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 }
 .book-unavailable { color: var(--ink-faint); font-size: 0.92rem; }
 
+/* ── The hero, as the university builds its own ───────────────────────────
+   A photograph under the house red rather than a neutral grey, the words
+   ranged to the reading edge, and a thin outlined link with an arrow instead
+   of a filled pill. */
+.hero__wash {
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(79, 2, 2, 0.58) 0%,
+            rgba(121, 4, 4, 0.52) 45%,
+            rgba(26, 31, 44, 0.72) 100%
+        );
+}
+
+.hero__body {
+    max-width: 46rem;
+    /* Ranged to whichever edge the reader starts from, so it reads the same
+       way in Kurdish as in English. */
+    margin-inline-end: auto;
+    text-align: start;
+}
+
+/* The name over a short rule, as on their slides. */
+.hero__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: clamp(0.9rem, 2.2vw, 1.05rem);
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    margin-bottom: 1rem;
+}
+.hero__eyebrow::before {
+    content: '';
+    width: 2.2rem;
+    height: 2px;
+    background: var(--accent);
+    flex: 0 0 auto;
+}
+
+.hero__welcome {
+    font-size: clamp(0.95rem, 2.4vw, 1.15rem);
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 0.4rem;
+}
+
+.hero__title {
+    font-size: clamp(2rem, 6.2vw, 3.6rem);
+    font-weight: 700;
+    line-height: 1.35;
+    margin-bottom: 1.1rem;
+    text-wrap: balance;
+}
+
+.hero__lede {
+    font-size: clamp(0.95rem, 2.3vw, 1.15rem);
+    line-height: 1.9;
+    color: rgba(255, 255, 255, 0.92);
+    margin-bottom: 2rem;
+}
+
+.hero__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.85rem 1.8rem;
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--brand);
+    font-family: var(--font-accent);
+    font-weight: 600;
+    font-size: clamp(0.95rem, 2.2vw, 1.05rem);
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    transition: background var(--quick) var(--ease), color var(--quick) var(--ease);
+}
+.hero__cta:hover { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+/* The arrow leads in the direction the line is read. */
+.hero__cta-arrow { font-size: 1.15em; line-height: 1; }
+[dir="rtl"] .hero__cta-arrow { transform: scaleX(-1); }
+
+@media (max-width: 640px) {
+    .hero__body { max-width: none; }
+}
+
 /* ── The repository ──────────────────────────────────────────────────── */
 .repo-title {
     font-size: clamp(1.5rem, 4vw, 2.1rem);
