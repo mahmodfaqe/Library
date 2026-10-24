@@ -90,7 +90,6 @@ return [
     */
 
     'contact' => [
-        'address' => env('LIBRARY_CONTACT_ADDRESS', ''),
         'phone' => env('LIBRARY_CONTACT_PHONE', ''),
         'email' => env('LIBRARY_CONTACT_EMAIL', ''),
     ],

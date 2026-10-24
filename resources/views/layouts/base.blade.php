@@ -217,10 +217,11 @@
     </div>
 
     @php
-        // Only what has actually been filled in: an address nobody checked is
-        // worse than none at all.
+        // The address is the university's, written out in each language as
+        // uor.edu.krd gives it; the phone and email are set per server, and a
+        // line left empty there is left out here.
         $contact = array_filter([
-            'address' => config('library.contact.address'),
+            'address' => __('messages.footer.address'),
             'phone' => config('library.contact.phone'),
             'email' => config('library.contact.email'),
         ]);
