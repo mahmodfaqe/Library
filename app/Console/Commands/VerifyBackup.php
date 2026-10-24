@@ -43,6 +43,16 @@ class VerifyBackup extends Command
                 }
 
                 $contents = BackupCipher::decrypt($contents, $key);
+
+                // The openssl enc format carries no signature of its own, so
+                // the wrong key is caught by the padding alone — and about one
+                // key in three hundred passes that by luck. What comes back is
+                // then rubbish, and the reader below would blame the backup
+                // rather than the key it was opened with.
+                if (! $this->looksLikeABackup($contents)) {
+                    return $this->failed('The backup would not decrypt: BACKUP_KEY is not the key this file was locked with.');
+                }
+
                 $this->line('  decrypted');
             }
 
@@ -65,6 +75,16 @@ class VerifyBackup extends Command
         $this->info("  holds {$books} books — this backup would restore.");
 
         return self::SUCCESS;
+    }
+
+    /**
+     * Every backup this application writes is either a gzipped dump or a
+     * SQLite file, and each begins with a signature of its own.
+     */
+    private function looksLikeABackup(string $contents): bool
+    {
+        return str_starts_with($contents, "\x1f\x8b")
+            || str_starts_with($contents, 'SQLite format 3');
     }
 
     private function newest(): ?string

@@ -118,9 +118,55 @@ class BackupTest extends TestCase
     {
         $sealed = BackupCipher::encrypt('the library', 'the-key');
 
+        // The openssl enc format has no signature in it, so a wrong key is
+        // caught by the padding alone and about one in three hundred gets
+        // past that. Refusing is the usual answer and handing back the file
+        // is never one, so it is the second that is worth pinning here.
+        try {
+            $this->assertNotSame('the library', BackupCipher::decrypt($sealed, 'not-the-key'));
+        } catch (\RuntimeException $e) {
+            $this->assertStringContainsString('would not decrypt', $e->getMessage());
+        }
+    }
+
+    public function test_a_truncated_backup_is_refused(): void
+    {
+        $sealed = BackupCipher::encrypt('the library', 'the-key');
+
         $this->expectException(\RuntimeException::class);
 
-        BackupCipher::decrypt($sealed, 'not-the-key');
+        BackupCipher::decrypt(substr($sealed, 0, -5), 'the-key');
+    }
+
+    public function test_a_file_that_opens_into_rubbish_is_blamed_on_the_key(): void
+    {
+        // The one wrong key in three hundred that the padding lets through:
+        // the file opens, and what comes out is not a backup at all.
+        config(['library.backup_key' => 'the-key']);
+        File::ensureDirectoryExists(storage_path('backups'));
+        file_put_contents(
+            storage_path('backups/database-test.sqlite.enc'),
+            BackupCipher::encrypt('rubbish, not a database', 'the-key')
+        );
+
+        $this->artisan('backup:verify')
+            ->expectsOutputToContain('not the key this file was locked with')
+            ->assertFailed();
+    }
+
+    public function test_a_backup_the_key_will_not_open_says_so(): void
+    {
+        config(['library.backup_key' => 'the-key']);
+        $this->aBookInTheLibrary();
+        $this->artisan('backup:database');
+
+        // Not a lost key but a wrong one, which is the likelier mistake: the
+        // server was rebuilt and BACKUP_KEY came back slightly different.
+        config(['library.backup_key' => 'not-the-key']);
+
+        $this->artisan('backup:verify')->assertFailed();
+
+        Http::assertSent(fn ($request) => str_contains($request['text'], 'did not verify'));
     }
 
     public function test_it_opens_the_backup_and_finds_the_library_inside(): void
