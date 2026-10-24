@@ -53,6 +53,7 @@ return [
         'copyright' => 'Fen Fakültesi Elektronik Kütüphanesi - Raparin Üniversitesi  |  Tüm hakları saklıdır © :year',
         'uor_line' => ':link  |  uor.edu.krd',
         'contact' => 'Adres ve iletişim',
+        'address' => 'Raparin Üniversitesi, Ana Cadde, Ranya, Süleymaniye İli, Kürdistan Bölgesi, Irak',
         'uor_link_label' => 'Raparin Üniversitesi Web Sitesi',
     ],
     'skip_to_content' => 'İçeriğe geç',

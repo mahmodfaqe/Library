@@ -53,6 +53,7 @@ return [
         'copyright' => 'Kitêbxaneya Elektronîkî ya Kolêja Zanistê - Zanîngeha Raperin  |  Hemû maf parastî ne © :year',
         'uor_line' => ':link  |  uor.edu.krd',
         'contact' => 'Navnîşan û pêwendî',
+        'address' => 'Zanîngeha Raperin, Cada Sereke, Ranye, Parêzgeha Silêmaniyê, Herêma Kurdistanê, Iraq',
         'uor_link_label' => 'Malpera Zanîngeha Raperîn',
     ],
     'skip_to_content' => 'Bazde bo naverokê',

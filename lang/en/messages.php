@@ -53,6 +53,7 @@ return [
         'copyright' => 'College of Science Electronic Library - Raparin University  |  All rights reserved © :year',
         'uor_line' => ':link  |  uor.edu.krd',
         'contact' => 'Address and contact',
+        'address' => 'University of Raparin, Main Street, Ranya, Sulaymaniyah Governorate, Kurdistan Region, Iraq',
         'uor_link_label' => 'University of Raparin Website',
     ],
     'skip_to_content' => 'Skip to content',
