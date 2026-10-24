@@ -23,7 +23,7 @@ return [
         ],
     ],
     'history' => [
-        'heading' => '📚 History of the College of Science Library',
+        'heading' => 'History of the College of Science Library',
         'opening_date' => '18/10/2025',
         'paragraphs' => [
             'The College of Science Library was established by order of the esteemed University President, Assistant Professor Dr. Payman Ramazan Ahmad, and was built on the second floor of the College of Science building at the University of Raparin. It was officially opened on :date by the University President, the Vice-President, and the College of Science Council, welcoming the science-seeking students of the College.',
@@ -35,7 +35,7 @@ return [
     'feedback' => [
         'success' => 'Thank you! Your feedback has been received.',
         'error' => 'Please write your feedback or suggestion.',
-        'title' => '💬 Feedback & Suggestions',
+        'title' => 'Feedback & Suggestions',
         'subtitle' => 'Share your opinion with us to help improve the library.',
         'name_label' => 'Name (optional)',
         'message_label' => 'Feedback or suggestion',
@@ -43,7 +43,7 @@ return [
     ],
     'footer' => [
         'copyright' => 'College of Science Electronic Library - Raparin University  |  All rights reserved © :year',
-        'uor_line' => '🎓 :link  |  uor.edu.krd',
+        'uor_line' => ':link  |  uor.edu.krd',
         'uor_link_label' => 'University of Raparin Website',
     ],
     'skip_to_content' => 'Skip to content',

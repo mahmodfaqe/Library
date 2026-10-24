@@ -23,7 +23,7 @@ return [
         ],
     ],
     'history' => [
-        'heading' => '📚 Fen Fakültesi Kütüphanesinin Tarihi',
+        'heading' => 'Fen Fakültesi Kütüphanesinin Tarihi',
         'opening_date' => '18/10/2025',
         'paragraphs' => [
             'Fen Fakültesi Kütüphanesi, saygıdeğer Üniversite Rektörü Yardımcı Doçent Dr. Peyman Ramazan Ahmed\'in emriyle kurulmuş olup Raparin Üniversitesi Fen Fakültesi binasının ikinci katında yer almaktadır. Kütüphane, :date tarihinde Rektör, Rektör Yardımcısı ve Fen Fakültesi Kurulu tarafından törenle açılmış ve Fen Fakültesi\'nin bilim meraklısı öğrencilerine kapılarını açmıştır.',
@@ -35,7 +35,7 @@ return [
     'feedback' => [
         'success' => 'Teşekkürler! Geri bildiriminiz alındı.',
         'error' => 'Lütfen eleştirinizi veya önerinizi yazın.',
-        'title' => '💬 Eleştiri ve Öneriler',
+        'title' => 'Eleştiri ve Öneriler',
         'subtitle' => 'Kütüphaneyi geliştirmemize yardımcı olmak için görüşlerinizi paylaşın.',
         'name_label' => 'İsim (isteğe bağlı)',
         'message_label' => 'Eleştiri veya öneri',
@@ -43,7 +43,7 @@ return [
     ],
     'footer' => [
         'copyright' => 'Fen Fakültesi Elektronik Kütüphanesi - Raparin Üniversitesi  |  Tüm hakları saklıdır © :year',
-        'uor_line' => '🎓 :link  |  uor.edu.krd',
+        'uor_line' => ':link  |  uor.edu.krd',
         'uor_link_label' => 'Raparin Üniversitesi Web Sitesi',
     ],
     'skip_to_content' => 'İçeriğe geç',

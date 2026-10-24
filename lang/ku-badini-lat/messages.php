@@ -23,7 +23,7 @@ return [
         ],
     ],
     'history' => [
-        'heading' => '📚 Dîroka Pirtûkxaneya Koleja Zanistê',
+        'heading' => 'Dîroka Pirtûkxaneya Koleja Zanistê',
         'opening_date' => '18/10/2025',
         'paragraphs' => [
             'Pirtûkxaneya Koleja Zanistê bi fermana rêzdar Serokê Zanîngehê Profesor Alîkar Dr. Peyman Ramezanê Ehmed hat avakirin, li qata duyemîn a avahiya Koleja Zanistê ya Zanîngeha Raperinê. Di tarîxa :date de ji aliyê Serokê Zanîngehê, Cîgirê wî û Encumena Koleja Zanistê ve hat vekirin û xwendekarên zanistxwaz pêşwazî lê hat kirin.',
@@ -35,7 +35,7 @@ return [
     'feedback' => [
         'success' => 'Spas! Rexne û pêşniyara te gihîşt.',
         'error' => 'Ji kerema xwe rexne an pêşniyara xwe binivîse.',
-        'title' => '💬 Rexne û Pêşniyar',
+        'title' => 'Rexne û Pêşniyar',
         'subtitle' => 'Nêrîna xwe bi me re parve bike ji bo çêtirkirina pirtûkxanê.',
         'name_label' => 'Nav (dilxwaz)',
         'message_label' => 'Rexne an pêşniyar',
@@ -43,7 +43,7 @@ return [
     ],
     'footer' => [
         'copyright' => 'Kitêbxaneya Elektronîkî ya Kolêja Zanistê - Zanîngeha Raperin  |  Hemû maf parastî ne © :year',
-        'uor_line' => '🎓 :link  |  uor.edu.krd',
+        'uor_line' => ':link  |  uor.edu.krd',
         'uor_link_label' => 'Malpera Zanîngeha Raperîn',
     ],
     'skip_to_content' => 'Bazde bo naverokê',
