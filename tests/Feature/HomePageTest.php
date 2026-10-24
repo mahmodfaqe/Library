@@ -148,6 +148,18 @@ class HomePageTest extends TestCase
         }
     }
 
+    public function test_the_footer_offers_this_page_in_every_language(): void
+    {
+        $html = $this->get('/en/books')->assertOk()->getContent();
+
+        foreach (Locale::SUPPORTED as $locale) {
+            $href = url($locale === Locale::DEFAULT ? 'books' : $locale.'/books');
+            $this->assertStringContainsString('<li><a href="'.$href.'" hreflang="'.Locale::languageTag($locale).'"', $html, $locale);
+        }
+
+        $this->assertSame(1, preg_match_all('/aria-current="true"\s*>English<\/a>/', $html));
+    }
+
     public function test_the_hills_above_the_footer_cover_nothing(): void
     {
         // The stylesheet gives the last block on the page room for the hills.

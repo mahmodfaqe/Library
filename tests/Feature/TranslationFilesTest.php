@@ -254,7 +254,6 @@ class TranslationFilesTest extends TestCase
             $messages = $this->load($locale, 'messages');
 
             $this->assertStringContainsString(':year', $messages['footer']['copyright'], $locale);
-            $this->assertStringContainsString(':link', $messages['footer']['uor_line'], $locale);
 
             // The QR code is linked from the shared footer, so every locale
             // needs a label for it.
@@ -273,9 +272,16 @@ class TranslationFilesTest extends TestCase
         // accounts, and must not publish anyone's phone number.
         $html = $this->get('/')->assertOk()->getContent();
 
-        foreach (['snapchat.com', 'tiktok.com', 'facebook.com', 't.me/', 'wa.me/', 'tel:+'] as $trace) {
+        foreach (['snapchat.com', 'tiktok.com', 't.me/', 'wa.me/', 'tel:+'] as $trace) {
             $this->assertStringNotContainsString($trace, $html);
         }
+
+        // The university's own accounts under the crest are the only ones.
+        preg_match_all('~https?://(?:www\.)?(?:facebook|instagram|twitter|x)\.com/[^"\s<]*~', $html, $links);
+        $this->assertEqualsCanonicalizing(
+            array_values(config('library.university_social')),
+            array_values(array_unique($links[0]))
+        );
     }
 
     public function test_arabic_script_locales_do_not_trail_off_into_latin(): void

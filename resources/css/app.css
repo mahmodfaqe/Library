@@ -212,38 +212,37 @@ body[dir="ltr"] :is(.section-btn, .search-submit, .error-home, .book-open, .repo
 transition: background-image 1.5s ease-in-out;
 }
 
-/* Scroll-to-top */
+/* Scroll-to-top, as theirs: 60px of the house red, 40px in from the bottom
+   right whichever way the page reads, with a soft shadow and a thin light
+   ring that the red takes over as the page is read. */
 #scrollTopBtn {
     position: fixed;
-    bottom: clamp(1.2rem,4vw,2rem);
-    inset-inline-end: clamp(1.2rem,4vw,2rem);
-    width: clamp(44px,6vw,54px);
-    height: clamp(44px,6vw,54px);
+    bottom: 40px;
+    right: 40px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     background: var(--brand);
-    color: white;
+    color: #fff;
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 6px 24px rgba(121,4,4,0.45);
+    box-shadow: 0 3px 15px 1px rgba(0, 0, 0, 0.2);
     z-index: 990;
     opacity: 0;
-    transform: translateY(20px) scale(0.85);
-    transition: opacity 0.35s var(--ease), transform 0.35s var(--ease-spring), box-shadow 0.25s ease;
+    transition: opacity 0.125s ease-in;
     pointer-events: none;
 }
 #scrollTopBtn.visible {
     opacity: 1;
-    transform: translateY(0) scale(1);
     pointer-events: auto;
 }
-#scrollTopBtn:hover {
-    transform: translateY(-5px) scale(1.1);
-    box-shadow: 0 14px 36px rgba(121,4,4,0.58);
-}
-#scrollTopBtn:active { transform: translateY(0) scale(0.95); }
+.scroll-top__ring { position: absolute; inset: 0; width: 100%; height: 100%; }
+.scroll-top__ring path { fill: none; }
+.scroll-top__track { stroke: #e5e5e5; stroke-width: 4; }
+.scroll-top__fill { stroke: var(--brand); stroke-width: 5; stroke-dasharray: 100; stroke-dashoffset: 100; }
 
 /* section-btn shimmer
    The overlay is absolutely positioned, so the button must establish the
@@ -915,19 +914,27 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
     .fact-row { gap: 14px; }
 }
 
-/* ── The footer, as the university sets its own ───────────────────────────
-   Measured on uor.edu.krd: the band is #393736, each column is headed in the
-   crest's gold at weight 400, and the links beneath are #dad8d8 at 14px with
-   no underline. */
 /* ── The footer, set out as theirs is ─────────────────────────────
-   Measured on uor.edu.krd: the band is #393736 and opens with 120px of air;
-   each column is headed in the crest's gold at 24px and weight 400, and the
-   links beneath are #dad8d8 at 14.4px with no underline. The crest stands in
-   the middle column, and a darker strip carries the copyright. */
+   Measured on uor.edu.krd at 375, 768, 1280 and 1600px. Their sizes grow
+   with the screen up to 1280px and are written here in px, because the rem
+   on this site runs from 14 to 18px over the same range and theirs does not.
+   The band is #393736, each column is headed in the crest's gold at weight
+   400, the links beneath are #dad8d8 with no underline, and a darker strip
+   carries the copyright. */
 .site-footer {
+    --footer-gutter: clamp(24.3px, 0.625vw + 22px, 30px);
+    --footer-gap: clamp(44px, 2.59vw + 34.4px, 67.5px);
     position: relative;
     background: #393736;
     color: rgba(255, 255, 255, 0.82);
+}
+
+/* Their content is 1280px wide, with the gutter outside it. */
+.footer-container {
+    width: 100%;
+    max-width: calc(1280px + 2 * var(--footer-gutter));
+    margin-inline: auto;
+    padding-inline: var(--footer-gutter);
 }
 
 /* Their hills and their city, the two images from uor.edu.krd, placed as
@@ -970,49 +977,106 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
     padding-bottom: calc(var(--hills) + 1rem);
 }
 
+/* Five columns with the middle one twice as wide, as theirs: the library's
+   pages at the reading edge, the crest under the university's name in the
+   middle, the languages at the far edge. Below 992px the crest takes a row
+   of its own above two columns, and below 479px there is one column. */
 .site-footer__cols {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-    gap: clamp(1.5rem, 4vw, 3rem);
-    padding-block: clamp(2.5rem, 7vw, 120px) clamp(2rem, 4vw, 3rem);
-    align-items: start;
+    grid-template-columns: 1fr 1fr 2fr 1fr 1fr;
+    gap: var(--footer-gutter);
+    padding-top: var(--hills-sky);
+    padding-bottom: var(--footer-gap);
+}
+.site-footer__cols > :first-child { grid-column: 1; }
+.site-footer__cols > .footer-col--mark { grid-column: 3; }
+.site-footer__cols > :last-child { grid-column: 5; }
+
+@media (max-width: 991px) {
+    .site-footer__cols { grid-template-columns: 1fr 1fr; }
+    .site-footer__cols > :first-child,
+    .site-footer__cols > :last-child { grid-column: auto; }
+    .site-footer__cols > .footer-col--mark { grid-column: 1 / -1; order: -1; }
+}
+
+@media (max-width: 478px) {
+    .site-footer__cols { grid-template-columns: 1fr; row-gap: 32.7px; }
+}
+
+.footer-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--footer-gutter);
+}
+
+@media (max-width: 478px) {
+    .footer-col { gap: 18px; }
 }
 
 .footer-col h2 {
-    font-size: 1.5rem;
+    font-size: clamp(19.47px, 0.5vw + 17.6px, 24px);
     font-weight: 400;
+    line-height: 1.2;
     color: var(--accent);
-    margin-bottom: 0.6rem;
 }
 .footer-col ul { list-style: none; }
-.footer-col a {
+/* Theirs keep 10px on the right of every link whichever way the page
+   reads, so it is set on that side here too. */
+.footer-col li a {
     display: inline-block;
-    padding-block: 8px;
-    padding-inline-end: 10px;
+    padding: 8px 10px 8px 0;
     color: #dad8d8;
-    font-size: 0.9rem;
-    line-height: 1.47;
+    font-size: 14.4px;
+    line-height: 1.38;
     text-decoration: none;
 }
-.footer-col a:hover { color: var(--accent); }
+.footer-col li a:hover,
+.footer-col li a[aria-current] { color: var(--accent); }
 
-/* The middle column is the crest, standing under the name. */
-.footer-col--mark { display: flex; flex-direction: column; align-items: center; gap: 1rem; text-align: center; }
-.footer-col--mark > img { width: clamp(120px, 14vw, 180px); height: auto; }
-.footer-col--mark p { font-size: 0.9rem; line-height: 1.7; color: #dad8d8; }
-.footer-col--mark a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+/* The middle column: the name, the crest at their 216px, and the
+   university's accounts beneath it. */
+.footer-col--mark { align-items: center; text-align: center; }
+.footer-col--mark img { display: block; width: 216px; height: auto; }
 
-/* The row of ways to reach the library: a tile holding the icon, the line
-   beside it. Their tile is 60x55 at a tenth of black, with the 5px corner
-   every control on the site carries. */
-.footer-info {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-    gap: clamp(1rem, 3vw, 2.5rem);
-    padding-bottom: clamp(2rem, 5vw, 67.5px);
+@media (max-width: 767px) {
+    .footer-col--mark img { width: 177px; }
 }
 
-.footer-info__item { display: flex; align-items: center; gap: 1rem; }
+@media (max-width: 478px) {
+    .footer-col--mark img { width: 167px; }
+}
+
+/* Theirs: each mark 19.8px high in its own colour, on a 52px-high target
+   with 15px at either side, 13.5px apart. */
+.footer-col .footer-social { display: flex; justify-content: center; gap: 13.5px; }
+.footer-col .footer-social a {
+    display: flex;
+    padding: 16.2px 15px;
+    line-height: 0;
+    transition: opacity var(--quick) var(--ease);
+}
+.footer-col .footer-social a:hover { opacity: 0.75; }
+.footer-col .footer-social svg { width: auto; height: 19.8px; }
+.footer-col .footer-social a.footer-social__facebook { color: #6774c5; }
+.footer-col .footer-social a.footer-social__x { color: #fff; }
+.footer-col .footer-social a.footer-social__instagram { color: #e4405f; }
+
+/* The ways to reach the library, three across as theirs and one above the
+   other below 768px: a 60x55 tile at a third of black holding the icon in
+   their pale gold, the line beside it, and the pair centred in its column. */
+.footer-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--footer-gutter);
+    padding-bottom: var(--footer-gap);
+}
+
+@media (max-width: 767px) {
+    .footer-info { grid-template-columns: 1fr; }
+}
+
+.footer-info__item { display: flex; align-items: center; justify-content: center; gap: 13.5px; }
 
 .footer-info__icon {
     flex: 0 0 auto;
@@ -1023,19 +1087,20 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
     height: 55px;
     border-radius: 5px;
     background: rgba(26, 25, 25, 0.3);
-    color: var(--accent);
+    color: #ffecb3;
 }
 
-.footer-info p { font-size: 0.9rem; line-height: 1.74; color: #dad8d8; }
+.footer-info p { font-size: clamp(12.89px, 0.167vw + 12.27px, 14.4px); line-height: 1.62; color: #dad8d8; }
 .footer-info a { color: #dad8d8; text-decoration: none; }
 .footer-info a:hover { color: var(--accent); }
 
 .site-footer__bottom {
     background: rgba(26, 25, 25, 0.9);
-    padding-block: 1.6rem;
+    padding-block: clamp(23.5px, 0.718vw + 20.8px, 30px);
 }
 .site-footer__bottom p {
-    font-size: 0.875rem;
+    font-size: 12px;
+    line-height: 23.33px;
     color: #dad8d8;
     text-align: center;
 }

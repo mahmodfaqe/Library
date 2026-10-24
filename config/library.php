@@ -81,6 +81,17 @@ return [
     'university_url' => env('LIBRARY_UNIVERSITY_URL', 'https://uor.edu.krd'),
 
     /*
+     * The university's own accounts, linked under the crest in the footer as
+     * uor.edu.krd links them. Official accounts only: the public page never
+     * links anyone's personal ones.
+     */
+    'university_social' => [
+        'facebook' => 'https://www.facebook.com/UoRofficial/',
+        'x' => 'https://twitter.com/raparinuni',
+        'instagram' => 'https://instagram.com/UoRofficial',
+    ],
+
+    /*
     |--------------------------------------------------------------------------
     | Where to find us
     |--------------------------------------------------------------------------
