@@ -39,12 +39,13 @@
     /* The band of hills above the footer, measured on uor.edu.krd, where a
        rem is 10px: sky above the peaks (their --section-space-m), the city
        drawing under them (10rem), and a little below it (their --space-xs).
-       Their band runs 3rem further, tucked under the footer; only what
-       shows is counted here. */
+       Measured on theirs at four widths: 400px gives 76/35/60, 480 gives
+       80/0/100, 768 gives 94.4/0/100 and 1280 gives 120/0/100, which is
+       5vw + 56px for the sky, capped where their container stops growing. */
     --hills-sky: clamp(72px, calc(5vw + 56px), 120px);
     --hills-gap: 0px;
     --hills-city: 100px;
-    --hills: calc(var(--hills-sky) + var(--hills-gap) + var(--hills-city) + 13.5px - 30px);
+    --hills: calc(var(--hills-sky) + var(--hills-gap) + var(--hills-city) + 13.5px);
 
     --radius-sm: 10px;
     --radius: 15px;
