@@ -147,7 +147,7 @@ class HomePageTest extends TestCase
             ->assertDontSee('https://drive.example.test/second', false);
     }
 
-    public function test_it_lists_the_subjects_in_order_with_their_icons(): void
+    public function test_it_lists_the_subjects_in_order(): void
     {
         // The College of Science's own subjects lead; the rest follow.
         Category::create(['name' => 'کیمیا', 'icon' => '⚗️', 'sort_order' => 2]);
@@ -156,8 +156,11 @@ class HomePageTest extends TestCase
         $html = $this->get('/en')->assertOk()->getContent();
 
         $this->assertLessThan(mb_strpos($html, 'کیمیا'), mb_strpos($html, 'بایۆلۆجی'));
-        $this->assertStringContainsString('🧬', $html);
-        $this->assertStringContainsString('⚗️', $html);
+
+        // A subject card is its name and the size of its shelf, nothing more:
+        // the university's own cards carry no icon, and neither do these.
+        $this->assertStringNotContainsString('🧬', $html);
+        $this->assertStringNotContainsString('⚗️', $html);
     }
 
     public function test_each_subject_links_into_its_shelf(): void

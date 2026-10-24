@@ -217,13 +217,14 @@ class BookCatalogueTest extends TestCase
     {
         $biology = Category::create(['name' => 'بایۆلۆجی', 'icon' => '🧬', 'sort_order' => 1]);
         $this->book(['drive_file_id' => 'abc123', 'category_id' => $biology->id]);
-        // Nothing to render a cover from; the subject's icon stands in.
+        // Nothing to render a cover from: the box is simply left empty, as it
+        // is on the university's own pages, which carry no emoji.
         $this->book(['title' => 'No cover', 'category_id' => $biology->id]);
 
         $this->get("/books?category={$biology->id}")
             ->assertOk()
             ->assertSee('https://drive.google.com/thumbnail?id=abc123&amp;sz=w400', false)
-            ->assertSee('🧬', false);
+            ->assertDontSee('🧬', false);
     }
 
     public function test_the_policy_lets_covers_load(): void
