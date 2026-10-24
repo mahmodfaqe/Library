@@ -94,6 +94,16 @@ docker compose logs -f library          # follow the logs
 docker compose up -d --build            # deploy a new version
 docker compose up -d                    # apply an .env change
 docker compose exec library php artisan backup:database
+docker compose exec library php -v      # which PHP the container is running
+```
+
+`--build` reuses the `php:8.3-fpm-alpine` layer already on the machine, so a
+PHP security release does not arrive with an ordinary deploy. When one is
+published, fetch the base image as well:
+
+```bash
+docker compose build --pull library && docker compose up -d library
+docker image prune -f                   # the layers the rebuild replaced
 ```
 
 `docker compose restart` does **not** re-read `.env` — a container keeps the

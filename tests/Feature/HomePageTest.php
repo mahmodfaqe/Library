@@ -117,6 +117,34 @@ class HomePageTest extends TestCase
         }
     }
 
+    public function test_the_footer_shows_only_the_contact_lines_that_are_set(): void
+    {
+        config([
+            'library.contact.address' => 'Main Street, Ranya',
+            'library.contact.phone' => '',
+            'library.contact.email' => 'library@example.test',
+        ]);
+
+        $page = $this->get('/en');
+
+        $page->assertSee('Main Street, Ranya')
+            ->assertSee('mailto:library@example.test', false)
+            // The phone was left empty, so no tile for it and no bare 'tel:'.
+            ->assertDontSee('tel:', false);
+    }
+
+    public function test_the_contact_row_is_absent_until_something_is_configured(): void
+    {
+        // An address nobody filled in is worse than none at all.
+        config([
+            'library.contact.address' => '',
+            'library.contact.phone' => '',
+            'library.contact.email' => '',
+        ]);
+
+        $this->get('/en')->assertDontSee('footer-info__item', false);
+    }
+
     public function test_nothing_links_nowhere_when_the_urls_are_not_configured_yet(): void
     {
         // A fresh install ships with these blank; the page must not render

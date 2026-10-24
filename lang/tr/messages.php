@@ -52,6 +52,7 @@ return [
     'footer' => [
         'copyright' => 'Fen Fakültesi Elektronik Kütüphanesi - Raparin Üniversitesi  |  Tüm hakları saklıdır © :year',
         'uor_line' => ':link  |  uor.edu.krd',
+        'contact' => 'Adres ve iletişim',
         'uor_link_label' => 'Raparin Üniversitesi Web Sitesi',
     ],
     'skip_to_content' => 'İçeriğe geç',

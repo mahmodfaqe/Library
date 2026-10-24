@@ -155,8 +155,9 @@
     @endphp
 
     {{-- Columns under gold headings, as the university sets its own footer:
-         a heading in #cbb58b over a short list of plain light links. --}}
-    <div class="site-footer__cols max-w-[1280px] mx-auto px-4">
+         a heading in #cbb58b at 24px over a list of #dad8d8 links at 14.4px,
+         with the crest standing in the middle column. --}}
+    <div class="site-footer__cols hdr-container">
 
         <section class="footer-col">
             <h2>{{ __('messages.library_name') }}</h2>
@@ -165,6 +166,13 @@
                 <li><a href="{{ Locale::thesesUrl() }}">{{ __('theses.title') }}</a></li>
                 <li><a href="{{ Locale::privacyUrl() }}">{{ __('privacy.title') }}</a></li>
             </ul>
+        </section>
+
+        {{-- The crest stands between the two lists, as it does on theirs. It
+             carries no heading: the column beside it already says the name. --}}
+        <section class="footer-col footer-col--mark">
+            <img src="{{ asset('file/uor-logo.webp') }}" alt="" width="512" height="523" loading="lazy" decoding="async">
+            <p>{{ RichText::make(__('messages.footer.uor_line'), ['link' => $uorLink]) }}</p>
         </section>
 
         <section class="footer-col">
@@ -177,16 +185,47 @@
             </ul>
         </section>
 
-        <section class="footer-col footer-col--mark">
-            <img src="{{ asset('file/uor-logo.webp') }}" alt="" width="512" height="523" loading="lazy" decoding="async">
-            <p>{{ RichText::make(__('messages.footer.uor_line'), ['link' => $uorLink]) }}</p>
-
-        </section>
-
     </div>
 
+    @php
+        // Only what has actually been filled in: an address nobody checked is
+        // worse than none at all.
+        $contact = array_filter([
+            'address' => config('library.contact.address'),
+            'phone' => config('library.contact.phone'),
+            'email' => config('library.contact.email'),
+        ]);
+    @endphp
+
+    @if ($contact)
+        <div class="footer-info hdr-container">
+            <h2 class="sr-only">{{ __('messages.footer.contact') }}</h2>
+            @foreach ($contact as $kind => $value)
+                <div class="footer-info__item">
+                    <span class="footer-info__icon" aria-hidden="true">
+                        @switch($kind)
+                            @case('address')
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                                @break
+                            @case('phone')
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.4 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.4 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
+                                @break
+                            @default
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+                        @endswitch
+                    </span>
+                    @if ($kind === 'address')
+                        <p dir="auto">{{ $value }}</p>
+                    @else
+                        <p><a href="{{ $kind === 'phone' ? 'tel:'.preg_replace('/[^+0-9]/', '', $value) : 'mailto:'.$value }}" dir="ltr">{{ $value }}</a></p>
+                    @endif
+                </div>
+            @endforeach
+        </div>
+    @endif
+
     <div class="site-footer__bottom">
-        <p class="max-w-[1280px] mx-auto px-4">{{ RichText::make(__('messages.footer.copyright'), ['year' => $year]) }}</p>
+        <p class="hdr-container">{{ RichText::make(__('messages.footer.copyright'), ['year' => $year]) }}</p>
     </div>
 </footer>
 

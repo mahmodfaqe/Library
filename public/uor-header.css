@@ -109,6 +109,13 @@ body:not(.has-hero) .topbar { background: #fff; }
 
 /* Scrolled: the top row slides away and the main row turns solid. On a wide
    screen the emblem and the V stay as they are. */
+/* Only the home page has a photograph for the band to lie on. Everywhere
+   else it is solid, which is what theirs becomes the moment the banner has
+   scrolled past. */
+body:not(.has-hero) .topbar,
+body:not(.has-hero) .mainbar,
+body:not(.has-hero) .mainbar::before { background: var(--hdr-solid); }
+
 .site-header.is-scrolled { transform: translateY(calc(-1 * var(--hdr-top))); }
 .is-scrolled .mainbar, .is-scrolled .mainbar::before { background: var(--hdr-solid); }
 

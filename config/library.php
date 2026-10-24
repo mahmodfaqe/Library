@@ -80,6 +80,21 @@ return [
 
     'university_url' => env('LIBRARY_UNIVERSITY_URL', 'https://uor.edu.krd'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Where to find us
+    |--------------------------------------------------------------------------
+    | The footer's contact row, as the university sets its own. Each line is
+    | shown only when it has been filled in, so the row stays empty rather
+    | than carrying an address nobody checked.
+    */
+
+    'contact' => [
+        'address' => env('LIBRARY_CONTACT_ADDRESS', ''),
+        'phone' => env('LIBRARY_CONTACT_PHONE', ''),
+        'email' => env('LIBRARY_CONTACT_EMAIL', ''),
+    ],
+
     'analytics' => [
         // Empty disables the counter entirely — no third-party request is made.
         'host' => env('LIBRARY_ANALYTICS_HOST', ''),

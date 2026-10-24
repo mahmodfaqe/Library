@@ -52,6 +52,7 @@ return [
     'footer' => [
         'copyright' => 'Kitêbxaneya Elektronîkî ya Kolêja Zanistê - Zanîngeha Raperin  |  Hemû maf parastî ne © :year',
         'uor_line' => ':link  |  uor.edu.krd',
+        'contact' => 'Navnîşan û pêwendî',
         'uor_link_label' => 'Malpera Zanîngeha Raperîn',
     ],
     'skip_to_content' => 'Bazde bo naverokê',

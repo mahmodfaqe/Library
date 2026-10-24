@@ -52,6 +52,7 @@ return [
     'footer' => [
         'copyright' => 'کتابخانه الکترونیکی دانشکده علوم - دانشگاه راپەرین  |  تمامی حقوق محفوظ است © :year',
         'uor_line' => ':link  |  uor.edu.krd',
+        'contact' => 'نشانی و تماس',
         'uor_link_label' => 'وب‌سایت دانشگاه راپەرین',
     ],
     'skip_to_content' => 'پرش به محتوا',
