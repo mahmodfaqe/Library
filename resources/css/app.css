@@ -36,6 +36,9 @@
 
     /* The university rounds to 1rem; these keep the same proportions. */
     /* 15px is what their cards round to. */
+    /* How far the hills above the footer rise into the page. */
+    --ridge: clamp(70px, 11vw, 150px);
+
     --radius-sm: 10px;
     --radius: 15px;
     --radius-lg: 15px;
@@ -928,9 +931,29 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
     inset-inline: 0;
     display: block;
     width: 100%;
-    height: clamp(70px, 11vw, 150px);
+    height: var(--ridge);
     margin-bottom: -1px;
     pointer-events: none;
+}
+
+/* The city sits behind the columns, filling the band's lower half. */
+.footer-skyline {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    width: 100%;
+    height: clamp(140px, 20vw, 260px);
+    pointer-events: none;
+}
+
+.site-footer__cols,
+.footer-info,
+.site-footer__bottom { position: relative; z-index: 1; }
+
+/* The last thing on the page makes room for them in its own colour, so the
+   sky between the peaks is that section rather than a white seam. */
+#main > :last-child {
+    padding-bottom: calc(var(--ridge) + 1rem);
 }
 
 .site-footer__cols {
