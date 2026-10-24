@@ -6,7 +6,7 @@
 @section('description', __('books.intro'))
 
 @section('content')
-<div class="max-w-[1280px] mx-auto px-4" style="padding: clamp(2rem,5vw,3.5rem) 1rem;">
+<div class="max-w-[1280px] mx-auto px-4" style="padding-top: clamp(2rem,5vw,3.5rem);">
 
     <nav class="mb-4 flex items-center gap-2 flex-wrap" style="font-size:0.9rem;" aria-label="{{ __('books.breadcrumb') }}">
         <a href="{{ Locale::url() }}" class="text-[#790404] no-underline hover:underline">{{ __('messages.library_name') }}</a>

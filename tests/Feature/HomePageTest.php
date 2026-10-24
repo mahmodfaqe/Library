@@ -148,6 +148,26 @@ class HomePageTest extends TestCase
         }
     }
 
+    public function test_the_hills_above_the_footer_cover_nothing(): void
+    {
+        // The stylesheet gives the last block on the page room for the hills.
+        // A padding in that block's own style attribute wins over it, and the
+        // hills then sit on its last row.
+        $category = Category::create(['name' => 'Biology', 'sort_order' => 1]);
+        $book = Book::create(['title' => 'A book', 'url' => 'https://example.test/x', 'category_id' => $category->id]);
+
+        foreach (['/', '/books', '/books/'.$book->id, '/theses', '/privacy', '/no-such-page'] as $uri) {
+            $dom = new \DOMDocument;
+            libxml_use_internal_errors(true);
+            $dom->loadHTML($this->get($uri)->getContent());
+            libxml_clear_errors();
+
+            $last = $dom->getElementById('main')?->lastElementChild;
+            $this->assertNotNull($last, $uri);
+            $this->assertDoesNotMatchRegularExpression('/padding(-bottom|-block(-end)?)?\s*:/', $last->getAttribute('style'), $uri);
+        }
+    }
+
     public function test_nothing_links_nowhere_when_the_urls_are_not_configured_yet(): void
     {
         // A fresh install ships with these blank; the page must not render

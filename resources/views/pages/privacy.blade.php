@@ -5,7 +5,7 @@
 @section('description', __('privacy.intro'))
 
 @section('content')
-<div class="max-w-[820px] mx-auto px-4" style="padding: clamp(2rem,6vw,4rem) 1rem;">
+<div class="max-w-[820px] mx-auto px-4" style="padding-top: clamp(2rem,6vw,4rem);">
 
     <nav class="mb-4 flex items-center gap-2 flex-wrap" style="font-size:0.9rem;" aria-label="{{ __('books.breadcrumb') }}">
         <a href="{{ Locale::url() }}" class="text-[#790404] no-underline hover:underline">{{ __('messages.library_name') }}</a>
