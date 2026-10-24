@@ -11,8 +11,8 @@
 :root {
     /* The University of Raparin's own palette, taken from uor.edu.krd so the
        library reads as part of the university rather than beside it.
-       Primary #790404, accent #cbb58b, secondary #1a1f2c. */
-    --ink: #1a1f2c;
+       Primary #790404, accent #cbb58b, secondary #1a1a1a. */
+    --ink: #1a1a1a;
     --ink-soft: #52504e;
     --ink-faint: #8a8785;
     --line: #e2ded7;
@@ -283,7 +283,7 @@ footer :focus-visible,
     padding: 0.6rem 1.1rem;
     border-radius: 0 0 10px 10px;
     background: #fff;
-    color: #1a1f2c;
+    color: #1a1a1a;
     font-weight: 600;
     text-decoration: none;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
@@ -624,7 +624,7 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
     font-weight: 600;
     font-size: 0.92rem;
     line-height: 1.45;
-    color: #1a1f2c;
+    color: #1a1a1a;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -693,7 +693,7 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
     margin-top: 0.5rem;
     font-size: clamp(1.4rem, 5vw, 2rem);
     font-weight: 700;
-    color: #1a1f2c;
+    color: #1a1a1a;
 }
 .error-body {
     margin-top: 0.9rem;
@@ -976,21 +976,83 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 }
 
 /* The name over a short rule, as on their slides. */
-.hero__eyebrow {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-size: clamp(0.9rem, 2.2vw, 1.05rem);
-    letter-spacing: 0.06em;
-    color: var(--accent);
-    margin-bottom: 1rem;
+
+/* ── The mark the university heads its sections with ──────────────────
+   Two slanted bars beside a small line of text: the house red above, the
+   crest's gold below and a little to the side. Measured on uor.edu.krd —
+   27x6 and 17x6, each turned 45°, standing in a 40px gutter. It opens every
+   section there, so it opens every section here. */
+.eyebrow {
+    position: relative;
+    padding-inline-start: 40px;
+    font-size: 1.03rem;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--ink);
+    margin-bottom: 0.65rem;
 }
-.hero__eyebrow::before {
+
+.eyebrow::before,
+.eyebrow::after {
     content: '';
-    width: 2.2rem;
-    height: 2px;
+    position: absolute;
+    height: 6px;
+    transform: rotate(-45deg);
+}
+
+.eyebrow::before {
+    inset-inline-start: 0;
+    top: 5px;
+    width: 27px;
+    background: var(--brand);
+}
+
+.eyebrow::after {
+    inset-inline-start: 10px;
+    top: 17px;
+    width: 17px;
     background: var(--accent);
-    flex: 0 0 auto;
+}
+
+/* Turned the other way where the reading runs right to left, so the pair
+   still leans towards the words rather than away from them. */
+[dir="rtl"] .eyebrow::before,
+[dir="rtl"] .eyebrow::after {
+    transform: rotate(45deg);
+}
+
+/* On a photograph the same line is lighter and thinner, as theirs is. */
+.eyebrow--light {
+    color: rgba(247, 244, 237, 0.92);
+    font-weight: 300;
+}
+
+/* Running text, measured on their own pages: 16.5px justified in the same
+   near-black as the headings, and set close — 1.42 in English, a shade
+   tighter in Kurdish, where they set Rabar. */
+.prose-uor p {
+    font-size: 1.03rem;
+    line-height: 1.42;
+    color: var(--ink);
+    text-align: justify;
+}
+
+.prose-uor p + p {
+    margin-top: 1.1rem;
+}
+
+[dir="rtl"] .prose-uor p {
+    line-height: 1.5;
+}
+
+/* Their section headings are modest: 25px at weight 400, ranged to the
+   reading edge. Nothing on their pages is centred. */
+.section-title {
+    font-size: clamp(1.35rem, 2.8vw, 1.6rem);
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
 }
 
 .hero__welcome {

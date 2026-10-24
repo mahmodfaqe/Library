@@ -63,7 +63,7 @@ html:not(.js) .topbar { background: #fff; }
 .search-toggle { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; }
 .site-search { background: var(--hdr-solid); }
 .site-search__inner { display: flex; gap: 12px; padding-block: 12px; }
-.site-search input { flex: 1 1 auto; min-width: 0; min-height: 48px; padding: 0 16px; border: 0; border-radius: 8px; font: inherit; color: #1a1f2c; background: #fff; text-align: start; }
+.site-search input { flex: 1 1 auto; min-width: 0; min-height: 48px; padding: 0 16px; border: 0; border-radius: 8px; font: inherit; color: #1a1a1a; background: #fff; text-align: start; }
 .hdr-gold-btn { min-height: 48px; padding: 0 22px; border: 0; border-radius: 5px; background: var(--hdr-gold); color: #1a1a1a; font: inherit; font-weight: 600; cursor: pointer; }
 .hdr-gold-btn:hover { background: #e0cda6; }
 

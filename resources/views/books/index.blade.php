@@ -24,9 +24,9 @@
         <a href="{{ Locale::booksUrl() }}" class="inline-block text-[#790404] no-underline mb-3 hover:underline" style="font-size:0.92rem;">
             <span aria-hidden="true">{{ Locale::isLtr() ? '←' : '→' }}</span> {{ __('books.back_to_subjects') }}
         </a>
-        <h1 class=" text-[#1a1f2c] mb-3" style="font-size:clamp(1.6rem,4.5vw,2.2rem);" dir="auto">{{ $selected->localName() }}</h1>
+        <h1 class=" text-[#1a1a1a] mb-3" style="font-size:clamp(1.6rem,4.5vw,2.2rem);" dir="auto">{{ $selected->localName() }}</h1>
     @else
-        <h1 class=" text-[#1a1f2c] mb-3" style="font-size:clamp(1.6rem,4.5vw,2.2rem);">{{ __('books.title') }}</h1>
+        <h1 class=" text-[#1a1a1a] mb-3" style="font-size:clamp(1.6rem,4.5vw,2.2rem);">{{ __('books.title') }}</h1>
         <p class="text-[#52504e] mb-8" style="font-size:clamp(0.95rem,2.4vw,1.08rem);">{{ __('books.intro') }}</p>
     @endif
 
@@ -100,7 +100,7 @@
                 <a href="{{ url()->current() }}?category={{ $shelf->id }}"
                    class="subject-card bg-white/85 backdrop-blur-md border border-white/70 rounded-[15px] no-underline flex flex-col justify-between"
                    style="padding:1.3rem; box-shadow:0 4px 16px rgba(121,4,4,0.10);">
-                    <span class="font-bold text-[#1a1f2c]" style="font-size:1.02rem; line-height:1.6;" dir="auto">{{ $shelf->localName() }}</span>
+                    <span class="font-bold text-[#1a1a1a]" style="font-size:1.02rem; line-height:1.6;" dir="auto">{{ $shelf->localName() }}</span>
                     <span class="text-[#52504e]" style="font-size:0.85rem; margin-top:0.6rem;">
                         {{ trans_choice('books.results', $shelf->books_count, ['count' => $shelf->books_count]) }}
                     </span>
@@ -153,7 +153,7 @@
 
                 <div class="book-body">
                     <div>
-                        <h3 class="book-title text-[#1a1f2c] mb-1">
+                        <h3 class="book-title text-[#1a1a1a] mb-1">
                             <a href="{{ Locale::bookUrl($book->id) }}"
                                class="no-underline text-inherit hover:underline" dir="auto">{{ $book->title }}</a>
                         </h3>

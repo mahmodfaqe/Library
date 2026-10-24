@@ -13,13 +13,13 @@
         <span class="text-[#52504e]">{{ __('privacy.title') }}</span>
     </nav>
 
-    <h1 class=" text-[#1a1f2c] mb-6" style="font-size:clamp(1.6rem,4.5vw,2.2rem);">{{ __('privacy.title') }}</h1>
+    <h1 class=" text-[#1a1a1a] mb-6" style="font-size:clamp(1.6rem,4.5vw,2.2rem);">{{ __('privacy.title') }}</h1>
 
     <p class="text-[#52504e] leading-[1.9] mb-8" style="font-size:clamp(0.95rem,2.5vw,1.1rem);">{{ __('privacy.intro') }}</p>
 
     @foreach (['collect', 'why', 'retention', 'sharing', 'rights'] as $section)
         <section class="mb-8">
-            <h2 class=" text-[#1a1f2c] mb-3" style="font-size:clamp(1.15rem,3vw,1.4rem);">
+            <h2 class=" text-[#1a1a1a] mb-3" style="font-size:clamp(1.15rem,3vw,1.4rem);">
                 {{ __("privacy.$section.heading") }}
             </h2>
             <p class="text-[#52504e] leading-[1.9]" style="font-size:clamp(0.92rem,2.4vw,1.05rem);">

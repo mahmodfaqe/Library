@@ -18,7 +18,7 @@
     <div class="hdr-container relative z-20">
         <div class="hero__body">
 
-            <p class="hero__eyebrow">{{ __('messages.university_name') }}</p>
+            <p class="eyebrow eyebrow--light">{{ __('messages.university_name') }}</p>
             <p class="hero__welcome">{{ __('messages.hero.welcome') }}</p>
             <h1 class="hero__title">{{ __('messages.hero.title') }}</h1>
             <p class="hero__lede">{{ __('messages.hero.subtitle') }}</p>
@@ -55,14 +55,15 @@
 <section class="band band--white">
     <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div class="text-center max-w-[900px] mx-auto">
-            <h2 class=" text-[#1a1f2c] mb-8" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.intro.heading') }}</h2>
+        <div class="max-w-[900px] mx-auto">
+            <p class="eyebrow">{{ __('messages.university_name') }}</p>
+            <h2 class="section-title">{{ __('messages.intro.heading') }}</h2>
 
-            <div class="relative rounded-[15px] overflow-hidden shimmer-border reveal"
-                 style="background: #f0f0f0; padding: clamp(1.5rem,5vw,3rem); box-shadow: none;">
-
+            {{-- Set straight on the band, as they set theirs: no panel, no
+                 border, nothing between the reader and the words. --}}
+            <div class="prose-uor reveal">
                 @foreach (__('messages.intro.paragraphs') as $paragraph)
-                    <p class="text-[#52504e] leading-[1.9] mb-6 text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">{{ $paragraph }}</p>
+                    <p>{{ $paragraph }}</p>
                 @endforeach
             </div>
         </div>
@@ -75,15 +76,15 @@
     <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-[900px] mx-auto">
 
-            <h2 class=" text-[#1a1f2c] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.history.heading') }}</h2>
+            <p class="eyebrow">{{ __('messages.university_name') }}</p>
+            <h2 class="section-title">{{ __('messages.history.heading') }}</h2>
 
-            <div class="relative rounded-[15px] overflow-hidden shimmer-border reveal"
-                 style="background: #f0f0f0; padding: clamp(1.5rem,5vw,3rem); box-shadow: none;">
+            <div class="prose-uor reveal">
                 @php
                     $openingDate = '<strong>'.e(__('messages.history.opening_date')).'</strong>';
                 @endphp
                 @foreach (__('messages.history.paragraphs') as $paragraph)
-                    <p class="text-[#52504e] leading-[1.9] {{ $loop->last ? '' : 'mb-4' }} text-justify" style="font-size:clamp(0.95rem,2.5vw,1.15rem);">{{ RichText::make($paragraph, ['date' => $openingDate]) }}</p>
+                    <p>{{ RichText::make($paragraph, ['date' => $openingDate]) }}</p>
                 @endforeach
             </div>
 
@@ -104,14 +105,15 @@
 
         <!-- Department cards (DB-driven) -->
         <div id="dept-{{ app()->getLocale() }}" style="direction:{{ Locale::dir() }};">
-            <h2 class="text-center text-[#1a1f2c] mb-10" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.dept_heading') }}</h2>
+            <p class="eyebrow">{{ __('messages.library_name') }}</p>
+            <h2 class="section-title">{{ __('messages.dept_heading') }}</h2>
             <div class="grid gap-5" style="grid-template-columns: repeat(auto-fit, minmax(260px,1fr));">
                 @forelse ($subjects as $subject)
                 <a href="{{ Locale::booksUrl() }}?category={{ $subject->id }}"
                    class="section-card card-top-bar card-glow relative flex flex-col justify-between bg-white border border-[#e2ded7] rounded-[15px] text-center no-underline transition-[transform,box-shadow,background,border-color,color] duration-300 hover:-translate-y-3 reveal"
                    style="padding:clamp(1.3rem,3.5vw,1.9rem); min-height:150px;">
                     <div>
-                        <h3 class=" text-[#1a1f2c] mb-2" style="font-size:clamp(1rem,2.6vw,1.2rem); line-height:1.6;" dir="auto">{{ $subject->localName() }}</h3>
+                        <h3 class=" text-[#1a1a1a] mb-2" style="font-size:clamp(1rem,2.6vw,1.2rem); line-height:1.6;" dir="auto">{{ $subject->localName() }}</h3>
                     </div>
                     <span class="text-[#52504e]" style="font-size:clamp(0.82rem,2vw,0.92rem);">
                         {{ trans_choice('books.results', $subject->books_count, ['count' => $subject->books_count]) }}
@@ -139,7 +141,7 @@
             </div>
         @endif
         <div class="rounded-[15px] bg-white border border-[#e2ded7] text-center" style="box-shadow:0 4px 16px rgba(26,25,25,0.06); padding: clamp(1.8rem,5vw,3rem);">
-            <h2 class=" text-[#1a1f2c] mb-3" style="font-size:clamp(1.5rem,4vw,2rem);">
+            <h2 class=" text-[#1a1a1a] mb-3" style="font-size:clamp(1.5rem,4vw,2rem);">
                     {{ __('messages.feedback.title') }}
             </h2>
             <p class="text-[#52504e] mb-6" style="font-size:clamp(0.9rem,2.2vw,1rem); line-height:1.7;">

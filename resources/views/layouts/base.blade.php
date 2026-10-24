@@ -93,7 +93,7 @@
     })();
     </script>
 </head>
-<body class="bg-white text-[#1a1f2c] overflow-x-hidden @yield('body_class')" dir="{{ Locale::dir() }}">
+<body class="bg-white text-[#1a1a1a] overflow-x-hidden @yield('body_class')" dir="{{ Locale::dir() }}">
 
 <a class="skip-link" href="#main">{{ __('messages.skip_to_content') }}</a>
 
