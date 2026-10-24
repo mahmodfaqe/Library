@@ -9,16 +9,16 @@
    page, the menu split around a hanging emblem, and a red V beneath. The header is fixed, so every page but the home page
    (whose hero sits underneath it) is pushed down by its height. */
 :root {
-    --hdr-bg: rgba(57, 55, 54, 0.6);
+    /* Measured on uor.edu.krd at 1280px: both rows carry the same translucent
+       dark, so the header reads as one band of 125px over the photograph, and
+       the links in it are #dad8d8 with the current page in the crest's gold. */
+    --hdr-bg: rgba(57, 55, 54, 0.604);
     --hdr-solid: rgb(57, 55, 54);
     --hdr-red: #790404;
     --hdr-gold: #cbb58b;
-    --hdr-link: #f2f2f2;
-    /* The university's own top row is a white band over the hero, not a dark
-       one: the utility links read as dark text on white, and only the menu
-       row beneath is translucent. */
-    --hdr-top-bg: rgba(255, 255, 255, 0.94);
-    --hdr-top-link: #393736;
+    --hdr-link: #dad8d8;
+    --hdr-top-bg: rgba(57, 55, 54, 0.604);
+    --hdr-top-link: #dad8d8;
     --hdr-top: 50px;
     --hdr-main: 75px;
     --hdr-v: 40px;
@@ -41,15 +41,18 @@
 html:not(.js) body:not(.has-hero) #main { padding-top: calc(var(--hdr-v) + 1rem); }
 html:not(.js) .mainbar,
 html:not(.js) .mainbar::before { background: var(--hdr-solid); }
-html:not(.js) .topbar { background: #fff; }
+html:not(.js) .topbar { background: var(--hdr-solid); }
 [id] { scroll-margin-top: 130px; }
 
-.topbar { background: var(--hdr-top-bg); border-bottom: 1px solid rgba(0, 0, 0, 0.08); }
+/* No rule between the rows: on their site the two run together as one band. */
+.topbar { background: var(--hdr-top-bg); }
 /* Less the rule beneath it, so the whole row is --hdr-top and slides fully away. */
-.topbar__inner { height: calc(var(--hdr-top) - 1px); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.topbar__inner { height: var(--hdr-top); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .quicklinks { display: flex; align-items: center; justify-content: space-evenly; flex: 1 1 auto; gap: 8px 24px; min-width: 0; }
-.topbar a, .lang summary, .search-toggle { color: var(--hdr-top-link); text-decoration: none; font-size: 15px; font-weight: 500; }
-.topbar a:hover, .lang summary:hover, .search-toggle:hover { color: var(--hdr-red); }
+.topbar a, .search-toggle { color: var(--hdr-top-link); text-decoration: none; font-size: 16.2px; font-weight: 500; }
+/* Theirs sets the language apart: a size larger and at plain weight. */
+.lang summary { color: var(--hdr-top-link); text-decoration: none; font-size: 18px; font-weight: 400; }
+.topbar a:hover, .lang summary:hover, .search-toggle:hover { color: var(--hdr-gold); }
 .quicklinks a { display: inline-flex; align-items: center; min-height: 44px; white-space: nowrap; }
 .lang { position: relative; flex: 0 0 auto; }
 .lang summary { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; cursor: pointer; list-style: none; }
