@@ -23,12 +23,14 @@ class HomeController extends Controller
             'subjects' => $subjects,
             // The size of the collection, in the four numbers a reader asks
             // about first. The university heads its own page the same way.
-            'facts' => [
+            // A count of nothing says nothing: until the first thesis is
+            // deposited, that card is left out rather than shown as a zero.
+            'facts' => array_filter([
                 'books' => Book::count(),
                 'subjects' => $subjects->count(),
                 'theses' => Thesis::published()->count(),
                 'languages' => Book::whereNotNull('language')->distinct()->count('language'),
-            ],
+            ]),
         ]);
     }
 }

@@ -36,6 +36,7 @@
 {{-- The same shape as the university's own data-fact-card row: a flat white
      card on the grey band, the number in the house red at weight 800 and the
      label beneath it in plain text. --}}
+@if ($facts)
 <section class="band band--grey">
     <div class="hdr-container">
         <div class="fact-row">
@@ -48,6 +49,7 @@
         </div>
     </div>
 </section>
+@endif
 
 <!-- ══════════ INTRO SECTION ══════════ -->
 <section class="band band--white">
