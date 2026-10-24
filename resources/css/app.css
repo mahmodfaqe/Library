@@ -42,7 +42,7 @@
        Measured on theirs at four widths: 400px gives 76/35/60, 480 gives
        80/0/100, 768 gives 94.4/0/100 and 1280 gives 120/0/100, which is
        5vw + 56px for the sky, capped where their container stops growing. */
-    --hills-sky: clamp(72px, calc(5vw + 56px), 120px);
+    --hills-sky: var(--section-space);
     --hills-gap: 0px;
     --hills-city: 100px;
     --hills: calc(var(--hills-sky) + var(--hills-gap) + var(--hills-city) + 13.5px);
@@ -62,6 +62,15 @@
     --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
     --quick: 0.18s;
     --calm: 0.28s;
+
+    /* uor.edu.krd's fluid scale, measured at 375, 768 and 1280px. It is
+       written in px because the rem here runs from 14 to 18px across those
+       widths while theirs stays at 10px. Section padding, side gutter, the
+       section heading (their --h2) and body text (their --text-m). */
+    --section-space: clamp(72px, calc(5vw + 56px), 120px);
+    --gutter: clamp(24.3px, calc(0.625vw + 22px), 30px);
+    --h2: clamp(23.55px, calc(0.9315vw + 20.06px), 31.98px);
+    --text-m: clamp(16.11px, calc(0.209vw + 15.33px), 18px);
 }
 
 
@@ -108,7 +117,8 @@ html { font-size: 16px; scroll-behavior: smooth; }
 
 /* The rest of their page rhythm, measured rather than guessed:
 
-       section            padding: 83.5px 25px; alternating #fff / #f0f0f0
+       section            padding: 120px 30px at 1280px, less on a phone;
+                          alternating #fff / #f0f0f0
        h2                 letter-spacing: 1px; text-align: start
        body paragraphs    text-align: justify
 
@@ -117,7 +127,7 @@ html { font-size: 16px; scroll-behavior: smooth; }
 :is(h2, h3) { letter-spacing: 1px; }
 
 .band {
-    padding-block: clamp(3rem, 8vw, 83.5px);
+    padding-block: var(--section-space);
 }
 .band--grey { background: var(--page); }
 .band--white { background: #fff; }
@@ -763,7 +773,7 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
     .error-link,
     .search-clear,
     footer a,
-    main a:not(.section-btn):not(.subject-card):not(.dept-card):not(.book-cover):not(.lang-chip) {
+    main a:not(.section-btn):not(.subject-card):not(.dept-card):not(.book-cover):not(.lang-chip):not(.hero__cta):not(.more-link) {
         display: inline-block;
         padding-block: 0.5rem;
     }
@@ -803,7 +813,6 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 
     /* Subjects read better two-up than one enormous card each. */
     .subject-card { padding: 1rem; }
-    .dept-card { padding: 1.2rem; min-height: 0; }
 }
 
 /* ── One book's page ─────────────────────────────────────────────────────
@@ -876,9 +885,9 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 .book-unavailable { color: var(--ink-faint); font-size: 0.92rem; }
 
 /* ── The collection in figures ────────────────────────────────────────────
-   Their .data-fact-card, measured: white, 15px, 28px of padding, no shadow,
-   ranged to the reading edge. The number is the one place on their whole site
-   that carries a heavy weight. */
+   Their .data-fact-card, measured: white, a 15px corner, no shadow, 120px
+   high at 1280px, the number and its label centred. The number is the one
+   place on their whole site that carries a heavy weight. */
 .fact-row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
@@ -888,29 +897,32 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 .fact-card {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: clamp(92px, calc(3.09vw + 80.4px), 120px);
     background: #fff;
     border-radius: 15px;
-    padding: 28px;
-    text-align: start;
+    padding: clamp(18.1px, calc(1.315vw + 13.17px), 30px);
+    text-align: center;
 }
 
 .fact-card__count {
     font-family: var(--font-ltr);
-    font-size: clamp(1.4rem, 3.4vw, 1.6rem);
+    font-size: clamp(21.42px, calc(0.549vw + 19.36px), 26.39px);
     font-weight: 800;
     color: var(--brand);
     line-height: 1.2;
 }
 
 .fact-card__title {
-    font-size: clamp(0.95rem, 2.3vw, 1.1rem);
+    font-size: var(--text-m);
     font-weight: 400;
+    line-height: 1.2;
     color: var(--ink);
 }
 
 @media (max-width: 480px) {
-    .fact-card { padding: 20px; }
     .fact-row { gap: 14px; }
 }
 
@@ -922,7 +934,7 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
    400, the links beneath are #dad8d8 with no underline, and a darker strip
    carries the copyright. */
 .site-footer {
-    --footer-gutter: clamp(24.3px, 0.625vw + 22px, 30px);
+    --footer-gutter: var(--gutter);
     --footer-gap: clamp(44px, 2.59vw + 34.4px, 67.5px);
     position: relative;
     background: #393736;
@@ -1105,26 +1117,53 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
     text-align: center;
 }
 
-/* ── The hero, as the university builds its own ───────────────────────────
-   A photograph under the house red rather than a neutral grey, the words
-   ranged to the reading edge, and a thin outlined link with an arrow instead
-   of a filled pill. */
+/* ── The hero, as the university builds its own slides ─────────────────────
+   Measured on uor.edu.krd: the photograph fills the screen under a dark grey
+   wash, and the words sit on a band of a third of black that runs from the
+   reading edge of the screen to just past the longest line. */
+.hero {
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: var(--hero-offset) 0 40px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
 .hero__wash {
-    background:
-        linear-gradient(
-            to bottom,
-            rgba(79, 2, 2, 0.58) 0%,
-            rgba(121, 4, 4, 0.52) 45%,
-            rgba(26, 31, 44, 0.72) 100%
-        );
+    background: linear-gradient(105deg, rgba(43, 43, 43, 0.75) 51%, rgba(55, 58, 54, 0.7));
+}
+
+.hero__inner {
+    width: 100%;
+    max-width: calc(1280px + 2 * var(--gutter));
+    margin-inline: auto;
+    padding-inline: var(--gutter);
 }
 
 .hero__body {
-    max-width: 46rem;
-    /* Ranged to whichever edge the reader starts from, so it reads the same
-       way in Kurdish as in English. */
-    margin-inline-end: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--gutter);
+    width: fit-content;
+    max-width: 100%;
+    padding-block: clamp(32.74px, calc(1.355vw + 27.66px), 45px);
+    padding-inline-end: var(--gutter);
+    background: rgba(0, 0, 0, 0.3);
     text-align: start;
+}
+
+/* The band carries on past the reading edge to the side of the screen. */
+.hero__body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    inset-inline-end: 100%;
+    width: 100vw;
+    background: inherit;
 }
 
 /* The name over a short rule, as on their slides. */
@@ -1137,7 +1176,7 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 .eyebrow {
     position: relative;
     padding-inline-start: 40px;
-    font-size: 1.03rem;
+    font-size: calc(var(--h2) * 0.7);
     font-weight: 400;
     line-height: 1.2;
     color: var(--ink);
@@ -1154,14 +1193,14 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 
 .eyebrow::before {
     inset-inline-start: 0;
-    top: 5px;
+    top: calc(50% - 5px);
     width: 27px;
     background: var(--brand);
 }
 
 .eyebrow::after {
     inset-inline-start: 10px;
-    top: 17px;
+    top: calc(50% + 7px);
     width: 17px;
     background: var(--accent);
 }
@@ -1173,10 +1212,10 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
     transform: rotate(45deg);
 }
 
-/* On a photograph the same line is lighter and thinner, as theirs is. */
+/* On a photograph the same line is in their lightest gold. */
 .eyebrow--light {
-    color: rgba(247, 244, 237, 0.92);
-    font-weight: 300;
+    color: #f7f4ed;
+    margin-bottom: 0;
 }
 
 /* Running text, measured on their own pages: 16.5px justified in the same
@@ -1197,98 +1236,140 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
     line-height: 1.5;
 }
 
-/* A department is a name and a count, which is the shape of their own count
-   card: no border, no shadow, a 15px corner, and everything ranged to the
-   reading edge. Set in their second surface colour because the band behind
-   it is white. Named apart from .subject-card, which the catalogue landing
-   already uses for a different tile. */
+/* A department is drawn as their college card: a 2px grey outline with a
+   15px corner and nothing behind it, the name and the count centred.
+   Named apart from .subject-card, which the catalogue landing already uses
+   for a different tile. */
 .dept-card {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    gap: 0.9rem;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     min-height: 150px;
-    padding: 28px;
-    background: var(--page);
+    padding: 30px 20px;
+    border: 2px solid #808080;
     border-radius: 15px;
-    text-align: start;
+    text-align: center;
     text-decoration: none;
-    transition: transform 0.3s ease, background 0.3s ease;
+    transition: border-color 0.3s, transform 0.3s;
 }
 
 .dept-card:hover {
+    border-color: var(--brand);
     transform: translateY(-4px);
-    background: #e8e8e8;
 }
 
 .dept-card__name {
-    font-size: 1.24rem;
+    font-size: clamp(19.47px, calc(0.5vw + 17.6px), 24px);
     font-weight: 400;
-    line-height: 1.25;
+    line-height: 1.2;
     color: var(--ink);
 }
 
 .dept-card__count {
-    font-size: 0.95rem;
+    font-size: var(--text-m);
     color: var(--ink-soft);
 }
 
-/* Their section headings are modest: 25px at weight 400, ranged to the
-   reading edge. Nothing on their pages is centred. */
+/* On a phone the list is one long column, so each card keeps only the room
+   its two lines need. */
+@media (max-width: 640px) {
+    .dept-card { min-height: 0; padding: 20px; }
+}
+
+/* A section's heading at the reading edge and its "more" link at the far
+   edge, centred on each other, as their news and events sections are set. */
+.section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem var(--gutter);
+    margin-bottom: 1.5rem;
+}
+.section-head .section-title { margin-bottom: 0; }
+
+/* Their "more" button: the house red on nothing, a long arrow before it. */
+.more-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-width: 200px;
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    color: var(--brand);
+    font-size: calc(var(--text-m) * 1.1);
+    line-height: 1.18;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    transition: gap 0.3s;
+}
+.more-link:hover { gap: 0; }
+.more-link .uor-arrow { width: 25px; }
+
+/* Their section headings: --h2 at weight 400, ranged to the reading edge. */
 .section-title {
-    font-size: clamp(1.35rem, 2.8vw, 1.6rem);
+    font-size: var(--h2);
     font-weight: 400;
-    line-height: 1.5;
+    line-height: 1.2;
     color: var(--ink);
     margin-bottom: 1.5rem;
 }
 
-.hero__welcome {
-    font-size: clamp(0.95rem, 2.4vw, 1.15rem);
-    letter-spacing: 0.04em;
-    color: rgba(255, 255, 255, 0.85);
-    margin-bottom: 0.4rem;
-}
-
+/* Their slide headline: --h2 at weight 400 on a 40px line, 768px at most. */
 .hero__title {
-    font-size: clamp(2rem, 6.2vw, 3.6rem);
+    max-width: 768px;
+    font-size: var(--h2);
     font-weight: 400;
-    line-height: 1.35;
-    margin-bottom: 1.1rem;
-    text-wrap: balance;
+    line-height: 40px;
+    letter-spacing: 1px;
+    color: #f0f0f0;
 }
 
 .hero__lede {
-    font-size: clamp(0.95rem, 2.3vw, 1.15rem);
-    line-height: 1.9;
-    color: rgba(255, 255, 255, 0.92);
-    margin-bottom: 2rem;
+    max-width: 768px;
+    font-size: var(--text-m);
+    line-height: 1.6;
+    color: rgba(240, 240, 240, 0.9);
 }
 
+/* Their slide button: 300px of #f0f0f0 with the label in the house red and
+   a long arrow at the reading edge that folds away on hover. */
 .hero__cta {
-    border-radius: 5px;
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 0.7rem;
-    padding: 0.85rem 1.8rem;
-    background: rgba(255, 255, 255, 0.95);
+    justify-content: flex-start;
+    gap: 10px;
+    width: 300px;
+    max-width: 100%;
+    margin-top: 20px;
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    background: #f0f0f0;
     color: var(--brand);
     font-family: var(--font-accent);
     font-weight: 600;
-    font-size: clamp(0.95rem, 2.2vw, 1.05rem);
+    font-size: calc(var(--text-m) * 1.1);
+    line-height: 1.18;
     text-decoration: none;
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    transition: background var(--quick) var(--ease), color var(--quick) var(--ease);
+    transition: background 0.3s, gap 0.3s;
 }
-.hero__cta:hover { background: var(--brand); color: #fff; border-color: var(--brand); }
+[dir="rtl"] .hero__cta { font-family: var(--font-rtl); font-weight: 400; }
+.hero__cta:hover { background: #f7f7f7; gap: 0; }
 
-/* The arrow leads in the direction the line is read. */
-.hero__cta-arrow { font-size: 1.15em; line-height: 1; }
-[dir="rtl"] .hero__cta-arrow { transform: scaleX(-1); }
-
-@media (max-width: 640px) {
-    .hero__body { max-width: none; }
+/* The long arrow theirs carry: it points the way the line is read. */
+.uor-arrow {
+    flex: 0 0 auto;
+    width: 30px;
+    height: auto;
+    fill: currentColor;
+    transition: width 0.3s;
 }
+[dir="rtl"] .uor-arrow { transform: rotate(180deg); }
+.hero__cta:hover .uor-arrow,
+.more-link:hover .uor-arrow { width: 0; }
 
 /* ── The repository ──────────────────────────────────────────────────── */
 .repo-title {

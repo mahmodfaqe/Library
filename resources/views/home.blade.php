@@ -7,24 +7,23 @@
 
 @section('content')
 <!-- ══════════ HERO ══════════ -->
-<section id="hero-section" class="hero relative overflow-hidden flex items-center text-white transition-[background-image,opacity] duration-1000 ease-in-out"
-         style="background-image: url('{{ asset('file/image1.webp') }}'); background-size: cover; background-position: center; background-repeat: no-repeat; padding: calc(var(--hero-offset) + clamp(2rem,5vw,4rem)) 0 clamp(5rem,10vw,9rem); min-height: clamp(520px,80vh,780px);">
+<section id="hero-section" class="hero relative overflow-hidden flex items-center text-white"
+         style="background-image: url('{{ asset('file/image1.webp') }}');">
 
     <div class="hero__wash absolute inset-0 z-0"></div>
 
-    {{-- Laid out as the university lays out its own: the name on a short
-         ruled line, the headline beneath it, and everything ranged to the
-         reading edge rather than centred. --}}
-    <div class="hdr-container relative z-20">
+    {{-- Laid out as one of the university's own slides: the name with its
+         mark, the headline and the button on a dark band that runs from the
+         reading edge of the screen. --}}
+    <div class="hero__inner relative z-20">
         <div class="hero__body">
 
             <p class="eyebrow eyebrow--light">{{ __('messages.university_name') }}</p>
-            <p class="hero__welcome">{{ __('messages.hero.welcome') }}</p>
-            <h1 class="hero__title">{{ __('messages.hero.title') }}</h1>
+            <h1 class="hero__title">{{ __('messages.hero.welcome') }} {{ __('messages.hero.title') }}</h1>
             <p class="hero__lede">{{ __('messages.hero.subtitle') }}</p>
 
             <a class="hero__cta" href="{{ Locale::booksUrl() }}">
-                <span class="hero__cta-arrow" aria-hidden="true">&rarr;</span>
+                <svg class="uor-arrow" viewBox="0 0 39 16" aria-hidden="true"><path d="M38.43 8.71a1 1 0 0 0 0-1.42L32.07.93a1 1 0 0 0-1.41 1.41L36.31 8l-5.65 5.66a1 1 0 0 0 1.41 1.41l6.36-6.36ZM0 9h37.73V7H0v2Z"/></svg>
                 {{ __('books.title') }}
             </a>
 
@@ -92,21 +91,23 @@
     </div>
 </section>
 <!-- ══════════ LIBRARY 2 + DEPARTMENTS ══════════ -->
-<section class="band band--white" style="padding-block: clamp(1rem,4vw,3rem);">
+<section class="band band--white">
     <div class="max-w-[1280px] mx-auto px-6 sm:px-8 lg:px-10">
-
-        <div style="margin-top:1.4rem; text-align:start;">
-            <a href="{{ Locale::booksUrl() }}"
-               class="section-btn inline-block text-[#f0f0f0] rounded-[5px] no-underline text-center transition-[transform,box-shadow,background,border-color,color] duration-300 hover:-translate-y-1"
-               style="background:#790404; padding:clamp(0.6rem,2.2vw,0.85rem) clamp(1.5rem,4vw,2.2rem); font-size:clamp(0.88rem,2.2vw,1rem);">
-                {{ __('books.title') }}
-            </a>
-        </div>
 
         <!-- Department cards (DB-driven) -->
         <div id="dept-{{ app()->getLocale() }}" style="direction:{{ Locale::dir() }};">
-            <p class="eyebrow">{{ __('messages.library_name') }}</p>
-            <h2 class="section-title">{{ __('messages.dept_heading') }}</h2>
+            {{-- The heading at the reading edge and the way to the whole
+                 catalogue at the far one, as their news section is set. --}}
+            <div class="section-head">
+                <div>
+                    <p class="eyebrow">{{ __('messages.library_name') }}</p>
+                    <h2 class="section-title">{{ __('messages.dept_heading') }}</h2>
+                </div>
+                <a class="more-link" href="{{ Locale::booksUrl() }}">
+                    <svg class="uor-arrow" viewBox="0 0 39 16" aria-hidden="true"><path d="M38.43 8.71a1 1 0 0 0 0-1.42L32.07.93a1 1 0 0 0-1.41 1.41L36.31 8l-5.65 5.66a1 1 0 0 0 1.41 1.41l6.36-6.36ZM0 9h37.73V7H0v2Z"/></svg>
+                    {{ __('books.title') }}
+                </a>
+            </div>
             <div class="grid gap-5" style="grid-template-columns: repeat(auto-fit, minmax(260px,1fr));">
                 @forelse ($subjects as $subject)
                 <a href="{{ Locale::booksUrl() }}?category={{ $subject->id }}" class="dept-card reveal" dir="auto">
