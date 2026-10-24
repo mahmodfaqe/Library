@@ -39,7 +39,7 @@
         <div class="text-center max-w-[900px] mx-auto">
             <h2 class=" text-[#1a1f2c] mb-8" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.intro.heading') }}</h2>
 
-            <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal"
+            <div class="relative rounded-[15px] overflow-hidden shimmer-border reveal"
                  style="background: #f0f0f0; padding: clamp(1.5rem,5vw,3rem); box-shadow: none;">
 
                 @foreach (__('messages.intro.paragraphs') as $paragraph)
@@ -58,7 +58,7 @@
 
             <h2 class=" text-[#1a1f2c] mb-8 text-center" style="font-size:clamp(1.7rem,4.5vw,2.4rem);">{{ __('messages.history.heading') }}</h2>
 
-            <div class="relative rounded-[18px] overflow-hidden shimmer-border reveal"
+            <div class="relative rounded-[15px] overflow-hidden shimmer-border reveal"
                  style="background: #f0f0f0; padding: clamp(1.5rem,5vw,3rem); box-shadow: none;">
                 @php
                     $openingDate = '<strong>'.e(__('messages.history.opening_date')).'</strong>';
@@ -110,16 +110,16 @@
 <section id="feedback" class="band band--grey">
     <div class="max-w-[760px] mx-auto px-4 sm:px-6">
         @if (session('feedback_sent'))
-            <div class="mb-6 rounded-[14px] px-5 py-4 text-center font-semibold" style="background:#d1fae5; color:#065f46; font-size:clamp(0.9rem,2vw,1rem);">
+            <div class="mb-6 rounded-[15px] px-5 py-4 text-center font-semibold" style="background:#d1fae5; color:#065f46; font-size:clamp(0.9rem,2vw,1rem);">
                     {{ __('messages.feedback.success') }}
             </div>
         @endif
         @if ($errors->has('message'))
-            <div class="mb-6 rounded-[14px] px-5 py-4 text-center font-semibold" style="background:#fee2e2; color:#991b1b; font-size:clamp(0.9rem,2vw,1rem);">
+            <div class="mb-6 rounded-[15px] px-5 py-4 text-center font-semibold" style="background:#fee2e2; color:#991b1b; font-size:clamp(0.9rem,2vw,1rem);">
                 {{ __('messages.feedback.error') }}
             </div>
         @endif
-        <div class="rounded-[1rem] bg-white border border-[#e2ded7] text-center" style="box-shadow:0 4px 16px rgba(26,25,25,0.06); padding: clamp(1.8rem,5vw,3rem);">
+        <div class="rounded-[15px] bg-white border border-[#e2ded7] text-center" style="box-shadow:0 4px 16px rgba(26,25,25,0.06); padding: clamp(1.8rem,5vw,3rem);">
             <h2 class=" text-[#1a1f2c] mb-3" style="font-size:clamp(1.5rem,4vw,2rem);">
                     {{ __('messages.feedback.title') }}
             </h2>
@@ -135,14 +135,14 @@
                         {{ __('messages.feedback.name_label') }}
                     </label>
                     <input type="text" id="fb-name" name="name" maxlength="120" dir="auto" value="{{ old('name') }}"
-                           class="w-full rounded-[12px] px-4 py-3" style="border:1px solid #d8d2c8; font-size:0.95rem; font-family:inherit; text-align:start;">
+                           class="w-full rounded-[15px] px-4 py-3" style="border:1px solid #d8d2c8; font-size:0.95rem; font-family:inherit; text-align:start;">
                 </div>
                 <div class="mb-5 text-start">
                     <label for="fb-msg" class="block font-semibold mb-1 text-[#393736]" style="font-size:0.9rem;">
                         {{ __('messages.feedback.message_label') }}
                     </label>
                     <textarea id="fb-msg" name="message" rows="4" maxlength="2000" required dir="auto"
-                              class="w-full rounded-[12px] px-4 py-3" style="border:1px solid #d8d2c8; font-size:0.95rem; font-family:inherit; text-align:start;">{{ old('message') }}</textarea>
+                              class="w-full rounded-[15px] px-4 py-3" style="border:1px solid #d8d2c8; font-size:0.95rem; font-family:inherit; text-align:start;">{{ old('message') }}</textarea>
                 </div>
                 <div style="text-align:center;">
                     <button type="submit" class="section-btn relative inline-block font-semibold text-white rounded-[5px] no-underline text-center transition-[transform,box-shadow,background,border-color,color] duration-300 hover:-translate-y-1 font-[inherit] cursor-pointer" style="background:#790404; padding:clamp(0.65rem,2.2vw,0.9rem) clamp(1.6rem,4vw,2.4rem); font-size:clamp(0.9rem,2.2vw,1rem); box-shadow:0 4px 14px rgba(121,4,4,0.28); border:none;">

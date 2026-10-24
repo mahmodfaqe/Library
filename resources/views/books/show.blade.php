@@ -260,7 +260,7 @@
 
             <div class="book-grid">
                 @foreach ($related as $other)
-                    <article class="book-card bg-white/85 backdrop-blur-md border border-white/70 rounded-[16px] flex flex-col">
+                    <article class="book-card bg-white/85 backdrop-blur-md border border-white/70 rounded-[15px] flex flex-col">
                         <a class="book-cover" href="{{ Locale::bookUrl($other->id) }}" aria-hidden="true" tabindex="-1">
                             @if ($other->coverUrl())
                                 <img src="{{ $other->coverUrl() }}" alt="" loading="lazy" decoding="async"

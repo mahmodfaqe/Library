@@ -113,7 +113,12 @@ html { font-size: 16px; scroll-behavior: smooth; }
 
 body { font-family: var(--font-rtl); }
 body[dir="ltr"] { font-family: var(--font-ltr); }
-body[dir="ltr"] :is(.section-btn, .search-submit, .error-home, .book-open, .repo-go) { font-family: var(--font-accent); }
+/* Their buttons: Lora at 600, the label in #f0f0f0 rather than pure white,
+   and a 5px corner. Measured on uor.edu.krd's "Read More About UoR". */
+body[dir="ltr"] :is(.section-btn, .search-submit, .error-home, .book-open, .repo-go, .hero__cta, .cite-file) {
+    font-family: var(--font-accent);
+    font-weight: 600;
+}
 
 /* Scroll progress bar */
 #scrollProgress {
@@ -235,6 +240,7 @@ transition: background-image 1.5s ease-in-out;
    stretches the full page width and swallows clicks meant for anything
    beside it, the catalogue's search box included. */
 .section-btn {
+    border-radius: 5px;
     position: relative;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(121, 4, 4, 0.28);
@@ -549,6 +555,7 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .search-submit {
+    border-radius: 5px;
     background: var(--brand);
     padding: 0.85rem 1.9rem;
     font-size: 0.95rem;
@@ -855,6 +862,58 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 }
 .book-unavailable { color: var(--ink-faint); font-size: 0.92rem; }
 
+/* ── The footer, as the university sets its own ───────────────────────────
+   Measured on uor.edu.krd: the band is #393736, each column is headed in the
+   crest's gold at weight 400, and the links beneath are #dad8d8 at 14px with
+   no underline. */
+.site-footer {
+    background: #393736;
+    color: rgba(255, 255, 255, 0.82);
+    border-top: 3px solid var(--brand);
+}
+
+.site-footer__cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: clamp(1.5rem, 4vw, 3rem);
+    padding-block: clamp(2rem, 5vw, 3.2rem);
+    align-items: start;
+}
+
+.footer-col h2 {
+    font-size: clamp(1.1rem, 2.6vw, 1.42rem);
+    font-weight: 400;
+    color: var(--accent);
+    letter-spacing: 1px;
+    margin-bottom: 0.9rem;
+}
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+.footer-col a {
+    color: #dad8d8;
+    font-size: 0.875rem;
+    text-decoration: none;
+}
+.footer-col a:hover { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+
+.footer-col--mark { display: flex; flex-direction: column; gap: 0.9rem; }
+.footer-col--mark > img { width: 72px; height: auto; }
+.footer-col--mark p { font-size: 0.875rem; line-height: 1.8; color: #dad8d8; }
+.footer-col--mark a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+
+
+.site-footer__bottom {
+    background: rgba(26, 25, 25, 0.9);
+    padding-block: 0.9rem;
+}
+.site-footer__bottom p {
+    font-size: clamp(0.8rem, 1.9vw, 0.875rem);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+@media (pointer: coarse) {
+    .footer-col a { display: inline-block; padding-block: 0.3rem; }
+}
+
 /* ── The hero, as the university builds its own ───────────────────────────
    A photograph under the house red rather than a neutral grey, the words
    ranged to the reading edge, and a thin outlined link with an arrow instead
@@ -918,6 +977,7 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 }
 
 .hero__cta {
+    border-radius: 5px;
     display: inline-flex;
     align-items: center;
     gap: 0.7rem;
@@ -1182,7 +1242,7 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 .cite-copy {
     align-self: start;
     padding: 0.35rem 0.8rem;
-    border-radius: 8px;
+    border-radius: 5px;
     border: 1px solid var(--line);
     background: #fff;
     color: var(--ink-soft);

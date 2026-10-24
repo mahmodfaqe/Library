@@ -98,7 +98,7 @@
         <div class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(min(230px,100%),1fr));">
             @foreach ($categories as $shelf)
                 <a href="{{ url()->current() }}?category={{ $shelf->id }}"
-                   class="subject-card bg-white/85 backdrop-blur-md border border-white/70 rounded-[16px] no-underline flex flex-col justify-between"
+                   class="subject-card bg-white/85 backdrop-blur-md border border-white/70 rounded-[15px] no-underline flex flex-col justify-between"
                    style="padding:1.3rem; box-shadow:0 4px 16px rgba(121,4,4,0.10);">
                     <span class="font-bold text-[#1a1f2c]" style="font-size:1.02rem; line-height:1.6;" dir="auto">{{ $shelf->localName() }}</span>
                     <span class="text-[#52504e]" style="font-size:0.85rem; margin-top:0.6rem;">
@@ -135,7 +135,7 @@
                 <div class="book-grid">
             @endif
 
-            <article class="book-card bg-white/85 backdrop-blur-md border border-white/70 rounded-[16px] flex flex-col">
+            <article class="book-card bg-white/85 backdrop-blur-md border border-white/70 rounded-[15px] flex flex-col">
                 {{-- The cover leads to the book's own page, like the title
                      beneath it. It is hidden from the keyboard and from screen
                      readers on purpose: the title is the same link, and

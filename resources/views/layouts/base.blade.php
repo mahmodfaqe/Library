@@ -147,53 +147,46 @@
 </main>
 
 <!-- ══════════ FOOTER ══════════ -->
-<footer class="text-center" style="background: #393736; color: rgba(255,255,255,0.82); border-top: 3px solid #790404;">
-    <div class="max-w-[1280px] mx-auto px-4" style="padding-block: clamp(1.5rem,4vw,2.2rem);">
-        @php
-            $year = '<span class="'.Locale::yearClass().'"></span>';
-            $uorLink = '<a href="'.e(config('library.university_url')).'" target="_blank" rel="noopener" style="color:#cbb58b; text-decoration:underline; text-underline-offset:3px;">'
-                .e(__('messages.footer.uor_link_label')).'</a>';
-        @endphp
-        <p style="font-size:clamp(0.85rem,2vw,0.95rem);">{{ RichText::make(__('messages.footer.uor_line'), ['link' => $uorLink]) }}</p>
-        <p style="font-size:clamp(0.85rem,2vw,0.95rem);">
-            <a href="{{ Locale::booksUrl() }}" style="color:#cbb58b; text-decoration:underline; text-underline-offset:3px;">{{ __('books.title') }}</a>
-            <span class="opacity-40 mx-2">·</span>
-            <a href="{{ Locale::thesesUrl() }}" style="color:#cbb58b; text-decoration:underline; text-underline-offset:3px;">{{ __('theses.title') }}</a>
-            <span class="opacity-40 mx-2">·</span>
-            <a href="{{ Locale::privacyUrl() }}" style="color:#cbb58b; text-decoration:underline; text-underline-offset:3px;">{{ __('privacy.title') }}</a>
-            @if (config('library.qr_url'))
-                <span class="opacity-40 mx-2">·</span>
-                <a href="{{ config('library.qr_url') }}" target="_blank" rel="noopener"
-                   style="color:#cbb58b; text-decoration:underline; text-underline-offset:3px;">{{ __('messages.qr_label') }}</a>
-            @endif
-        </p>
+<footer class="site-footer">
+    @php
+        $year = '<span class="'.Locale::yearClass().'"></span>';
+        $uorLink = '<a href="'.e(config('library.university_url')).'" target="_blank" rel="noopener">'
+            .e(__('messages.footer.uor_link_label')).'</a>';
+    @endphp
 
-        @if (config('library.analytics.host'))
-            <div class="mt-3 flex items-center justify-center gap-3 opacity-75 hover:opacity-100 transition-opacity duration-300">
-                {{-- Drawn rather than set in an emoji: the university's own
-                     pages carry no emoji anywhere. --}}
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                     stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M1.8 12S5.5 5 12 5s10.2 7 10.2 7-3.7 7-10.2 7S1.8 12 1.8 12Z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-                <div class="flex items-center gap-3 no-underline rounded-full border border-white/20 px-4 py-1.5"
-                     style="background:rgba(255,255,255,0.12); font-size: 1rem; color:rgba(255,255,255,0.85);">
-                    {{-- Built whole rather than pieced together in the
-                         attribute: it is an address on the analytics host, not
-                         a file in this project. --}}
-                    @php $counter = rtrim(config('library.analytics.host'), '/').'/counter/TOTAL.svg'; @endphp
-                    <img src="{{ $counter }}"
-                         alt="{{ __('messages.visitors_label') }}"
-                         class="h-[40px] w-auto align-middle"
-                         loading="lazy" decoding="async">
-                    <span id="visitor-label">{{ __('messages.visitors_label') }}</span>
-                </div>
-            </div>
-        @endif
+    {{-- Columns under gold headings, as the university sets its own footer:
+         a heading in #cbb58b over a short list of plain light links. --}}
+    <div class="site-footer__cols max-w-[1280px] mx-auto px-4">
+
+        <section class="footer-col">
+            <h2>{{ __('messages.library_name') }}</h2>
+            <ul>
+                <li><a href="{{ Locale::booksUrl() }}">{{ __('books.title') }}</a></li>
+                <li><a href="{{ Locale::thesesUrl() }}">{{ __('theses.title') }}</a></li>
+                <li><a href="{{ Locale::privacyUrl() }}">{{ __('privacy.title') }}</a></li>
+            </ul>
+        </section>
+
+        <section class="footer-col">
+            <h2>{{ __('messages.university_name') }}</h2>
+            <ul>
+                <li><a href="{{ config('library.university_url') }}" target="_blank" rel="noopener">{{ __('messages.footer.uor_link_label') }}</a></li>
+                @if (config('library.qr_url'))
+                    <li><a href="{{ config('library.qr_url') }}" target="_blank" rel="noopener">{{ __('messages.qr_label') }}</a></li>
+                @endif
+            </ul>
+        </section>
+
+        <section class="footer-col footer-col--mark">
+            <img src="{{ asset('file/uor-logo.webp') }}" alt="" width="512" height="523" loading="lazy" decoding="async">
+            <p>{{ RichText::make(__('messages.footer.uor_line'), ['link' => $uorLink]) }}</p>
+
+        </section>
+
     </div>
-    <div style="background: rgba(26,25,25,0.9); padding-block: 0.9rem;">
-        <p class="max-w-[1280px] mx-auto px-4" style="font-size:clamp(0.8rem,1.9vw,0.9rem); color: rgba(255,255,255,0.7);">{{ RichText::make(__('messages.footer.copyright'), ['year' => $year]) }}</p>
+
+    <div class="site-footer__bottom">
+        <p class="max-w-[1280px] mx-auto px-4">{{ RichText::make(__('messages.footer.copyright'), ['year' => $year]) }}</p>
     </div>
 </footer>
 
