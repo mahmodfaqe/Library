@@ -239,14 +239,16 @@ transition: background-image 1.5s ease-in-out;
    containing block itself. Without this it anchors to the viewport instead,
    stretches the full page width and swallows clicks meant for anything
    beside it, the catalogue's search box included. */
+/* Theirs carry no shadow at all — a flat 5px rectangle, the label in #f0f0f0
+   rather than pure white. */
 .section-btn {
     border-radius: 5px;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(121, 4, 4, 0.28);
-    transition: transform var(--quick) var(--ease), box-shadow var(--calm) var(--ease);
+    box-shadow: none;
+    transition: transform var(--quick) var(--ease), background var(--calm) var(--ease);
 }
-.section-btn:hover { box-shadow: 0 4px 16px rgba(121, 4, 4, 0.40); }
+.section-btn:hover { box-shadow: none; }
 .section-btn:active { transform: translateY(1px); }
 .section-btn::before {
     content: '';
@@ -751,7 +753,7 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
     .error-link,
     .search-clear,
     footer a,
-    main a:not(.section-btn):not(.subject-card):not(.book-cover):not(.lang-chip) {
+    main a:not(.section-btn):not(.subject-card):not(.dept-card):not(.book-cover):not(.lang-chip) {
         display: inline-block;
         padding-block: 0.5rem;
     }
@@ -791,6 +793,7 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 
     /* Subjects read better two-up than one enormous card each. */
     .subject-card { padding: 1rem; }
+    .dept-card { padding: 1.2rem; min-height: 0; }
 }
 
 /* ── One book's page ─────────────────────────────────────────────────────
@@ -1043,6 +1046,42 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 
 [dir="rtl"] .prose-uor p {
     line-height: 1.5;
+}
+
+/* A department is a name and a count, which is the shape of their own count
+   card: no border, no shadow, a 15px corner, and everything ranged to the
+   reading edge. Set in their second surface colour because the band behind
+   it is white. Named apart from .subject-card, which the catalogue landing
+   already uses for a different tile. */
+.dept-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.9rem;
+    min-height: 150px;
+    padding: 28px;
+    background: var(--page);
+    border-radius: 15px;
+    text-align: start;
+    text-decoration: none;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.dept-card:hover {
+    transform: translateY(-4px);
+    background: #e8e8e8;
+}
+
+.dept-card__name {
+    font-size: 1.24rem;
+    font-weight: 400;
+    line-height: 1.25;
+    color: var(--ink);
+}
+
+.dept-card__count {
+    font-size: 0.95rem;
+    color: var(--ink-soft);
 }
 
 /* Their section headings are modest: 25px at weight 400, ranged to the

@@ -95,10 +95,10 @@
 <section class="band band--white" style="padding-block: clamp(1rem,4vw,3rem);">
     <div class="max-w-[1280px] mx-auto px-6 sm:px-8 lg:px-10">
 
-        <div class="text-center" style="margin-top:1.4rem;">
+        <div style="margin-top:1.4rem; text-align:start;">
             <a href="{{ Locale::booksUrl() }}"
-               class="section-btn inline-block font-semibold text-white rounded-[5px] no-underline text-center transition-[transform,box-shadow,background,border-color,color] duration-300 hover:-translate-y-1"
-               style="background:#790404; padding:clamp(0.6rem,2.2vw,0.85rem) clamp(1.5rem,4vw,2.2rem); font-size:clamp(0.88rem,2.2vw,1rem); box-shadow:0 4px 14px rgba(121,4,4,0.28);">
+               class="section-btn inline-block text-[#f0f0f0] rounded-[5px] no-underline text-center transition-[transform,box-shadow,background,border-color,color] duration-300 hover:-translate-y-1"
+               style="background:#790404; padding:clamp(0.6rem,2.2vw,0.85rem) clamp(1.5rem,4vw,2.2rem); font-size:clamp(0.88rem,2.2vw,1rem);">
                 {{ __('books.title') }}
             </a>
         </div>
@@ -109,13 +109,9 @@
             <h2 class="section-title">{{ __('messages.dept_heading') }}</h2>
             <div class="grid gap-5" style="grid-template-columns: repeat(auto-fit, minmax(260px,1fr));">
                 @forelse ($subjects as $subject)
-                <a href="{{ Locale::booksUrl() }}?category={{ $subject->id }}"
-                   class="section-card card-top-bar card-glow relative flex flex-col justify-between bg-white border border-[#e2ded7] rounded-[15px] text-center no-underline transition-[transform,box-shadow,background,border-color,color] duration-300 hover:-translate-y-3 reveal"
-                   style="padding:clamp(1.3rem,3.5vw,1.9rem); min-height:150px;">
-                    <div>
-                        <h3 class=" text-[#1a1a1a] mb-2" style="font-size:clamp(1rem,2.6vw,1.2rem); line-height:1.6;" dir="auto">{{ $subject->localName() }}</h3>
-                    </div>
-                    <span class="text-[#52504e]" style="font-size:clamp(0.82rem,2vw,0.92rem);">
+                <a href="{{ Locale::booksUrl() }}?category={{ $subject->id }}" class="dept-card reveal" dir="auto">
+                    <h3 class="dept-card__name">{{ $subject->localName() }}</h3>
+                    <span class="dept-card__count">
                         {{ trans_choice('books.results', $subject->books_count, ['count' => $subject->books_count]) }}
                     </span>
                 </a>
@@ -140,11 +136,10 @@
                 {{ __('messages.feedback.error') }}
             </div>
         @endif
-        <div class="rounded-[15px] bg-white border border-[#e2ded7] text-center" style="box-shadow:0 4px 16px rgba(26,25,25,0.06); padding: clamp(1.8rem,5vw,3rem);">
-            <h2 class=" text-[#1a1a1a] mb-3" style="font-size:clamp(1.5rem,4vw,2rem);">
-                    {{ __('messages.feedback.title') }}
-            </h2>
-            <p class="text-[#52504e] mb-6" style="font-size:clamp(0.9rem,2.2vw,1rem); line-height:1.7;">
+        <div class="rounded-[15px] bg-white" style="box-shadow:none; padding: clamp(1.8rem,5vw,3rem);">
+            <p class="eyebrow">{{ __('messages.library_name') }}</p>
+            <h2 class="section-title" style="margin-bottom:0.7rem;">{{ __('messages.feedback.title') }}</h2>
+            <p class="text-[#52504e] mb-6" style="font-size:1.03rem; line-height:1.5;">
                     {{ __('messages.feedback.subtitle') }}
                 <br>
                 <a href="{{ route('privacy') }}" style="color:#790404; text-decoration:underline; text-underline-offset:3px; font-size:0.88em;">{{ __('privacy.title') }}</a>
@@ -156,17 +151,17 @@
                         {{ __('messages.feedback.name_label') }}
                     </label>
                     <input type="text" id="fb-name" name="name" maxlength="120" dir="auto" value="{{ old('name') }}"
-                           class="w-full rounded-[15px] px-4 py-3" style="border:1px solid #d8d2c8; font-size:0.95rem; font-family:inherit; text-align:start;">
+                           class="w-full rounded-[5px] px-4 py-3" style="border:1px solid #d8d2c8; font-size:0.95rem; font-family:inherit; text-align:start;">
                 </div>
                 <div class="mb-5 text-start">
                     <label for="fb-msg" class="block font-semibold mb-1 text-[#393736]" style="font-size:0.9rem;">
                         {{ __('messages.feedback.message_label') }}
                     </label>
                     <textarea id="fb-msg" name="message" rows="4" maxlength="2000" required dir="auto"
-                              class="w-full rounded-[15px] px-4 py-3" style="border:1px solid #d8d2c8; font-size:0.95rem; font-family:inherit; text-align:start;">{{ old('message') }}</textarea>
+                              class="w-full rounded-[5px] px-4 py-3" style="border:1px solid #d8d2c8; font-size:0.95rem; font-family:inherit; text-align:start;">{{ old('message') }}</textarea>
                 </div>
-                <div style="text-align:center;">
-                    <button type="submit" class="section-btn relative inline-block font-semibold text-white rounded-[5px] no-underline text-center transition-[transform,box-shadow,background,border-color,color] duration-300 hover:-translate-y-1 font-[inherit] cursor-pointer" style="background:#790404; padding:clamp(0.65rem,2.2vw,0.9rem) clamp(1.6rem,4vw,2.4rem); font-size:clamp(0.9rem,2.2vw,1rem); box-shadow:0 4px 14px rgba(121,4,4,0.28); border:none;">
+                <div style="text-align:start;">
+                    <button type="submit" class="section-btn relative inline-block text-[#f0f0f0] rounded-[5px] no-underline text-center transition-[transform,box-shadow,background,border-color,color] duration-300 hover:-translate-y-1 font-[inherit] cursor-pointer" style="background:#790404; padding:clamp(0.65rem,2.2vw,0.9rem) clamp(1.6rem,4vw,2.4rem); font-size:clamp(0.9rem,2.2vw,1rem); border:none;">
                         {{ __('messages.feedback.send') }}
                     </button>
                 </div>
