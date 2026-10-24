@@ -36,8 +36,15 @@
 
     /* The university rounds to 1rem; these keep the same proportions. */
     /* 15px is what their cards round to. */
-    /* How far the hills above the footer rise into the page. */
-    --ridge: clamp(70px, 11vw, 150px);
+    /* The band of hills above the footer, measured on uor.edu.krd, where a
+       rem is 10px: sky above the peaks (their --section-space-m), the city
+       drawing under them (10rem), and a little below it (their --space-xs).
+       Their band runs 3rem further, tucked under the footer; only what
+       shows is counted here. */
+    --hills-sky: clamp(72px, calc(5vw + 56px), 120px);
+    --hills-gap: 0px;
+    --hills-city: 100px;
+    --hills: calc(var(--hills-sky) + var(--hills-gap) + var(--hills-city) + 13.5px - 30px);
 
     --radius-sm: 10px;
     --radius: 15px;
@@ -922,28 +929,34 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
     color: rgba(255, 255, 255, 0.82);
 }
 
-/* The hills stand on whatever lies above the footer, not inside it — so the
-   sky between the peaks is the page, as it is on theirs. Stretched rather
-   than scaled, to span the window at any width. */
-.footer-ridge {
+/* Their hills and their city, the two images from uor.edu.krd, placed as
+   they place them: the hills at 63% across at their own size, repeating
+   past 2000px, and the city scaled to the band's height under the peaks.
+   The hills stand on whatever lies above the footer, so the sky between
+   the peaks is the page, as on theirs. */
+.footer-hills {
     position: absolute;
     bottom: 100%;
     inset-inline: 0;
-    display: block;
-    width: 100%;
-    height: var(--ridge);
+    height: var(--hills);
+    padding-top: calc(var(--hills-sky) + var(--hills-gap));
+    overflow: hidden;
     margin-bottom: -1px;
+    background: url('/images/footer/uor-footer-hills.webp') 63% 0% repeat;
     pointer-events: none;
 }
 
-/* The city sits behind the columns, filling the band's lower half. */
-.footer-skyline {
-    position: absolute;
-    inset-inline: 0;
-    bottom: 0;
-    width: 100%;
-    height: clamp(140px, 20vw, 260px);
-    pointer-events: none;
+.footer-hills__city {
+    height: var(--hills-city);
+    background: url('/images/footer/uor-footer-city.webp') center top / contain repeat;
+}
+
+/* Their small-phone layout: a shorter city, set lower. */
+@media (max-width: 478px) {
+    :root {
+        --hills-gap: 35px;
+        --hills-city: 60px;
+    }
 }
 
 .site-footer__cols,
@@ -953,7 +966,7 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 /* The last thing on the page makes room for them in its own colour, so the
    sky between the peaks is that section rather than a white seam. */
 #main > :last-child {
-    padding-bottom: calc(var(--ridge) + 1rem);
+    padding-bottom: calc(var(--hills) + 1rem);
 }
 
 .site-footer__cols {
