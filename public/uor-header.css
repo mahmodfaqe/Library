@@ -44,10 +44,12 @@ html:not(.js) .mainbar::before { background: var(--hdr-solid); }
 html:not(.js) .topbar { background: var(--hdr-solid); }
 [id] { scroll-margin-top: 130px; }
 
-/* No rule between the rows: on their site the two run together as one band. */
+/* Theirs draws a faint rule under the top row, 1px of #f0f0f0 at 30%, as
+   wide as the content. */
 .topbar { background: var(--hdr-top-bg); }
-/* Less the rule beneath it, so the whole row is --hdr-top and slides fully away. */
-.topbar__inner { height: var(--hdr-top); display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+/* The rule is inside the row's height, so the whole row is --hdr-top and
+   slides fully away. */
+.topbar__inner { box-sizing: border-box; height: var(--hdr-top); display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid rgba(240, 240, 240, 0.3); }
 .quicklinks { display: flex; align-items: center; justify-content: space-evenly; flex: 1 1 auto; gap: 8px 24px; min-width: 0; }
 .topbar a, .search-toggle { color: var(--hdr-top-link); text-decoration: none; font-size: 16.2px; font-weight: 500; }
 /* Theirs sets the language apart: a size larger and at plain weight. */
@@ -80,7 +82,7 @@ html:not(.js) .topbar { background: var(--hdr-solid); }
 .mainnav__group { display: flex; align-items: center; justify-content: space-evenly; margin: 0; padding: 0; list-style: none; }
 .mainnav__group + .mainnav__group { grid-column: 3; }
 .mainnav__item { position: relative; height: 100%; display: flex; align-items: center; }
-.mainnav__item > a { display: inline-flex; align-items: center; height: 100%; padding: 0 6px; color: var(--hdr-link); text-decoration: none; font-size: 16px; font-weight: 500; white-space: nowrap; }
+.mainnav__item > a { display: inline-flex; align-items: center; height: 100%; padding: 0 6px; color: #f2f2f2; text-decoration: none; font-size: 18px; font-weight: 500; letter-spacing: 0.5px; white-space: nowrap; }
 .mainnav__item > a:hover, .mainnav__item > a[aria-current="page"] { color: var(--hdr-gold); }
 [dir="ltr"] .mainnav__item > a { font-size: 14.4px; text-transform: uppercase; letter-spacing: 0.5px; }
 /* The panel's menu is eight items, twice the site's; in capitals, and in the

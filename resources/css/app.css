@@ -701,7 +701,7 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 .error-page {
     max-width: 34rem;
     margin: 0 auto;
-    padding: clamp(3rem, 12vw, 7rem) 1.5rem;
+    padding: var(--section-space) 1.5rem;
     text-align: center;
 }
 .error-code {
@@ -710,12 +710,6 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
     line-height: 1;
     letter-spacing: -0.03em;
     color: var(--brand);
-}
-.error-title {
-    margin-top: 0.5rem;
-    font-size: clamp(1.4rem, 5vw, 2rem);
-    font-weight: 700;
-    color: #1a1a1a;
 }
 .error-body {
     margin-top: 0.9rem;
@@ -821,7 +815,7 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 .book-page {
     max-width: 60rem;
     margin: 0 auto;
-    padding: clamp(1.5rem, 5vw, 3rem) 1rem 4rem;
+    padding: var(--section-space) 1rem 4rem;
 }
 
 .book-hero {
@@ -837,14 +831,6 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 }
 .book-hero-cover .book-cover { margin: 0; }
 .book-hero-body { min-width: 0; }
-.book-hero-body h1 {
-    font-size: clamp(1.4rem, 4vw, 2rem);
-    font-weight: 800;
-    line-height: 1.45;
-    letter-spacing: -0.01em;
-    color: var(--ink);
-    overflow-wrap: break-word;
-}
 .book-byline {
     margin-top: 0.4rem;
     font-size: clamp(0.95rem, 2.4vw, 1.1rem);
@@ -1359,6 +1345,66 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 [dir="rtl"] .hero__cta { font-family: var(--font-rtl); font-weight: 400; }
 .hero__cta:hover { background: #f7f7f7; gap: 0; }
 
+/* ── An inner page's banner, as theirs ────────────────────────────────────
+   Measured on uor.edu.krd: 70% of the screen's height (65% on a phone), the
+   photograph under a flat wash of rgba(77, 77, 77, 0.7), and near its foot
+   the page's name in their --h1 with the trail back beneath it. */
+.page-hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 70vh;
+    padding: var(--hero-offset) 0 var(--section-space);
+    background-size: cover;
+    background-position: 50% 20%;
+    color: #f2f2f2;
+}
+.page-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(77, 77, 77, 0.7);
+}
+
+@media (max-width: 478px) {
+    .page-hero { min-height: 65vh; }
+}
+
+.page-hero__inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--gutter);
+    width: 100%;
+    max-width: calc(1280px + 2 * var(--gutter));
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+}
+
+.page-hero__title {
+    font-size: clamp(28.51px, calc(1.56vw + 22.66px), 42.63px);
+    font-weight: 400;
+    line-height: 1.2;
+    color: #f2f2f2;
+    overflow-wrap: anywhere;
+}
+
+.page-hero__crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 5px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-m);
+}
+.page-hero__crumbs li + li::before { content: '- '; }
+.page-hero__crumbs a { color: #f2f2f2; text-decoration: none; }
+.page-hero__crumbs a:hover { color: var(--accent); }
+
 /* The long arrow theirs carry: it points the way the line is read. */
 .uor-arrow {
     flex: 0 0 auto;
@@ -1372,13 +1418,7 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 .more-link:hover .uor-arrow { width: 0; }
 
 /* ── The repository ──────────────────────────────────────────────────── */
-.repo-title {
-    font-size: clamp(1.5rem, 4vw, 2.1rem);
-    font-weight: 800;
-    color: var(--ink);
-    line-height: 1.4;
-}
-.repo-subtitle { color: var(--ink-soft); margin: 0.35rem 0 1.6rem; }
+.repo-subtitle { color: var(--ink-soft); margin: 0 0 1.6rem; }
 
 .repo-filters {
     display: grid;
@@ -1451,14 +1491,6 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
     border-radius: var(--radius-lg);
     padding: clamp(1.2rem, 4vw, 2rem);
     box-shadow: var(--shadow-md);
-}
-.thesis-hero h1 {
-    font-size: clamp(1.3rem, 3.6vw, 1.9rem);
-    font-weight: 800;
-    line-height: 1.5;
-    color: var(--ink);
-    margin-top: 0.7rem;
-    overflow-wrap: break-word;
 }
 .thesis-alt-title {
     color: var(--ink-soft);
@@ -1636,7 +1668,6 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
        stops the grid stretching it, so the width is given outright. */
     .book-hero { grid-template-columns: 1fr; gap: 1.2rem; }
     .book-hero-cover { width: 8rem; justify-self: center; }
-    .book-hero-body h1 { text-align: center; }
     .book-byline { text-align: center; }
     .book-open,
     .book-unavailable { display: block; width: fit-content; margin-inline: auto; }

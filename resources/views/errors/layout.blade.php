@@ -9,10 +9,16 @@
     <meta name="robots" content="noindex, nofollow">
 @endpush
 
+@section('body_class', 'has-hero')
+
 @section('content')
+<x-page-hero :title="__('errors.'.$code.'.title')" :crumbs="[
+    ['label' => __('messages.nav.home'), 'url' => Locale::url()],
+    ['label' => __('errors.'.$code.'.title')],
+]" />
+
 <div class="error-page">
     <p class="error-code" aria-hidden="true">{{ $code }}</p>
-    <h1 class="error-title">{{ __("errors.$code.title") }}</h1>
     <p class="error-body">{{ __("errors.$code.body") }}</p>
 
     <div class="error-actions">

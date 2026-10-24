@@ -11,6 +11,8 @@
     __('messages.university_name'),
 ])->filter()->implode(' · '))
 
+@section('body_class', 'has-hero')
+
 @push('head')
     {{-- A thesis is not a book, and a search engine that is told otherwise
          indexes it as one. Built in a plain PHP block because in a Blade
@@ -91,23 +93,17 @@
     ];
 @endphp
 
-<div class="book-page">
+<x-page-hero :title="$thesis->localTitle()" :label="__('theses.breadcrumb')" :crumbs="array_values(array_filter([
+    ['label' => __('messages.nav.home'), 'url' => Locale::url()],
+    ['label' => __('theses.title'), 'url' => Locale::thesesUrl()],
+    $thesis->department ? ['label' => $thesis->department->translation(app()->getLocale(), 'title'), 'url' => Locale::thesesUrl().'?department='.$thesis->department_id] : null,
+    ['label' => $thesis->localTitle()],
+]))" />
 
-    <nav class="mb-4 flex items-center gap-2 flex-wrap" style="font-size:0.9rem;" aria-label="{{ __('theses.breadcrumb') }}">
-        <a href="{{ Locale::url() }}" class="text-[#790404] no-underline hover:underline">{{ __('messages.library_name') }}</a>
-        <span class="text-[#b8b3ad]">/</span>
-        <a href="{{ Locale::thesesUrl() }}" class="text-[#790404] no-underline hover:underline">{{ __('theses.title') }}</a>
-        @if ($thesis->department)
-            <span class="text-[#b8b3ad]">/</span>
-            <a href="{{ Locale::thesesUrl() }}?department={{ $thesis->department_id }}"
-               class="text-[#790404] no-underline hover:underline" dir="auto">{{ $thesis->department->translation(app()->getLocale(), 'title') }}</a>
-        @endif
-    </nav>
+<div class="book-page">
 
     <article class="thesis-hero">
         <span class="thesis-degree-large">{{ __('theses.degrees.'.$thesis->degree) }}</span>
-
-        <h1 dir="auto">{{ $thesis->localTitle() }}</h1>
 
         @if ($thesis->title_en && $thesis->title_en !== $thesis->localTitle())
             <p class="thesis-alt-title" dir="ltr">{{ $thesis->title_en }}</p>

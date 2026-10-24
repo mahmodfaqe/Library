@@ -11,6 +11,8 @@
     __('messages.site_title'),
 ])->filter()->implode(' · '))
 
+@section('body_class', 'has-hero')
+
 @push('head')
     {{-- So a search engine, and anything reading the page for a citation,
          knows this is one book rather than a page that mentions one.
@@ -131,18 +133,14 @@
     ];
 @endphp
 
-<div class="book-page">
+<x-page-hero :title="$book->title" :crumbs="array_values(array_filter([
+    ['label' => __('messages.nav.home'), 'url' => Locale::url()],
+    ['label' => __('books.title'), 'url' => Locale::booksUrl()],
+    $book->category ? ['label' => $book->category->localName(), 'url' => Locale::booksUrl().'?category='.$book->category->id] : null,
+    ['label' => $book->title],
+]))" />
 
-    <nav class="mb-4 flex items-center gap-2 flex-wrap" style="font-size:0.9rem;" aria-label="{{ __('books.breadcrumb') }}">
-        <a href="{{ Locale::url() }}" class="text-[#790404] no-underline hover:underline">{{ __('messages.library_name') }}</a>
-        <span class="text-[#b8b3ad]">/</span>
-        <a href="{{ Locale::booksUrl() }}" class="text-[#790404] no-underline hover:underline">{{ __('books.title') }}</a>
-        @if ($book->category)
-            <span class="text-[#b8b3ad]">/</span>
-            <a href="{{ Locale::booksUrl() }}?category={{ $book->category->id }}"
-               class="text-[#790404] no-underline hover:underline" dir="auto">{{ $book->category->localName() }}</a>
-        @endif
-    </nav>
+<div class="book-page">
 
     <article class="book-hero">
         <div class="book-hero-cover">
@@ -155,8 +153,6 @@
         </div>
 
         <div class="book-hero-body">
-            <h1 dir="auto">{{ $book->title }}</h1>
-
             @if ($book->author)
                 <p class="book-byline" dir="auto">{{ $book->author }}</p>
             @endif

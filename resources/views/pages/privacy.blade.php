@@ -4,16 +4,15 @@
 @section('title', __('privacy.title').' — '.__('messages.site_title'))
 @section('description', __('privacy.intro'))
 
+@section('body_class', 'has-hero')
+
 @section('content')
-<div class="max-w-[820px] mx-auto px-4" style="padding-top: clamp(2rem,6vw,4rem);">
+<x-page-hero :title="__('privacy.title')" :crumbs="[
+    ['label' => __('messages.nav.home'), 'url' => Locale::url()],
+    ['label' => __('privacy.title')],
+]" />
 
-    <nav class="mb-4 flex items-center gap-2 flex-wrap" style="font-size:0.9rem;" aria-label="{{ __('books.breadcrumb') }}">
-        <a href="{{ Locale::url() }}" class="text-[#790404] no-underline hover:underline">{{ __('messages.library_name') }}</a>
-        <span class="text-[#b8b3ad]">/</span>
-        <span class="text-[#52504e]">{{ __('privacy.title') }}</span>
-    </nav>
-
-    <h1 class=" text-[#1a1a1a] mb-6" style="font-size:clamp(1.6rem,4.5vw,2.2rem);">{{ __('privacy.title') }}</h1>
+<div class="max-w-[820px] mx-auto px-4" style="padding-top: var(--section-space);">
 
     <p class="text-[#52504e] leading-[1.9] mb-8" style="font-size:clamp(0.95rem,2.5vw,1.1rem);">{{ __('privacy.intro') }}</p>
 

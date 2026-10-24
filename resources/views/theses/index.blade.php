@@ -4,16 +4,16 @@
 @section('title', __('theses.title').' — '.__('messages.site_title'))
 @section('description', __('theses.subtitle'))
 
+@section('body_class', 'has-hero')
+
 @section('content')
+<x-page-hero :title="__('theses.title')" :label="__('theses.breadcrumb')" :crumbs="[
+    ['label' => __('messages.nav.home'), 'url' => Locale::url()],
+    ['label' => __('theses.title')],
+]" />
+
 <div class="book-page">
 
-    <nav class="mb-4 flex items-center gap-2 flex-wrap" style="font-size:0.9rem;" aria-label="{{ __('theses.breadcrumb') }}">
-        <a href="{{ Locale::url() }}" class="text-[#790404] no-underline hover:underline">{{ __('messages.library_name') }}</a>
-        <span class="text-[#b8b3ad]">/</span>
-        <span class="text-[#52504e]">{{ __('theses.title') }}</span>
-    </nav>
-
-    <h1 class="repo-title" dir="auto">{{ __('theses.title') }}</h1>
     <p class="repo-subtitle" dir="auto">{{ __('theses.subtitle') }}</p>
 
     <form method="GET" action="{{ Locale::thesesUrl() }}" class="repo-filters">
