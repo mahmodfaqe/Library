@@ -13,6 +13,14 @@ return [
         'title' => 'Kitêbxaneya Elektronîkî ya Kolêja Zanistê',
         'subtitle' => 'Bigihîje hezaran çavkanî û pirtûkên zanistî bi awayekî hêsan û bilez.',
     ],
+    // The size of the collection, headed as the university heads its own.
+    'facts' => [
+        'books' => 'Pirtûk',
+        'subjects' => 'Babet',
+        'theses' => 'Nameya zanistî',
+        'languages' => 'Ziman',
+    ],
+
     'intro' => [
         'heading' => 'Pêşgotin',
         'paragraphs' => [

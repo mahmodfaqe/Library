@@ -32,6 +32,23 @@
     </div>
 </section>
 
+<!-- ══════════ THE COLLECTION IN FIGURES ══════════ -->
+{{-- The same shape as the university's own data-fact-card row: a flat white
+     card on the grey band, the number in the house red at weight 800 and the
+     label beneath it in plain text. --}}
+<section class="band band--grey">
+    <div class="hdr-container">
+        <div class="fact-row">
+            @foreach ($facts as $key => $value)
+                <div class="fact-card">
+                    <span class="fact-card__count">{{ number_format($value) }}</span>
+                    <span class="fact-card__title">{{ __('messages.facts.'.$key) }}</span>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+
 <!-- ══════════ INTRO SECTION ══════════ -->
 <section class="band band--white">
     <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">

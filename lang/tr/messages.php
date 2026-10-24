@@ -13,6 +13,14 @@ return [
         'title' => 'Fen Fakültesi Elektronik Kütüphanesi',
         'subtitle' => 'Binlerce bilimsel kaynak ve kitaba kolayca ve hızlıca erişin ve toplayın.',
     ],
+    // The size of the collection, headed as the university heads its own.
+    'facts' => [
+        'books' => 'Kitap',
+        'subjects' => 'Konu',
+        'theses' => 'Tez',
+        'languages' => 'Dil',
+    ],
+
     'intro' => [
         'heading' => 'Giriş',
         'paragraphs' => [

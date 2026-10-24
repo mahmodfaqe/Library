@@ -13,6 +13,14 @@ return [
         'title' => 'کتێبخانەیا ئەلیکترۆنیکی یا کۆلێژا زانستێ',
         'subtitle' => 'بهێسانی و زو پەیدابوونا بی هەزاران چاوکانی و پەرتوکین زانستی.',
     ],
+    // The size of the collection, headed as the university heads its own.
+    'facts' => [
+        'books' => 'پەرتوک',
+        'subjects' => 'بابەت',
+        'theses' => 'نامەیا زانستی',
+        'languages' => 'زمان',
+    ],
+
     'intro' => [
         'heading' => 'پێشگرتن',
         'paragraphs' => [

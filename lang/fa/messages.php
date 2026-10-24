@@ -13,6 +13,14 @@ return [
         'title' => 'کتابخانه الکترونیکی دانشکده علوم',
         'subtitle' => 'دسترسی و گردآوری هزاران منبع و کتاب علمی به آسانی و سرعت.',
     ],
+    // The size of the collection, headed as the university heads its own.
+    'facts' => [
+        'books' => 'کتاب',
+        'subjects' => 'موضوع',
+        'theses' => 'پایان‌نامه',
+        'languages' => 'زبان',
+    ],
+
     'intro' => [
         'heading' => 'مقدمه',
         'paragraphs' => [

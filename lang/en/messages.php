@@ -13,6 +13,14 @@ return [
         'title' => 'College of Science Electronic Library',
         'subtitle' => 'Access and gather thousands of scientific resources and books easily and quickly.',
     ],
+    // The size of the collection, headed as the university heads its own.
+    'facts' => [
+        'books' => 'Books',
+        'subjects' => 'Subjects',
+        'theses' => 'Theses',
+        'languages' => 'Languages',
+    ],
+
     'intro' => [
         'heading' => 'Introduction',
         'paragraphs' => [

@@ -13,6 +13,14 @@ return [
         'title' => 'المكتبة الإلكترونية لكلية العلوم',
         'subtitle' => 'الوصول وتجميع آلاف المصادر والكتب العلمية بسهولة وسرعة.',
     ],
+    // The size of the collection, headed as the university heads its own.
+    'facts' => [
+        'books' => 'كتاب',
+        'subjects' => 'موضوع',
+        'theses' => 'رسالة علمية',
+        'languages' => 'لغة',
+    ],
+
     'intro' => [
         'heading' => 'مقدمة',
         'paragraphs' => [

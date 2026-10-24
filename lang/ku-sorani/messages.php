@@ -13,6 +13,14 @@ return [
         'title' => 'کتێبخانەی ئەلیکترۆنی کۆلێژی زانست',
         'subtitle' => 'بەردەستبوون و کۆکردنەوەی هەزاران سەرچاوە و پەرتووکی زانستی بە شێوەیەکی ئاسان و خێرا.',
     ],
+    // The size of the collection, headed as the university heads its own.
+    'facts' => [
+        'books' => 'کتێب',
+        'subjects' => 'بابەت',
+        'theses' => 'نامەی زانستی',
+        'languages' => 'زمان',
+    ],
+
     'intro' => [
         'heading' => 'پێشەکی',
         'paragraphs' => [

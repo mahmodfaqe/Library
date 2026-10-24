@@ -862,6 +862,45 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
 }
 .book-unavailable { color: var(--ink-faint); font-size: 0.92rem; }
 
+/* ── The collection in figures ────────────────────────────────────────────
+   Their .data-fact-card, measured: white, 15px, 28px of padding, no shadow,
+   ranged to the reading edge. The number is the one place on their whole site
+   that carries a heavy weight. */
+.fact-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 28px;
+}
+
+.fact-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    background: #fff;
+    border-radius: 15px;
+    padding: 28px;
+    text-align: start;
+}
+
+.fact-card__count {
+    font-family: var(--font-ltr);
+    font-size: clamp(1.4rem, 3.4vw, 1.6rem);
+    font-weight: 800;
+    color: var(--brand);
+    line-height: 1.2;
+}
+
+.fact-card__title {
+    font-size: clamp(0.95rem, 2.3vw, 1.1rem);
+    font-weight: 400;
+    color: var(--ink);
+}
+
+@media (max-width: 480px) {
+    .fact-card { padding: 20px; }
+    .fact-row { gap: 14px; }
+}
+
 /* ── The footer, as the university sets its own ───────────────────────────
    Measured on uor.edu.krd: the band is #393736, each column is headed in the
    crest's gold at weight 400, and the links beneath are #dad8d8 at 14px with
