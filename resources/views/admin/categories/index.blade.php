@@ -17,7 +17,6 @@
                 <thead>
                     <tr>
                         <th>{{ __('admin.categories.table.order') }}</th>
-                        <th>{{ __('admin.categories.table.icon') }}</th>
                         <th>{{ __('admin.categories.table.name') }}</th>
                         <th>{{ __('admin.categories.table.translated') }}</th>
                         <th>{{ __('admin.categories.table.books') }}</th>
@@ -28,7 +27,6 @@
                     @foreach ($categories as $category)
                         <tr>
                             <td>{{ $category->sort_order }}</td>
-                            <td><span class="icon-preview">{{ $category->icon }}</span></td>
                             <td dir="auto">{{ $category->name }}</td>
                             <td style="font-size:0.85rem; color:#52504e;">
                                 {{ count($category->translations ?? []) }} / {{ count(\App\Support\Locale::SUPPORTED) - 1 }}

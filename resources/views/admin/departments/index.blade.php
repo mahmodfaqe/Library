@@ -16,7 +16,6 @@
                 <thead>
                     <tr>
                         <th>{{ __('admin.departments.table.order') }}</th>
-                        <th>{{ __('admin.departments.table.icon') }}</th>
                         <th>{{ __('admin.departments.table.name_sorani') }}</th>
                         <th>{{ __('admin.departments.table.name_english') }}</th>
                         <th>{{ __('admin.departments.table.link') }}</th>
@@ -27,7 +26,6 @@
                     @foreach ($departments as $department)
                         <tr>
                             <td>{{ $department->sort_order }}</td>
-                            <td><span class="icon-preview">{{ $department->icon }}</span></td>
                             <td>{{ $department->translation('ku-sorani', 'title') }}</td>
                             <td>{{ $department->translation('en', 'title') }}</td>
                             <td style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">

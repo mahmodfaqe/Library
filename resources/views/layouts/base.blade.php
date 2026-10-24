@@ -170,7 +170,13 @@
 
         @if (config('library.analytics.host'))
             <div class="mt-3 flex items-center justify-center gap-3 opacity-75 hover:opacity-100 transition-opacity duration-300">
-                <span style="font-size: 1rem;">👁</span>
+                {{-- Drawn rather than set in an emoji: the university's own
+                     pages carry no emoji anywhere. --}}
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M1.8 12S5.5 5 12 5s10.2 7 10.2 7-3.7 7-10.2 7S1.8 12 1.8 12Z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
                 <div class="flex items-center gap-3 no-underline rounded-full border border-white/20 px-4 py-1.5"
                      style="background:rgba(255,255,255,0.12); font-size: 1rem; color:rgba(255,255,255,0.85);">
                     {{-- Built whole rather than pieced together in the

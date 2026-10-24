@@ -89,10 +89,9 @@
             <div class="grid gap-5" style="grid-template-columns: repeat(auto-fit, minmax(260px,1fr));">
                 @forelse ($subjects as $subject)
                 <a href="{{ Locale::booksUrl() }}?category={{ $subject->id }}"
-                   class="section-card card-top-bar card-glow relative flex flex-col justify-between bg-white border border-[#e2ded7] rounded-[1rem] text-center no-underline transition-[transform,box-shadow,background,border-color,color] duration-300 hover:-translate-y-3 reveal"
-                   style="padding:clamp(1.3rem,3.5vw,1.9rem); min-height:190px; box-shadow:0 4px 16px rgba(26,25,25,0.06);">
+                   class="section-card card-top-bar card-glow relative flex flex-col justify-between bg-white border border-[#e2ded7] rounded-[15px] text-center no-underline transition-[transform,box-shadow,background,border-color,color] duration-300 hover:-translate-y-3 reveal"
+                   style="padding:clamp(1.3rem,3.5vw,1.9rem); min-height:150px;">
                     <div>
-                        <span class="block text-5xl mb-3 transition-transform duration-300">{{ $subject->icon }}</span>
                         <h3 class=" text-[#1a1f2c] mb-2" style="font-size:clamp(1rem,2.6vw,1.2rem); line-height:1.6;" dir="auto">{{ $subject->localName() }}</h3>
                     </div>
                     <span class="text-[#52504e]" style="font-size:clamp(0.82rem,2vw,0.92rem);">
@@ -195,33 +194,5 @@
     }
 })();
 
-// Section card icon hover
-document.querySelectorAll('.section-card').forEach(function(card){
-    var icon=card.querySelector('.section-icon, span.text-5xl');
-    if(icon){
-        card.addEventListener('mouseenter',function(){ icon.style.transform='scale(1.18) translateY(-4px)'; });
-        card.addEventListener('mouseleave',function(){ icon.style.transform=''; });
-    }
-});
-
-(function(){
-    const images = [
-        '{{ asset('file/image1.webp') }}',
-        '{{ asset('file/image2.webp') }}',
-        '{{ asset('file/image3.webp') }}',
-        '{{ asset('file/image4.webp') }}'
-    ];
-
-    let currentIndex = 0;
-    const heroSection = document.getElementById('hero-section');
-
-    function changeBackground() {
-        currentIndex = (currentIndex + 1) % images.length;
-        heroSection.style.backgroundImage = `url('${images[currentIndex]}')`;
-    }
-
-    // گۆڕینی وێنەکان هەر ٥ چرکە جارێک
-    if (heroSection) setInterval(changeBackground, 5000);
-})();
 </script>
 @endpush

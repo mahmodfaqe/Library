@@ -22,11 +22,6 @@
                 <div class="hint">{{ __('admin.categories.order_hint') }}</div>
             </div>
 
-            <div class="field">
-                <label for="icon">{{ __('admin.categories.table.icon') }}</label>
-                <input type="text" id="icon" name="icon" maxlength="16" placeholder="🧬"
-                       value="{{ old('icon', $category->icon) }}">
-            </div>
 
             <hr style="border:none; border-top:1px solid #efeae1; margin:1.4rem 0;">
 

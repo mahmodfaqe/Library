@@ -4,4 +4,3 @@
     <img src="{{ $book->coverUrl() }}" alt="" loading="lazy"
          decoding="async" referrerpolicy="no-referrer">
 @endif
-<span aria-hidden="true">{{ $book->category?->icon ?: '📘' }}</span>

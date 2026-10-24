@@ -96,7 +96,7 @@
                         @php $share = $counts['books'] > 0 ? $category->books_count / $counts['books'] : 0; @endphp
                         <li>
                             <a href="{{ route('admin.books', ['category' => $category->id]) }}">
-                                <span class="gap-label" dir="auto">{{ $category->icon }} {{ $category->localName() }}</span>
+                                <span class="gap-label" dir="auto">{{ $category->localName() }}</span>
                                 <span class="gap-bar gap-bar-good" aria-hidden="true">
                                     <span style="width: {{ round($share * 100) }}%"></span>
                                 </span>

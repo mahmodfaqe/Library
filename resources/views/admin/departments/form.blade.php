@@ -22,12 +22,6 @@
                        value="{{ old('sort_order', $department->sort_order ?? '') }}">
             </div>
 
-            <div class="field">
-                <label for="icon">{{ __('admin.departments.fields.icon') }}</label>
-                <input type="text" id="icon" name="icon" maxlength="16" required
-                       placeholder="🧬"
-                       value="{{ old('icon', $department->icon ?? '') }}">
-                <div class="hint">{{ __('admin.departments.fields.icon_hint') }}</div>
             </div>
 
             <div class="field">

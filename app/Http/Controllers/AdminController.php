@@ -147,7 +147,9 @@ class AdminController extends Controller
     private function validated(Request $request): array
     {
         $rules = [
-            'icon' => ['required', 'string', 'max:16'],
+            // The column is still there, holding what was entered before, but
+            // nothing shows it any more and the form no longer asks.
+            'icon' => ['nullable', 'string', 'max:16'],
             'drive_url' => ['required', 'url', 'max:500'],
             'sort_order' => ['required', 'integer', 'min:0'],
         ];

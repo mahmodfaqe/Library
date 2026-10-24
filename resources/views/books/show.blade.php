@@ -151,7 +151,6 @@
                     <img src="{{ $book->coverUrl() }}" alt="" loading="eager" decoding="async"
                          referrerpolicy="no-referrer">
                 @endif
-                <span class="book-cover-fallback" aria-hidden="true">{{ $book->category?->icon ?: '📘' }}</span>
             </div>
         </div>
 
@@ -267,7 +266,6 @@
                                 <img src="{{ $other->coverUrl() }}" alt="" loading="lazy" decoding="async"
                                      referrerpolicy="no-referrer">
                             @endif
-                            <span class="book-cover-fallback" aria-hidden="true">{{ $other->category?->icon ?: '📘' }}</span>
                         </a>
 
                         <div class="book-body">
