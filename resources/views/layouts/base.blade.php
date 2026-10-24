@@ -148,6 +148,24 @@
 
 <!-- ══════════ FOOTER ══════════ -->
 <footer class="site-footer">
+
+    {{-- The footer does not begin on a straight line on their site: a ridge of
+         hills carries the band's top edge, with a second, paler range behind
+         it. Theirs is a 2000px image; this is the same shape drawn, so it
+         stretches to any width and costs nothing to fetch. --}}
+    <svg class="footer-ridge" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <defs>
+            <linearGradient id="ridge-far" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#55514f"/>
+                <stop offset="1" stop-color="#413e3d"/>
+            </linearGradient>
+        </defs>
+        <path fill="url(#ridge-far)"
+              d="M0,88 C60,80 110,62 170,58 C230,54 270,30 330,24 C390,18 430,46 490,56 C550,66 600,54 660,48 C720,42 760,30 820,38 C880,46 920,64 980,66 C1040,68 1100,78 1200,74 L1200,120 L0,120 Z"/>
+        <path fill="#393736"
+              d="M0,104 C70,98 120,84 190,82 C260,80 300,62 370,60 C440,58 480,80 550,88 C620,96 660,86 730,82 C800,78 840,68 910,74 C980,80 1020,94 1090,96 C1140,97 1170,100 1200,98 L1200,120 L0,120 Z"/>
+    </svg>
+
     @php
         $year = '<span class="'.Locale::yearClass().'"></span>';
         $uorLink = '<a href="'.e(config('library.university_url')).'" target="_blank" rel="noopener">'

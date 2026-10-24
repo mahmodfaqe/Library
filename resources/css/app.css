@@ -914,8 +914,23 @@ a.book-cover:hover::after { background: rgba(121, 4, 4, 0.12); }
    links beneath are #dad8d8 at 14.4px with no underline. The crest stands in
    the middle column, and a darker strip carries the copyright. */
 .site-footer {
+    position: relative;
     background: #393736;
     color: rgba(255, 255, 255, 0.82);
+}
+
+/* The hills stand on whatever lies above the footer, not inside it — so the
+   sky between the peaks is the page, as it is on theirs. Stretched rather
+   than scaled, to span the window at any width. */
+.footer-ridge {
+    position: absolute;
+    bottom: 100%;
+    inset-inline: 0;
+    display: block;
+    width: 100%;
+    height: clamp(70px, 11vw, 150px);
+    margin-bottom: -1px;
+    pointer-events: none;
 }
 
 .site-footer__cols {
